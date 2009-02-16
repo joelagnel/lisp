@@ -1,0 +1,8 @@
+def trace(fr, evt, arg):
+    import linecache
+    if evt == 'line':
+        f = fr.f_code.co_filename
+        n = fr.f_lineno
+        print '%s:%d -> ' %(f, n), linecache.getline(f, n),
+    return trace
+sys.settrace(trace)

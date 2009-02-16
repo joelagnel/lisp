@@ -1,0 +1,181 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="ecb-download">ecb-download</a>,
+Next:<a rel=next accesskey=n href="ecb-help.html#ecb-help">ecb-help</a>,
+Previous:<a rel=previous accesskey=p href="ecb-faces.html#ecb-faces">ecb-faces</a>,
+Up:<a rel=up accesskey=u href="Customizable-options.html#Customizable%20options">Customizable options</a>
+<hr><br>
+
+<h4>Group ecb-download</h4>
+
+<p>This group contains settings for downloading and installing a new ECB
+from within ECB:
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>download-delete-archive</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Should the downloaded archive be deleted after successful
+installation or after failure during the installation-process. 
+Possible values are:
+
+<ul>
+<li><code>only-after-success</code>:
+Archive is only deleted after successful installation
+but not if a failure occurs during the installation process. 
+<li><code>always</code>:
+Archive is also deleted if an error occurs. 
+<li><code>nil</code>:
+Archive will never be deleted. 
+</ul>
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>download-install-parent-dir</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Parent directory where downloaded packages are installed.
+
+<p>ECB installs a downloaded package in this directory, i.e. the downloaded
+archive X.tar.gz will be extracted in this directory so afterwards this
+directory contains a new subdirectory X which contains the downloaded package.
+
+<p>This directory must be write-able! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>download-package-version-type</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Version type ECB is allowed to download for upgrading.
+
+<p>If you want to upgrade to a newer ECB-version via
+<code>ecb-download-ecb</code> or if you must upgrade to newer semantic-
+eieio- and/or speedbar-versions (because ECB requires these newer
+versions) then this option specifies which version-types are allowed. 
+ECB checks on the download-sites of ECB/semantic/eieio/speedbar which
+versions are currently available and then downloads always the latest
+version matching the specified type:
+
+<ul>
+<li>2: Get the newest version of all stable versions available. 
+<li>1: Get the newest version of all stable and beta versions available. 
+<li>0: Get the newest version of all stable, beta and alpha versions
+available. 
+<li>-1: Ask before downloading in the minibuffer for a version
+(TAB-completion of all available versions is possible). 
+</ul>
+
+<p>So, 2 means stable, 1 means stable and betas, 0 means stable, betas and alphas
+and -1 means ask the user for a version.
+
+<p>Per default stable and beta-versions are allowed (value 1).
+
+<p>But all versions must match the restrictions of the specified min- and
+max-versions of the required packages. For this see the file README! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>download-url</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+URL where download-able ECB-versions are located. The ECB-archive-file
+(e.g. ecb-1.70.tar.gz) will be appended to this URL and
+<code>ecb-download-ecb</code> will try to download this archive.
+
+<p>Note: Normally this URL should never change but who knows... 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>gzip-setup</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Configuration for the gzip-utility. For a description about the
+possible settings see <code>ecb-wget-setup</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>tar-setup</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Configuration for the tar-utility. For a description about the
+possible settings see <code>ecb-wget-setup</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>wget-setup</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Configuration for the wget-utility. Value is a cons-cell where:
+
+<ul>
+
+<li>car is the name of the wget-executable - if the executable can not be
+found in the <var>PATH</var> then it must be a full path.
+
+<li>cdr is the path type of the file-arguments of this binary. Possible
+values are <code>cygwin</code>, <code>windows</code> and <code>other</code> whereas the
+latter one is used for all Unix, Linux, Mac OS etc... If <code>cygwin</code> is
+set then the cygpath-utility must be in the PATH! 
+</ul>
+</td></tr>
+</table>
+
+</body></html>
+

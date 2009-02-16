@@ -1,0 +1,200 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Possible%20layout-outlines">Possible layout-outlines</a>,
+Next:<a rel=next accesskey=n href="The-layout-engine-API.html#The%20layout-engine%20API">The layout-engine API</a>,
+Previous:<a rel=previous accesskey=p href="Programming-special-windows.html#Programming%20special%20windows">Programming special windows</a>,
+Up:<a rel=up accesskey=u href="The-layout-engine.html#The%20layout-engine">The layout-engine</a>
+<hr><br>
+
+<h4>The wide range of possible layout-outlines</h4>
+
+<p>In the two previous sections <a href="Programming-a-new-layout.html#Programming%20a%20new%20layout">Programming a new layout</a> and
+<a href="Programming-special-windows.html#Programming%20special%20windows">Programming special windows</a> we have explained in detail how to
+program new layouts and how to program new special windows/buffers and
+adding them to a new layout.
+
+<p>The intention of this section is to be a summary what are the real
+restrictions for a new layout-outline programmed with
+<code>ecb-layout-define</code>. This is necessary because until now we just
+programmed "obvious" layouts, means layout which are in principle
+very similar to the standard ones which means one big edit-window and
+some special windows "around" this edit-window. This section will
+show you that a layout can have also very different outlines.
+
+<p>OK, here are the real restrictions and conditions for a layout
+programmed with <code>ecb-layout-define</code>:
+<ol type=1 start=1>
+</p><li>It must have exactly one edit-window regardless of its size. The user
+of this layout can later split this edit-window in as many
+edit-windows as he like.
+
+<li>All other windows created within the <var>CREATE-CODE</var> body of
+<code>ecb-layout-define</code> (see <a href="Programming-a-new-layout.html#Programming%20a%20new%20layout">Programming a new layout</a>) must be
+dedicated to their buffers.
+
+<li>All the dedicated windows must (exclusive!) either reside on the left,
+right, top or left-and-right side of the edit-window. This will be
+defined with the <var>TYPE</var>-argument of <code>ecb-layout-define</code>
+(see <a href="Programming-a-new-layout.html#Programming%20a%20new%20layout">Programming a new layout</a>).
+</ol>
+
+<p>You see, there are only three restrictions/conditions. These and only
+these must be fulfilled at layout-programming.
+
+<p>Demonstrating what this really means and how flexible the
+layout-engine of ECB really is, can be done best with some
+"pathological" layout-outlines. All the following are correct
+layouts (working code is added below each layout):
+
+<p>The following is a top layout with three vertical layered special
+windows.
+
+<br><pre>------------------------------------------------------------------
+|                                                                |
+|                 Upper special window                           |
+|                                                                |
+|----------------------------------------------------------------|
+|                                                                |
+|                 Middle special window                          |
+|                                                                |
+|----------------------------------------------------------------|
+|                                                                |
+|                 Lower special window                           |
+|                                                                |
+|================================================================|
+|                                                                |
+|                         Edit-area                              |
+|      (can be splitted by the user in several edit-windows)     |
+------------------------------------------------------------------
+|                                                                |
+|                 Compilation-window (optional)                  |
+|                                                                |
+------------------------------------------------------------------
+</pre>
+
+<p>Here is the code for that top layout (all buffers are dummy-buffers):
+
+<br><pre>
+;; The "window dedicator" functions:
+
+(defecb-window-dedicator ecb-set-usw-buffer "Upper special window"
+  (switch-to-buffer (get-buffer-create "Upper special window")))
+
+(defecb-window-dedicator ecb-set-msw-buffer "Middle special window"
+  (switch-to-buffer (get-buffer-create "Middle special window")))
+
+(defecb-window-dedicator ecb-set-lsw-buffer "Lower special window"
+  (switch-to-buffer (get-buffer-create "Lower special window")))
+
+;; The layout itself:
+
+(ecb-layout-define "example-layout3" top
+  nil
+
+  ;; here we have an edit-window and above one top window which we can
+  ;; now split in several other windows. Dependent on the value of
+  ;; `ecb-compile-window-height' we have also a compile-window at the
+  ;; bottom.
+
+  (ecb-set-usw-buffer)
+  (ecb-split-ver 0.33)
+  (ecb-set-msw-buffer)
+  (ecb-split-ver 0.5)
+  (ecb-set-lsw-buffer)
+
+  ;; select the edit-window.
+  (select-window (next-window)))
+</pre>
+
+<p>The following is a left-right layout which has six special windows in
+the left-"column" and one big special window in the
+right-"column". For left-right layouts the left-"column" and the
+right-"column" have always the same width.
+
+<br><pre>------------------------------------------------------------------
+|             |       |                   |                      |
+| Left1       | Left5 |                   |                      |
+|             |       |                   |                      |
+|-------------|       |                   |                      |
+|      |      |       |                   |                      |
+|      |      |       |                   |                      |
+|      |      |       |                   |                      |
+| Left2| Left3|-------|     Edit-area     |   Right1             |
+|      |      |       | (can be splitted  |                      |
+|      |      |       |  in several edit- |                      |
+|      |      |       |      windows)     |                      |
+|-------------|       |                   |                      |
+|             |       |                   |                      |
+| Left4       | Left6 |                   |                      |
+|             |       |                   |                      |
+------------------------------------------------------------------
+|                                                                |
+|                 Compilation-window (optional)                  |
+|                                                                |
+------------------------------------------------------------------
+</pre>
+
+<p>Here is the code for that left-right layout, again with dummy-buffers
+(depending to your screen-resolution you will need a quite big value
+for <code>ecb-windows-width</code>, e.g. 0.4):
+
+<p>Here is one of the "window dedicator"-functions<a rel=footnote href="#fn-1"><sup>1</sup></a>:
+
+<br><pre>(defecb-window-dedicator ecb-set-left1-buffer "Left1"
+  (switch-to-buffer (get-buffer-create "Left1")))
+</pre>
+
+<p>Here is the layout-definition itself:
+
+<br><pre>(ecb-layout-define "example-layout2" left-right
+  nil
+
+  ;; here we have an edit-window and left and right two windows each
+  ;; with width `ecb-windows-width'. Dependent to the value of
+  ;; `ecb-compile-window-height' we have also a compile-window at the
+  ;; bottom.
+
+  (ecb-set-left1-buffer)
+  (ecb-split-hor 0.66 t)
+  (ecb-split-ver 0.75)
+  (ecb-set-left4-buffer)
+  (select-window (previous-window (selected-window) 0))
+  (ecb-split-ver 0.25 nil t)
+  (ecb-set-left2-buffer)
+  (ecb-split-hor 0.5)
+  (ecb-set-left3-buffer)
+  (select-window (next-window (next-window)))
+  (ecb-set-left5-buffer)
+  (ecb-split-ver 0.5)
+  (ecb-set-left6-buffer)
+  (select-window (next-window (next-window)))
+  (ecb-set-right1-buffer))
+
+  ;; select the edit-window
+  (select-window (previous-window (selected-window) 0)))
+</pre>
+
+<p>Especially the last example should demonstrate that even very
+complicated layouts are easy to program with <code>ecb-layout-define</code>. 
+If such layouts are senseful is another topic ;-)
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>The
+``window dedicators'' for all these ecb-windows/buffers are
+not explicitly described - they look all like
+<code>ecb-set-left1-buffer</code> - of course with different buffer-names!</p>
+
+</ol><hr>
+
+</body></html>
+

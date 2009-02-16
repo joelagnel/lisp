@@ -1,0 +1,2 @@
+echo "ERROR: <cursor>"
+exit 1

@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>channels.anim (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .eev-glyph-face-red {
+        /* eev-glyph-face-red */
+        color: #ff0000;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+
+ <embed src="channels.swf"
+       width="600" height="400" type="application/x-shockwave-flash">
+
+The animation above shows Emacs sending commands to xterms one line at
+a time through "communication channels".
+
+When the user types &lt;F9&gt; Emacs checks if the current line starts with
+a "<span class="eev-glyph-face-red">*</span>"; if it does, then the rest of the line is executed as Lisp code,
+and if doesn't then the line is sent to the program at the end of the
+current communication channel. The user only had to type a series of
+&lt;F9&gt;s at the Emacs window for all this to happen.
+
+The line
+
+  <span class="eev-glyph-face-red">*</span> (eechannel-xterm "A") ;; create
+
+creates a xterm "listening to channel A", and sets the default channel
+to A; similarly,
+
+  <span class="eev-glyph-face-red">*</span> (eechannel-xterm "B") ;; create
+
+creates a xterm "listening to channel A" and sets the default channel
+to B. After that some lines are send to the xterm at channel B, then
+
+  <span class="eev-glyph-face-red">*</span> (eechannel "A") ;; change target
+
+sets the default channel to A; the next lines are sent to A, and so
+on.
+
+After executing/sending all those lines the user switches the focus to
+an xterm and types "exit" there to close it, and then does the same
+with the other xterm. Note that these xterms "listen" to the user's
+keystrokes as usual, but _in addition to that_ they also listen to
+input from Emacs.
+
+
+For more information:
+  The code that runs in the movie:     <a href="../examples/anim.e.html#movie1">(find-eevex "anim.e" "movie1")</a>
+  The preparatives for the recording:  <a href="../examples/anim.e.html#movie1_A0">(find-eevex "anim.e" "movie1_A0")</a>
+  The code for F9:             <a href="../eev.el.html#eechannel-do-this-line">(find-eev "eev.el" "eechannel-do-this-line")</a>
+  An auxiliary program:        <a href="../eegchannel.html">(find-eev "eegchannel")</a>
+  The program that produced the animation:
+    &lt;<a href="http://www.unixuser.org/~euske/vnc2swf/rec_vncserver.html">http://www.unixuser.org/~euske/vnc2swf/rec_vncserver.html</a>&gt;
+  Compiling vnc2swf (and some auxiliary libraries and programs):
+                                <a href="../examples/anim.e.html#compile-ming">(find-eevex "anim.e" "compile-ming")</a>
+  More about SWF:               <a href="README">(find-eevfile "anim/README")</a>
+</pre>
+  </body>
+</html>

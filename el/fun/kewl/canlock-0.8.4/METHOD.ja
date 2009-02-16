@@ -1,0 +1,114 @@
+[Canlock の生成方法]
+
+概要
+====
+
+  ニュース記事を送信するときはヘッダに Cancel-Lock フィールドを付加し
+  ます。
+  そして自分が送信したニュース記事を cancel または supersede するとき
+  は、ヘッダに Cancel-Key フィールドを付けたコントロールメッセージか
+  ニュース記事を送信します。
+
+  Cancel-Key フィールドには、簡単に贋作できないようにするために元記事
+  の Message-ID と秘密の文字列 (*1) を元にして HMAC-SHA1 の技法 (*2)
+  で作った文字列を含めます。生成された文字列は一般に base64 で encode
+  したものです。
+
+  元記事を送信したときにヘッダに付けた Cancel-Lock フィールドの中身は、
+  Cancel-Key フィールドの中身と同じ文字列を SHA1 して、さらに base64
+  で encode したものです。
+
+  ニュースサーバは元記事の Cancel-Lock フィールドの中身を base64 で
+  decode した結果と Cancel-Key フィールドの中身を SHA1 した結果が一致
+  した場合に cancel または supersede の処理を行ないます。
+
+	(*1) 以下の説明では秘密の文字列として "HeavyLispers" を使って
+	     います。
+	(*2) draft-ietf-ipsec-auth-hmac-sha196-03.txt, rfc2104.txt
+
+
+Cancel-Key フィールドの生成
+===========================
+
+  Cancel-Key は cancel のためのコントロールメッセージや supersedes の
+  ためのニュース記事のヘッダに含める次の二行目のようなフィールドです。
+
+	Control: cancel <28hftu2xkw.fsf@jpl.org>
+	Cancel-Key: sha1:prmYkyHi4xn+ARde5H6apvdEDrE=
+
+  これはニュース記事をキャンセルするためのコントロールメッセージですが、
+  元記事には
+
+	Message-ID: <28hftu2xkw.fsf@jpl.org>
+	Cancel-Lock: sha1:cZO13MZJDp/zC/459gVaGeyNX6M=
+
+  という Message-ID と Cancel-Lock フィールドが存在していました。
+  Cancel-Key と Cancel-Lock フィールドの内容は "sha1:" という scheme
+  を示す文字列で始まっています。大文字小文字は問いませんが、SHA1 以外
+  の scheme は使われません。
+  Cancel-Key フィールドの "sha1:" より後ろの文字列は次のようにして作り
+  ます。
+
+  最初に ipad および opad と呼ばれる文字列が定義されています。
+
+	ipad: 64-byte の連続した 0x36 のデータ
+	opad: 64-byte の連続した 0x5c のデータ
+
+  そして text として元記事の Message-ID を元に HMAC と呼ばれる byte 列
+  を作ります。
+
+	H(K XOR opad, H(K XOR ipad, text))
+
+  この式の意味は以下の通りです。
+
+    (1) K は秘密の文字列で、長さが 64 の byte 列です。もし秘密の文字列
+	の長さが 64-byte に満たないときは後ろに 0x00 を必要な数だけ付
+	けます。逆に秘密の文字列の長さが 64-byte を越えていた場合は、
+	後で述べるハッシュ関数 H を使って 20-byte の長さにしてから後ろ
+	に 44-byte の 0x00 を付加します。
+
+    (2) K と ipad の XOR (bit 単位の exclusive-OR) の演算を行ないます。
+
+    (3) (2) の演算結果で得られた長さが 64 の byte 列の後ろに text すな
+	わち Message-ID の文字列をつなげます。
+
+    (4) (3) で作った連続した文字列をハッシュ関数 H にかけます。Canlock
+	ではハッシュ関数として SHA1 message digest algorithm を使うの
+	で、この結果長さが 20 の byte 列が得られます。
+
+    (5) K と opad の XOR の演算を行ないます。
+
+    (6) (5) の演算結果の後ろに (4) で作った byte 列をつなげます。
+
+    (7) (6) の演算結果をさらにハッシュ関数 H にかけます。
+
+  以上の演算で得られる長さが 20 の byte 列を base64 で encode した結果
+  が Cancel-Key フィールドの "sha1:" より後ろの文字列として使われます。
+
+
+Cancel-Lock フィールドの生成
+============================
+
+  送信するニュース記事の Message-ID と秘密の文字列を元に Cancel-Key
+  フィールドを作ったら、"sha1:" より後ろの文字列をさらにハッシュ関数
+  H にかけ、その結果を base64 で encode したものを Cancel-Lock フィー
+  ルドの "sha1:" より後ろの文字列として付加します。
+
+  通常のニュース記事ではヘッダに Cancel-Lock フィールドだけを付加しま
+  すが、supersedes ではその記事の Message-ID を元に作った Cancel-Lock
+  フィールドとともに元記事の Message-ID を元に作った Cancel-Key フィー
+  ルドも付加することが必要です。
+
+
+その他
+======
+
+  draft-ietf-usefor-cancel-lock-01.txt によれば Cancel-Key または
+  Cancel-Lock フィールドに二組以上のハッシュ関数で生成した文字列を含む
+  ことが許されています。そのような場合にニュースサーバは、Cancel-Key
+  フィールドに含まれる文字列のどれかが元記事の Cancel-Lock フィールド
+  に含まれる文字列のどれかにマッチした場合に cancel または supersede
+  の処理を行なうもののようです。
+
+-- 
+山岡克美 <yamaoka@jpl.org>

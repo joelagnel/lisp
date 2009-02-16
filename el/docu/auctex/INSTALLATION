@@ -1,0 +1,111 @@
+Installation of AUC TeX
+***********************
+
+Compiling
+=========
+
+The following describes how to install AUC TeX under Unix.  You may
+also be able to do use these instructions under some other operating
+systems, if you have already installed the proper GNU tools, such as
+`make'.
+
+   To install AUC TeX for an entire site (which may just be your own
+personal Linux box), issue the following two commands as root:
+
+     make
+     make lispdir=/usr/local/share/emacs/site-lisp install
+
+   except that instead of /usr/local/... you should use the location of
+your sites emacs installation.  AUC TeX will then be installed in a
+subdirectory named `auctex' of the `site-lisp' directory, and the file
+`tex-site.el' will be stored directly in the `site-lisp'.  You can now
+tell your users to enable AUC TeX by adding
+
+     (require 'tex-site)
+
+   to their `.emacs' file.
+
+   If you use xemacs instead, or if your emacs binary is named something
+else than `emacs', specify this by using the commands
+
+     make EMACS=xemacs
+     make lispdir=/usr/local/share/emacs/site-lisp install
+
+   to install.
+
+   If you want to install AUC TeX in your personal account, you should
+chose a directory for all your emacs add-ons, for example an `elisp'
+subdirectory in your home directory.  You can then install AUC TeX with
+the commands
+
+     make
+     make lispdir=$HOME/elisp install
+
+   You will then need to add the following lines to your `.emacs' file:
+
+     (setq load-path (cons "~/elisp" load-path))
+     (require 'tex-site)
+
+Customizing
+===========
+
+   Next, you should edit the file `tex-site.el' to fit your local site.
+You do this by looking at the customization section in the beginning
+of `tex.el' and copy the definitions that are wrong for your site to
+`tex-site.el'.  Do _not_ edit `tex.el' directly, or you will have to do
+all the work over again when you upgrade AUC TeX.  AUC TeX will not
+overwrite your old `tex-site.el' file next time you install, so you
+will be able to keep all your customizations.
+
+   There are two variables with a special significance.
+
+ - User Option: TeX-lisp-directory
+     The directory where you want to install the AUC TeX lisp files.
+
+   This variable is set automatically by the `make install' command.
+If you don't issue a `make install', for example if you don't want to
+install AUC TeX in a different place, you will have to set this
+variable manually to the location of the compiled files.
+
+ - User Option: TeX-macro-global
+     Directories containing the site's TeX style files.
+
+   Normally, AUC TeX will only allow you to complete a short list of
+built-in macros and environments and on the macros you define yourself.
+If you issue the `M-x TeX-auto-generate-global' command after loading
+AUC TeX, you will be able to complete on all macros available in the
+standard style files used by your document.  To do this, you must set
+this variable to a list of directories where the standard style files
+are located.  The directories will be searched recursively, so there is
+no reason to list subsirectories explicitly.
+
+   You probably also need to change `TeX-command-list' to make sure
+that the commands used for starting TeX, printing, etc. work on your
+system.  Copy the definition from `tex.el' to `tex-site.el' and edit
+the command names appropriately.
+
+   Finally, copy and edit `TeX-printer-list' to contain the printers
+available at your site.
+
+   To extract information from your sites TeX macros, type `M-x
+TeX-auto-generate-global' in your emacs.  This will only work if you
+have set `TeX-macro-global' correctly in `tex-site.el'.
+
+Contributed files
+=================
+
+   There are several files that are not part of AUC TeX proper, but
+included in the distribution in case they are useful.
+
+`hilit-LaTeX.el'
+     Better highlighting for the obsolete `hilit19' package.
+
+`bib-cite.el'
+     Better support for bibliographies and much more.
+
+`tex-jp.el'
+     Support for Japanese.
+
+   Read the comments in the start of each file for more information
+about how to install, what they do, and who wrote and maintains them.
+

@@ -1,0 +1,1 @@
+memchr(<field "void *s">, <field "int c">, <field "size_t n">)

@@ -1,0 +1,90 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Semantic%20analyser">Semantic analyser</a>,
+Next:<a rel=next accesskey=n href="Symboldefinition.html#Symboldefinition">Symboldefinition</a>,
+Previous:<a rel=previous accesskey=p href="Add-on-interactors.html#Add-on%20interactors">Add-on interactors</a>,
+Up:<a rel=up accesskey=u href="Add-on-interactors.html#Add-on%20interactors">Add-on interactors</a>
+<hr><br>
+
+<h4>Displaying the current semantic context</h4>
+
+<p>The cedet-suite contains the <dfn>semantic analyzer</dfn> which is a
+library tool that performs context analysis and can derive useful
+information. See the related node in the info-manual of cedet/semantic
+for more detailed informations about this tool.
+
+<p>The analyzer output can be used through a special ECB-interactor. This
+interface lists details about the analysis, such as the current
+function, local arguments and variables, details on the prefix (the
+symbol the cursor is on), and a list of all possible completions (see
+<code>semantic-analyze-possible-completions</code> for more details about
+completions available via the semantic-analyser).
+
+<p>Per default the content of the analyser-interactor is automatically
+synchronized and updated with current point of the current
+source-buffer in the edit-area (see <code>ecb-window-sync</code> and
+<a href="ECB-window-synchronizing.html#ECB-window%20synchronizing">ECB-window synchronizing</a>).
+
+<p>The analyser-interactor is of type tree-buffer. See <a href="Tree-buffer-basics.html#Tree-buffer%20basics">Tree-buffer basics</a> for basic informations how to use such a tree-buffer.
+
+<h5>Usage of the analyser-interactor</h5>
+
+<ul>
+<li>When a node-name in the "Context"-bucket is selected with the
+primary mouse button (see <a href="Using-the-mouse.html#Using%20the%20mouse">Using the mouse</a>) or RETURN (see <a href="Using-the-keyboard.html#Using%20the%20keyboard">Using the keyboard</a>) the buffer in the edit-window (which one depends on the
+setting in <code>ecb-mouse-click-destination</code>) will jump to the
+related entry. For strongly typed languages, this means you will jump
+to the definition of the variable, slot, or type definition.
+
+<li>Clicking on a node-name in the "Context"-bucket with the secondary
+mouse button or C-RETURN (see <a href="Usage-of-ECB.html#Usage%20of%20ECB">Usage of ECB</a>) will jump to the
+related entry in another edit window - which one depends on the
+setting in <code>ecb-mouse-click-destination</code>.
+
+<li>If you click on a node-name in the "Completions"-bucket, then the text
+that was recently analyzed will be replaced with the name of the tag
+that was clicked on in the analyser-interactor.
+
+<li>Right clicking with the mouse (or with the keyboard, see <a href="Using-popup-menus.html#Using%20popup-menus">Using popup-menus</a>) onto a tree-node opens a popup-menu which allows to
+display additional (if available) informations to the current node.
+
+<h5>Interactive commands of the analyser-interactor</h5>
+
+<p>ECB offers the following commands for the analyser-interactor:
+
+<ul>
+<li><code>ecb-analyse-buffer-sync</code>
+<li><code>ecb-goto-window-analyse</code>
+<li><code>ecb-maximize-window-analyse</code>
+</ul>
+
+<p>See <a href="Interactive-ECB-commands.html#Interactive%20ECB%20commands">Interactive ECB commands</a> for details about these commands. 
+But you should not have any need to call
+<code>ecb-analyse-buffer-sync</code> directly because ECB automatically
+syncronizes the analyser-interactor with current active edit-buffer.
+
+</ul>
+
+<h5>Activating/Displaying the analyser-interactor</h5>
+
+<p>Either use one of the predefined layouts "left-analyse" or
+"leftright-analyse" (e.g. via <kbd>C-c . l c</kbd>) or create a new
+ecb-layout via the command <code>ecb-create-new-layout</code> and add a
+buffer of type "other" and name "analyse" into this new layout
+(see <a href="Creating-a-new-ECB-layout.html#Creating%20a%20new%20ECB-layout">Creating a new ECB-layout</a>).
+
+<h5>Customizing the analyser interactor</h5>
+
+<p>See <a href="ecb-analyse.html#ecb-analyse">ecb-analyse</a> for a list of all options currently available
+for customizing this interactor to your needs.
+
+</body></html>
+

@@ -1,0 +1,1 @@
+bzero(<field "void *BLOCK">, <field "size_t SIZE">)<endpoint>

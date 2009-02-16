@@ -1,0 +1,52 @@
+			 <Readme for Mew 4.1>
+			    Kazu Yamamoto
+			     Jan 13, 2005
+
+This is the stable release of Mew 4.2.
+
+			     <Platforms>
+
+Please use Emacs 20.7 or Emacs 21.3 or later (including the CVS
+version of Emacs). Mew doesn't support earlier versions. (Mew may work
+on XEmacs 21.1.14 or later but Mew does not support it officially
+anymore.)
+
+			      <Web Site>
+
+Useful information may be found from the following web page:
+
+	http://www.Mew.org/
+
+			    <Installation>
+
+(1) Type './configure'.
+
+(2) Type 'make'.
+
+(2.1) Mew's info is formatted by Emacs 21.x. So, the info could not be
+visible with other Emacsen. In this case, type 'make info' to format
+the info.
+
+(2.2) If you want to format the Japanese info, type 'make jinfo'.
+
+(3) Type 'make install'.
+
+If you have the "install-info" command, the following line will be
+automatically added to the "dir" file.  Otherwise, add it by yourself.
+
+---
+* Mew: (mew.info).      Messaging in the Emacs World
+---
+
+(3.1) If you want the Japanese info, type 'make install-jinfo'. If you
+have the "install-info" command, the following line will be
+automatically added to the "dir" file.  Otherwise, add it by yourself.
+
+---
+* Mew-J: (mew.jis.info).  Messaging in the Emacs World
+---
+
+(4) See info for configuring a site file/.emacs/.mew.el.
+    See also "mew.dot.emacs" and "mew.dot.mew".
+
+--End of file

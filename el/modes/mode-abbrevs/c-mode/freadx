@@ -1,0 +1,8 @@
+if (fread(<field "void *ptr">, <field "size_t size">, <field "size_t nmemb">, <field "FILE *stream">) < 1) {
+    perror("fread");
+    std::cerr << "ERROR: errno=" << errno << " calling fread()"
+              << " at " << __FILE__ << ":" << __LINE__
+              << std::endl << std::flush;
+    exit(1);
+}
+<endpoint>

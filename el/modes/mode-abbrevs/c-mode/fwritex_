@@ -1,0 +1,21 @@
+(lambda (insertion-point-begin insertion-point-end)
+  (let ((files nil)
+	(ctxt nil)
+	(lv nil)))
+  (when semantic-idle-scheduler-mode
+    (setq ctxt (semantic-analyze-current-context))
+    (setq lv (oref ctxt localvariables))
+    (setq files
+	  (mapcar
+	   (lambda (x) (semantic-tag-name x))
+	   (semantic-find-tags-by-type "FILE" lv)))
+    (when files
+      (re-search-forward "<field \"f\">" insertion-point-end t)
+      (replace-match
+       (concat "<choose>"
+	       (mapconcat
+		(lambda (f)
+		  (format "<choice \"%s\">" f))
+		files "")
+	       "</choose>")
+       nil t))))

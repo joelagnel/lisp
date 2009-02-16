@@ -1,0 +1,43 @@
+# -*- mode: sh -*-
+# This is the `rcfiles/.bashrc-psne' file of GNU eev.
+# This file is in the Public Domain.
+# Author and version: Eduardo Ochs, 2005jan07
+
+# The installation scripts of eev add a few lines to your .bashrc to
+# make bash read this file on startup.
+# (find-eevrc "change" "eev_chunk_for_dotbashrc")
+#
+# This is a simple implementation of `psne' for bash.
+# Example: "psne http://www.foo.bar/mm" will run this:
+#
+#   mkdir -p $S/http/www.foo.bar/ && \
+#   cd       $S/http/www.foo.bar/ && \
+#   wget http://www.foo.bar/mm
+#
+# Note that after running that "psne" we are left at the directory
+# "~/snarf/http/www.foo.bar/".
+
+export S;: ${S:=~/snarf}
+
+function psne-sh-sed-snarfize () { sed 's,^\([a-z]*\)://,$S/\1/,'; }
+function psne-sh-urlp () { echo $1 | egrep -q '^(http|ftp)://'; }
+function psne-sh-meta () {(
+  URL=$1
+  SURL=$(echo $1 | psne-sh-sed-snarfize)
+  DIR=$(dirname $SURL)
+  echo "mkdir -p $DIR/ && \\"
+  echo "cd       $DIR/ && \\"
+  echo "wget $URL"
+);}
+function psne-sh () {
+  if psne-sh-urlp $1; then
+    eval "$(psne-sh-meta $1)"
+    echo $1 >> ~/.psne.log
+  else
+    echo "Not an url: $1"
+  fi
+}
+alias psne=psne-sh
+
+# (find-sh ". $EEVRCDIR/.bashrc-psne; psne-sh-meta http://www.foo.bar/mm")
+# (find-node "(bashref)The Set Builtin" "`e'")

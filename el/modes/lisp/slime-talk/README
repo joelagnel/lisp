@@ -1,0 +1,36 @@
+This is an ad-hoc presentation used for presenting SLIME at the 2005
+European Common Lisp Meeting in Amsterdam. Fun meeting!
+
+The slideshow was presented in GNU Emacs 21.3 and CMUCL 19a in
+800x600. I was running Debian 'testing'.
+
+Usage tips:
+
+  ./run.sh
+  M-x eval-buffer
+  M-x slime
+  M-x present-my-slideshow
+
+Hopefully you have the right fonts! Otherwise you need to find close
+enough alternatives, e.g. regular helvetica instead of italic.
+
+Important bindings:
+
+  f - forward slide
+  b - backward slide
+  / - forward slide with fading special effect
+  a - trigger the next "action" for the current slide.
+      The only slide with an action is the "SLIM" one.
+
+Technical notes on how it is presented:
+
+  "SLIM" slide: first 'a' to show the snippet then C-c C-c to compile
+  it in-place (to show off compiler note annotations).
+
+  "SLIME" slide: `C-x C-e' at the end to evaluate (foo 1) and enter
+  debugger. Note that since foo was defun'd on the previous slide the
+  'v'iew source command in the debugger will pop to that slide. When
+  the debugger is 'q'uit we end up back at the right slide.
+
+- Luke Gorrie <luke@member.fsf.org>
+

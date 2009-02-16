@@ -1,0 +1,5 @@
+def requireutil(executables):
+    for exe in executables:
+        if not which(exe):
+            sys.stderr.write("ERROR: cannot find required util %s\n" % (exe))
+            sys.exit(1)

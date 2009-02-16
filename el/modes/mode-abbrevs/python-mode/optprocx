@@ -1,0 +1,6 @@
+while len(sys.argv)-1 > 0:
+    if sys.argv[1]=="--foo":
+        pass
+    else:
+        break
+    sys.argv = sys.argv[:1] + sys.argv[2:]

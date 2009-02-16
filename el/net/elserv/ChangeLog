@@ -1,0 +1,597 @@
+2001-07-19  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elserv.el (product): Up to 0.4.0.
+
+	* README.ja: Update.
+
+	* es-demo.el (elserv-demo-post-apropos): Fixed problem when no
+	apropos matched.
+
+2001-07-18  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elservd: Removed.
+
+	* elservd.in: New file.
+
+	* Makefile (GOMI): Added elservd.
+
+	* ELSERV-MK (config-ruby): New function.
+	(config-elserv): Call `config-ruby'.
+	(config-elserv-package): Ditto.
+
+	* COPYING: New file.
+
+	* es-wiki.el (elserv-wiki-function): Redirect "" to "/".
+
+	* es-mhc.el (elserv-mhc-function): Don't cause an error when
+	month is "".
+
+	* es-demo.el (elserv-demo-publish): Changed name for upload.
+
+	* elserv.el (elserv-make-redirect): Added argument `result'.
+	(elserv-service-directory): Follow change above.
+	(elserv-service-function): Don't redirect here.
+
+	* ELSERV-MK: Check whether ruby is installed or not.
+
+2001-07-17  OHASHI Akira  <bg66@koka-in.org>
+
+        * elserv-autoindex.el (elserv-autoindex): Simplify.
+        (elserv-autoindex-get-icon): Don't use `assoc-if'.
+
+2001-07-17  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elserv.el (toplevel): Enclose autoloading elserv-autoindex
+	definition with eval-and-compile.
+
+	* elserv-autoindex.el (elserv-autoindex): Don't use delete-if.
+
+	* ELSERV-MK, ELSERV-ELS, ELSERV-CFG, Makefile: New files.
+
+	* web-custom.el (toplevel): Require mcharset.
+	(web-custom-option-body): Use elserv-replace-in-string.
+
+	* es-mhc.el (elserv-mhc/path, elserv-mhc/icon-image-alist): Moved
+	definition.
+	(elserv-mhc-article-function): Added local binding `charset'.
+
+	* elserv.el (elserv-daemon-name): Setup default for XEmacs package.
+	(elserv-icon-path): Set default value.
+	(elserv-service-directory): Set argument `result'.
+	(elserv-replace-in-string): New function.
+
+	* elserv-autoindex.el (toplevel): Require elserv.
+	(elserv-autoindex): Added argument `result'.
+
+2001-07-17  OHASHI Akira  <bg66@koka-in.org>
+
+        * elserv-autoindex.el (elserv-autoindex): Fix regexp.
+        (elserv-autoindex-get-icon): Fix directory handling.
+
+2001-07-16  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* es-wiki.el (elserv-wiki-search-page): Rewrite for latest emacs-wiki.
+	(elsesrv-wiki-compilation-finish-function): Removed.
+
+	* elserv.el (elserv-service-function): Redirect "" to "/".
+
+	* es-monitor.el: Removed "(require 'mcs-20)".
+
+2001-07-16  OHASHI Akira  <bg66@koka-in.org>
+
+        * elserv-autoindex.el (elserv-autoindex-ignore-list): Change list
+        contents to regexp.
+        (elserv-autoindex): Follow changes above.
+        (make-match-function): Abolish.
+        (elserv-autoindex-get-icon): Implement `make-match-function'.
+
+        * elserv-autoindex.el (elserv-autoindex): Simplify parent directory
+        handlings.
+        (elserv-autoindex-get-attr): Ditto.
+
+        * es-monitor.el (toplevel): Require `mcharset' and `mcs-20'.
+
+2001-07-16  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* es-monitor.el: New file.
+
+	* elserv.el (elserv-publish): Added description as first argument.
+	(elserv-execute-service-maybe): Renamed from
+	elserv-call-service-function-maybe.
+	(elserv-execute-service-maybe): Use intern-soft instead of intern.
+	(elserv-service-directory): Added argument `doc'.
+	(elserv-service-string): Ditto.
+	(elserv-service-function): Ditto.
+	(elserv-publish-default): Publish monitor.
+
+	* es-demo.el (elserv-demo-publish): Added description.
+
+	* es-wiki.el (elserv-wiki-publish): Ditto.
+
+	* es-mhc.el (elserv-mhc-publish): Ditto.
+
+	* es-mhc.el (elserv-mhc-icon-publish-path): New user option.
+	(elserv-mhc-icon-path): Changed default value as elserv-icon-path.
+	(elserv-mhc/icon-setup): Eliminated.
+	(elserv-mhc-icon-string): Changed to use elserv-mhc-icon-publish-path.
+	(elserv-mhc-make-todo-list): Use elserv-mhc/icon-image-alist.
+	(elserv-mhc/icon-image-alist): New internal variable.
+	(elserv-mhc-icon-setup): Rewritten.
+
+	* elserv.el: Defcustomized.
+
+	* elserv-autoindex.el (elserv-autoindex-http-header): Don't hard code
+	icon path.
+	(elserv-autoindex-get-icon): Ditto.
+	(elserv-autoindex-icon-alist): Ditto;
+	Renamed from elserv-autoindex-icon-alist.
+	(elserv-autoindex-list-format): Added space.
+	(elserv-autoindex): Use elserv-icon-publish-path.
+	(elserv-autoindex-get-attr): Ditto.
+	(elserv-autoindex-get-attr): Bind system-time-locale as "C".
+	(elserv-autoindex-get-icon): Renamed
+
+	* elserv.el (elserv-directory-autoindex): New variable
+	(Renamed from elserv-options-indexes).
+	(elserv-icon-path): New variable.
+	(elserv-icon-publish-path): Ditto.
+	(elserv-server-eol): Define as constant.
+	(elserv-client-eor): Ditto.
+	(elserv-service-directory): Fixed.
+	(elserv-service-function): Fixed.
+	(elserv-publish-default): Publish elserv-icon-path on
+	elserv-icon-publish-path.
+
+	* es-wiki.el (elserv-wiki-function): Fixed default page detection.
+	(elserv-wiki-publish): Fixed.
+
+2001-07-15  OHASHI Akira  <bg66@koka-in.org>
+
+        * elserv.el (toplevel): Autoload  `elserv-autoindex'.
+        (elserv-start): Run `elserv-start-hook'.
+        (elserv-options-indexes): New variable.
+        (elserv-service-directory): If `elserv-options-indexes' is Non-nil
+        and directory has no index file, generate html index in the directory.
+
+        * elserv-autoindex.el: New file.
+
+        * icons/a.gif: Ditto.
+
+        * icons/back.gif: Ditto.
+
+        * icons/binary.gif: Ditto.
+
+        * icons/blank.gif: Ditto.
+
+        * icons/bomb.gif: Ditto.
+
+        * icons/c.gif: Ditto.
+
+        * icons/compressed.gif: Ditto.
+
+        * icons/dvi.gif: Ditto.
+
+        * icons/folder.gif: Ditto.
+
+        * icons/image2.gif: Ditto.
+
+        * icons/layout.gif: Ditto.
+
+        * icons/movie.gif: Ditto.
+
+        * icons/p.gif: Ditto.
+
+        * icons/script.gif: Ditto.
+
+        * icons/sound2.gif: Ditto.
+
+        * icons/tar.gif: Ditto.
+
+        * icons/tex.gif: Ditto.
+
+        * icons/text.gif: Ditto.
+
+        * icons/unknown.gif: Ditto.
+
+2001-07-13  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* es-demo.el (elserv-demo-apropos-page): Eliminated.
+	(elserv-demo-describe-function): Renamed from elserv-demo-function.
+	(elserv-demo-publish): New function.
+	(elserv-demo-start): Use it.
+
+	* es-wiki.el (elsesrv-wiki-compilation-finish-function): New variable
+	(To follow changes in latest emacs-wiki).
+	(elserv-wiki-search-page): Use it.
+	* elservd (toplevel): Call STDOUT.binmode for DOS environment.
+	(Patches provided on gotoh-san's diary.)
+
+	* elserv.el (elserv-package-publish): New function.
+
+	* es-wiki.el (elserv-wiki-publish): New function.
+
+	* es-mhc.el: Provide es-mhc with product-provide.
+
+	* elserv.el: Removed comment for elserv-demo.el.
+
+	* elserv-mhc.el, elserv-wiki.el, elserv-demo.el: Deleted (Renamed).
+
+	* es-demo.el: Renamed from elserv-demo.el.
+
+	* es-mhc.el: Renamed from elserv-mhc.el.
+
+	* es-wiki.el: Renamed from elserv-wiki.el.
+	(elserv-wiki-function): Renamed from `elserv-wiki'.
+
+	* elserv.el (elserv-parse-path): Changed behavior like XEmacs.
+	(elserv-service): Changed path analyse process.
+	path always starts with '/'.
+	(elserv-service-directory): Follow changes above.
+
+	* elserv-wiki.el (elserv-wiki): Likewise.
+
+	* elserv-mhc.el (elserv-mhc-function): Likewise.
+
+2001-07-12  OHASHI Akira  <bg66@koka-in.org>
+
+	* elserv.el (elserv-service-directory): Fix.
+
+2001-07-09  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* remote.el (remote-controller): Use function system-name instead
+	of variable.
+
+	* web-custom.el (web-custom): Ditto.
+
+	* elserv.el (elserv-parse-path): New function.
+	(elserv-service): Ditto.
+	(Pointed out by "OHASHI, Akira" <bg66@koka-in.org>)
+
+	* elserv-mhc.el (elserv-mhc-face-foreground): New function.
+	(elserv-mhc-face-background): Ditto.
+	(elserv-mhc-string-with-face): Use above functions.
+	(elserv-mhc-content): Ditto.
+	(elserv-mhc-start): Use function system-name instead of variable.
+
+2001-07-06  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elserv-wiki.el (elserv-wiki): Follow changes for path.
+
+	* elserv.el (elserv-define-status-code): Renamed from
+	elserv-define-result-code (All other related portions are changed).
+	(elserv-moved-permanently): Renamed from elserv-moved/perm.
+	(elserv-make-redirect): Follow chage above.
+	(elserv-moved-found): Renamed from elserv-moved/temp.
+	(elserv-see-other): Added.
+	(elserv-not-modified): Ditto.
+	(elserv-process-request): Added argument `request'.
+	(elserv-process-filter): Follow change above.
+	(elserv-call-service-function-maybe): New inline function.
+	(elserv-service): Search for all hierarchies of paths.
+	(elserv-service-directory): Follow change above.
+	(elserv-service-function): Fixed docstring.
+
+	* elserv-mhc.el: New file.
+
+	* remote.el: Ditto.
+
+	* web-custom.el: Ditto.
+
+	* icons/Anniversary.gif: Ditto.
+
+	* icons/Anniversary.png: Ditto.
+
+	* icons/Birthday.gif: Ditto.
+
+	* icons/Birthday.png: Ditto.
+
+	* icons/Business.gif: Ditto.
+
+	* icons/Business.png: Ditto.
+
+	* icons/CheckBox.gif: Ditto.
+
+	* icons/CheckBox.png: Ditto.
+
+	* icons/CheckedBox.gif: Ditto.
+
+	* icons/CheckedBox.png: Ditto.
+
+	* icons/Conflict.gif: Ditto.
+
+	* icons/Conflict.png: Ditto.
+
+	* icons/Date.gif: Ditto.
+
+	* icons/Date.png: Ditto.
+
+	* icons/Holiday.gif: Ditto.
+
+	* icons/Holiday.png: Ditto.
+
+	* icons/Link.gif: Ditto.
+
+	* icons/Link.png: Ditto.
+
+	* icons/Other.gif: Ditto.
+
+	* icons/Other.png: Ditto.
+
+	* icons/Party.gif: Ditto.
+
+	* icons/Party.png: Ditto.
+
+	* icons/Private.gif: Ditto.
+
+	* icons/Private.png: Ditto.
+
+	* icons/Vacation.gif: Ditto.
+
+	* icons/Vacation.png: Ditto.
+
+	* icons/article.png: Ditto.
+
+	* icons/background.gif: Ditto.
+
+	* icons/background.png: Ditto.
+
+2001-05-30  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elserv.el (elserv-ok): Set message as "OK".
+	(elserv-make-redirect): Set body.
+	(elserv-make-header): Use elserv-msg for message.
+	(elserv-log): Fixed bug when access-log file does not exist.
+	(elserv-parse-accept-language): New function.
+	(elserv-find-file): Use it.
+	(elserv-service-directory): Fixed.
+
+2001-05-29  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elservd: Assume argument number as 5.
+
+	* elserv.el (elserv-bytes): Rewrite.
+	(elserv-process-request-internal): Don't count body length if it's nil.
+	(elserv-log): Ditto.
+	(elserv-make-header): Don't refer body if it is nil.
+	(elserv-start): Fixed arguments.
+	(elserv-find-file): New function.
+	(elserv-service-directory): Fixed problem when the directory is
+	published as root content.
+	(elserv-access-log-file): New variable.
+	(elserv-access-log-max-size): Ditto.
+	(elserv-log): Write access log to the elserv-access-log-file if
+	specified.
+
+2001-05-28  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elservd (ElservClientSession::close): New method.
+	(ElservClientSession::read): Ditto.
+	(ElservClientSession::read_chunked): Ditto.
+	(main-loop): Detect transfer-encoding header and read chunked body if
+	it is specified.
+
+	* elserv.el: Fixed "a HTTP server" => "an HTTP server".
+	(elserv-bytes): Rewrite.
+	(elserv-client-start): Set buffer as unibyte.
+	(elserv-process-request-internal): Use elserv-make-header instead of
+	elserv-make-response.
+	(elserv-parse-request): Set buffer as unibyte.
+	(elserv-make-header): Renamed from elserv-make-response;
+	Don't include body.
+	(elserv-start): Set buffer as unibyte.
+
+	* elserv-demo.el (elserv-demo-upload): Set temp buffer as unibyte.
+
+	* elservd (toplevel): Added 5th argument.
+	(main-loop): Check keep_alive_timeout;
+	Close session if bogus null request.
+
+	* elserv.el (toplevel): Require 'static.
+	(elserv-program-name): New variable.
+	(elserv-keep-alive-timeout): Ditto.
+	(elserv-http-version): New constant.
+	(elserv-bytes): New alias.
+	(elserv-method-not-allowed): Changed name.
+	(elserv-make-result): Added argument content-length.
+	(elserv-result-content-length): New macro.
+	(elserv-set-result-content-length): Ditto.
+	(elserv-version): Added optional argument.
+	(elserv-load): Don't use default-enable-multibyte-characters.
+	(elserv-make-response): Added Date, Accept-Range, Keep-Alive fields.
+	(elserv-start): Added argument for elserv-keep-alive-timeout.
+	(elserv-log): Use elserv-bytes instead of length.
+	(elserv-request-handler): Check "Host" field when HTTP/1.1.
+	(elserv-request-handler): Return 'Not implemented' response if
+	method is not implemented.
+	(elserv-handle-head): Set content-length.
+	(elserv-publish): Added :host argument.
+	(elserv-service): Added virtual host support.
+
+	* elserv-wiki.el (elserv-wiki-publishing-footer): New variable.
+	(elserv-wiki-render-page): Rewrite.
+	(elserv-wiki-search-page): Added save-window-excursion.
+	(elserv-wiki): Use elserv-wiki-publishing-footer;
+	Use emacs-wiki-default-page for "/".
+
+	* README.ja: Update.
+
+	* BUGS.ja: Update.
+
+2001-05-26  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elservd: Rewrite to have only one persistent connection with emacs.
+
+	* elserv.el (toplevel): Require 'poem.
+	(toplevel): checkdoc.
+	(elserv-max-keep-alive-requests): New variable.
+	(elserv-identity-check): Set default as nil.
+	(elserv-garbage-collect-every-request): Abolish.
+	(elserv-buffer-client-process): New buffer local variable.
+	(elserv-buffer-client-port): Ditto.
+	(elserv-url-int-char): Abolish.
+	(elserv-url-decode-string): Use int-char.
+	(elserv-position): New inline function.
+	(elserv-url-decode): Use it.
+	(elserv-url-decode): Use substring instead of subseq.
+	(elserv-client-start): Changed argument; Don't send response.
+	(elserv-process-request-internal): New inline function.
+	(elserv-process-request): Call elserv-process-request-internal.
+	(elserv-parse-request): Rewrite.
+	(elserv-make-response): Added argument connection.
+	(elserv-make-response): Don't add last CRLF.
+	(elserv-start): Added elserv-max-keep-alive-requests.
+	(elserv-find-process): Changed regexp.
+	(elserv-stop): kill process buffer.
+
+2001-05-23  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elserv-wiki.el: New file.
+
+	* elserv-demo.el (elserv-counter-file-base): New variable.
+	(elserv-counter): New function.
+	(elserv-demo-counter): Ditto.
+	(elserv-demo-start): Added counter.
+
+	* elservd (toplevel): Require "thread", "timeout";
+	Changed argument number;
+	Check client count;
+	Added timeout for emacs client acception.
+
+	* elserv.el (elserv-max-clients): New variable.
+	(elserv-garbage-collect-every-request): Ditto.
+	(elserv-url-unreserved-chars): Renamed from
+	`elserv-cgi-url-unreserved-chars'.
+	(elserv-make-unauthorized-basic): Added unauthorized page.
+	(elserv-url-int-char): Renamed from elserv-cgi-int-char.
+	(elserv-url-hex-char-p): Likewise.
+	(elserv-url-decode-string): Likewise.
+	(elserv-url-decode): Likewise.
+	(elserv-load): New function.
+	(elserv-make-directory): Ditto.
+	(elserv-save-buffer): Ditto.
+	(elserv-save): Ditto.
+	(elserv-client-start): Garbage collect every request.
+	(elserv-start): Added max client argument.
+	(elserv-start): Make process buffer for each port.
+	(elserv-process-port): New function.
+	(elserv-find-process): Use it.
+	(elserv-log): Make log buffer for each port.
+	(elserv-log): Fixed problem when user-agent is nil.
+	(elserv-request-handler): Don't catch error handler here.
+	(elserv-service): Support "/" content.
+	(elserv-service-directory): Changed checking order of auth and
+	predicate.
+	(elserv-service-string): Ditto.
+	(elserv-service-function): Ditto.
+	(elserv-service-directory): Decode path first.
+	(elserv-publish-default): Simplify.
+	(elserv-request-handler): Downcase method name.
+
+2001-05-18  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elserv-demo.el (elserv-demo-buffers): Replace " " as "+".
+
+	* elserv.el (elserv-cgi-url-unreserved-chars): New constant.
+	(elserv-make-predicate-from-plist): Append 'list for host-regexp list.
+	(elserv-make-unauthorized-basic): Fixed.
+	(elserv-cgi-int-char): New function.
+	(elserv-cgi-hex-char-p): Ditto.
+	(elserv-cgi-decode-string): Ditto.
+	(elserv-cgi-decode): Ditto.
+	(elserv-make-response): Added "\r\n" after Content-Length: field.
+	(elserv-client-start): Display response on debug buffer;
+	Don't send last "\r\n".
+	(elserv-service-function): Call `elserv-cgi-decode-string' to decode
+	path.
+
+	* elserv-demo.el (elserv-demo-start): Don't quote as list.
+
+2001-05-17  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elservd (keep_alive): Abolish.
+	(toplevel): Added identity check, added argument;
+	Use pack('m') to encode body;
+	Added decimal client address information to the header.
+
+	* elserv-demo.el (elserv-demo-calendar): Added argument result,
+	removed argument header-only, follow other API changes.
+	(elserv-demo-buffers): Ditto.
+	(elserv-demo-post-apropos): Ditto.
+	(elserv-demo-function): Ditto.
+	(elserv-demo-start): Added buffers-local, upload demo.
+
+	* elserv.el (elserv-directory-index-file): New variable.
+	(elserv-keep-alive): Ditto.
+	(elserv-identity-check): Ditto.
+	(elserv-define-result-code): Renamed from elserv-define-exception.
+	(All other related portions are changed.)
+	(elserv-make-result): New macro.
+	(elserv-result-code): Ditto.
+	(elserv-set-result-code): Ditto.
+	(elserv-result-header): Ditto.
+	(elserv-set-result-header): Ditto.
+	(elserv-result-body): Ditto.
+	(elserv-set-result-body): Ditto.
+	(elserv-result-user): Ditto.
+	(elserv-set-result-user): Ditto.
+	(elserv-error): Changed argument.
+	(with-elserv-error-handler): Follow changes above.
+	(elserv-make-unauthorized-basic): Ditto.
+	(elserv-make-redirect): Ditto.
+	(elserv-parse-request): Get client's decimal address.
+	(elserv-parse-request): Get content-type, ident.
+	(elserv-parse-request): Decode body as base64 encoded string.
+	(elserv-make-response): New function.
+	(elserv-start): Add argument if elserv-identity-check is non-nil.
+	(elserv-stop): Changed message.
+	(elserv-log): Print logname and username.
+	(elserv-request-handler): Call elserv-make-response.
+	(elserv-handle-HEAD): Set body as nil.
+	(elserv-authenticate-basic): Added argument result.
+	(elserv-authenticate): Ditto.
+	(elserv-check-predicate): New function.
+	(elserv-publish): Call elserv-make-predicate-from-plist to make
+	predicate for each service function.
+	(elserv-service): Removed argument header-only.
+	(elserv-make-header): Abolish.
+	(elserv-service-directory): Added argument predicate,
+	remove argument header-only, and check predicate.
+	(elserv-service-string): Ditto.
+	(elserv-service-function): Ditto, added content-type argument.
+
+2001-05-15  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elserv-demo.el (toplevel): Require w3m.
+	(elserv-demo-start): Added authentication example.
+	(elserv-demo-buffers): Display buffer content
+	(According to Akihiro Arisawa san's diary.)
+
+	* elserv.el (elserv-make-redirect): Abolished argument req.
+	(elserv-service): Pass published path to each service function.
+	(elserv-authenticate): New function.
+	(elserv-authenticate-basic): Ditto.
+	(toplevel): Added comment.
+	(toplevel): Require 'cl when compile.
+	(elserv-debug): New variable.
+	(elserv-make-unauthorized-basic): New function.
+	(elserv-make-redirect): Change return value.
+	(elserv-debug): Output to debug buffer only when elserv-debug is
+	non-nil.
+	(elserv-parse-request): Get authorization header.
+	(elserv-handle-GET): Changed return value.
+	(elserv-handle-HEAD): Ditto.
+	(elserv-handle-POST): Ditto.
+	(elserv-publish): Process authentication setting.
+	(elserv-publish): Changed function processing.
+	(elserv-service-directory): Added argument auth.
+
+2001-05-13  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elserv.el: Checkdoc.
+
+2001-05-12  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* elserv-demo.el: New file.
+
+	* README.ja, BUGS.ja, ChangeLog, elservd, elserv.el: New file.
+

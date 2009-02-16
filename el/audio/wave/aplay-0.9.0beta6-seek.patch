@@ -1,0 +1,76 @@
+--- aplay.c~	Mon Jun 11 09:44:13 2001
++++ aplay.c	Fri Aug 24 22:33:29 2001
+@@ -66,6 +66,7 @@
+ 	unsigned int rate;
+ } hwparams, rhwparams;
+ static int timelimit = 0;
++static int seek_length = 0;
+ static int quiet_mode = 0;
+ static int file_type = FORMAT_DEFAULT;
+ static unsigned int sleep_min = 0;
+@@ -146,6 +147,7 @@
+ -c, --channels=#        channels
+ -f, --format=FORMAT     sample format (case insensitive)
+ -r, --rate=#            sample rate
++-S, --seek=#            seek to position # before playing
+ -d, --duration=#        interrupt after # seconds
+ -s, --sleep-min=#       min ticks to sleep
+ -M, --mmap              mmap stream
+@@ -268,7 +270,7 @@
+ int main(int argc, char *argv[])
+ {
+ 	int option_index;
+-	char *short_options = "lLD:qt:c:f:r:d:s:MNF:A:X:R:T:B:vIPC";
++	char *short_options = "lLD:qt:c:f:r:S:d:s:MNF:A:X:R:T:B:vIPC";
+ 	static struct option long_options[] = {
+ 		{"help", 0, 0, OPT_HELP},
+ 		{"version", 0, 0, OPT_VERSION},
+@@ -280,6 +282,7 @@
+ 		{"channels", 1, 0, 'c'},
+ 		{"format", 1, 0, 'f'},
+ 		{"rate", 1, 0, 'r'},
++		{"seek", 1, 0, 'S'},
+ 		{"duration", 1, 0 ,'d'},
+ 		{"sleep-min", 0, 0, 's'},
+ 		{"mmap", 0, 0, 'M'},
+@@ -390,6 +393,9 @@
+ 				return 1;
+ 			}
+ 			break;
++		case 'S':
++			seek_length = atoi(optarg);
++			break;
+ 		case 'd':
+ 			timelimit = atoi(optarg);
+ 			break;
+@@ -1628,6 +1634,8 @@
+ 	}
+ 	if (test_au(fd, audiobuf) >= 0) {
+ 		rhwparams.format = SND_PCM_FORMAT_MU_LAW;
++		if (seek_length != 0)
++		        lseek(fd, seek_length, SEEK_SET);
+ 		playback_go(fd, 0, count, FORMAT_AU, name);
+ 		goto __end;
+ 	}
+@@ -1638,15 +1646,21 @@
+ 		exit(EXIT_FAILURE);
+ 	}
+ 	if ((ofs = test_vocfile(audiobuf)) >= 0) {
++		if (seek_length != 0)
++		        lseek(fd, seek_length, SEEK_SET);
+ 		voc_play(fd, ofs, name);
+ 		goto __end;
+ 	}
+ 	/* read bytes for WAVE-header */
+ 	if ((dtawave = test_wavefile(fd, audiobuf, dta)) >= 0) {
++		if (seek_length != 0)
++		        lseek(fd, seek_length, SEEK_SET);
+ 		playback_go(fd, dtawave, count, FORMAT_WAVE, name);
+ 	} else {
+ 		/* should be raw data */
+ 		init_raw_data();
++		if (seek_length != 0)
++		        lseek(fd, seek_length, SEEK_SET);
+ 		playback_go(fd, dta, count, FORMAT_RAW, name);
+ 	}
+       __end:

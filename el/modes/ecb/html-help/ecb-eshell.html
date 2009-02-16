@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="ecb-eshell">ecb-eshell</a>,
+Next:<a rel=next accesskey=n href="ecb-speedbar.html#ecb-speedbar">ecb-speedbar</a>,
+Previous:<a rel=previous accesskey=p href="ecb-help.html#ecb-help">ecb-help</a>,
+Up:<a rel=up accesskey=u href="Customizable-options.html#Customizable%20options">Customizable options</a>
+<hr><br>
+
+<h4>Group ecb-eshell</h4>
+
+<p>This group contains settings for eshell integration within the ECB:
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>eshell-auto-activate</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Startup the eshell and display it in the compile-window. If current
+layout does not display a compile-window (see
+<code>ecb-compile-window-height</code>) then nothing is done. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>eshell-enlarge-when-eshell</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Enlarge the compile-window if it is selected by <code>eshell</code>. This
+takes only effect if the command <code>eshell</code> is called! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>eshell-fit-window-to-command-output</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Fit the compile-window after an eshell-command to the output. This is
+done by the function <code>ecb-eshell-fit-window-to-output</code> which is
+added to <code>eshell-post-command-hook</code> ie. which is running autom. 
+after each eshell-command. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>eshell-synchronize</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Synchronize eshell with the default-directory of current
+source-buffer. The synchronization is done by
+<code>ecb-eshell-current-buffer-sync</code> which can be called
+interactively but normally it is called autom. by the
+<code>ecb-current-buffer-sync-hook-internal</code>. 
+</td></tr>
+</table>
+
+</body></html>
+

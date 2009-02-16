@@ -1,0 +1,101 @@
+This is the `doc/EEVMANIFESTO' file GNU eev.
+I published this originally on the web - in December 1999 - without
+any notice of copyright... maybe it will need one now, so let's go:
+
+  This file is in the Public Domain.
+
+Author: Eduardo Ochs; version (of the headers): 2005jan05
+Latest version: <http://angg.twu.net/eev-current/doc/EEVMANIFESTO>
+      See also: <http://angg.twu.net/eev-current/README.html>
+                <http://angg.twu.net/eev-current/>
+
+
+
+The eev Manifesto
+=================
+
+I)
+
+Do you remember your first Unix days, when you were always asking yourself
+questions like "how do I compile this?", "how do I install this stuff?", "and
+now, how do I run it?", "how do I generate html from this file?"?
+
+Do you remember how you marvelled at the first time you ran a "make" on a
+package and you saw echoed each of the commands that were used to generate
+binaries and docs from the source? Have you had the same feeling I've had,
+that by understanding those commands we would have access to the tricks that
+the owner of the package knew, and that we'd learn which were the "important"
+programs and in what way the experts used them?
+
+II)
+
+Everybody is fluent in only a small fraction of all Unix commands. If you
+could "listen" to how the Unix gurus "speak" to their machines you would learn
+which "words" are related to solving a particular task, and learn how they fit
+in "sentences". By checking the "dictionary entries" for them (i.e., manpages,
+info pages, READMEs, source code, etc) you could learn the real meaning of
+them. But then you'd be learning Unix by immersion, from real use, instead of
+having to rely only on "textbooks", "dictionaries" and sometimes "Rosetta
+stones", "graffitis on toilet walls" and "old newspapers".
+
+The fact is that you can make a record of how you "speak" Unix, and more, you
+can become a lot more productive if you do so. Many tasks consist on short
+fixed sequences of commands: connecting to your ISP via modem, unpacking a
+source package and recompiling it, printing a text file in two-column mode,
+and so on. The trick is that with some functions defined in eev.el you can
+write these sequences of commands in a plain text file, then mark a block of
+this file with your editor (which must be Emacs for this to work), then tell a
+shell to execute only the commands in that block; in this way you can easily
+execute only portions of what would otherwise have to be a monolythic script;
+this is great for when you're not sure if everything works, or if you just
+want to do some steps. Also, it would be easy to change bits of the "script"
+before execution, as you'll be doing things from inside an editor.
+
+There is also another trick. Scripts allow "comments", that is, lines that are
+not executed; generally the convention is that lines that start with "#" are
+comments. So we can place lines like these in a script:
+
+  # (find-enode "Picture" "C-c c-c")
+
+The expression "(find-enode "Picture")" is an Emacs command (in Lisp) that
+means: open the "info page" called "Picture", from the Emacs manual, treating
+it as a file; then place the cursor after the first occurrence of the string
+"C-c c-c" there. To execute this command, i.e., to make emacs go to that point
+on that page, you just have to put the cursor after the ")" and type C-x C-e.
+There are many other similar commands, that will open specific files or
+specific manpages, with various ways of searching. These "hyperlinks" are
+especially interesting if you want to record from where you got some piece of
+information relevant to the "script" you're writing; this is very useful, for
+example, on "scripts" you haven't finished and on which you plan to work more
+someday, or on scripts you want to send to someone.
+
+Just as hyperlinks have many flavors, the function that executes a block also
+has variants: a block can be executed by the Tcl interpreter instead of the
+shell, or can be run through LaTeX, just to pick some examples. See the docs
+on eev.el (<http:/angg.twu.net/eev-current/README.html>).
+
+III)
+
+I have placed essentially all my "scripts" written in this way (I call
+them "e-scripts") in a public place (<http:/angg.twu.net/e/>). They
+contain almost everything I know about Unix.
+
+If you like this idea, please get in touch, send comments, ask questions --
+about e-scripts or questions whose answer could become an e-script chunk -- or
+send me your e-scripts when you have some, or even ask for help on setting up
+your own e-script collection or e-script public site... anything! By asking
+good questions you can help me make the documentation get better.
+
+I really want to make this e-scripts idea spread. Learning Unix -- or simply
+more Unix -- could be made easier for everybody... please help! E-scripts are
+funnier to use, and easier to write, than texts that tell everything in terms
+of "press this, do that". A lot of effort and money are being invested now on
+these kinds of text, and they're often very depressing. Let's try to save the
+world from them, at least a bit, and maybe this money will be directed to
+better things. And teaching people Unix tricks will be both easier and
+funnier.
+
+Eduardo Ochs, 1999dec18.
+
+edrx@mat.puc-rio.br
+See: <http://angg.twu.net/eev-current/README.html>

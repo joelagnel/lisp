@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Window-managers%20and%20ECB">Window-managers and ECB</a>,
+Next:<a rel=next accesskey=n href="Using-semanticdb.html#Using%20semanticdb">Using semanticdb</a>,
+Previous:<a rel=previous accesskey=p href="Hide-show.html#Hide-show">Hide-show</a>,
+Up:<a rel=up accesskey=u href="Tips-and-tricks.html#Tips%20and%20tricks">Tips and tricks</a>
+<hr><br>
+
+<h3>Support of several Emacs-window-managers</h3>
+
+<p>There are several window-managers available which offer an easy
+interface to jump between different window-configurations within the
+same frame. A window configuration is the layout of windows and
+associated buffers within a frame. There is always at least one
+configuration, the current configuration. You can create new
+configurations and cycle through the layouts in either direction. 
+Window configurations are often named or numbered, and you can jump to
+and delete named rsp. numbered configurations.
+
+<p>Without special support by ECB these window-managers would not work in
+combination with ECB!
+
+<p>ECB currently supports the following managers:
+
+<ul>
+<li>winring.el:
+Written by Barry A. Warsaw <a href="mailto:bwarsaw@python.org">bwarsaw@python.org</a>, available at
+<a href="http://www.python.org/emacs/">http://www.python.org/emacs/</a>
+
+<li>escreen.el:
+Written by Noah Friedman <a href="mailto:friedman@splode.com">friedman@splode.com</a>, available at
+<a href="http://www.splode.com/~friedman/software/emacs-lisp/">http://www.splode.com/~friedman/software/emacs-lisp/</a>
+</ul>
+
+<p><strong>IMPORTANT</strong>: With one of these window-managers installed and
+active you can run applications like Gnus, VM or BBDB in the same
+frame as ECB! Just use different window-configurations (winring.el) or
+escreens (escreen.el) for ECB and the other applications. Especially
+with winring.el you can give every configuration a descriptive name
+like "ECB" or "Gnus"; afterwards you can jump to a
+window-configuration by name!
+
+<p>When you go back to the ECB-window-configuration (winring.el) or the
+ECB-escreen (escreen.el) with any of the special
+window-manager-commands then the state of ECB will be restored exactly
+as you have left it when going to another window-configuration rsp. 
+escreen. This includes the whole splitting state of the edit-area and
+the visibilty of the ecb-windows and of the compile-window!
+
+<p>The rest of this section describes how to enable the special
+ECB-support for these window-managers and how to use them.
+
+<h4>Enabling of the support</h4>
+
+<p>Every support must be enabled explicitly:
+<ul>
+<li>winring:
+Call <code>ecb-winman-winring-enable-support</code>. This <strong>MUST</strong> be
+done <strong>BEFORE</strong> the first call to any winring-command, so also
+before calling <code>winring-initialize</code>!
+
+<li>escreen:
+Call <code>ecb-winman-escreen-enable-support</code>. This <strong>MUST</strong> be
+done <strong>BEFORE</strong> the first call to any escreen-command, so also
+before calling <code>escreen-install</code>! 
+</ul>
+
+<p>If a window-manager-support should be enabled autom. after Emacs-start
+just put the following into your <code>.emacs</code>:
+
+<br><pre>(ecb-winman-winring-enable-support)
+(winring-initialize)
+
+;; or - if you like escreen more
+
+(ecb-winman-escreen-enable-support)
+(escreen-install)
+</pre>
+
+<h4>Usage of a window-manager in combination with ECB</h4>
+
+<p>After enabling the support of one of the supported window-managers
+just go on as described in the commentary or introduction of the
+respective library-file(s) of the window-manager. Here is a short
+description:
+
+<ul>
+<li>winring:
+First you have to define how to identify the ECB-window-configuration,
+i.e. the configuration with activated ECB. This done with the option
+<code>ecb-winman-winring-name</code>. There is always only one
+window-configurations with name <code>ecb-winman-winring-name</code>!
+
+<p>Then run <code>winring-initialize</code>. If ECB is active then the
+resulting window-configuration is the ECB-window-configuration. 
+Otherwise you can create the ECB-window-configuration when you first
+time call <code>winring-new-configuration</code> with name equal to
+<code>ecb-winman-winring-name</code>. In general you can run all commands of
+the winring-library. If you jump to the ECB-window-configuration then
+ECB will be autom. activated and if you leave the
+ECB-window-configuration then ECB will autom. deactivated.
+
+</p><li>escreen:
+First you have to define how to identify the ECB-escreen
+i.e. that escreen with activated ECB. This done with the option
+<code>ecb-winman-escreen-number</code>. There is always only one
+escreen with number <code>ecb-winman-escreen-number</code>!
+
+<p>Then run <code>escreen-install</code> (deactivates ECB if currently
+running). After that you can call <code>escreen-create-screen</code> and
+<code>escreen-goto-screen</code><a rel=footnote href="#fn-1"><sup>1</sup></a>. These commands autom. activate ECB
+if creating or selecting the escreen with number
+<code>ecb-escreen-number</code> (default = 1) and autom. deactivate ECB if
+leaving the ECB-escreen. 
+</ul>
+
+<h4>Disabling the support</h4>
+
+<p>There is normally no need to do this but nevertheless it can be done
+by <code>ecb-winman-escreen-disable-support</code> rsp. 
+<code>ecb-winman-winring-disable-support</code>.
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>And of course all other
+<code>escreen-goto-*</code> commands!</p>
+
+</ol><hr>
+
+</body></html>
+

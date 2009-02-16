@@ -1,0 +1,15 @@
+try:
+    opts, args = getopt.getopt(sys.argv[1:], <cursor>"ho:v", ["help", "output="])
+except getopt.GetoptError:
+    usage()
+output = None
+verbose = False
+for opt, arg in opts:
+    if opt == "-v":
+        verbose = True
+    elif opt in ("-h", "--help"):
+        usage()
+    elif opt in ("-o", "--output"):
+        output = arg
+for arg in args:
+    pass

@@ -1,0 +1,89 @@
+;; File: <animals - 1999-05-26 Wed 11:17:32 EDT sds@goems.com>
+;; Created by: CLISP [1998-04-24 (April 1998)]
+
+
+("Is it an insect?"
+  ("Can it sting?"
+    ("Does it fly?" ("Does it give honey?" "a bee" . "a hornet")
+      "Is it gregarious (lives in large groups)?" "an ant" . "a scorpion"
+    )
+    "Does it have wings?"
+    ("Is it a plague to the crops?" "a locust" "Does it feed on animal blood?"
+      "a moskito" . "a butterfly"
+    )
+    "Does it weave a web?" "a spider" "Can it jump?"
+    ("Is it a parasite?" "a flea" . "a grasshopper") "Is it a parasite?"
+    "a louse" "Does it have only six legs?" "a cockroach" . "centipede"
+  )
+  "Does it have wings?"
+  ("Can it swim?"
+    ("Does it swim in salt water?"
+      ("Can it also fly?" "a sea-gull" . "a penguin")
+      "Do its males have greenish heads?" "a duck" . "a swan"
+    )
+    "Does it eat seeds?"
+    ("Is it a domestic animal?" ("Is it large?" "a turkey" . "a chicken")
+      "Can it also fly?"
+      ("Does it have a beautiful tail?" "a peacock" . "a blackbird") .
+      "an ostrich"
+    )
+    "Is it active during daylight?"
+    ("Does it spend much of its life in a flight?" "an eagle"
+      "Does it have scales?" "a dragon" . "a flamingo"
+    )
+    . "an owl"
+  )
+  "Is it an amphibian (snakes/frogs/lizards)?"
+  ("Is it a predator?"
+    ("Is it a snake?" ("Can it sting with poison?" "a viper" . "a python")
+      "Does it live in Florida?" "an alligator" . "a crocodile"
+    )
+    "Does it have a tail?"
+    ("Can it discard the tail?" "a lizard" "Does it have a hard hull?"
+      "a turtle" . "a dragon lizard"
+    )
+    . "a frog"
+  )
+  "Does it live in the water?"
+  ("Is it a fish?"
+    ("Does it live in fresh water?" "a bass" "Is it flat?" "a sole fish" .
+      "a shark"
+    )
+    "Is it huge?" "a whale" "Does it ever go ashore?" "seal" . "a dolphin"
+  )
+  "Is it a rodent?"
+  ("Does it have long ears?" ("Is it a fast runner?" "a hare" . "a rabbit")
+    "Does it have a bold tail?" "a rat" "Does it live in the trees?"
+    "a squirrel" "Does it make dams?" "a beaver"
+    "Is it used in medical research?" "a mouse" . "a racoon"
+  )
+  "Is it graminivorous (eats just the green stuff)?"
+  ("Is it a domestic animal?"
+    ("Do we get wool from it?" "a sheep" "Does it have humps?"
+      "a camel"  "Does it have horns?" "a cow" . "a horse")
+    "Does it have a very long neck?" "a giraffe" "Does it have a long trunk?"
+    "an elefant" "Does it have black and white stripes?" "a zebra"
+    "Does it have a horn on its nose?" "a rhinoceros" . "a hippopotamus"
+  )
+  "Is it a canine (dog-like)?"
+  ("Does it have a beautiful brush?" "a fox"
+    "Does it emit stench for self-defence?" "a skunk" "Is it a scavenger?"
+    "an hyena" "Is it a domestic animal?" "a dog" . "a wolf"
+  )
+  "Is it a feline (cat-like)?"
+  ("Does it have a huge mane?" "a lion" "Is it domesticated?" "a cat" .
+    "a tiger"
+  )
+  "Is it a ursine (bear-like)?"
+  ("Does it live far in the north?" "a polar bear" . "a brown bear")
+  "Is it a primate (ape/monkey/human)?"
+  ("Is it an ape?"
+    ("Are its males more than twice as large as females?" "a gorilla" .
+      "a chimpanzee"
+    )
+    "Is it a monkey?" "a lemur" . "a human"
+  )
+  . "a snark"
+)
+
+;; file written [0.004 sec].

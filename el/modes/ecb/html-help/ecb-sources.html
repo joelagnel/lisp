@@ -1,0 +1,343 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="ecb-sources">ecb-sources</a>,
+Next:<a rel=next accesskey=n href="ecb-methods.html#ecb-methods">ecb-methods</a>,
+Previous:<a rel=previous accesskey=p href="ecb-directories.html#ecb-directories">ecb-directories</a>,
+Up:<a rel=up accesskey=u href="Customizable-options.html#Customizable%20options">Customizable options</a>
+<hr><br>
+
+<h4>Group ecb-sources</h4>
+
+<p>This group contains settings for the sources-buffer in the ECB:
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>read-only-check-exclude-regexps</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Which directories should be excluded from the sources-read-only-check. 
+If a directory matches any of the regexps of this option their sources
+will not be checked if they are writable - This option takes only
+effect if <code>ecb-sources-perform-read-only-check</code> is not nil. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>show-source-file-extension</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Show the file extension of source files. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>source-file-regexps</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Specifies which files are shown as source files.
+
+<p>This is done on directory-base, which means for each directory-regexp
+the files to display can be specified. If more than one
+directory-regexp matches the current selected directory then always the
+first one (and its related file-exclude/include-regexps) is used! If
+no directory-regexp matches then all files are displayed for the
+currently selected directory.
+
+<p>Important note: It is recommended that the *LAST* element of this list
+should contain an always matching directory-regexp (<code>".*"</code>)!
+
+<p>So the value of this option is a list of cons-cells where the car is a
+directory regexp and the cdr is a 2 element list where the first
+element is a list of exclude regexps and the second element is a list
+of include regexps. A file is displayed in the source-buffer of ECB
+iff: The file does not match any of the exclude regexps OR the file
+matches at least one of the include regexps.
+
+<p>But regardless of the value of this option a file F is never displayed
+in the sources-buffer if the directory matches
+<code>ecb-sources-exclude-cvsignore</code> and the directory contains a file
+.cvsignore which contains F as an entry!
+
+<p>There are three predefined and useful combinations of an exclude and
+include regexp:
+
+<ul>
+<li>All files
+
+<li>All, but no backup, object, lib or ini-files (except .emacs and .gnus). This
+means all files except those starting with ".", "#" or ending with
+"~", ".elc", ".obj", ".o", ".lib", ".dll", ".a",
+".so". (but including .emacs and .gnus)
+
+<li>Common source file types (.c, .java etc.) 
+</ul>
+
+<p>In addition to these predefined values a custom exclude and include
+combination can be defined.
+
+<p>Tips for the directory- and file-rexexps: <code>"$^"</code> matches no
+files/directories, <code>".*"</code> matches all files/directories. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>sources-buffer-after-create-hook</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Local hook running after the creation of the sources-buffer. Every
+function of this hook is called once without arguments direct after
+creating the sources-buffer of ECB and it's local key-map. So for
+example a function could be added which performs calls of
+<code>local-set-key</code> to define new keybindings only for the
+sources-buffer of ECB. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>sources-buffer-name</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Name of the ECB sources buffer. Because it is not a normal buffer for
+editing you should enclose the name with stars, e.g. "*ECB Sources*".
+
+<p>If it is necessary for you you can get emacs-lisp access to the
+buffer-object of the ECB-sources-buffer by this name, e.g. by a call
+of <code>set-buffer</code>.
+
+<p>Changes for this option at runtime will take affect only after
+deactivating and then activating ECB again! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>sources-exclude-cvsignore</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Specify if files contained in a <code>.cvsignore</code> should be
+excluded.
+
+<p>Value is a list of regular expressions or nil. If you want to exclude
+files listed in a <code>.cvsignore</code>-file from being displayed in the
+ecb-sources-buffer then specify a regexp for such a directory.
+
+<p>If you want to exclude the contents of <code>.cvsignore</code>-files for
+every directory then you should add one regexp ".*" which matches
+every directory.
+
+<p>If you never want to exclude the contents of <code>.cvsignore</code>-files
+then set this option to nil. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>sources-menu-sorter</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Function which re-sorts the menu-entries of the directories buffer.
+
+<p>If a function then this function is called to sort the menu-entries of
+the combined menu-entries of the user-menu-extensions of
+<code>ecb-sources-menu-user-extension</code> and the built-in-menu
+<code>ecb-sources-menu</code>. If nil then no special sorting will be done
+and the user-extensions are placed in front of the built-in-entries.
+
+<p>For the guidelines for such a sorter-function see
+<code>ecb-directories-menu-sorter</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>sources-menu-user-extension</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Static user extensions for the popup-menu of the sources buffer. For
+further explanations see <code>ecb-directories-menu-user-extension</code>.
+
+<p>The node-argument of a menu-function contains as data the filename of
+the source for which the popup-menu has been opened.
+
+<p>Per default the static user-extensions are added at the beginning of
+the built-in menu-entries of <code>ecb-sources-menu</code> but the whole
+menu can be re-arranged with <code>ecb-sources-menu-sorter</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>sources-menu-user-extension-function</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Dynamic user extensions for the popup-menu of the sources buffer. A
+function which has to return a list in the same format like the option
+<code>ecb-sources-menu-user-extension</code>. This function is called when
+the user opens the popup-menu for the sources buffer.
+
+<p>If no dynamically evaluated menu-extensions should be added to the
+sources-buffer the function has to return nil. Therefore the
+default-value of this option is <code>ignore</code>.
+
+<p>Per default the dynamic user-extensions are added in front of the
+static extensions of <code>ecb-sources-menu-user-extension</code> but the
+whole menu can be re-arranged with <code>ecb-sources-menu-sorter</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>sources-perform-read-only-check</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Check if source-items in the tree-buffers are read-only. If a
+sourcefile is read-only then it will be displayed with that face set
+in the option <code>ecb-source-read-only-face</code>.
+
+<p>Because this check can be take some time if files are used via a
+mounted net-drive ECB performs this check stealthily (see
+<code>ecb-stealthy-tasks-delay</code>) so normally the user should not see a
+performance-decrease or additional waiting-time. But to get sure this
+option offers three choices: <code>t</code>, <code>unless-remote</code> and
+<code>nil</code>. See <code>ecb-prescan-directories-for-emptyness</code> for an
+explanation for these three choices.
+
+<p>The option <code>ecb-read-only-check-exclude-regexps</code> offers are more
+fine granularity to exclude the sources of certain directories from
+the read-only state-check. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>sources-show-node-info</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+When to display which node-info in the sources-buffer. Define which
+node info should displayed after moving the mouse over a node (or
+after a shift click onto the node) in the sources-buffer.
+
+<p>You can define "when" a node-info should be displayed: See
+<code>ecb-directories-show-node-info</code> for the possible choices.
+
+<p>You can define what info should be displayed:
+<ul>
+<li>name: Only the full node-name is displayed. 
+<li>file-info: File infos for this file are displayed. 
+<li>file-info-full: Fill infos incl. full path for this file are displayed. 
+</ul>
+
+<p>Do NOT set this option directly via setq but use always customize! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>sources-sort-ignore-case</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Ignore case for sorting the source-files of the Sources-buffer. See
+also <code>ecb-sources-sort-method</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>sources-sort-method</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Defines how the source files are sorted.
+
+<ul>
+<li><code>name</code>:
+Sorting by name. 
+<li><code>extension</code>:
+Sorting first by extension and then by name. 
+<li><code>nil</code>:
+No sorting, means source files are displayed in the sequence returned
+by <code>directory-files</code> (called without sorting). 
+</ul>
+
+<p>See also <code>ecb-sources-sort-ignore-case</code>
+</td></tr>
+</table>
+
+</body></html>
+

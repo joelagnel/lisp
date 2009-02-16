@@ -1,0 +1,69 @@
+#!/usr/bin/ruby -sn
+# -*- Ruby -*-
+
+# $id$
+
+# Convert tag to plan file
+# Usage: Assume that you have all your memo in ~/memo/.
+#    [this_file] ~/memo/* > ~/.dayplan_tag
+
+BEGIN {
+  $date_sep ||= '-'
+  x = $date_sep
+  num_r = "([0-9]+)"
+#    num_r = "([0-9x]+)"
+  if $format == 'old'
+    date_r = "@\\[#{num_r}#{x}#{num_r}#{x}#{num_r}()\\]"
+  else
+    date_r = "\\[#{num_r}#{x}#{num_r}#{x}#{num_r}(\\s+\\d+:\\d+)?\\]"
+  end
+  type_r = "([!@])"
+#    type_r = "([-+!@. ])"
+  content_r = "(.*)"
+  $item_regexp = %r|#{date_r}#{type_r} *#{content_r}|
+#  $item_regexp = %r|#{date_r} #{priority_r} *#{content_r}|
+#    $item_regexp = %r|#{date_r}\s+#{priority_r}\s*#{content_r}|
+
+  pink = 6
+  blue = 5
+  green = 7
+  yellow = 4
+  black = 1
+
+  $type2color = {
+#      '-', black,
+#      '+', blue,
+    '!', pink,
+    '@', blue,
+#      '.', yellow,
+#      ' ', black,
+  }
+  $misc_color = yellow
+}
+
+match_result = $_.scan $item_regexp
+next if match_result.empty?
+
+y, m, d, t, type, content = match_result[0]
+# p [y, m, d, t, type, content]
+#  d = 28 if d == 'xx'
+#  m = 12 if m == 'xx'
+color = $type2color[type] || $misc_color
+
+date = "#{m}/#{d}/#{y}"
+beg_time = (t || '99:99') + ':00'
+length = '0:0:0'
+warn_before = '0:2:0'
+xxx = '0:0:0'  # What's this?
+yyy = '0'  # What's this?
+
+print <<_EOI_
+#{date}  #{beg_time}  #{length}  #{warn_before}  #{xxx}  ---------- #{color} #{yyy}
+N	#{content}
+_EOI_
+
+# print <<_EOI_
+# #{m}/#{d}/#{y}  99:99:0  0:0:0  0:2:0  0:0:0  ---------- #{color} 0
+# N	#{content}
+# _EOI_
+

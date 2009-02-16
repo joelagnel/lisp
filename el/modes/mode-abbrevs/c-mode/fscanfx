@@ -1,0 +1,1 @@
+fscanf(<field "FILE *restrict stream">, <field "const char *restrict format">, <field "...">)

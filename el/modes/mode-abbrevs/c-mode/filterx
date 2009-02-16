@@ -1,0 +1,9 @@
+class <QUERY "class name: "> : public DCFilter
+{
+public:
+    int process() {
+        return 0;
+    }
+};
+
+dcmpi_provide1(<QUERY "class name: ">);

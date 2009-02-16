@@ -1,0 +1,277 @@
+#!@ruby@
+# -*- ruby -*-
+# elservd - A daemon process for elserv
+# Yuuichi Teranishi <teranisi@gohome.org>
+
+require "socket"
+require "thread"
+require "timeout"
+require "monitor"
+
+if (ARGV.length != 5)
+  STDERR.print "error: wrong number of arguments ", ARGV.length, "\n"
+  exit(1)
+end
+
+CRLF = "\r\n"
+STDOUT.binmode
+
+# Arguments:
+# port-number {log|nolog} max-children max-keep-alive keep-alive-timeout
+
+ident = true if ARGV[1] == "log"
+max_children = ARGV[2].to_i if ARGV[2] != "0"
+max_keep_alive = ARGV[3].to_i if ARGV[3] != "0"
+keep_alive_timeout = ARGV[4].to_i if ARGV[4] != "0"
+keep_alive_timeout = 15 unless keep_alive_timeout
+
+session_hash = Hash.new (nil)
+
+class ElservClientSession
+  def initialize (socket, max_count = 0)
+    @socket = socket
+    @max_count = max_count
+    @serve_count = 0
+    @key = @socket.peeraddr[1].to_s
+    @keep_alive  = true
+    
+    @mutex = Monitor.new
+    @cond = @mutex.new_cond
+    @running = false
+    
+    @closed = false
+  end
+
+  def set_close! ()
+    @keep_alive = nil
+  end
+
+  def key
+    return @key
+  end
+
+  def peer_host
+    return @socket.peeraddr[2]
+  end
+
+  def peer_addr
+    return @socket.peeraddr[3]
+  end
+
+  def wait
+    @mutex.synchronize do
+      @cond.wait_while {@running}
+    end
+  end
+  
+  def start
+    @mutex.synchronize do
+      @running = true
+    end
+  end
+
+  def closed? ()
+    return @closed
+  end
+
+  def gets ()
+    return @socket.gets
+  end
+
+  def close ()
+    @socket.close
+    @closed = true
+  end
+
+  def serve_page (content)
+    # serve_page may close the socket.
+    @socket.write (content + "\r\n")
+    @serve_count += 1
+    if (@max_count != 0)
+      if (@serve_count >= @max_count)
+	@socket.close
+	@closed = true
+      end
+    end
+    if !@keep_alive
+      @socket.close
+      @closed = true
+    end
+    @mutex.synchronize do
+      @running = false
+      @cond.signal
+    end
+  end
+
+  def read (length)
+    return @socket.read (length)
+  end
+  
+  def read_chunked()
+    len = nil
+    total = 0
+    body = ""
+    while true do
+      line = @socket.gets
+      m = /[0-9a-fA-F]+/.match(line)
+      m or close # XXX
+      len = m[0].hex
+      break if len == 0
+      body << @socket.read(len)
+      @socket.read (2)   # CRLF
+    end
+    until @socket.gets.empty? do
+      ;
+    end
+    return body
+  end
+end
+
+#  emacs                         elservd
+#    <===  greeting:port   ===
+#     ===  connect         ===>
+#    <===  request,key     ===  
+#     ===  key:length,CRLF ===>
+#     ===  content,  CRLF  ===>
+#
+
+## Emacs thread
+Thread.start() do
+  emacs_daemon = TCPserver.open("localhost", 0)
+  ## Greeting.
+  STDOUT.print "elserv-port: ", emacs_daemon.addr[1], CRLF, CRLF
+  while TRUE
+    ## EMACS thread.
+    esock = emacs_daemon.accept
+    content = nil
+    sport = nil
+    while line = esock.gets # wait for the emacs response.
+      if line =~ /^stop/
+	# emacs sent 'stop'.
+	emacs_daemon.shutdown(2)
+	esock.close()
+      elsif line =~/(\d+)([:;])(\d+)/
+	# emacs sent port:bytes
+	content = esock.read ($3.to_i)
+	esock.read (2) # CRLF
+	session = session_hash[$1]
+	if session
+	  if ($2 == ";") # ';'=> close ':' => keep_alive
+	    session.set_close!
+	  end
+	  session.serve_page (content)
+	end
+      else # invalid. close connection
+	esock.close()
+      end
+      # end of EMACS thread
+    end
+  end
+end
+
+session_count = 0
+m = Mutex.new
+
+## MAIN thread
+gs = TCPserver.open(ARGV[0])
+while TRUE
+  s = gs.accept
+  ## end of MAIN thread
+  Thread.start() do
+    ## SESSION thread
+    sock = s # thread local
+    # identity check
+    user = ""
+    if ident
+      begin
+	isock = TCPSocket.open(sock.peeraddr[3], "auth")
+      rescue
+	isock = nil
+      end
+      if isock
+	isock.write (sock.addr[1].to_s + ","+ sock.peeraddr[1].to_s + "\r\n")
+	igot = isock.gets.split(/: */)
+	if igot
+	  user += "elserv-ident: "+ igot[3]
+	end
+	isock.close
+      end
+    end
+    # end of identity check
+    session = ElservClientSession.new (sock, (max_keep_alive or 0))
+    m.synchronize do
+      session_count += 1
+    end
+    # LOCK OUT!
+    if max_children and (session_count > max_children)
+      session.close
+    end    
+    first_request = true
+    while !session.closed?
+      req = ""
+      force_close = true
+      chunked = false
+      content_length = 0
+      if first_request
+	# first request.
+	while (got = session.gets) != CRLF
+	  if got =~ /^content-length: *(\d+)/i
+	    content_length = $1.to_i
+	  elsif got =~ /^connection: *keep-alive/i
+	    force_close = false
+	  elsif got =~ /^transfer-coding: *chunked/i
+	    chunked = true
+	  end
+	  req += got
+	end
+      else
+	# requests while keep-alive
+	begin
+	  timeout (keep_alive_timeout) do
+	    while (got = session.gets) != CRLF
+	      if got =~ /^content-length: *(\d+)/i
+		content_length = $1.to_i
+	      elsif got =~ /^connection: *keep-alive/i
+		force_close = false
+	      elsif got =~ /^transfer-encoding: *chunked/i
+		chunked = true
+	      end
+	      req += got
+	    end
+	  end
+	rescue TimeoutError
+	  req = ""
+	end
+      end
+      first_request = false
+      if req == ""
+	# bogus null request.
+	force_close = true
+	session.close
+      else
+	if chunked
+	  body = session.read_chunked
+	  body = [body].pack('m').chomp.gsub("\n",CRLF+" ")
+	  req += "elserv-content: " + body + CRLF
+	elsif content_length != 0
+	  body = session.read (content_length)
+	  body = [body].pack('m').chomp.gsub("\n",CRLF+" ")
+	  req += "elserv-content: " + body + CRLF
+	end
+	session_hash[session.key] = session
+	session.set_close! if force_close
+	session.start
+	STDOUT.print user,
+	  "elserv-key: ", session.key, CRLF,
+	  "elserv-client: ", session.peer_host, " ", session.peer_addr, CRLF,
+	  "elserv-request: ", req, CRLF
+	STDOUT.flush
+	session.wait
+      end
+    end # end of while !session.closed?
+    m.synchronize do
+      session_count -= 1
+    end
+    ## end of SESSION thread
+  end
+end

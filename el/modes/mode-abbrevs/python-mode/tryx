@@ -1,0 +1,4 @@
+try:
+    <cursor>
+except Exception:
+    traceback.print_exc()

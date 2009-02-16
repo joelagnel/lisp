@@ -1,0 +1,215 @@
+2003-02-12  Yoichi NAKAYAMA  <yoichi@eken.phys.nagoya-u.ac.jp>
+
+	* canlock-cmds.el (wl-summary-canlock-verify): Save-excursion.
+
+2002-03-22  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (canlock-version): Remove.
+	(canlock-sha1-with-openssl): Don't use `canlock-string-as-unibyte'
+	here; simplify \x insertions.
+	(canlock-sha1): New function, always return a unibyte string.
+	(canlock-make-cancel-key): Use `canlock-sha1'; simplify truncation
+	of a password.
+	(canlock-insert-header): Use `canlock-sha1'.
+	(canlock-verify): Ditto.
+
+2002-01-21  Simon Josefsson  <jas@extundo.com>
+
+	* canlock.el (base64-encode-string): Autoload it from base64.
+	(canlock-make-cancel-key): Base64 encode unibyte string.
+
+2002-01-09  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (canlock-string-as-unibyte): New macro.
+	(canlock-sha1-with-openssl): Return a unibyte string.
+	(canlock-make-cancel-key): Treat Message-ID as a unibyte string.
+
+2001-12-07  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* (Version 0.8 released).
+
+	* canlock-comp.el (canlock-compile): Warn user if the function
+	`base64-encode-string' is not built-in.
+
+2001-11-30  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* Makefile.in, aclocal.m4, configure, configure.ac: New files.
+	* canlock-cmds.el, canlock-comp.el, canlock-om.el: New files.
+	* hex-util.el, sha1-el.el: New files imported from FLIM 1.14.
+
+	* Makefile, README-Makefile.ja: Removed.
+
+2001-11-26  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el: Remove sha1.el and base64.el stuff.
+
+2001-11-23 02:00:00  ShengHuo ZHU  <zsh@cs.rochester.edu>
+
+	* canlock.el (canlock-sha1-with-openssl): Use unibyte
+	buffer. Correctly decode hex.
+
+2001-10-30  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (canlock-version): Increment to 0.8.
+	(canlock-base64-encode-function): Removed.
+	(canlock-mmencode-program): Removed.
+	(canlock-mmencode-args-for-encoding): Removed.
+	(canlock-openssl-program): Renamed from `canlock-ssleay-program'.
+	(canlock-openssl-args): Renamed from `canlock-ssleay-args'.
+	(canlock-load-hook): Removed.
+	(canlock-base64-encode-string-with-mmencode): Removed.
+	(canlock-sha1-with-openssl): Renamed from
+	`canlock-sha1-with-ssleay'.
+	(canlock-hex-string-to-int): Removed.
+	(canlock-fetch-fields): Don't use `mapcar'.
+	(canlock-fetch-id-for-key): Don't use Cancel header if there is no
+	cancel command.
+	(gnus-summary-canlock-verify): Removed.
+	(wl-summary-canlock-verify): Removed.
+	(canlock-mew-summary-display): Removed.
+	(mew-summary-canlock-verify): Removed.
+	(mh-summary-canlock-verify): Removed.
+	(vm-summary-canlock-verify): Removed.
+	(cmail-summary-canlock-verify): Removed.
+	(rmail-summary-canlock-verify): Removed.
+
+2001-10-25  Simon Josefsson  <jas@extundo.com>
+
+	* canlock.el (canlock-password, canlock-password-for-verify)
+	(canlock-force-insert-header): Defcustom.
+
+2001-10-17  Simon Josefsson  <jas@extundo.com>
+
+	* canlock.el (sha1-binary): Autoload `sha1-binary'.
+	(canlock-sha1-function): Use it.
+	(canlock-sha1-function-for-verify): Ditto.
+
+2001-02-09  ShengHuo ZHU  <zsh@cs.rochester.edu>
+
+	* canlock.el: Added to Gnus CVS repository.
+
+1999-06-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (canlock-version): Update to 0.7 and release.
+
+1999-06-14  Shuhei KOBAYASHI  <shuhei@aqua.ocn.ne.jp>
+
+	* canlock.el (canlock-make-cancel-key): Pad `password' with
+	trailing 44 null characters.
+
+1999-05-31  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (canlock-version): Update to 0.6 and release.
+
+	* Makefile, README-Makefile.ja: New files.
+
+	* canlock.el (canlock-mew-summary-display): New macro.  If the
+	version of Mew is 1.94b20 or later, call `mew-summary-display' with
+	the 1st arg T.
+	Thanks to Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp> for reporting
+	about the recent Mew.
+	(mew-summary-canlock-verify): Use it.
+
+1999-02-05  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (canlock-version): Update to 0.5 and release.
+	(canlock-read-passwd): Try to load "passwd" if the function
+	`read-passwd' does not exist.
+	(vm-summary-canlock-verify): Don't signal an error if
+	`canlock-ignore-errors' is non-nil.
+
+1999-02-04  Ken'ichi Okada   <kokada@tamaru.kuee.kyoto-u.ac.jp>
+
+	* canlock.el (canlock-verify): Ignore errors even though there are
+	neither Cancel-Lock, Cancel-Key nor Message-ID fields if
+	`canlock-ignore-errors' is non-nil.
+	(canlock-ignore-errors): New user option.
+
+1999-01-14  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el: Rewrite COPYing notice.
+
+	* METHOD.ja: New file.
+
+1999-01-13  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* README.ja: New file.
+
+	* canlock.el (rmail-summary-canlock-verify): New command.
+	(cmail-summary-canlock-verify): New command.
+	(vm-summary-canlock-verify): New command.
+	(mew-summary-canlock-verify): Don't use Mew's macro.
+	(canlock-insert-header): Don't generate Canlock fields if the
+	article does not contain a Newsgroups fields.
+	(canlock-base64-decode-string-with-mmencode): Abolished.
+	(canlock-base64-decode-function): Abolished.
+	(canlock-force-insert-header): New variable.
+	(canlock-version): Update to 0.4.
+
+1999-01-12  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (canlock-verify): Don't use `throw' and `catch'.
+
+1999-01-11  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (canlock-sha1-with-ssleay): Don't use `replace-match'
+	for replacing with binary data.
+
+1999-01-08  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (canlock-insert-header): Bug fix (insert Cancel-Lock
+	field if the article contains a Supersedes field).
+
+1999-01-08  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (TopLevel): Require `custom'.
+	(canlock-sha1-with-ssleay): Bind `mc-flag' and
+	`program-coding-system-alist' to nil,
+	`default-process-coding-system' to (binary . binary).
+	(canlock-base64-decode-string-with-mmencode): Ditto.
+	(canlock-base64-encode-string-with-mmencode): Bind `mc-flag' and
+	`program-coding-system-alist' to nil,
+	`default-process-coding-system' to (raw-text . binary).
+	(canlock-password-for-verify): New variable.
+	(canlock-sha1-function-for-verify): New user option.
+	(canlock-version): Update to 0.3.
+
+1999-01-08  Hidekazu Nakamura <u90121@uis-inf.co.jp>
+
+	* canlock.el (mh-summary-canlock-verify): New command.
+
+1999-01-08  Hideyuki SHIRAI  <shirai@rdmg.mgcs.mei.co.jp>
+
+	* canlock.el (mew-summary-canlock-verify): New command.
+
+1999-01-08  Yuuichi Teranishi <teranisi@gohome.org>
+
+	* canlock.el (wl-summary-canlock-verify): New command.
+
+1999-01-07  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (gnus-summary-canlock-verify): New command.
+	(canlock-verify): New command.
+	(canlock-version): Update to 0.2.
+
+1998-12-28  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (canlock-insert-header): New function.
+	(canlock-fetch-fields): New function.
+	(canlock-fetch-id-for-key): New function.
+	(canlock-insert-cancel-lock-or-cancel-key): Abolished.
+	(canlock-insert-cancel-lock): Abolished.
+	(canlock-insert-cancel-key): Abolished.
+	(canlock-sha1-function): Default to `sha1-encode-binary'.
+	(canlock-base64-encode-function): Default to
+	`base64-encode-string'.
+	(canlock-base64-decode-function): Default to
+	`base64-decode-string'.
+
+1998-11-30  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el (canlock-insert-header): Add "sha1:" as a scheme.
+
+1998-11-24  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* canlock.el: New file.

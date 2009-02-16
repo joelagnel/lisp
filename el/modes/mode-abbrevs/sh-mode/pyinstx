@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+R=<field "FILENAME_BASE">
+upak-wget $R.tar.gz
+gunzip -qc $R.tar.gz | tar xvf -
+cd $R
+python setup.py install --home=$UPAKINSTALLDIR

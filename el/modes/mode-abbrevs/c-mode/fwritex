@@ -1,0 +1,8 @@
+if (fwrite(<field "void *ptr">, <field "size_t size">, 1, <field "f">) < 1) {
+    perror("fwrite");
+    std::cerr << "ERROR: errno=" << errno << " calling fwrite()"
+              << " at " << __FILE__ << ":" << __LINE__
+              << std::endl << std::flush;
+    exit(1);
+}
+<endpoint>

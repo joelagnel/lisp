@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Ascii-based%20styles">Ascii-based styles</a>,
+Next:<a rel=next accesskey=n href="Tree-buffers-with-images.html#Tree-buffers%20with%20images">Tree-buffers with images</a>,
+Previous:<a rel=previous accesskey=p href="Style-basics.html#Style%20basics">Style basics</a>,
+Up:<a rel=up accesskey=u href="Tree-buffer-styles.html#Tree-buffer%20styles">Tree-buffer styles</a>
+<hr><br>
+
+<h5>How to customize the ascii-styles</h5>
+
+<p>The ECB-option <code>ecb-tree-buffer-style</code> offers two different
+styles completely drawn with ascii-controls and -guides.
+
+<p>Ascii-style with guide-lines (value <code>ascii-guides</code>)<a rel=footnote href="#fn-1"><sup>1</sup></a>:
+
+<br><pre>[-] ECB
+ |  [+] code-save
+ `- [-] ecb-images
+     |  [-] directories
+     |   |  [-] height-15
+     |   |   |  * close.xpm
+     |   |   |  * empty.xpm
+     |   |   |  * leaf.xpm
+     |   |   `- * open.xpm
+     |   |  [+] height-17
+     |   |  [+] height-19
+     |   `- [+] height-21
+     |  [x] history
+     |  [x] methods
+     `- [x] sources
+</pre>
+
+<p>Ascii-style without guide-lines (value <code>ascii-no-guides</code>) - this
+is the style used by ECB &lt;= 1.96:
+
+<br><pre>[-] ECB
+    [+] code-save
+    [-] ecb-images
+        [-] directories
+            [-] height-15
+                * close.xpm
+                * empty.xpm
+                * leaf.xpm
+                * open.xpm
+            [+] height-17
+            [+] height-19
+            [+] height-21
+        [x] history
+        [x] methods
+        [x] sources
+</pre>
+
+<p>The tree-layout of both ascii-styles can be affected with the options
+<code>ecb-tree-indent</code> and <code>ecb-tree-expand-symbol-before</code> (the
+examples above have set 4 for the former and true for the latter one). 
+For the guide-style the face and color of the guide- and
+handle-symbols can be customized with the option
+<code>ecb-tree-guide-line-face</code> (default is the equal-named face).
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>For
+a better look&amp;feel of such a tree-buffer ECB displays only the last
+subnode of an opened node with a handle!</p>
+
+</ol><hr>
+
+</body></html>
+

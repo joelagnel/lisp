@@ -1,0 +1,17 @@
+def mkdtempold():
+    import random, os, os.path
+    dir = '/tmp/mkdtempold.'
+    n = 0
+    while n < 100000:
+        val = `random.randint(0, 1000000)`
+        file = dir + val
+        try:
+            os.mkdir(file, 0700)
+            return file
+        except OSError, e:
+            import errno
+            if e.errno == errno.EEXIST:
+                continue # try again
+            raise
+        n += 1
+    raise RuntimeError, 'ERROR: could not find temporary filename'

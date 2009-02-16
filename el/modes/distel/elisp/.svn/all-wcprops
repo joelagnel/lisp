@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 28
+/svn/!svn/ver/42/trunk/elisp
+END
+erl-service.el
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/42/trunk/elisp/erl-service.el
+END
+patmatch.el
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/3/trunk/elisp/patmatch.el
+END
+erl.el
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/7/trunk/elisp/erl.el
+END
+erlext.el
+K 25
+svn:wc:ra_dav:version-url
+V 37
+/svn/!svn/ver/7/trunk/elisp/erlext.el
+END
+distel.el
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/25/trunk/elisp/distel.el
+END
+epmd.el
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/3/trunk/elisp/epmd.el
+END
+derl.el
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/3/trunk/elisp/derl.el
+END
+net-fsm.el
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/7/trunk/elisp/net-fsm.el
+END
+edb.el
+K 25
+svn:wc:ra_dav:version-url
+V 35
+/svn/!svn/ver/22/trunk/elisp/edb.el
+END
+erl-example.el
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/!svn/ver/3/trunk/elisp/erl-example.el
+END
+.cvsignore
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/3/trunk/elisp/.cvsignore
+END
+distel-ie.el
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/svn/!svn/ver/3/trunk/elisp/distel-ie.el
+END
+erl-test.el
+K 25
+svn:wc:ra_dav:version-url
+V 39
+/svn/!svn/ver/3/trunk/elisp/erl-test.el
+END

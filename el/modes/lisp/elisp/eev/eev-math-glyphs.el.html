@@ -1,0 +1,336 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eev-math-glyphs.el (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .doc {
+      }
+      .eev-glyph-face-font {
+        /* eev-glyph-face-font */
+        color: #ffd700;
+        background-color: #8b4500;
+      }
+      .eev-glyph-face-graphic {
+        /* eev-glyph-face-graphic */
+        color: #ff0000;
+        background-color: #333333;
+      }
+      .eev-glyph-face-greek {
+        /* eev-glyph-face-greek */
+        color: #ff7f50;
+        background-color: #333333;
+      }
+      .eev-glyph-face-greek-1 {
+        /* eev-glyph-face-Greek */
+        color: #ffa500;
+        background-color: #333333;
+      }
+      .eev-glyph-face-green {
+        /* eev-glyph-face-green */
+        color: #00ff00;
+      }
+      .eev-glyph-face-linear {
+        /* eev-glyph-face-linear */
+        color: #db7093;
+        background-color: #333333;
+      }
+      .eev-glyph-face-logical {
+        /* eev-glyph-face-logical */
+        color: #63b8ff;
+        background-color: #333333;
+      }
+      .eev-glyph-face-math {
+        /* eev-glyph-face-math */
+        color: #436eee;
+        background-color: #333333;
+      }
+      .eev-glyph-face-red {
+        /* eev-glyph-face-red */
+        color: #ff0000;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #98fb98;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #ffc0cb;
+        font-weight: bold;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;;; </span><span class="comment">eev-math-glyphs.el -- mathematical glyphs for editing TeX texts in X
+</span><span class="comment-delimiter">;; </span><span class="comment">Copyright (C) 2005 Free Software Foundation, Inc.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This file is part of GNU eev.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is free software; you can redistribute it and/or modify
+</span><span class="comment-delimiter">;; </span><span class="comment">it under the terms of the GNU General Public License as published by
+</span><span class="comment-delimiter">;; </span><span class="comment">the Free Software Foundation; either version 2, or (at your option)
+</span><span class="comment-delimiter">;; </span><span class="comment">any later version.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is distributed in the hope that it will be useful,
+</span><span class="comment-delimiter">;; </span><span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of
+</span><span class="comment-delimiter">;; </span><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU General Public License for more details.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">You should have received a copy of the GNU General Public License
+</span><span class="comment-delimiter">;; </span><span class="comment">along with GNU Emacs; see the file COPYING.  If not, write to the
+</span><span class="comment-delimiter">;; </span><span class="comment">Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+</span><span class="comment-delimiter">;; </span><span class="comment">Boston, MA 02111-1307, USA.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Author:     Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Maintainer: Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Version:    2006jul27
+</span><span class="comment-delimiter">;; </span><span class="comment">Keywords:   e-scripts, display, TeX, glyphs.
+</span>
+<span class="comment-delimiter">;;; </span><span class="comment">Commentary:
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">This is immature code, and it is being included in the eev package
+</span><span class="comment-delimiter">;; </span><span class="comment">as an example ONLY! This is only for the addicts to the
+</span><span class="comment-delimiter">;; </span><span class="comment">unibyte/raw-text "encodings", like me. I have tons of TeX'able
+</span><span class="comment-delimiter">;; </span><span class="comment">notes using glyphs like those, and _I KNOW_ that unibyte and glyphs
+</span><span class="comment-delimiter">;; </span><span class="comment">is not the modern way to do things, that this glyphs trick is
+</span><span class="comment-delimiter">;; </span><span class="comment">non-standard as hell, etc etc, you don't need to tell me, _thanks_!
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">By the way: I used to use glyphs like those in (VGA) text mode,
+</span><span class="comment-delimiter">;; </span><span class="comment">using hacked console fonts - I only adapted this thing to X in the
+</span><span class="comment-delimiter">;; </span><span class="comment">beginning of May, 2005. Which means: I haven't even played with it
+</span><span class="comment-delimiter">;; </span><span class="comment">for long enough!
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">See: <a href="eev-glyphs.el.html">(find-eev "eev-glyphs.el")</a>
+</span><span class="comment-delimiter">;;      <a href="eev-compose.el.html">(find-eev "eev-compose.el")</a></span><span class="comment">
+</span><span class="comment-delimiter">;;      <a href="../vtutil4/mathchars.lua.html">(find-angg "vtutil4/mathchars.lua")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">To reload: (load-file "eev-math-glyphs.el")
+</span>
+(<span class="keyword">require</span> '<span class="constant">eev-glyphs</span>)
+(<span class="keyword">require</span> '<span class="constant">eev-compose</span>)
+(<span class="keyword">if</span> (not window-system)
+    (<span class="warning">error</span> <span class="string">"eev-math-glyphs.el is for X only"</span>))
+
+<span class="comment-delimiter">;; </span><span class="comment">Define several faces for glyphs in a few lines of code.
+</span><span class="comment-delimiter">;; </span><span class="comment">This is too rigid, but whatever.
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-ecolors)
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defun</span> <a name="eev-glyphs-set-face"><span class="function-name">eev-glyphs-set-face</span></a> (face fg bg)
+  (make-face face)
+  (set-face-foreground face fg)
+  (set-face-background face bg))
+
+(eev-glyphs-set-face 'eev-glyph-face-Greek   <span class="string">"orange"</span>        <span class="string">"gray20"</span>)
+(eev-glyphs-set-face 'eev-glyph-face-greek   <span class="string">"coral"</span>         <span class="string">"gray20"</span>)
+(eev-glyphs-set-face 'eev-glyph-face-logical <span class="string">"SteelBlue1"</span>    <span class="string">"gray20"</span>)
+(eev-glyphs-set-face 'eev-glyph-face-math    <span class="string">"RoyalBlue2"</span>    <span class="string">"gray20"</span>)
+(eev-glyphs-set-face 'eev-glyph-face-linear  <span class="string">"PaleVioletRed"</span> <span class="string">"gray20"</span>)
+(eev-glyphs-set-face 'eev-glyph-face-graphic <span class="string">"red"</span>           <span class="string">"gray20"</span>)
+(eev-glyphs-set-face 'eev-glyph-face-font    <span class="string">"gold"</span>          <span class="string">"DarkOrange4"</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">Now defining glyphs can be as simple as this:
+</span><span class="comment-delimiter">;; </span><span class="comment">(eev-set-glyph ?</span><span class="eev-glyph-face-greek-1">&#920;</span><span class="comment"> 332664 'eev-glyph-face-Greek)
+</span><span class="comment-delimiter">;; </span><span class="comment">but having many lines like that is not very convenient - it ignores
+</span><span class="comment-delimiter">;; </span><span class="comment">compose pairs and is too verbose...
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Make adding new glyphs a reversible operation.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defvar</span> <a name="eev-math-glyphs-standard-display-table-backup"><span class="variable-name">eev-math-glyphs-standard-display-table-backup</span></a> nil
+  <span class="doc">"A backup of standard-display-table (before adding user-defined glyphs)"</span>)
+<span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">if</span> (not eev-math-glyphs-standard-display-table-backup)
+    (setq eev-math-glyphs-standard-display-table-backup
+          (copy-sequence standard-display-table)))
+
+(<span class="keyword">defun</span> <a name="eev-math-glyphs-reset"><span class="function-name">eev-math-glyphs-reset</span></a> ()
+  <span class="doc">"Restore the standard-display-table and empties eev-composes-localmath."</span>
+  (interactive)
+  (setq standard-display-table
+        (copy-sequence eev-math-glyphs-standard-display-table-backup))
+  (setq eev-composes-localmath nil)
+  (eev-composes-update))
+
+<span class="comment-delimiter">;; </span><span class="comment">(find-echarsetchars 'mule-unicode-0100-24ff)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-echarsetchars 'mule-unicode-2500-33ff)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-eleimfile "quail/sgml-input.el")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-eleimfile "quail/latin-ltx.el")
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">A high-level way to set glyphs and compose pairs.
+</span>(<span class="keyword">defvar</span> <a name="eev-math-glyphs-name-to-char"><span class="variable-name">eev-math-glyphs-name-to-char</span></a>
+  '((<span class="string">"Theta"</span>   . 332664)
+    (<span class="string">"Pi"</span>      . 332704)
+    (<span class="string">"Sigma"</span>   . 332707)
+    (<span class="string">"Omega"</span>   . 332713)
+    <span class="comment-delimiter">;;</span><span class="comment">
+</span>    (<span class="string">"delta"</span>   . 332724)
+    (<span class="string">"epsilon"</span> . 332725)
+    (<span class="string">"theta"</span>   . 332728)
+    (<span class="string">"lambda"</span>  . 343339)
+    (<span class="string">"nu"</span>      . 332733)
+    (<span class="string">"rho"</span>     . 332737)
+    (<span class="string">"sigma"</span>   . 332739)
+    (<span class="string">"tau"</span>     . 332740)
+    (<span class="string">"omega"</span>   . 343541)
+    <span class="comment-delimiter">;;</span><span class="comment">
+</span>    (<span class="string">"top"</span>     . 343268)
+    (<span class="string">"bot"</span>     . 343269)
+    (<span class="string">"land"</span>    . 343111)
+    (<span class="string">"lor"</span>     . 343112)
+    (<span class="string">"supset"</span>  . 343235)
+    (<span class="string">"forall"</span>  . 343072)
+    (<span class="string">"exists"</span>  . 343075)
+    (<span class="string">"box"</span>     . 299376)
+    (<span class="string">"thin:"</span>   . 343126)
+    (<span class="string">"in"</span>      . 343082)
+    (<span class="string">"circ"</span>    . 343096)
+    (<span class="string">"cap"</span>     . 343113)
+    (<span class="string">"cup"</span>     . 343114)
+    (<span class="string">"Int"</span>     . 343115)
+    (<span class="string">"nabla"</span>   . 343079)
+    (<span class="string">"infty"</span>   . 343102)
+    (<span class="string">"ge"</span>      . 343205)
+    (<span class="string">"^1"</span>      .    185)
+    (<span class="string">"sqcap"</span>   . 343251)
+    (<span class="string">"ud&amp;"</span>     . 342827)
+    (<span class="string">"oplus"</span>   . 343253)
+    (<span class="string">"otimes"</span>  . 343259)
+    (<span class="string">"to"</span>      . 342898)
+    (<span class="string">"dotli"</span>   . 343375)
+    (<span class="string">"nat"</span>     . 299502)
+    (<span class="string">"seblock"</span> . 299223)
+    (<span class="string">"neblock"</span> . 299229)
+    (<span class="string">"b"</span>       .     ?b)
+    (<span class="string">"r"</span>       .     ?r)
+    (<span class="string">"t"</span>       .     ?t)
+    (<span class="string">"s"</span>       .     ?s))
+  <span class="doc">"An alist that translates char names\
+ (for mathematical glyphs) to char codes."</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">To inspect eev-math-glyphs-name-to-char:
+</span>' (<span class="keyword">progn</span> (find-estring <span class="string">""</span>)
+         (mapc (<span class="keyword">lambda</span> (p) (insert (format <span class="string">"%c %s\n"</span> (cdr p) (car p))))
+               eev-math-glyphs-name-to-char))
+
+(<span class="keyword">defun</span> <a name="eev-math-glyphs-set"><span class="function-name">eev-math-glyphs-set</span></a> (face names pairs chars <span class="type">&amp;rest</span> rest)
+  <span class="doc">"This is hard to explain, but there's an example at:...
+    (find-efunction 'eev-math-glyphs-edrx)"</span>
+  (setq names (split-string names <span class="string">" +"</span>))
+  (setq pairs (split-string pairs <span class="string">" +"</span>))
+  (setq chars (split-string chars <span class="string">" +"</span>))
+  (<span class="keyword">while</span> names
+    (<span class="keyword">let</span> ((n (car names)) (p (car pairs)) (c (car chars)))
+      (<span class="keyword">if</span> (= 1 (length c))
+          (<span class="keyword">let</span> ((c (string-to-char c)))
+            (eev-set-glyph c (ee-aref eev-math-glyphs-name-to-char n) face)
+            (setq eev-composes-localmath
+                  (lax-plist-put eev-composes-localmath p c)))))
+    (setq names (cdr names) pairs (cdr pairs) chars (cdr chars)))
+  (<span class="keyword">if</span> rest (apply 'eev-math-glyphs-set rest)
+    (eev-composes-update)))
+
+<span class="comment-delimiter">;; </span><span class="comment">A demo: this function sets up the glyphs that I (Edrx)
+</span><span class="comment-delimiter">;; </span><span class="comment">use for most of my TeXed notes.
+</span>(<span class="keyword">defun</span> <a name="eev-math-glyphs-edrx"><span class="function-name">eev-math-glyphs-edrx</span></a> ()
+  <span class="doc">"Sets up a certain set of mathematical glyphs for TeX, with compose pairs."</span>
+  (interactive)
+  (eev-math-glyphs-set
+   'eev-glyph-face-Greek
+   <span class="string">"Theta Pi Sigma Omega"</span>
+   <span class="string">"Th    Pi Si    Om   "</span>
+   <span class="string">"</span><span class="eev-glyph-face-greek-1">&#920;</span><span class="string">     </span><span class="eev-glyph-face-greek-1">&#928;</span><span class="string">  </span><span class="eev-glyph-face-greek-1">&#931;</span><span class="string">     </span><span class="eev-glyph-face-greek-1">&#937;</span><span class="string">    "</span>
+   'eev-glyph-face-greek
+   <span class="string">"delta epsilon theta lambda nu rho sigma tau omega"</span>
+   <span class="string">"dd    ee      te    ll     nu ro  si    tt  ww   "</span>
+   <span class="string">"</span><span class="eev-glyph-face-greek">&#948;</span><span class="string">     </span><span class="eev-glyph-face-greek">&#949;</span><span class="string">       </span><span class="eev-glyph-face-greek">&#952;</span><span class="string">     </span><span class="eev-glyph-face-greek">&#8907;</span><span class="string">      </span><span class="eev-glyph-face-greek">&#957;</span><span class="string">  </span><span class="eev-glyph-face-greek">&#961;</span><span class="string">   </span><span class="eev-glyph-face-greek">&#963;</span><span class="string">     </span><span class="eev-glyph-face-greek">&#964;</span><span class="string">   </span><span class="eev-glyph-face-greek">&#9077;</span><span class="string">    "</span>
+   'eev-glyph-face-logical
+   <span class="string">"top bot land lor supset forall exists box thin: in circ"</span>
+   <span class="string">"TT  bo  la   lo  im     fa     ex     bo  ::    in oo  "</span>
+   <span class="string">"</span><span class="eev-glyph-face-logical">&#8868;</span><span class="string">   </span><span class="eev-glyph-face-logical">&#8869;</span><span class="string">   </span><span class="eev-glyph-face-logical">&#8743;</span><span class="string">    </span><span class="eev-glyph-face-logical">&#8744;</span><span class="string">   </span><span class="eev-glyph-face-logical">&#8835;</span><span class="string">      </span><span class="eev-glyph-face-logical">&#8704;</span><span class="string">      </span><span class="eev-glyph-face-logical">&#8707;</span><span class="string">      </span><span class="eev-glyph-face-logical">&#9744;</span><span class="string">   </span><span class="eev-glyph-face-logical">&#8758;</span><span class="string">     </span><span class="eev-glyph-face-logical">&#8704;</span><span class="string">  </span><span class="eev-glyph-face-logical">&#8728;</span><span class="string">   "</span>
+   'eev-glyph-face-math
+   <span class="string">"cap cup Int nabla infty ge ^1"</span>
+   <span class="string">"ca  cu  In  na    88    &gt;= -1"</span>
+   <span class="string">"</span><span class="eev-glyph-face-math">&#8745;</span><span class="string">   </span><span class="eev-glyph-face-greek-1">&#920;</span><span class="string">   </span><span class="eev-glyph-face-greek-1">&#928;</span><span class="string">   </span><span class="eev-glyph-face-math">&#8711;</span><span class="string">     </span><span class="eev-glyph-face-math">&#8734;</span><span class="string">     </span><span class="eev-glyph-face-math">&#8805;</span><span class="string">  &#179; "</span>
+   'eev-glyph-face-linear
+   <span class="string">"sqcap ud&amp; oplus otimes to"</span>
+   <span class="string">"ka    &amp;&amp;  o+    ox     -o"</span>
+   <span class="string">"</span><span class="eev-glyph-face-linear">&#8851;</span><span class="string">     </span><span class="eev-glyph-face-logical">&#9744;</span><span class="string">   </span><span class="eev-glyph-face-linear">&#8853;</span><span class="string">     </span><span class="eev-glyph-face-linear">&#8859;</span><span class="string">      </span><span class="eev-glyph-face-linear">&#8594;</span><span class="string"> "</span>
+   'eev-glyph-face-graphic
+   <span class="string">"dotli nat seblock neblock"</span>
+   <span class="string">"..    bq  bl      ^^     "</span>
+   <span class="string">"</span><span class="eev-glyph-face-graphic">&#8943;</span><span class="string">     </span><span class="eev-glyph-face-logical">&#8707;</span><span class="string">   </span><span class="eev-glyph-face-graphic">&#9623;</span><span class="string">       </span><span class="eev-glyph-face-graphic">&#9629;</span><span class="string">      "</span>
+   'eev-glyph-face-font
+   <span class="string">"b  r  t  s "</span>
+   <span class="string">"bf rm tx ss"</span>
+   <span class="string">"</span><span class="eev-glyph-face-font">b</span><span class="string">  </span><span class="eev-glyph-face-font">r</span><span class="string">  </span><span class="eev-glyph-face-font">t</span><span class="string">  </span><span class="eev-glyph-face-greek">&#8907;</span><span class="string"> "</span>))
+
+<span class="comment-delimiter">;; </span><span class="eev-glyph-face-greek-1">&#920;&#928;&#931;&#937;</span><span class="eev-glyph-face-greek">&#948;&#949;&#952;&#8907;&#957;&#961;&#963;&#964;&#9077;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="eev-glyph-face-logical">&#8868;&#8869;&#8743;&#8744;&#8835;&#8704;&#8707;&#9744;&#8758;&#8704;&#8728;</span><span class="eev-glyph-face-math">&#8745;</span><span class="eev-glyph-face-greek-1">&#920;&#928;</span><span class="eev-glyph-face-math">&#8711;&#8734;&#8805;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="eev-glyph-face-linear">&#8851;</span><span class="eev-glyph-face-logical">&#9744;</span><span class="eev-glyph-face-linear">&#8853;&#8859;&#8594;</span><span class="eev-glyph-face-graphic">&#8943;</span><span class="eev-glyph-face-logical">&#8707;</span><span class="eev-glyph-face-graphic">&#9623;&#9629;</span><span class="eev-glyph-face-font">brt</span><span class="eev-glyph-face-greek">&#8907;</span><span class="comment">
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">To set up a certain set of TeX glyphs:
+</span><span class="comment-delimiter">;;   </span><span class="comment">(require 'eev-math-glyphs)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(eev-math-glyphs-edrx)
+</span><span class="comment-delimiter">;; </span><span class="comment">To undo (i.e., to remove all local math glyphs):
+</span><span class="comment-delimiter">;;   </span><span class="comment">(eev-math-glyphs-reset)
+</span><span class="comment-delimiter">;; </span><span class="comment">An example of TeX code using glyphs:
+</span><span class="string">"
+%</span><span class="eev-glyph-face-red">*</span><span class="string">
+% (ee-once (eelatex-bounded))
+\catcode`</span><span class="eev-glyph-face-font">b</span><span class="string">=13 \def</span><span class="eev-glyph-face-font">b</span><span class="string">{\mathbf}
+
+A natural transformation from $F:</span><span class="eev-glyph-face-font">b</span><span class="string">A \to </span><span class="eev-glyph-face-font">b</span><span class="string">B$ to $G:</span><span class="eev-glyph-face-font">b</span><span class="string">A \to </span><span class="eev-glyph-face-font">b</span><span class="string">B$ is...
+%</span><span class="eev-glyph-face-red">*</span><span class="string">
+"</span>
+<span class="comment-delimiter">;; </span><span class="comment">See: (find-texbookpage 'appendixI)
+</span><span class="comment-delimiter">;;      </span><span class="comment">(find-texbookpage (+ 11 39))
+</span>
+(<span class="keyword">provide</span> '<span class="constant">eev-math-glyphs</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">Local Variables:
+</span><span class="comment-delimiter">;; </span><span class="comment">coding:               raw-text-unix
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-anchor-format:     "</span><span class="eev-glyph-face-green">&#171;</span><span class="comment">%s</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">"
+</span><span class="comment-delimiter">;; </span><span class="comment">End:
+</span></pre>
+  </body>
+</html>

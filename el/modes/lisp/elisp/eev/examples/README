@@ -1,0 +1,42 @@
+This is the file 'examples/README' of GNU eev.
+Author and version: Eduardo Ochs, 2005jan06
+
+This directory contains some example e-scripts and some auxiliary
+programs used by these e-scripts. They are not very tidy. Sorry.
+
+The files in this directory are being released under the following
+copyright and license:
+
+  Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+  This file is part of GNU eev.
+   
+  GNU eev is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
+   
+  GNU eev is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  General Public License for more details.
+   
+  You should have received a copy of the GNU General Public License
+  along with program; see the file COPYING. If not, write to the Free
+  Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+  02111-1307, USA.
+
+
+
+Note: I have the feeling that these files should be released under a
+more permissive license: something like what happens (maybe not in the
+U.S., but certainly in all the more reasonable parts of the world)
+with graffittis; if some sentences get written in a wall in a very
+visible place then no one afterwards can claim that that text was his
+private work and try to collect copyright fees on that, or to restrict
+people's rights of quoting and modifying that text. What is written on
+the walls becomes "non-ownable".
+
+The problem is: which licensing scheme would be closer to that? The
+GPL is good enough - it has some funny twists, but it needs those in
+order to defend us from insane laws - but maybe something else would
+be a bit more adequate in this case. That needs to be discussed.

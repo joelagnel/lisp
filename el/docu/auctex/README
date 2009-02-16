@@ -1,0 +1,160 @@
+Introduction to AUC TeX
+***********************
+
+This section of the AUC TeX manual gives a brief overview of what AUC
+TeX is, and the section is also available as a `README' file.  It is
+*not* an attempt to document AUC TeX.  Real documentation for AUC TeX
+is available in the rest of the manual, which you can find in the `doc'
+directory.
+
+   Read the `INSTALLATION' file for information about how to install
+AUC TeX.  It is identical to the Installation chapter in the AUC TeX
+manual.
+
+   If you are upgrading from the previous version of AUC TeX, the
+latest changes can be found in the `CHANGES' file.  If you are
+upgrading from an older version, read the History chapter in the AUC
+TeX manual.
+
+   AUC TeX is a comprehensive customizable integrated environment for
+writing input files for LaTeX using GNU Emacs.
+
+   AUC TeX lets you run TeX/LaTeX and other LaTeX-related tools, such
+as a output filters or post processor from inside Emacs.  Especially
+`running LaTeX' is interesting, as AUC TeX lets you browse through the
+errors TeX reported, while it moves the cursor directly to the reported
+error, and displays some documentation for that particular error.  This
+will even work when the document is spread over several files.
+
+   AUC TeX automatically indents your `LaTeX-source', not only as you
+write it -- you can also let it indent and format an entire document.
+It has a special outline feature, which can greatly help you `getting an
+overview' of a document.
+
+   Apart from these special features, AUC TeX provides a large range of
+handy Emacs macros, which in several different ways can help you write
+your LaTeX documents fast and painlessly.
+
+   All features of AUC TeX are documented using the GNU Emacs online
+documentation system.  That is, documentation for any command is just a
+key click away!
+
+   AUC TeX is written entirely in Emacs-Lisp, and hence you can easily
+add new features for your own needs.  It was not made as part of any
+particular employment or project (apart from the AUC TeX project
+itself).  AUC TeX is distributed under the `GNU Emacs General Public
+License' and may therefore almost freely be copied and redistributed.
+
+   The next sections are a short introduction to some `actual' features.
+For further information, refer to the built-in online documentation of
+AUC TeX.
+
+Indentation and formatting
+==========================
+
+   AUC TeX may automatically indent your document as you write it. By
+pressing <lfd> instead of <ret> at the end of a line, the current line
+is indented by two spaces according to the current environment level,
+and the cursor is moved down one line.  By pressing <tab>, the current
+line is indented, and the cursor stays where it is.  The well-known
+Emacs feature `format-paragraph' (`M-q') is reimplemented especially
+for AUC TeX to follow the indentation.  A special command
+`LaTeX-fill-buffer' lets you indent an entire document like the
+well-known C utility indent (this time, only according to the LaTeX
+structure :-).
+
+Completion
+==========
+
+   By studying your `\documentclass' command (in the top of your
+document), and consulting a precompiled list of (La)TeX symbols from a
+large number of TeX and LaTeX files, AUC TeX is aware of the LaTeX
+commands you should be able to use in this particular document.  This
+`knowledge' of AUC TeX is used for two purposes.
+
+  1. To make you able to `complete' partly written LaTeX commands. You
+     may e.g. write `\renew' and press `M-<tab>'
+     (`TeX-complete-symbol'), and then AUC TeX will complete the word
+     `\renewcommand' for you. In case of ambiguity it will display a
+     list of possible completions.
+
+  2. To aid you inserting environments, that is \begin - \end pairs.
+     This is done by pressing C-c C-e (LaTeX-environment), and you will
+     be prompted for which `environment' to insert.
+
+Editing your document
+=====================
+
+   A number of more or less intelligent keyboard macros have been
+defined to aid you editing your document.  The most important are
+listed below.
+
+`LaTeX-environment'
+     (`C-c C-e') Insert a `\begin{}' -- `\end{}' pair as described
+     above.
+
+`LaTeX-section'
+     (`C-c C-s') Insert one of `\chapter', `\section', etc.
+
+`TeX-font'
+     (`C-c C-f C-r', `C-c C-f C-i', `C-c C-f C-b') Insert one of
+     `\textrm{ }'), `\textit{ \/}' `\textbf{ }' etc.
+
+   A number of additional functions are available.  But it would be far
+too much to write about here.  Refer to the rest of the AUC TeX
+documentation for further information.
+
+Running LaTeX
+=============
+
+   When invoking one of the commands `TeX-command-master' (`C-c C-c')
+or `TeX-command-region' (`C-c C-r') LaTeX is run on either the entire
+current document or a given region of it.  The Emacs view is split in
+two, and the output of TeX is printed in the second half of the screen,
+as you may simultaneously continue editing your document.  In case TeX
+find any errors when processing your input you can call the function
+`TeX-next-error' (`C-c `') which will move the cursor to the first
+given error, and display a short explanatory text along with the
+message TeX gave.  This procedure may be repeated until all errors have
+been displayed.  By pressing `C-c C-w' (`TeX-toggle-debug-boxes') you
+can toggle whether the browser also should notify over-full/under-full
+boxes or not.
+
+   Once you've successfully formatted your document, you may preview or
+print it by invoking `TeX-command-master' again.
+
+Outlines
+========
+
+   Along with AUC TeX comes support for outline mode for Emacs, which
+lets you browse the sectioning structure of your document, while you
+will still be able to use the full power of the rest of the AUC TeX
+functionality.
+
+Availability
+============
+
+   The most recent version is always available at
+
+               <http://savannah.nongnu.org/download/auctex/stable.pkg/>
+
+   WWW users may want to check out the AUC TeX page at
+
+                                        <http://www.nongnu.org/auctex/>
+
+Contacts
+========
+
+   There has been established a mailing list for help, bug reports,
+feature requests and general discussion about AUC TeX.  You're very
+welcome to join.  Traffic average at an article by day, but they come
+in bursts.  If you are only interested in information on updates, you
+could refer to the newsgroups `comp.text.tex' and `gnu.emacs.sources'.
+
+   If you want to contact the AUC TeX mailing list, send mail to
+<mailto:auc-tex-subscribe@sunsite.dk> in order to join.  Articles
+should be sent to <mailto:auc-tex@sunsite.dk>.
+
+   To contact the current maintainers of AUC TeX directly, email
+<mailto:auc-tex_mgr@sunsite.dk>.
+

@@ -1,0 +1,119 @@
+The following people contributed to Emacs IRC Client development:
+
+Alexander L. Belikoff <abel@bfr.co.il>:
+  * Original author.
+
+Sergey Berezin <sergey.berezin@cs.cmu.edu>:
+  * Hacked it in 1999.
+
+Mario Lang <mlang@delysid.org>:
+  * Maintainer of the new erc.
+  * erc-speak, erc-ibuffer.el, erc-speedbar.el
+
+Alex Schroeder <alex@gnu.org>:
+  * Helped alot with the first rewrite phase.
+  * Wrote erc-complete.el, erc-ring.el
+  * Great elisp knowledge base, thanks alex!
+
+Andreas Fuchs <asf@acm.org>:
+  * erc-bbdb, erc-replace, and a lot of other useful stuff
+
+Tijs van Bakel <smoke@wanadoo.nl>:
+  * helped a lot in crucial rewriting phase
+
+Diane Murray <dsm@muenster.de>:
+  * Miscellaneous development, additions, bug fixes
+  * erc-nickserv.el
+
+Gergely Nagy <algernon@debian.org> (aka "mhp"):
+  * Debian package maintainer
+
+Shae Erisson <shae@webwitches.com>:
+  * Did much testing and contributed a lot of great ideas.
+
+Jeremy Bertram Maitin-Shepard <jbms@attbi.com> (aka "jbms"):
+  * Modified erc.el and erc-pcomplete.el to include time-sensitive
+    completion.
+  * Changed ERC to use hash tables instead of the `channel-members'
+    alist.
+
+Adrian Aichner <adrian@xemacs.org>:
+  * Provided fixes for spelling errors in many docstrings, comments 
+    and (embarrassingly) a function name.
+
+Marcelo Toledo <marcelo@marcelotoledo.org>:
+  * Made it possible to display notices in the current buffer.
+
+Arne Schwabe <arne@rfc2549.org>:
+  * Helped with handlers for 313 and 330 (erc.el).
+
+Mark Triggs <mst@dishvelled.net> (aka "MrBump"):
+  * Added code to strip control chars and topic attribution in C-c
+    C-t.
+  * Helped with listing bans and mass unbanning.
+  * Fixed problem with erc-set-topic inserting ^C characters.
+
+Stephan Stahl <stl@isogmbh.de>:
+  * Modified erc-dcc.el so that the buffer is killed if transfer
+    completed correctly.
+
+Eric M. Ludlam <eric@siege-engine.com>:
+  * Patched erc-speedbar.el heavily.
+
+David Edmondson (dme AT dme DOT org):
+  * Contributed patch to erc-track.el that makes button 3 on the
+    erc-track buffer names in the modeline show the selected buffer in
+    another window.
+
+Michal Maruska <mmaruska@tin.it> (aka "mmc"):
+  * Fixed problem in erc.el where % in NOTICE produced errors.
+
+David Spreen <netzwurm@debian.org>:
+  * Added hostmask-authentication to DCC auto-accept (erc-dcc.el).
+
+Michael Olson <mwolson@gnu.org>:
+  * Re-structured `erc-process-sentinel' so that server buffers could
+    be killed on /quit.
+  * Helped prepare for erc 5.0 release.
+
+Hoan Ton-That <hoan@ton-that.org>:
+  * Helped with filename expansion (erc-log.el).
+
+Fabien Penso (fabien AT penso DOT info):
+  * Made completion case insensitive (erc.el).
+
+Henrik Enberg <henrik@enberg.org>:
+  * Added variables `erc-frame-alist' and `erc-frame-dedicated-p'
+    (erc.el).
+  * Made handling of `erc-hide-list' smarter.
+  * Use optimal amount of spacing around modified channels indicator
+    in erc-track.el.
+
+Peter Solodov <peter@alcor.concordia.ca>:
+  * Contributed a patch for erc-fill.el.
+
+Hynek Schlawack <hynek+erc@hys.in-berlin.de>:
+  * Tweaked the Makefile to remove .elc files and add erc-compat.el.
+
+Daniel Knapp (dankna AT accela DOT net):
+  * Made it optional for server buffers to show up on the mode line.
+
+Simon Siegler <simon@trz-kril.de>:
+  * Fixed erc-fill-static so it breaks the lines at the right column
+    and respects timestamps (erc-fill.el).
+
+Andreas Schwab <schwab@suse.de>:
+  * Corrected a bug in sorting of channel users (erc.el).
+ 
+Kai Fan (m_pupil AT yahoo DOT com) (aka "It's me FKtPp ;)"):
+  * Enhanced non-ASCII character support (erc-backend.el).
+
+Daniel Brockman (daniel AT brockman DOT se):
+  * Submitted small patch that fixed a load failure in erc-autoaway.el
+    when using Emacs21.
+
+----
+
+P.S.: Many people contributed small bits to ERC whose names I probably
+forgot. If you aren't listed here, simply write a mail to mlang@delysid.org,
+I'll add you then.

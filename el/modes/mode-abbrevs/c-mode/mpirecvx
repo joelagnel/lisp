@@ -1,0 +1,2 @@
+MPI_Recv(<field "void *buf">, <field "int count">, MPI_CHAR, <field "int source">,
+         <field "int tag">, MPI_COMM_WORLD, MPI_STATUS_IGNORE);

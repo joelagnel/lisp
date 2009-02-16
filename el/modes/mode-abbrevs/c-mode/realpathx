@@ -1,0 +1,1 @@
+realpath(<field "const char *restrict NAME">, <field "char *restrict RESOLVED">)<endpoint>

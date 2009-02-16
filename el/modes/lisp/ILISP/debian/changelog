@@ -1,0 +1,621 @@
+ilisp (5.12.0+cvs.2004.12.23) unstable; urgency=low
+
+  * Orphan -- as described in bug #284376
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu, 23 Dec 2004 21:34:02 -0700
+
+ilisp (5.12.0+cvs.2004.10.29) unstable; urgency=low
+
+  * Add Czech translation (closes:278785)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri, 29 Oct 2004 11:24:09 -0600
+
+ilisp (5.12.0+cvs.2004.08.24) unstable; urgency=low
+
+  * Delete bogus symlink
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 24 Aug 2004 02:59:46 -0600
+
+ilisp (5.12.0+cvs.2004.08.11) unstable; urgency=low
+
+  * Fix for sbcl from Christophe Rhodes
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Wed, 11 Aug 2004 13:12:25 -0600
+
+ilisp (5.12.0+cvs.2004.08.03) unstable; urgency=low
+
+  * Enable GCL avoid defsystem hack (closes:241541)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue,  3 Aug 2004 06:30:44 -0600
+
+ilisp (5.12.0+cvs.2004.08.02.2) unstable; urgency=low
+
+  * Add German translation (closes:263028)
+  * More common-lisp-controller v4 changes
+  
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon,  2 Aug 2004 13:38:45 -0600
+
+ilisp (5.12.0+cvs.2004.08.02.1) unstable; urgency=low
+
+  * Convert to common-lisp-controller v4
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon,  2 Aug 2004 04:28:28 -0600
+
+ilisp (5.12.0+cvs.2004.08.02) unstable; urgency=low
+
+  * Apply patch from Daniel Skarda for Guile (closes:262503)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon,  2 Aug 2004 04:13:51 -0600
+
+ilisp (5.12.0+cvs.2004.03.19) unstable; urgency=low
+
+  * Update french translation (closes:238933)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri, 19 Mar 2004 12:46:15 -0700
+
+ilisp (5.12.0+cvs.2004.03.11) unstable; urgency=low
+
+  * Apply patch for gettext (closes:237461)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu, 11 Mar 2004 11:50:06 -0700
+
+ilisp (5.12.0+cvs.2003.12.04) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu,  4 Dec 2003 22:13:01 -0700
+
+ilisp (5.12.0+cvs.2003.10.24) unstable; urgency=low
+
+  * Use : as separator between user and group names (closes:217397) 
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri, 24 Oct 2003 09:03:27 -0600
+
+ilisp (5.12.0+cvs.2003.10.04) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat,  4 Oct 2003 15:35:44 -0600
+
+ilisp (5.12.0+cvs.2003.09.14) unstable; urgency=low
+
+  * Have completer.el require ilcompat (closes:210836)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun, 14 Sep 2003 11:37:43 -0600
+
+ilisp (5.12.0+cvs.2003.09.04) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu,  4 Sep 2003 23:57:12 -0600
+
+ilisp (5.12.0+cvs.2003.07.20) unstable; urgency=low
+
+  * Remove any preexisting C-c C-v keybinding (closes: 202225)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun, 20 Jul 2003 21:31:36 -0600
+
+ilisp (5.12.0+cvs.2003.07.04) unstable; urgency=low
+
+  * New upstream
+  * Fixed hang with spacebar (closes:186936)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri,  4 Jul 2003 15:32:29 -0600
+
+ilisp (5.12.0+cvs.2003.06.05) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu,  5 Jun 2003 00:09:14 -0600
+
+ilisp (5.12.0+cvs.2003.05.27.3) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 27 May 2003 19:20:46 -0600
+
+ilisp (5.12.0+cvs.2003.05.27.1) unstable; urgency=low
+
+  * Add symlinks for .lisp and .scm files if they don't exist
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 27 May 2003 11:58:46 -0600
+
+ilisp (5.12.0+cvs.2003.05.27) unstable; urgency=low
+
+  * new upstream
+  * Remove bashism from maintainer scripts
+  * avoid deleting symlinks (closes: 194919)
+  
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 27 May 2003 11:42:13 -0600
+
+ilisp (5.12.0+cvs.2003.05.26) unstable; urgency=low
+
+  * new upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon, 26 May 2003 15:46:01 -0600
+
+ilisp (5.12.0+cvs.2003.05.21) unstable; urgency=low
+
+  * New upstream
+  * move links to rules file (closes: 194095)
+  * new upstream key bindings (closes: 194097)
+  * use compat file rather than DH_COMPAT
+  
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 20 May 2003 10:48:25 -0600
+
+ilisp (5.12.0+cvs.2003.05.19) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 20 May 2003 10:35:11 -0600
+
+ilisp (5.12.0+cvs.2003.05.18) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon, 19 May 2003 12:15:14 -0600
+
+ilisp (5.12.0+cvs.2003.05.17) unstable; urgency=low
+
+  * Improved documentation
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 17 May 2003 01:37:34 -0600
+
+ilisp (5.12.0+cvs.2003.05.14) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Wed, 14 May 2003 13:47:09 -0600
+
+ilisp (5.12.0+cvs.2003.05.12) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun, 11 May 2003 22:34:27 -0600
+
+ilisp (5.12.0+cvs.2003.05.11) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun, 11 May 2003 16:07:15 -0600
+
+ilisp (5.12.0+cvs.2003.05.09) unstable; urgency=low
+
+  * New uptream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri,  9 May 2003 09:00:51 -0600
+
+ilisp (5.12.0+cvs.2003.04.20) unstable; urgency=low
+
+  * Link .scm files to /usr/lib/ilisp (closes:189821)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun, 20 Apr 2003 08:08:34 -0600
+
+ilisp (5.12.0+cvs.2003.04.14) unstable; urgency=low
+
+  * New upstream
+  * Correct spelling error in templates (closes:188958)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon, 14 Apr 2003 08:11:39 -0600
+
+ilisp (5.12.0+cvs.2003.04.02) unstable; urgency=low
+
+  * New upstream
+  * Add support for sbcl-mt dialect
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu,  3 Apr 2003 01:23:28 -0700
+
+ilisp (5.12.0+cvs.2003.03.29) unstable; urgency=low
+
+  * Use clc-autobuild-library to turn on autobuilding for all
+  CL implementations.
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 29 Mar 2003 05:04:20 -0700
+
+ilisp (5.12.0+cvs.2003.03.23) unstable; urgency=low
+
+  * New upstream
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun, 23 Mar 2003 09:35:02 -0700
+
+ilisp (5.12.0+cvs.2003.03.05c) unstable; urgency=low
+
+  * Spell Pre-Depends correctly (closes: 183578)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Wed,  5 Mar 2003 15:46:44 -0700
+
+ilisp (5.12.0+cvs.2003.03.05b) unstable; urgency=low
+
+  * Remove /usr/lib/ilisp and /usr/lib/ilisp in preinst on an upgrade
+  * Make sure symlink from an ancient version of ilisp is remove in preinst
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue,  4 Mar 2003 22:20:55 -0700
+
+ilisp (5.12.0+cvs.2003.03.05) unstable; urgency=low
+
+  * Remove bashisms from maintainer scripts
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue,  4 Mar 2003 22:02:33 -0700
+
+ilisp (5.12.0+cvs.2003.03.04) unstable; urgency=low
+
+  * Add force option to creating symlinks with CLC compilation
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue,  4 Mar 2003 21:59:34 -0700
+
+ilisp (5.12.0+cvs.2003.03.03) unstable; urgency=low
+
+  * Add support for SBCL aclrepl in version 0.7.13.
+  
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon,  3 Mar 2003 18:40:19 -0700
+
+ilisp (5.12.0+cvs.2003.03.02c) unstable; urgency=low
+
+  * Ensure that /usr/lib/ilisp exists on installation
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat,  2 Mar 2003 06:50:00 -0700
+
+ilisp (5.12.0+cvs.2003.03.02b) unstable; urgency=low
+
+  * Symlink source .lisp files into /usr/lib/ilisp/ for implementations
+  that don't have CLC auto-building set
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat,  1 Mar 2003 18:11:15 -0700
+
+ilisp (5.12.0+cvs.2003.03.02) unstable; urgency=low
+
+  * New upstream
+  * Move .scm files to /usr/share/ilisp/, move .lisp files to
+  /usr/share/common-lisp/source/ilisp/
+  * Use Common Lisp Controller to compile Common Lisp code (closes: 182963)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat,  1 Mar 2003 10:39:16 -0700
+
+ilisp (5.12.0+cvs.2003.02.23) unstable; urgency=low
+
+  * New upstream (closes: 182116)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun, 23 Feb 2003 21:18:48 -0700
+
+ilisp (5.12.0+cvs.2003.02.22) unstable; urgency=low
+
+  * Remove /etc/ilisp on purge
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 22 Feb 2003 22:44:02 -0700
+
+ilisp (5.12.0+cvs.2003.02.16) unstable; urgency=low
+
+  * New upstream version
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon, 17 Feb 2003 00:54:51 -0700
+
+ilisp (5.12.0+cvs.2003.01.31) unstable; urgency=low
+
+  * debian/copyright: Remove speculation about future GPL licensing
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Wed,  5 Feb 2003 23:56:34 -0700
+
+ilisp (5.12.0+cvs.2003.01.30) unstable; urgency=low
+
+  * New upstream (closes: 179037)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu, 30 Jan 2003 08:08:07 -0700
+
+ilisp (5.12.0+cvs.2003.01.11) unstable; urgency=low
+
+  * Don't remove .el files from elc directory since upstream ilisp-mak.el does
+  not compile all .el files. (closes: 175663)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 11 Jan 2003 14:55:29 -0700
+
+ilisp (5.12.0+cvs.2003.01.02) unstable; urgency=low
+
+  * Happy New Year
+  * New upstream version
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu,  2 Jan 2003 11:42:03 -0700
+
+ilisp (5.12.0+cvs.2002.12.22.1) unstable; urgency=low
+
+  * Policy says it's okay to have contrib packages be suggestions
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun, 22 Dec 2002 02:03:05 -0700
+
+ilisp (5.12.0+cvs.2002.12.22) unstable; urgency=low
+
+  * Remove Recommends that are in contrib section
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun, 22 Dec 2002 00:32:29 -0700
+
+ilisp (5.12.0+cvs.2002.12.21) unstable; urgency=low
+
+  * Change license to in accordance with ILISP Developer Questionnaire
+  of Nov 20, 2002.
+  * Move section from non-free/devel to devel now that license is
+  DFSG-compatibile.
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 21 Dec 2002 09:55:32 -0700
+
+ilisp (5.12.0+cvs.2002.12.12) unstable; urgency=low
+
+  * Change short description (closes: 172820)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu, 12 Dec 2002 13:00:43 -0700
+
+ilisp (5.12.0+cvs.2002.12.11) unstable; urgency=low
+
+  * Remove reference to common lisp controller (closes: 172559)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 10 Dec 2002 15:24:47 -0700
+
+ilisp (5.12.0+cvs.2002.12.10) unstable; urgency=low
+
+  * Change where common-lisp-hyperspec-root is set (closes: 172557)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 10 Dec 2002 14:26:54 -0700
+
+ilisp (5.12.0+cvs.2002.12.05) unstable; urgency=low
+
+  * Add README.Debian file
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri,  6 Dec 2002 00:03:28 -0700
+
+ilisp (5.12.0+cvs.2002.12.03) unstable; urgency=low
+
+  * New upstream (closes: 171001)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue,  3 Dec 2002 13:41:01 -0700
+
+ilisp (5.12.0+cvs.2002.11.12) unstable; urgency=low
+
+  * New upstream (see upstream ChangeLog)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 12 Nov 2002 09:18:06 -0700
+
+ilisp (5.12.0+cvs.2002.11.10) unstable; urgency=low
+
+  * Change program name for guile
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon, 10 Nov 2002 23:17:20 -0700
+
+ilisp (5.12.0+cvs.2002.11.04) unstable; urgency=low
+
+  * New upstream
+  * Change permissions on install log (closes: 167724)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon,  4 Nov 2002 08:03:51 -0700
+
+ilisp (5.12.0+cvs.2002.10.25b) unstable; urgency=low
+
+  * Rework handling of buffer-substring
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri, 25 Oct 2002 06:01:37 -0600
+
+ilisp (5.12.0+cvs.2002.10.25a) unstable; urgency=low
+
+  * ilxemacs.el: Call buffer-substring instead for xemacs20 compatibility.
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri, 25 Oct 2002 00:24:55 -0600
+
+ilisp (5.12.0+cvs.2002.10.25) unstable; urgency=low
+
+  * change buffer-substring to buffer-substring-no-properties
+  (closes: 166232)
+  * Make FSF-compliant keybindings user selectable
+  
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu, 24 Oct 2002 20:51:16 -0600
+
+ilisp (5.12.0+cvs.2002.09.27) unstable; urgency=low
+
+  * Add support for openmcl to ilisp.el
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Fri, 27 Sep 2002 00:30:53 -0600
+
+ilisp (5.12.0+cvs.2002.09.25) unstable; urgency=high
+
+  * New upstream version
+  * Fixes critical bug with using lispworks with emacs
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Wed, 25 Sep 2002 13:46:23 -0600
+
+ilisp (5.12.0+cvs.2002.09.22) unstable; urgency=low
+
+  * Add upstream's ChangeLog.
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun, 22 Sep 2002 14:22:44 -0600
+
+ilisp (5.12.0+cvs.2002.09.20) unstable; urgency=low
+
+  * Fix duplicated line in ilisp.el
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 21 Sep 2002 12:50:02 -0600
+
+ilisp (5.12.0+cvs.2002.09.19) unstable; urgency=low
+
+  * Remove user compiled files from /usr/lib/ilisp/ when package is purged.
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Thu, 19 Sep 2002 11:18:57 -0600
+
+ilisp (5.12.0+cvs.2002.09.17) unstable; urgency=low
+
+  * Latest CVS updates
+  * Remove Common Lisp Controller functionality (closes: 161267)
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 17 Sep 2002 23:22:30 -0600
+
+ilisp (5.12.0+cvs.2002.08.31) unstable; urgency=low
+
+  * Sync to latest CVS changes
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sun,  1 Sep 2002 00:18:01 -0600
+
+ilisp (5.12.0+cvs.2002.08.23-3) unstable; urgency=low
+
+  * Change ilisp.el startup sequence, improves autoloading with opening
+  a lisp file.
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Sat, 31 Aug 2002 14:43:26 -0600
+
+ilisp (5.12.0+cvs.2002.08.23-1) unstable; urgency=low
+
+  * Newest CVS checkout
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 20 Aug 2002 15:21:14 -0600
+
+ilisp (5.12.0-6) unstable; urgency=low
+
+  * Move ilisp keybinding setting to toplevel of ilisp.el
+  
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 20 Aug 2002 15:20:57 -0600
+
+ilisp (5.12.0-5) unstable; urgency=low
+
+  * Add preinst script to remove symlinks from older versions of ilisp
+
+ -- Kevin M. Rosenberg <kevin@rosenberg.net>  Wed, 14 Aug 2002 15:08:49 -0600
+
+ilisp (5.12.0-4) unstable; urgency=low
+
+  * Add multiprocessing option to lispworks
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Wed, 14 Aug 2002 07:14:58 -0600
+
+ilisp (5.12.0-3) unstable; urgency=low
+
+  * Make new binary package, ilisp-doc, for PDF and HTML
+    documentation.
+  * Add to Build-Depends-Indep to support ilisp-docs
+  * Fix name of file referenced in control file description
+  
+ -- Kevin M. Rosenberg <kevin@rosenberg.net>  Tue, 13 Aug 2002 12:23:32 -0600
+
+ilisp (5.12.0-2) unstable; urgency=low
+
+  * Add aliases for clisp. Now, names of all lisp interpreters have exact
+  aliases (closes: 101924).
+  * Clean rules files
+  * Fix installation of info files
+  * Add Build-Depends-Indep for texinfo
+  * Change "make ilisp.info" to "make info" in rules file
+  * Change from setting prefix to C-c to setting
+  ilisp-*use-fsf-compliant-keybindings* to t
+  
+ -- Kevin M. Rosenberg <kmr@debian.org>  Tue, 13 Aug 2002 10:47:03 -0600
+
+ilisp (5.12.0-1) unstable; urgency=low
+
+  * New Maintainer <kmr@debian.org>
+  * New upstream version 5.12.0 (closes: 150397)
+  * Update upstream's debian directory (closes: 150398)
+  * Add ilisp.system (closes: 141881)
+  * Fix compatibility with SBCL (closes: 151060)
+  * Use default hyperspec directory (closes: 153124)
+  * Update Standards-version in control file
+  * Use Debhelper V4 and add Build-Depends-Indep record to control file
+  * Add suggests field for hyperspec and cltl in control file
+  * Change Common Lisp Controller from Suggests to Depends in control file
+  * Change Depends from emacsen to emacsen-common in control file
+  * Modify upstream to use Common Lisp Controller locations
+  * Extend Craig's ilisp.system to support Lispworks and AllegroCL
+  * Set more default paths in ilisp.el, including cltl and hyperspec paths
+  * Add functions to ilisp.el to handle various CMUCL and AllegroCL flavors
+  * Rework rules file to use debhelper functions to dh_install, dh_installdirs
+  * Use dh_installinfo rather than manually installing, registering, and unregistering
+  * Remove *.el files from /usr/share/${flavor}/site-lisp/ilisp/extra directory
+  * Move .lisp and .system files to Common Lisp Controller locations
+  * Add missing options to postrm
+  * Added "changes compared to upstream" in copyright file to comply with Debian policy
+  * Change upstream sources to CVS tree, remove URL that does not exist
+
+ -- Kevin M. Rosenberg <kmr@debian.org>  Mon, 12 Aug 2002 09:44:52 -0600
+
+ilisp (5.11.1-7) unstable; urgency=low
+
+  * well 125744 was fixed, but I put the files in the old place on
+    accident.
+  * Fixed 140049 - bad symlinks
+  * Fixed 138669 - typo in ilisp-cmu
+  * Fixed 137011 - ilisp-pkg issues
+
+ -- Craig Brozefsky <craig@red-bean.com>  Mon, 25 Feb 2002 12:26:21 -0500
+
+ilisp (5.11.1-6) unstable; urgency=low
+
+  * common-lisp-controller support finally.  This is the official
+    interface for ILISP maintenance of source and compiled files for
+    it's various CL based backends.
+  * upstream updates, fresh baked from HEAD
+  * closed 125744 ilisp-mak.el turn on
+  * closed 98132  (use c-l-c now) take up with clisp maintainer
+  * closed 128856 (use c-l-c now) cleanup is really cmucl's problem
+  * closed 129980 (use c-l-c now)
+  * closed 87652  (use c-l-c now)
+  * closed 123631 (remaining changes are to be taken care of upstream)
+
+ -- Craig Brozefsky <craig@red-bean.com>  Fri, 22 Feb 2002 12:26:21 -0500
+
+ilisp (5.11.1-5) unstable; urgency=low
+
+  * compile/install ilisp-imenu
+
+ -- Craig Brozefsky <craig@red-bean.com>  Mon, 26 Nov 2001 12:26:21 -0500
+
+ilisp (5.11.1-4) unstable; urgency=low
+
+  * closed bug 121266
+
+ -- Craig Brozefsky <craig@red-bean.com>  Mon, 26 Nov 2001 12:26:21 -0500
+
+ilisp (5.11.1-3) unstable; urgency=low
+
+  * closed bug 98130
+  * closed bug 87751
+
+ -- Craig Brozefsky <craig@red-bean.com>  Fri, 23 Nov 2001 12:26:21 -0500
+
+ilisp (5.11.1-2) unstable; urgency=low
+
+  * closed bug 120767, includes cltl2.elc
+  * fixed minor emacsen-install problem
+
+ -- Craig Brozefsky <craig@red-bean.com>  Fri, 23 Nov 2001 11:26:21 -0500
+
+ilisp (5.11.1-1) unstable; urgency=low
+
+  * New upstream minor version
+  * closed bug 85592, actually last version did.
+  * closed bug 119931 with upstream fix.
+  * closed bug 18825
+
+ -- Craig Brozefsky <craig@red-bean.com>  Thu, 22 Apr 2001 03:26:21 -0500
+
+ilisp (5.11-1) unstable; urgency=low
+
+  * New upstream version
+  * closed bug 87752
+
+ -- Craig Brozefsky <craig@red-bean.com>  Tue, 17 Apr 2001 03:26:21 -0500
+
+ilisp (5.10.1-1) unstable; urgency=low
+
+  * New upstream version
+  * Added a system defaults  file in /etc/ilisp/ilisp.el which is loaded
+    by the emacsen-startup code for ilisp only if ~/.ilisp is not
+    readable.  This is to allow users to customize ilisp fully, while
+    allowing administrators to provide useful defaults
+  * Craig Brozefsky takes over as maintainer from the original
+    packager, Jesse Bouwman <jesse@onshore.com>
+
+ -- Craig Brozefsky <craig@red-bean.com>  Wed, 27 Dec 2000 03:26:21 -0500
+
+ilisp (5.9.4-2) unstable; urgency=low
+
+  * Add Karl Fogel's FSF keybindings, make them the default.
+
+ -- Jesse L. Bouwman <jesse@onshore.com>  Fri,  4 Feb 2000 23:26:44 -0600
+
+ilisp (5.9.4-1) unstable; urgency=low
+
+  * Initial Release.
+
+ -- Jesse L. Bouwman <jesse@onshore.com>  Wed,  2 Feb 2000 23:26:44 -0600

@@ -1,0 +1,72 @@
+General notes:
+
+   * Setting the lisp-find-definition-verbose-p switch to non-nil
+enables some extra debugging output.  There is no pause after each
+such message, so the cost for enabling this is low, but it does mean
+that you have to switch to the *Messages* buffer to see what it said.
+
+   * The *Edit-Definitions* buffer now has a rudimentary
+lisp-edit-definitions-mode of its own, which makes it easier to find
+multiple definitions via "random access."
+
+   * The lisp-fall-back-on-find-tags switch turns off the "Can't find;
+use tags?" query, which I find annoying.  The way I see it, if I had
+wanted find-tag, I would have invoked find-tag directly.
+
+   * I have tested ACL, CMUCL, and SBCL, all of which use the new
+protocol.  Other CL dialects should still work, though with some loss of
+function, but I haven't tested the backward-compatibility code lately.
+[SBCL seems to return no file, or the wrong file, for functions
+sometimes, but methods and classes work, so for the time being I'm
+assuming this is an SBCL problem(s).  -- rgr, 31-Mar-03.]
+
+Some bugs:
+
+   1.  Finding a structure slot accessor in CMUCL sometimes fails the
+first time.  It tends to succeed afterwards, so I haven't been able to
+track this down.
+
+   2.  ACL won't tell us whether an explicit defgeneric form exists; it
+always gives us a source file, presumably the source of the first method
+for implicit generic functions.  (method ilisp::object-source-file
+(standard-generic-function)) in find-src.lisp implements a workaround: A
+defgeneric is reported iff there is a documentation string, which of
+course means that explicit defgeneric forms without doc strings are
+missed.
+
+   3.  If M-. finds a definition that is already visible and positioned
+so that the comments above it are showing, reposition-window-lisp hides
+the comments again.  (More of a glitch than a bug, but still annoying.)
+
+   4.  It may be necessary to clean up lisp-setup-edit-definitions,
+lisp-next-file, and the other search-based stuff in the ilisp-src.el
+file.  In particular, search-lisp and replace-lisp shouldn't use
+*Edit-Definitions*; there could be bad interactions with M-. if these
+aren't changed.
+
+Some possible enhancements:
+
+   * Package DWIM.  This would be really nice; it wasn't even possible
+while the Lisp was restricted to returning a list of file names.  Since
+there may be more than one alternative, it would be best to define a
+response message that enumerates the alternatives, so the user can
+choose.
+
+   * Mouse interface.  I have the code to make M-left on a symbol (or
+reasonable facsimile) find the source, but I need to disentangle it
+from my other hacks first.
+
+   * The way the code works now, it expects to find a definition
+exactly once in the given buffer.  It should look for more hits,
+notify the user if any were found, and permit stepping through them in
+source order.  (Ideally, it should be able to filter out "false hits"
+such as definitions with "#+ignore" in front of them, but that's more
+ambitious, and requires going back to the Lisp to ask it to "vet" each
+hit.)
+
+   * When it finds the next definition, the ACL eli M-. command tells
+you how many known definitions are left; this would be nice to have,
+and probably not too tough.  (When the previous enhancement is done,
+it should probably only do this for the last hit in a buffer.  The
+user would see either "N more definitions" or "N more occurrences of
+this definition", but not both.)

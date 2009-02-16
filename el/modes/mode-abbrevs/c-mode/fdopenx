@@ -1,0 +1,1 @@
+fdopen(<field "int FILEDES">, <field "const char *OPENTYPE">)<endpoint>

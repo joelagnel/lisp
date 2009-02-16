@@ -1,0 +1,18 @@
+gwizard
+-------
+
+gwizard is a set of emacs-lisp macros, designed to help you with
+Gtk+/GNOME/Bonobo programming, by generating all the boring
+boilerplate code.
+
+For installation notes, please consult the gwizard.el file.
+
+gwizard comes with an article on how to use it to generate Bonobo
+boilerplate code in doc/bonobo. It's in LaTeX format, so you'll need
+that to actually read it nicely typeset. If you can't/won't do that,
+you can look at the same article online:
+http://www.djcbsoftware.nl/projecten/bonobo-gwizard/
+
+The example discussed in the
+article can be found in doc/bonobo/moody-component.
+ 

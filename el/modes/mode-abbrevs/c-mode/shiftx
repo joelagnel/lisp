@@ -1,0 +1,9 @@
+void args_shift(int & argc, char ** argv, int frompos=1)
+{
+    int i;
+    for (i = frompos; i < (argc-1); i++) {
+        argv[i] = argv[i+1];
+    }
+    argv[argc-1] = NULL;
+    argc--;
+}

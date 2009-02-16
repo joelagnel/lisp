@@ -1,0 +1,119 @@
+<title>html-helper-mode documentation</title>
+<h1>html-helper-mode documentation</h1>
+
+<hr><h3>Basic functionality: inserting cookies</h3> 
+
+The main function of html-helper-mode is to make it easy to insert
+HTML cookies. html-helper-mode does its best to do this consistently
+and conveniently. For every HTML and HTML+ cookie there should be a
+template which contains the text of the cookie itself and information
+as to where the fields are that the user might want to fill in.<p>
+
+Each template can be activated in one of two ways: by typing the key
+sequence for the cookie, or by completing on the beginning of the
+cookie.  For example, <kbd>C-cC-bt</kbd> will insert the string
+<tt>&lt;title&gt;&lt;/title&gt;</tt>, and position point where you
+want to type the title. Or, you could type <tt>&lt;kb</tt> and hit
+<kbd>M-TAB</kbd>, and the tag &lt;kbd&gt;&lt;/kbd&gt; will be
+inserted.<p>
+
+If a command is called with a prefix argument (by pressing
+<kbd>C-u</kbd> first), then instead of inserting the cookie at the
+point the cookie is inserted around the region. Thus,
+<kbd>C-uC-cC-pb</kbd> will wrap the &lt;b&gt;&lt;/b&gt; token
+around region, thereby making it bold.<p>
+
+A separate file contains a <a href="keybindings.html">complete list of
+keybindings</a>. Be warned, there are a lot - you might want to
+get used to completion.<p>
+
+<hr>
+<h3>Fields</h3>
+More complicated cookies have several fields that need filling in. For example,
+a hyperlink (<tt>&lt;a href=""&gt;&lt;/a&gt;</tt>) has two fields - the URL and
+the link description. When a multiple-field cookie is inserted,
+point will be placed at the first field and then the other fields will
+be entered on a special list. <kbd>M-C-f</kbd> and <kbd>M-C-b</kbd>
+will make the point skip back and forth on this list.<p>
+
+html-helper-mode can prompt you in the minibuffer for all of the
+fields a cookie need.  For example, you can have it ask you to type in
+the URL: and link description fields in a hyperlink.  This feature is
+turned off by default - for information on how to turn it on, read
+about <a href="configuring.html">configuring html-helper-mode</a>.<p>
+
+<hr>
+<h3>Indentation</h3>
+HTML documents can have nested lists: these are a bit hard to read
+in source form. html-helper-mode has code to indent lists cookies to
+the appropriate depth depending on how deeply nested the list is. List
+cookies are automatically indented when they are inserted. To indent a
+line by hand, hit <kbd>TAB</kbd>.<p>
+
+The indentation code is a bit of a hack - it doesn't really parse the
+HTML document very carefully. The main restriction is that cookies that
+are parts of lists (for example, <tt>&lt;ul&gt;</tt> or <tt>&lt;li&gt;</tt>)
+should appear at the beginning of their lines for the code to work best.<p>
+
+<hr>
+<h3>New document skeletons</h3>
+
+When a new HTML document is created, html-helper-mode can insert a
+skeleton with all the tags every HTML document should have.  This
+feature is turned off by default - see the documentation for <a
+href="configuring.html">configuring html-helper-mode</a> to turn it on
+and to customize the skeleton.<p>
+
+<hr>
+<h3>Timestamps</h3>
+
+Good HTML documents should all have timestamps stating the last time
+they were modified. html-helper-mode can make this easy by
+automatically updating your timestamp. This feature is turned off by
+default - see the documentation for <a
+href="configuring.html">configuring html-helper-mode</a> to turn it on
+and to customize the timestamp.<p>
+
+<hr>
+<h3>Emacs editing support</h3>
+
+One of the joys of emacs is that it is pretty smart about parsing the
+contents of the buffer. However, HTML is fairly outside of the realm
+of what emacs thinks is a programming language, so the syntax support
+html-helper-mode provides isn't that helpful.  It does define
+<kbd>&gt;</kbd> as a match for <kbd>&lt;</kbd>, and emacs knows about
+HTML comment syntax, so you can type <kbd>M-;</kbd> to get a
+comment.<p>
+
+<hr>
+<h3>Highlighting</h3>
+If you have hilit19 loaded in your emacs, then html-helper-mode will
+automatically set up regular expressions to colour links, HTML
+cookies, included images, and comments. I think this is one of the most
+useful features of html-helper-mode. For these patterns to be
+installed correctly hilit19 must be loaded <em>before</em>
+html-helper-mode.<p>
+
+I do not use font-lock, so currently there are no font-lock patterns
+defined. However, there is <a
+href="http://www.nbi.dk/TOOLS/emacs/lisp/html-font.el">user-contributed
+font-lock code</a> on the net.  <p>
+
+<hr>
+<h3>Customization</h3>
+Once you have html-helper-mode installed, you probably will want to
+customize a few things. For more information, see the document on
+<a href="configuring.html">configuring html-helper-mode</a>.<p>
+
+<hr>
+<h3>Emacs 18</h3>
+I don't use emacs18 anymore - 19 is quite stable and much nicer. I've
+tried to make sure html-helper-mode works in emacs18, and it seems to
+right now, but it is not being well supported. If you can, upgrade to
+emacs19.<p>
+
+<hr>
+<address><a href="http://www.santafe.edu/~nelson/">Nelson Minar &lt;nelson@santafe.edu&gt;</a></address>
+<!-- hhmts start -->
+Last modified: Thu Feb  2 14:15:43 1995
+<!-- hhmts end -->

@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Introduction">Introduction</a>,
+Next:<a rel=next accesskey=n href="A-new-tree-buffer.html#A%20new%20tree-buffer">A new tree-buffer</a>,
+Previous:<a rel=previous accesskey=p href="tree-buffer.html#tree-buffer">tree-buffer</a>,
+Up:<a rel=up accesskey=u href="tree-buffer.html#tree-buffer">tree-buffer</a>
+<hr><br>
+
+<h4>General description of tree-buffers</h4>
+
+<p>This subchapter is a general introduction in the main concepts of a
+tree-buffer.
+
+<h5>What is a tree-buffer?</h5>
+
+<p>A <dfn>tree-buffer</dfn> is meant to display certain informations (e.g. a
+directory-tree) in a tree-structure consisting of <dfn>tree-nodes</dfn>. 
+Every line in a tree-buffer displays exactly one tree-node. Each node
+has exactly one parent-node and can have any arbitrary number of
+<dfn>children</dfn>-nodes. If a tree-node has no children then it is called
+a <dfn>leaf</dfn>. A tree-node contains several "slots" wheras the most
+important ones are the "name", "displayed-name" and "data". See
+<a href="A-new-tree-node.html#A%20new%20tree-node">A new tree-node</a> for a detailed explanation.
+
+<p>The difference between a natural tree like a fir and a tree-buffer is
+that the root(-node) of a tree-buffer is not visible but only its
+children. In the example below the nodes parent-node-1 and
+parent-node-2 are the children of the invisible root-node. Each
+tree-buffer has exactly one root-node which is created automatically
+by `tree-buffer-create'.
+
+<p>If a tree-node contains at least one child it is displayed with a
+special expand/collapse-symbol (see the example below). This symbol
+allows expanding (rsp. collapsing) the tree-node wheras expanding
+means to display the children-nodes and collapsing means to hide the
+childrens of a tree-node.
+
+<p>Here is an example of a tree-buffer:
+
+<br><pre>&lt;root-node&gt;  ------------------------[root-node (invisible)]
+    [+] &lt;parent-node-1&gt;  -------.
+    [-] &lt;parent-node-2&gt;  -------|
+        [-] &lt;expanded&gt;  --------|
+            &lt;leaf-node-1&gt;  -----|
+            &lt;leaf-node-2&gt;  -----|-----[tree-nodes]
+            &lt;leaf-node-3&gt;  -----|
+            &lt;leaf-node-4&gt;  -----|
+        [+] &lt;collapsed&gt;  -------´
+         |
+         `-----------------[expand/collapse-symbol]
+</pre>
+
+<p>In most cases an action is triggered when clicking with the mouse onto
+a tree-node<a rel=footnote href="#fn-1"><sup>1</sup></a> (e.g. clicking onto
+"leaf-node-1" or "parent-node-1" in the example above). Which
+action is triggered by which key depends on what you specify at
+creation-time of the tree-buffer - see <a href="A-new-tree-buffer.html#A%20new%20tree-buffer">A new tree-buffer</a> for
+details.
+
+<p>The creation-interface of a tree-buffer allows defining special
+popup-menus when clicking with the right mouse-button (of course also
+possible via keyboard, see <a href="Tree-buffer-keybindings.html#Tree-buffer%20keybindings">Tree-buffer keybindings</a>) onto a
+tree-node (e.g. some senseful actions possible for directory-nodes
+like grepping this directory or performing version-control actions for
+this directory or something else).
+
+<h5>General recipe for a tree-buffer</h5>
+
+<p>The following sequence of tasks is the general recipe for a
+tree-buffer beginning from creation and ending with the display.
+
+<ol type=1 start=1>
+</p><li>Create the tree-buffer
+Creating a new tree-buffer has to be done with
+<code>tree-buffer-create</code> for non ECB-tree-buffers and with the macro
+<code>defecb-tree-buffer-creator</code> when the tree-buffer should be used
+as an ECB-tree-buffer, so it is an ECB-interactor. See <a href="A-new-tree-buffer.html#A%20new%20tree-buffer">A new tree-buffer</a> for all details.
+
+<li>Add tree-nodes to the tree-buffer
+Adding nodes to the new tree-buffer (means make the new tree-buffer
+the current buffer and call <code>tree-node-new</code> for a new tree-node
+(note that a root-node for this tree-buffer has been autom. created by
+<code>tree-buffer-create</code>!). The first tree-node you add to a
+tree-buffer must have always the root-node (avaliable via
+<code>tree-buffer-get-root</code>) as parent-node. The next nodes can have
+either one of the fromerly added nodes or the root-node too. All
+tree-nodes haveing the root-node as parent will be displayed at the
+toplevel of the tree-buffer. See <a href="A-new-tree-node.html#A%20new%20tree-node">A new tree-node</a> for all
+details.
+
+<li>Display the tree-buffer with current nodes and state
+When you are finished building up the tree-node-structure call
+<code>tree-buffer-update</code> to display the current tree-structure (again
+after making the tree-buffer the current-buffer). See <a href="Updating-a-tree-buffer.html#Updating%20a%20tree-buffer">Updating a tree-buffer</a> for all details.
+</ol>
+
+<p><strong>IMPORTANT</strong>: First a call of <code>tree-buffer-update</code> updates
+the <strong>display</strong> of a tree-buffer, means shows all the tree-nodes
+in an emacs-buffer! Neither creating a tree-buffer nor adding
+tree-nodes display anything; this just builds the internal
+tree-structure.
+
+<p><strong>IMPORTANT</strong>: See <a href="Programming-special-windows.html#Programming%20special%20windows">Programming special windows</a> for details
+about programming interactors (special windows) regardless if they
+were build as tree or not. There you can find a.o. how to
+automatically synchronizing a special window with the current
+edit-buffer.
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>Of course using the keyboard is also possible,
+see <a href="Tree-buffer-keybindings.html#Tree-buffer%20keybindings">Tree-buffer keybindings</a>.</p>
+
+</ol><hr>
+
+</body></html>
+

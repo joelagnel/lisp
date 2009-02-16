@@ -1,0 +1,28 @@
+Index: url-cookie.el
+===================================================================
+RCS file: /gd/gnu/anoncvsroot/url/lisp/url-cookie.el,v
+retrieving revision 1.1.1.1
+diff -u -r1.1.1.1 url-cookie.el
+--- url-cookie.el	1999/11/26 12:11:47	1.1.1.1
++++ url-cookie.el	1999/12/10 06:53:05
+@@ -255,6 +255,10 @@
+ 		(setq retval (cons cur retval))))))
+     retval))
+ 
++(defvar url-cookie-multiple-line t
++  "If nil, use one line cookie.
++Some web servers, such as hotmail, only accept one line cookie.")
++
+ ;;;###autolaod
+ (defun url-cookie-generate-header-lines (host path secure)
+   (let* ((cookies (url-cookie-retrieve host path secure))
+@@ -272,7 +276,8 @@
+       (setq cur (car cookies)
+ 	    cookies (cdr cookies)
+ 	    chunk (format "%s=%s" (url-cookie-name cur) (url-cookie-value cur))
+-	    retval (if (< 80 (+ (length retval) (length chunk) 4))
++	    retval (if (and url-cookie-multiple-line
++			(< 80 (+ (length retval) (length chunk) 4)))
+ 		       (concat retval "\r\nCookie: " chunk)
+ 		     (if retval
+ 			 (concat retval "; " chunk)

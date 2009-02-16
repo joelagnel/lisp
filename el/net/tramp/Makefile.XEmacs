@@ -1,0 +1,93 @@
+# XEmacs Makefile for TRAMP
+
+# This file is part of XEmacs.
+
+# XEmacs is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2, or (at your option) any
+# later version.
+
+# XEmacs is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with XEmacs; see the file COPYING.  If not, write to
+# the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+# Boston, MA 02111-1307, USA.
+
+# Author: Stephen J. Turnbull <stephen@xemacs.org>
+# Created: 2001 November 10
+
+# This Makefile requires GNU make.
+
+# #### This Makefile is a newt.  It'll get betta.
+
+#
+# packaging paramaters
+#
+
+VERSION = 0.50
+AUTHOR_VERSION = 2.46
+MAINTAINER = Stephen J. Turnbull <stephen@xemacs.org>
+PACKAGE = tramp
+PKG_TYPE = regular
+# not found: vc-rcs
+# copied to TRAMP from elsewhere
+#     format-spec from Gnus 5.8, also in tar ball (REQUIRE gnus)
+#     base64 by Kyle Jones for mimencode methods (REQUIRE mail-lib)
+REQUIRES = tramp xemacs-base vc fsf-compat efs dired mail-lib gnus
+CATEGORY = standard
+
+PACKAGE_CVSROOT=:pserver:anonymous@cvs.tramp.sourceforge.net:/cvsroot/tramp
+
+TEXI_DIR = texi
+
+#
+# Definitions telling Make what to build and install.
+#
+
+# These MUST be .elcs; bad things will happen (your sources will all
+# disappear when you clean!) if these are .els.
+ELCS = lisp/tramp-util.elc lisp/tramp.elc lisp/tramp-vc.elc lisp/trampcache.elc
+
+# EXTRA_OBJS get cleaned by make clean
+EXTRA_OBJS = lisp.ChangeLog $(TEXI_DIR).ChangeLog
+
+# EXTRA_SOURCES get copied into the package
+# Don't put ChangeLog in here, that gets picked up automatically
+EXTRA_SOURCES = CONTRIBUTORS $(EXTRA_OBJS)
+
+# We should put the Lisp ChangeLog in with the Lisp files, the Texinfo
+# ChangeLog in man/tramp, the top-level ChangeLog in etc/tramp, and create
+# a README which also goes in etc/tramp.
+INFO_FILES = $(TEXI_DIR)/$(PACKAGE).info*
+TEXI_FILES = $(TEXI_DIR)/$(PACKAGE).texi
+MANUAL = $(PACKAGE)
+
+AUTOLOAD_PATH = lisp
+
+include ../../XEmacs.rules
+
+GENERATED += lisp/custom-load.elc
+
+.PHONY: extra-sources
+
+all:: $(AUTOLOAD_PATH)/auto-autoloads.elc $(ELCS) \
+	$(AUTOLOAD_PATH)/custom-load.elc $(TEXI_DIR)/tramp.info \
+	extra-objects
+
+extra-objects:
+	cp lisp/ChangeLog lisp.ChangeLog
+	cp $(TEXI_DIR)/ChangeLog $(TEXI_DIR).ChangeLog
+
+$(TEXI_DIR)/tramp.info: $(TEXI_DIR)/tramp.texi
+	(cd $(TEXI_DIR); $(MAKEINFO) -o tramp.info tramp.texi)
+
+# #### I don't know why you wouldn't be able to build a source package
+srckit: 
+	@echo "You cannot build a source package for $(PACKAGE)"
+
+binkit: binkit-sourceinfo
+# end Makefile.XEmacs

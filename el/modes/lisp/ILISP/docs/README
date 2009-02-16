@@ -1,0 +1,17 @@
+ILISP DOCUMENTATION
+===================
+
+ILISP is a powerful GNU Emacs interface to many dialects of Lisp.
+
+This is the 'docs' directory.
+
+Using 'make' you can produce .dvi, .ps and .info files for ILISP,
+starting from the 'ilisp.texi' file.
+
+There is also the reference card 'ilisp-refcard.tex' which you may
+find useful (provided by Valentino Kyriakides).
+
+Enjoy,
+
+
+The ILISP Maintainers

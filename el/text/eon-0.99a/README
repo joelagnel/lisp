@@ -1,0 +1,97 @@
+::::------------:--::----:-::::--------:--::----:-:-------:--::-
+::::-----:--::----:-:---------------:--::----:-:--:--::----:-:--
+  ___  ___  _ __  _ 
+ / _ \/ _ \| '_ \(_)
+|  __/ (_) | | | |_      the emacs ontology project
+ \___|\___/|_| |_(_)                        
+                  
+::::-----:--::----:-:---------------:--::----:-:--:--::----:-:--
+::::-::------:--::----:-:------:--::----:-:----:--::----:-:-::--
+
+:::: CONTACT INFORMATION
+
+Dave O'Toole
+dto@gnu.org
+irc.freenode.net#emacs
+               
+:::: ABOUT EON
+
+Eon is my collection of add-ons for GNU Emacs (version 22 or later.)
+Many more files are in preparation.
+
+:::: STATUS
+
+2007-11-08: This is the last alpha release. Beta is next!
+
+:::: THE FILES IN THIS ARCHIVE
+
+  COPYING        Your license (GPL v3).
+  Makefile       The makefile!
+  README         The file you are reading now.
+  cell.el        A generalized spreadsheet program. (UNFINISHED)
+  cl-guide.el    A guide to using the CL package. (UNFINISHED)
+  color-theme-eon.el --- My standard color theme.
+  eon.el         Object-oriented extension to Emacs Lisp
+  eon-maint.el   Used to configure batch byte-compilation of Eon.
+  iso-date.el    Standard timestamping stuff
+  org-blog.el    Blogging add-on for org-mode
+  peano.el       Document structure/indexing tool (UNFINISHED)
+  pixel.el       Very simple XPM pixel drawing app (eon demo)
+  usb.el         Utilities for managing many USB storage devices
+
+:::: HOW TO INSTALL EON
+
+Look at the Makefile and make any changes you need. Then:
+
+  make
+  make install
+
+:::: THEN WHAT DO I DO?
+
+Not much; this is primarily a developer's release. There's one (not
+very exciting) xpm widget demo. See the file "eon.el" (in this
+archive) for further instructions.
+
+:::: ABOUT THE METACONFERENCE                 
+
+The Emacs Meta Activity Conference Symposium (or "metaconference"
+for short) is a recurring decentralized, self-organizing,
+interventionist semi-structured content-optional meta activity
+event. The conference is free and open for anyone to attend.
+
+Online conference:
+
+ - presentations, articles, and screencasts
+ - dedicated IRC channel ##metaconference for discussion
+                         ^^ (two pound signs)
+ - dedicated torrent for multimedia distribution?
+ - lasts minutes or days
+ - people in various time zones can catch up at their leisure
+ - public logging and archiving of IRC "Conference Proceedings" 
+   is encouraged.
+ - monthly zine? i would love this
+
+Live-action conference:
+
+ (We haven't done this yet.)
+ - presentations and demos
+ - coffee (or just have the event near a coffee shop)
+ - performance art
+ - live streaming audio with audience feedback via IRC? (i have some
+   hardware to support this)
+ - rms keynote?    
+
+More info:
+
+irc: freenode.net#metaconference
+mailing list: metaconference@emacsen.org
+subscription contact: mwolson@member.fsf.org
+
+TODO: brief mission statement
+
+http://www.gnu.org/philosophy/free-sw.html
+http://en.wikipedia.org/wiki/Intellectual_freedom
+http://en.wikipedia.org/wiki/Universal_Declaration_of_Human_Rights
+
+::::-----:--::----:-:---------------:--::----:-:--:--::----:-:--
+::::-::------:--::----:-:------:--::----:-:----:--::----:-:-::--

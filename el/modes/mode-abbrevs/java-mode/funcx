@@ -1,0 +1,3 @@
+public <field "return_type"> <field "method_name">(<field " ">) {
+    <endpoint>
+}

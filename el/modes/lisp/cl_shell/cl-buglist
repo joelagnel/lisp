@@ -1,0 +1,106 @@
+----------------------------------------------------------------------
+CL-SHELL BUGS:
+
+The startup code should be fixed so that it doesn't return anything to
+top-level... It currently causes lots of extra prompts to appear by
+returning an empty list of values.  Also, if the *lisp* buffer is
+already around, if CL already running, etc. should handle this
+correctly.
+
+Since it longer uses temp files, cl-compile-form should use an alist
+to determine what kind of compile expression to send to CL (ie,
+compile for defuns, clos-sys:compile-method for defmethods, and wrap
+in a lambda and funcall otherwise.  Get rid of "compile-def" stuff.
+
+Errors that occur during requests to CL should be handled better
+(e.g., describe).
+
+Hitting return in an unfinished expression in the middle of the *lisp*
+buffer should insert a newline, as at the end of the buffer.
+Currently, it beeps and moves the point to the start of the
+expression.
+
+Behavior when killing the *lisp* buffer and calling run-cl when a
+*lisp* buffer already exists should check that the process is alive,
+and clear the buffer. Should the function cl-process do the checking?
+
+Source-file code doesn't give proper redefinition warnings for Lucid's
+CLOS.
+
+Lucid insists on expanding all symbolic filename links for source-file
+pathnames.  In general, source-file code can easily get screwed up in
+situations where you have complicated symlinks between
+files/directories.  Making source-files work correctly from different
+machines depends on the system administrator setting up the full
+(non-symlink) paths to look the same.
+
+Source-file code assumes that there are no package prefixes used in
+your definitions.  If there are, it won't find them in the file.  I
+don't know if this is worth fixing.
+
+Shouldn't allow user to save or write the *lisp* buffer, since this
+will rename it!  Instead, copy to a temp buffer and save that (as an
+interaction log).
+
+----------------------------------------------------------------------
+CL-SHELL SUGGESTIONS/TODO:
+
+Would be nice if you could use the mouse to position the cursor in the
+source-file buffer.
+
+cl-send-request could be modified for Lucid to use multi-processing.
+The cl-lucid file should tell CL to set up a secondary process for
+handling help requests, and then Cl should tell emacs how to connect
+to that process.  This would allow help requests to run asynchronously.
+
+Shell-history should allow user to save previous history in a file and 
+reload it the next time they run lisp.
+
+Should allow users to have evaluations done in-package (like
+compilations).  Perhaps another global parameter?  cl-eval-region
+(C-c C-r) should probably send the forms in the region one-by-one so
+that the results are printed at top-level.  In general, need to
+reconsider the following issues for evaluating and compiling forms
+from lisp-mode buffers (using cl-eval-form, cl-eval-region, and
+cl-compile-form):
+	1) move point to end of form?
+	2) in-package of buffer or current package?
+	3) with source file recording? (Lucid only)
+	4) echo into *lisp* buffer?
+	5) move *lisp* buffer point to end of echoed form?
+	6) what value/values should be returned by CL?
+	7) done in background, or by main CL process?
+
+Would be nice to have eval-buffer.
+
+What about a cl-compile-load-file?  Or even some extensions to dired to 
+compile CL files?
+
+Should fix the standard Emacs TAGS facility M-. to handle multiple
+source files just like C-c.  Perhaps C-c. should call the standard
+TAGS facility if it cannot get a source file from Lisp.  Alternatively,
+it could call apropos.
+
+Should provide bindings to do inspect.  This requires substantial
+work, since one would like an interactive inspection mode.
+
+Advise the CL function 'ed to check the variable
+user::*emacs-cl-shell* and send a find-file command to emacs if it is
+non-nil (current version just prints an error message if the Lucid
+editor is not in the CL world).  This is easy and would be helpful.
+
+Need a pushnew function in cl-lucid, cl-pcl, cl-flavors, so that they
+do not add things to plists every time they are loaded.
+
+Would be nice if Emacs could figure out the prompt automagically.  It
+could instruct CL to print something like
+"[[EVAL-STREAM>>(cl-set-prompt " and then ")<<EVAL-STREAM]]".  On the
+other hand, should probably get rid of the ability to have Emacs
+change the prompt.  Most implementations of CL will probably provide a
+*prompt* variable to do this.
+
+Would be nice to have a yank-last-output (like in shell-mode). 
+
+Perhaps cl-set-buffer-package should ask the user if they want to
+insert an in-package statement in the file.
+----------------------------------------------------------------------

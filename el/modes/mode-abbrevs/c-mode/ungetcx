@@ -1,0 +1,1 @@
+ungetc(<field "int c">, <field "FILE *stream">)

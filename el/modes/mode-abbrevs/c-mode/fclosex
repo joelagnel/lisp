@@ -1,0 +1,7 @@
+if (fclose(<field "f">) != 0) {
+    std::cerr << "ERROR: errno=" << errno << " calling fclose()"
+              << " at " << __FILE__ << ":" << __LINE__
+              << std::endl << std::flush;
+    exit(1);
+}
+<endpoint>

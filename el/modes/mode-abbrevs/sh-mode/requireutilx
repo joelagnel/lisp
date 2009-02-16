@@ -1,0 +1,10 @@
+requireutil () {
+    while [ -n "$1" ]; do
+        type $1 >/dev/null 2>/dev/null
+	if [ $? -ne 0 ]; then
+	    echo Missing utility "$1". Please install it. >/dev/stderr
+	    exit 1
+	fi
+	shift
+    done
+}

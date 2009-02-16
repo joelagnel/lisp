@@ -1,0 +1,1 @@
+re.sub(<field "pattern">, <field "replacement">, <field "string">)

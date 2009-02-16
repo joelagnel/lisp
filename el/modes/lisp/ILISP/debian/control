@@ -1,0 +1,28 @@
+Source: ilisp
+Section: devel
+Priority: optional
+Maintainer: Debian QA Group <packages@qa.debian.org>
+Build-Depends-Indep: debhelper (>= 4.1.16), texinfo, tetex-bin, gs-common, texi2html
+Standards-Version: 3.6.1.1
+
+Package: ilisp
+Architecture: all
+Depends: emacsen-common, debconf (>= 1.2.0)
+Pre-Depends: common-lisp-controller (>= 3.42)
+Recommends: ilisp-doc
+Suggests: hyperspec, cltl
+Description: Emacs interface to LISP implementations
+ ILISP is a powerful GNU Emacs interface to many dialects of Lisp,
+ including Lucid, Allegro, Harlequin LispWorks, GCL, KCL, AKCL, ECL,
+ IBCL, and CMUCL.  Also some Scheme implementations are supported as
+ well as a preliminary version of Xlisp/XlispStat.
+
+Package: ilisp-doc
+Architecture: all
+Section: devel
+Recommends: ilisp
+Description: Documentation for ILISP package
+ This package supplies PDF and HTML documentation for the ILISP
+ package. ILISP is a powerful GNU Emacs interface to many dialects of
+ Lisp.
+

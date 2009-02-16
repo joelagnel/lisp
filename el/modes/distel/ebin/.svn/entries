@@ -1,0 +1,40 @@
+8
+
+dir
+43
+http://distel.googlecode.com/svn/trunk/ebin
+http://distel.googlecode.com/svn
+
+
+
+2007-09-12T07:39:02.723258Z
+38
+mats.cronqvist
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d5f8e727-742a-0410-b67d-dd739a6cc792
+
+.cvsignore
+file
+
+
+
+
+2007-09-21T09:27:33.000000Z
+77cd1ff19a8edd3ed5013bbbcbb85f25
+2007-02-27T13:37:40.501793Z
+3
+lukego
+

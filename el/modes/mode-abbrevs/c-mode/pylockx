@@ -1,0 +1,3 @@
+PyEval_AcquireLock();
+<cursor>
+PyEval_ReleaseLock();

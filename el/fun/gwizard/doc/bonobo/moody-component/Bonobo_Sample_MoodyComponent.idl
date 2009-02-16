@@ -1,0 +1,17 @@
+/*
+ *  Bonobo_Sample_Moods.idl
+ */
+
+#include <Bonobo.idl>
+
+module Bonobo {
+        module Sample {
+                interface GoodMood : Unknown {
+                        say_hello ();        
+                };
+        
+                interface BadMood : Unknown {
+                        say_hi ();
+                };
+        };
+};

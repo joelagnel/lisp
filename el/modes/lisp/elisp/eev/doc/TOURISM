@@ -1,0 +1,128 @@
+This is the `doc/TOURISM' file of GNU eev.
+Copyright (C) 2000 Free Software Foundation, Inc.
+  Permission is granted to anyone to make or distribute verbatim
+copies of this document, in any medium, provided that the copyright
+notice and permission notice are preserved, and that the distributor
+grants the recipient permission for further redistribution as
+permitted by this notice.
+
+This version: Eduardo Ochs, 2004nov05
+Latest version:    <http://angg.twu.net/eev-current/doc/TOURISM>
+      htmlized:    <http://angg.twu.net/eev-current/doc/TOURISM.html>
+First version: see <http://web.archive.org/web/*/angg.twu.net>
+    See also:      <http://angg.twu.net/eev-current/README.html>
+
+
+
+A Brief Statement About Tourism
+===============================
+
+I need to start by quoting some paragraphs from the transcription of a
+speech (<http://www.gnu.org/philosophy/stallman-kth.html>) that
+Richard Stallman gave at the KTH (Royal Institute of Technology) in
+Stockholm, Sweden, at the 30th of October of 1986. They'll probably
+make clear enough how we are far nowadays from being in a perfect
+world.
+
+    In the old days on ITS it was considered desirable that everyone could
+    look at any file, change any file, because we had reasons to. I remember
+    one interesting scandal where somebody sent a request for help in using
+    Macsyma. Macsyma is a symbolic algebra program that was developed at MIT.
+    He sent to one of the people working on it a request for some help, and he
+    got an answer a few hours later from somebody else. He was horrified, he
+    sent a message ``so-and-so must be reading your mail, can it be that mail
+    files aren't properly protected on your system?'' ``Of course, no file is
+    protected on our system. What's the problem? You got your answer sooner;
+    why are you unhappy? Of course we read each other's mail so we can find
+    people like you and help them.'' Some people just don't know when they're
+    well off.
+   
+    (...)
+   
+    But gradually things got worse and worse, it's just the nature of the way
+    the system had been constructed forced people to demand more and more
+    security. Until eventually I was forced to stop using the machine, because
+    I refused to have a password that was secret. Ever since passwords first
+    appeared at the MIT-AI lab I had come to the conclusion that to stand up
+    for my belief, to follow my belief that there should be no passwords, I
+    should always make sure to have a password that is as obvious as possible
+    and I should tell everyone what it is. Because I don't believe that it's
+    really desirable to have security on a computer, I shouldn't be willing to
+    help uphold the security regime. On the systems that permit it I use the
+    ``empty password'', and on systems where that isn't allowed, or where that
+    means you can't log in at all from other places, things like that, I use
+    my login name as my password. It's about as obvious as you can get. And
+    when people point out that this way people might be able to log in as me,
+    i say ``yes that's the idea, somebody might have a need to get some data
+    from this machine. I want to make sure that they aren't screwed by
+    security''.
+   
+    And another thing that I always do is I always turn off all protection on
+    my directory and files, because from time to time I have useful programs
+    stored there and if there's a bug I want people to be able to fix it.
+   
+    But that machine wasn't designed also to support the phenomenon called
+    ``tourism''. Now ``tourism'' is a very old tradition at the AI lab, that
+    went along with our other forms of anarchy, and that was that we'd let
+    outsiders come and use the machine. Now in the days where anybody could
+    walk up to the machine and log in as anything he pleased this was
+    automatic: if you came and visited, you could log in and you could work.
+    Later on we formalized this a little bit, as an accepted tradition
+    specially when the Arpanet began and people started connecting to our
+    machines from all over the country. Now what we'd hope for was that these
+    people would actually learn to program and they would start changing the
+    operating system. If you say this to the system manager anywhere else he'd
+    be horrified. If you'd suggest that any outsider might use the machine,
+    he'll say ``But what if he starts changing our system programs?'' But for
+    us, when an outsider started to change the system programs, that meant he
+    was showing a real interest in becoming a contributing member of the
+    community. We would always encourage them to do this. Starting, of course,
+    by writing new system utilities, small ones, and we would look over what
+    they had done and correct it, but then they would move on to adding
+    features to existing, large utilities. And these are programs that have
+    existed for ten years or perhaps fifteen years, growing piece by piece as
+    one craftsman after an other added new features.
+   
+    Sort of like cities in France you might say, where you can see the
+    extremely old buildings with additions made a few hundred years later all
+    the way up to the present. Where in the field of computing, a program that
+    was started in 1965 is essentially that. So we would always hope for
+    tourists to become system maintainers, and perhaps then they would get
+    hired, after they had already begun working on system programs and shown
+    us that they were capable of doing good work.
+   
+    But the ITS machines had certain other features that helped prevent this
+    from getting out of hand, one of these was the ``spy'' feature, where
+    anybody could watch what anyone else was doing. And of course tourists
+    loved to spy, they think it's such a neat thing, it's a little bit naughty
+    you see, but the result is that if any tourist starts doing anything that
+    causes trouble there's always somebody else watching him. So pretty soon
+    his friends would get very mad because they would know that the continued
+    existence of tourism depended on tourists being responsible. So usually
+    there would be somebody who would know who the guy was, and we'd be able
+    to let him leave us alone. And if we couldn't, then what we would do was
+    we would turn off access from certain places completely, for a while, and
+    when we turned it back on, he would have gone away and forgotten about us.
+    And so it went on for years and years and years.
+
+We can't have such level of tourism anymore, except maybe in few cases where
+we can be quite sure that no irresponsible script kiddies will have access to
+the machines; but by packing the public parts of our home directories and
+making them available we can give an offline way to let outsiders spy us, and
+if things work right then some of those outsiders will start doing the same.
+
+(By the way, how many times have you programmed together with other people? In
+more than fifteen years programming in my spare time I did it together with
+other people a couple of times, at most. Is there anybody else in the same
+situation?)
+
+Important links:
+----------------
+
+  œôó¢ The eev Manifesto
+  œôó¢ The README of the package with my home stuff (~ 900K).
+  œôó¢ My main page.
+  œôó¢ http://www.gnu.org/philosophy/ (rmt)
+
+(^ fix this)
+

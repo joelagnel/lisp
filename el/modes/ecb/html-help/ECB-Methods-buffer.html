@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="ECB%20Methods-buffer">ECB Methods-buffer</a>,
+Previous:<a rel=previous accesskey=p href="ECB-Sources-buffer.html#ECB%20Sources-buffer">ECB Sources-buffer</a>,
+Up:<a rel=up accesskey=u href="Basic-interactors.html#Basic%20interactors">Basic interactors</a>
+<hr><br>
+
+<h4>The ECB Methods interactor</h4>
+
+<p>The <dfn>ECB-Methods</dfn> interactor contains all parsed and recognized tags
+of the current source-buffer. It is called "Method-buffer" because
+ECB is mostly designed for browsing sourcecode files and for
+programming-languages these tags are often methods (and variables
+etc.) To simplify explanations we talk in the following only about
+methods and variables - but in general the method-buffer can contain
+any kind of tags (e.g. sections and subsections for texinfo
+buffers).
+
+<p>Per default the content of the methods-interactor is automatically
+synchronized and updated with current point of the current
+source-buffer in the edit-area (see <code>ecb-window-sync</code> and
+<a href="ECB-window-synchronizing.html#ECB-window%20synchronizing">ECB-window synchronizing</a>).
+
+<h5>Usage of the methods interactor</h5>
+
+<ul>
+<li>When a method/variable is selected with the primary mouse button
+(see <a href="Using-the-mouse.html#Using%20the%20mouse">Using the mouse</a>) or RETURN (see <a href="Using-the-keyboard.html#Using%20the%20keyboard">Using the keyboard</a>) the
+buffer in the edit-window (which one depends on the setting in
+<code>ecb-mouse-click-destination</code>) will jump to the method/variable.
+
+<p>IMPORTANT: If you use the POWER-click (i.e. hold down the SHIFT-key
+while clicking with the primary mouse button (see <a href="Using-the-mouse.html#Using%20the%20mouse">Using the mouse</a>)
+or RETURN (see <a href="Using-the-keyboard.html#Using%20the%20keyboard">Using the keyboard</a>)) on a node in this buffer then
+the edit-buffer will be narrowed to the selected tag (see also
+option <code>ecb-tag-visit-post-actions</code>). But this works only for
+sources parsed by semantic, not by imenu or etags!
+
+</p><li>Clicking on a method/variable with the secondary mouse button or C-RETURN
+(see <a href="Usage-of-ECB.html#Usage%20of%20ECB">Usage of ECB</a>) will jump to the method in another edit window
+- which one depends on the setting in
+<code>ecb-mouse-click-destination</code>.
+
+<li>Right clicking on a method/variable will open a popup menu where
+different operation on the item under the mouse cursor can be
+performed. The popup-menu offers commands for filtering the displayed
+tree-nodes, hiding/narrowing the related tags in the source-buffer and
+expanding/collapsing one/all tree-nodes according to a certain
+expansion-level.
+
+</ul>
+
+<h5>Activating/Displaying the methods interactor</h5>
+
+<p>Either use one of the predefined layouts which contain the methods
+interactor (see <a href="Changing-the-ECB-layout.html#Changing%20the%20ECB-layout">Changing the ECB-layout</a>) (e.g. via <kbd>C-c . l
+c</kbd>) or create a new ecb-layout via the command
+<code>ecb-create-new-layout</code> and add a buffer of type "methods" into
+this new layout (see <a href="Creating-a-new-ECB-layout.html#Creating%20a%20new%20ECB-layout">Creating a new ECB-layout</a>).
+
+<h5>Customizing the methods interactor</h5>
+
+<p>See <a href="ecb-methods.html#ecb-methods">ecb-methods</a> for a list of all options currently available
+for customizing this interactor to your needs.
+
+</body></html>
+

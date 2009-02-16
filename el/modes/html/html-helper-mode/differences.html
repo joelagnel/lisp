@@ -1,0 +1,52 @@
+<title>Differences between html-mode and html-helper-mode</title>
+<h1>Differences between html-mode and html-helper-mode</h1>
+
+There are several similarities between html-helper-mode and html-mode
+This isn't surprising, since my mode was inspired by
+html-mode. Here's an (incomplete) list of the differences:<p>
+
+<dl>
+  <dt> Insertion philosophy
+  <dd> html-mode frequently prompts the user in the minibuffer for
+       the data to fill in fields like titles or headers.
+       In html-helper-mode, prompting is a user-controlled option.<p>
+
+  <dt> Modifying regions
+  <dd> In html-helper-mode, every command will instead
+       modify the region if it is called with a prefix argument.<p>
+
+  <dt> Automatic text insertion
+  <dd> html-helper-mode can automatically insert skeletons for
+       new documents and also maintain timestamps.<p>
+
+  <dt> Minimal syntax support
+  <dd> html-helper-mode does its best to tell emacs about the syntax
+       of HTML documents.<p>
+
+  <dt> Indentation
+  <dd> html-helper-mode indents nested lists<p>
+
+  <dt> Highlighting
+  <dd> HTML cookies are coloured nicely with hilit19.<p>
+
+  <dt> Keymap
+  <dd> A few obsolete cookies
+       have been removed, a few new cookies have been added, and
+       the keybindings have been completely rearranged to be compliant with
+       emacs standards.<p>
+
+  <dt> Completion
+  <dd> HTML cookies can be completed in the buffer with M-TAB.<p>
+
+
+  <dt> Missing features
+  <dd> Some features of html-mode are not included. These include the
+       ability to quotify old-style HREFs and automatic naming of anchors<p>
+
+</dl>
+
+<hr>
+<!-- hhmts start -->
+Last modified: Wed Feb  1 14:16:27 1995
+<!-- hhmts end -->
+<address><a href="http://www.santafe.edu/~nelson/">Nelson Minar &lt;nelson@santafe.edu&gt;</a></address>

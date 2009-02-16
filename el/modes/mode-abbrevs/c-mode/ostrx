@@ -1,0 +1,5 @@
+#ifdef OLD_SSTREAM
+    std::ostrstream str;
+#else
+    std::ostringstream str;
+#endif

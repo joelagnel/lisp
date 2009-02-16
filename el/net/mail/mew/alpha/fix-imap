@@ -1,0 +1,20 @@
+#! /bin/sh
+
+# If you have used Mew 4 (4.0.53 or earlier) and start using Mew
+# 4.0.54, and if your IMAP server allows folder only under "inbox.", 
+# you need to terminate Mew and execute this command once in 
+# each IMAP sub-directory under ~/Mail/.imap.
+
+# Usage
+#	% cd ~/Mail/.imap
+#	% cd user@server%port
+#	% fix-imap
+
+prefix="inbox."
+
+for olddir in $prefix* 
+do
+	newdir=`echo $olddir | sed -e 's/^inbox\.//g '`
+	echo mv $olddir $newdir
+	mv $olddir $newdir
+done

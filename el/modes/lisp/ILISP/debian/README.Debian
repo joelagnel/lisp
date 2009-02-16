@@ -1,0 +1,9 @@
+The default initialization file for ILISP is installed in
+/etc/ilisp/ilisp.el. However, if you wish to override the global
+initialization file with a local initialization file, you can install
+that file as .ilisp in your home directory. If ~/.ilisp exists, then
+the system-wide default file will not be read at all.
+
+Thus, a warning, if you have a .ilisp file in your homn directory, you
+are completely on your own to ensure that ilisp is properly
+configured.

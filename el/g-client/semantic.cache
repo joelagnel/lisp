@@ -1,0 +1,21 @@
+;; Object g-client/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "g-client/"
+  :tables (list 
+   (semanticdb-table "g.el"
+    :major-mode 'emacs-lisp-mode
+    :tags '(("defgroup" code nil nil [2360 2417]) ("load-library" code nil nil [2475 2502]) ("add-hook" code nil nil [2534 2601]) ("g" package nil nil [2609 2621]))
+    :file "g.el"
+    :pointmax 2725
+    )
+   (semanticdb-table "json.el"
+    :major-mode 'emacs-lisp-mode
+    :tags '(("json-object-type" variable (:default-value (quote alist)) nil [2021 2223]) ("json-array-type" variable (:default-value (quote vector)) nil [2225 2411]) ("json-key-type" variable nil nil [2413 2974]) ("json-false" variable (:default-value :json-false) nil [2976 3262]) ("json-null" variable nil nil [3264 3541]) ("json-join" function (:arguments ("strings" "separator")) nil [3561 3673]) ("json-alist-p" function (:arguments ("list")) nil [3675 3824]) ("json-plist-p" function (:arguments ("list")) nil [3826 4008]) ("json-advance" function (:arguments ("&optional" "n")) nil [4031 4246]) ("json-peek" function nil nil [4248 4368]) ("json-pop" function nil nil [4370 4571]) ("json-skip-whitespace" function nil nil [4573 4712]) ("put" code nil nil [4738 4791]) ("put" code nil nil [4792 4847]) ("put" code nil nil [4849 4914]) ("put" code nil nil [4915 5006]) ("put" code nil nil [5008 5073]) ("put" code nil nil [5074 5165]) ("put" code nil nil [5167 5231]) ("put" code nil nil [5232 5319]) ("put" code nil nil [5321 5382]) ("put" code nil nil [5383 5470]) ("put" code nil nil [5472 5532]) ("put" code nil nil [5533 5620]) ("put" code nil nil [5622 5680]) ("put" code nil nil [5681 5768]) ("json-keywords" variable (:default-value (quote ("true" "false" "null"))) nil [5787 5861]) ("json-read-keyword" function (:arguments ("keyword")) nil [5883 6708]) ("json-encode-keyword" function (:arguments ("keyword")) nil [6731 6929]) ("json-read-number" function nil nil [6963 7354]) ("json-encode-number" function (:arguments ("number")) nil [7376 7478]) ("json-special-chars" variable (:default-value (quote ((34 . 34) (92 . 92) (47 . 47) (98 . 8) (102 . 12) (110 . 10) (114 . 13) (116 . 9)))) nil [7493 7715]) ("json-read-escaped-char" function nil nil [7736 8253]) ("json-read-string" function nil nil [8255 8803]) ("json-encode-char" function (:arguments ("char")) nil [8825 9291]) ("json-encode-string" function (:arguments ("string")) nil [9293 9432]) ("json-new-object" function nil nil [9452 9705]) ("json-add-to-object" function (:arguments ("object" "key" "value")) nil [9707 10779]) ("json-read-object" function nil nil [10805 11641]) ("json-encode-hash-table" function (:arguments ("hash-table")) nil [11667 12083]) ("json-encode-alist" function (:arguments ("alist")) nil [12133 12511]) ("json-encode-plist" function (:arguments ("plist")) nil [12513 12850]) ("json-encode-list" function (:arguments ("list")) nil [12852 13275]) ("json-read-array" function nil nil [13307 13837]) ("json-encode-array" function (:arguments ("array")) nil [13858 13989]) ("json-readtable" variable (:default-value (let ((table (quote ((116 json-read-keyword "true") (102 json-read-keyword "false") (110 json-read-keyword "null") (123 json-read-object) (91 json-read-array) (34 json-read-string))))) (mapc (lambda (char) (push (list char (quote json-read-number)) table)) (quote (45 48 49 50 51 52 53 54 55 56 57))) table)) nil [14012 14447]) ("json-read" function nil nil [14449 14878]) ("json-read-from-string" function (:arguments ("string")) nil [14915 15098]) ("json-read-file" function (:arguments ("file")) nil [15100 15290]) ("json-encode" function (:arguments ("object")) nil [15313 16084]) ("json" package nil nil [16086 16101]))
+    :file "json.el"
+    :pointmax 16124
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre4"
+  :semanticdb-version "2.0pre4"
+  )

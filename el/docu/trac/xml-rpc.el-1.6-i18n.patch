@@ -1,0 +1,31 @@
+diff -r 3a1ae31f93af -r bdab0ea7ef74 xml-rpc.el
+--- a/xml-rpc.el	Thu Aug 03 15:57:15 2006 +0900
++++ b/xml-rpc.el	Tue Oct 24 10:43:13 2006 +0900
+@@ -249,7 +249,7 @@ interpreting and simplifying it while re
+       valvalue)
+      ;; Integer
+      ((eq valtype 'int)
+-      (string-to-int valvalue))
++      (string-to-number valvalue))
+      ;; Double/float
+      ((eq valtype 'double)
+       (string-to-number valvalue))
+@@ -425,7 +425,8 @@ or nil if called with ASYNC-CALLBACK-FUN
+ 	      (url-request-data (concat "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+ 					(with-temp-buffer
+ 					  (xml-print xml)
+-					  (buffer-string))))
++					  (encode-coding-string 
++					   (buffer-string) 'utf-8))))
+ 	      (url-request-coding-system 'utf-8)
+ 	      (url-http-attempt-keepalives nil)
+ 	      (url-request-extra-headers (list 
+@@ -520,6 +521,8 @@ or nil if called with ASYNC-CALLBACK-FUN
+ 	       (result (cond
+ 			;; A probable XML response
+ 			((looking-at "<\\?xml ")
++			 (decode-coding-region (point-min) (point-max) 'utf-8)
++			 (set-buffer-multibyte t)
+ 			 (xml-rpc-clean (xml-parse-region (point-min) (point-max))))
+ 			  
+ 			;; No HTTP status returned

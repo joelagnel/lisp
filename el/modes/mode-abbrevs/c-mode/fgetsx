@@ -1,0 +1,1 @@
+fgets(<field "buf">, sizeof(<field "buf">), <field "f">)

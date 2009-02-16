@@ -1,0 +1,19 @@
+#!/bin/bash
+
+version=$1
+
+if [ "$version" = "" ]; then
+    echo "$0 <version>"
+    exit
+fi
+
+tmp=/tmp/wave-$version
+
+rm -rf $tmp
+mkdir $tmp
+cp -a /usr/share/common-licenses/GPL-2 "$tmp/COPYING"
+cp -a Makefile README aplay* *.c wave.el $tmp
+cd /tmp
+tar czvf wave-$version.tar.gz wave-$version
+
+rm -rf $tmp

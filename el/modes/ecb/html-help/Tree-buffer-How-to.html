@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Tree-buffer%20How%20to">Tree-buffer How to</a>,
+Previous:<a rel=previous accesskey=p href="Do-not-with-tree-buffer.html#Do%20not%20with%20tree-buffer">Do not with tree-buffer</a>,
+Up:<a rel=up accesskey=u href="tree-buffer.html#tree-buffer">tree-buffer</a>
+<hr><br>
+
+<h4>How to deal with certain programming-requirements</h4>
+
+<p>This chapter describes in detail how to solve certain
+programming-challenges with tree-buffers.
+
+<h5>Caching the current tree-buffer display</h5>
+
+<p>Sometimes it can be useful or important to cache the current display
+of a tree-buffer and display later exactly this cached display-state. 
+Here is how to do this:
+
+<ol type=1 start=1>
+</p><li>Caching the display:
+You have to do two tasks: First store the current internal structure
+of the tree-buffer; you must do this with the function
+<code>tree-buffer-displayed-nodes-copy</code>. Then store the
+buffer-contents of that tree-buffer you want to cache; you can do this
+for example with <code>buffer-substring</code>. For both tasks you must make
+the tree-buffer the current-buffer.
+
+<li>Displaying a previous tree-buffer-cache:
+Make the tree-buffer the current buffer, call
+<code>tree-buffer-update</code> and pass as second argument <var>CONTENT</var>
+the data you have stored in step 1. See the documentation of
+<code>tree-buffer-update</code> for details.
+
+<p>Here is an example:
+
+<br><pre>(tree-buffer-update
+  nil
+  (cons (nth 2 cache-elem) ;; the stored buffer-string
+        (nth 1 cache-elem) ;; the stored tree-structure
+  )))
+</pre>
+</ol>
+
+</body></html>
+

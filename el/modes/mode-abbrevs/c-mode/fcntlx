@@ -1,0 +1,1 @@
+fcntl(<field "int FILEDES">, <field "int COMMAND">, <field "...">)<endpoint>

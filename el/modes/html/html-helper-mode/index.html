@@ -1,0 +1,103 @@
+<html> <head>
+<title>html-helper-mode</title>
+</head>
+
+<body>
+<h1>html-helper-mode</h1>
+
+<dfn>html-helper-mode</dfn> is an emacs mode to make editing HTML
+files easier, inspired by Marc Andreessen's html-mode. html-helper-mode does
+most of the things that html-mode does, but with a slightly different
+interface and lots of new features.<p>
+
+To use this mode, you need two lisp files:
+<ul>
+  <li> <a href="tempo.el">tempo.el</a>, a generic template insertion
+       facility for emacs by
+       <a href="http://www.lysator.liu.se/~davidk">David Kågedal</a>
+  <li> <a href="html-helper-mode.el">html-helper-mode.el</a>,
+       the actual editing mode.
+</ul>
+
+You might also like to try this user-contributed code by
+<a href="http://www.nbi.dk/~dickow/">Ulrik Dickow</a> for
+<a href="http://www.nbi.dk/TOOLS/emacs/lisp/html-font.el">font-lock support</a>.
+
+<p>
+
+Put these files in your load-path and byte compile them (if
+you want). Then arrange for html-helper-mode to be loaded: the easiest
+way is to put this in your .emacs:
+
+<pre>
+  (autoload 'html-helper-mode "html-helper-mode" "Yay HTML" t)
+  (setq auto-mode-alist (cons '("\\.html$" . html-helper-mode) auto-mode-alist))
+</pre>
+Alternately, you can get an entire distribution of html-helper-mode,
+including these HTML documents, as 
+<a href="ftp://ftp.reed.edu/pub/src/html-helper-mode.tar.gz">html-helper-mode.tar.gz</a>.
+<p>
+
+<hr>
+
+<b>NEW</b>: the version of tempo.el I am now distributing is version 1.2.
+There are lots of new things in this version: the relevant change here is
+the completion code has been updated to be consistent with post emacs-19.26
+definitions of the <kbd>\=</kbd> regexp token. If completion wasn't working
+before, try this version. I still have <a href="tempo-1.0.el">version 1.0</a>
+around if you need it.<p>
+
+<hr>
+
+<h3>You can get there from here</h3>
+<ul>
+  <li> <a href="tempo.el">tempo.el</a> (local copy, known to work with html-helper-mode)
+  <li> <a href="html-helper-mode.el">html-helper-mode.el</a>
+  <li> <a href="documentation.html">Documentation</a> for html-helper-mode
+  <li> How to <a href="configuring.html">configure</a> html-helper-mode
+  <li> A list of <a href="keybindings.html">keybindings</a>
+  <li> <a href="differences.html">Differences</a> between html-helper-mode and html-mode
+  <li> <a href="changelog.html">Changelog</a> for html-helper-mode
+  <li> The official <a href="ftp://ftp.lysator.liu.se/pub/emacs/">ftp site</a>
+       for
+       <a href="ftp://ftp.lysator.liu.se/pub/emacs/tempo.el">tempo.el</a>.
+  <li> User contributed <a href="http://www.nbi.dk/TOOLS/emacs/lisp/html-font.el">font-lock support</a>.
+</ul>
+
+<hr>
+<h3>Acknowledgements</h3>
+Many thanks to <a href="http://www.lysator.liu.se/~davidk">David
+Kågedal</a> &lt;davidk@lysator.liu.se&gt; for coming along at just
+the right time with tempo.el, the basic template code that underlies
+html-helper-mode. Many of the neat features like completion and field
+support are because of his good design and programming.<p>
+
+Thanks to <a href="http://www.nbi.dk/~dickow/">Ulrik Dickow</a> for his font-lock code.<p>
+
+Thanks to the author of cc-mode, Barry Warsaw &lt;baw@anthem.nlm.nih.gov&gt;,
+his code provided a useful guide in writing this mode (not to
+mention saving me many hours of formatting C, C++, and Objective C!)<p>
+
+My appreciation to Marc Andreessen &lt;marca@netscape.com&gt;, the
+author of the original html-mode.<p>
+
+And finally, many thanks to the various people on the net who have been
+offering encouragement, suggestions, and example code. Y'all're the main
+reason I'm writing this, and the main reason it's usable.<p>
+
+<hr>
+New HTML document writers should read something like the 
+<a href="http://www.ncsa.uiuc.edu/General/Internet/WWW/HTMLPrimer.html">HTML
+primer</a>. The references at the bottom of the primer are all worth
+following. <a href="http://akebono.stanford.edu/yahoo/">Yahoo</a> has
+a good index of
+<a href="http://akebono.stanford.edu/yahoo/Computers/World_Wide_Web/HTML/">HTML info</a>
+on the Web. <p>
+
+<hr>
+Comments and suggestions are highly encouraged.<p>
+<address><a href="http://www.santafe.edu/~nelson/">Nelson Minar &lt;nelson@santafe.edu&gt;</a></address>
+<!-- hhmts start -->
+Last modified: Tue Feb 28 10:32:13 1995
+<!-- hhmts end -->
+</body> </html>

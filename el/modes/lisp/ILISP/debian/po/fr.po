@@ -1,0 +1,67 @@
+# translation of fr.new.po to French
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans#
+#    Developers do not need to manually edit POT or PO files.
+# Emmanuel le Chevoir <mms@debian.org>, 2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ilisp-5.12.0+cvs.2004.03.11\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-03-17 12:09+0100\n"
+"PO-Revision-Date: 2004-03-17 12:15+0100\n"
+"Last-Translator: Emmanuel le Chevoir <mms@debian.org>\n"
+"Language-Team: French <debian-l10n-french@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.3.1\n"
+
+#. Type: boolean
+#. Description
+#: ../ilisp.templates:4
+msgid "Use FSF-compliant keybindings?"
+msgstr "Utiliser des associations de touches conformes aux normes FSF ?"
+
+#. Type: boolean
+#. Description
+#: ../ilisp.templates:4
+msgid ""
+"ILISP allows the choice of using FSF-compliant keybindings which start with "
+"a Control-C character. The older ILISP keybindings use a Control-Z character "
+"as the prefix."
+msgstr ""
+"ILISP vous permet d'utiliser des associations de touches (« keybindings ») "
+"conformes aux normes de la FSF pour les combinaisons basées sur Ctrl-C. Les "
+"anciennes associations de touches d'ILISP utilisent la séquence Ctrl-Z comme "
+"préfixe."
+
+#. Type: boolean
+#. Description
+#: ../ilisp.templates:4
+msgid ""
+"In general, the non-FSF compliant keybindings are easier to use: the ILISP "
+"manual in the Debian package ilisp-doc uses the non-FSF compliant "
+"keybindings and these keybindings often use fewer keystrokes."
+msgstr ""
+"En général, les associations de touches non conformes aux normes FSF sont "
+"plus simples à utiliser : le manuel ILISP du paquet debian ilisp-doc utilise "
+"ces associations de touches, qui sont souvent composées de séquences de "
+"touches plus courtes."
+
+#. Type: boolean
+#. Description
+#: ../ilisp.templates:4
+msgid ""
+"If you change you mind later, you can run dpkg-reconfigure ilisp and change "
+"your keybinding selection."
+msgstr ""
+"Si vous changez d'avis ultérieurement, vous pourrez utiliser la commande "
+"« dpkg-reconfigure ilisp » pour modifier le type d'association de touches."

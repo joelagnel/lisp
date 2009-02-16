@@ -1,0 +1,1 @@
+mempcpy(<field "void *restrict TO">, <field "const void *restrict FROM">, <field "size_t SIZE">)<endpoint>

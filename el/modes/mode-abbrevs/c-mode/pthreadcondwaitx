@@ -1,0 +1,4 @@
+if (pthread_cond_wait(<field "pthread_cond_t *cond">, <field "pthread_mutex_t * mutex">) != 0) {
+    fprintf(stderr, "ERROR: calling pthread_cond_wait()\n");
+    exit(1);
+}

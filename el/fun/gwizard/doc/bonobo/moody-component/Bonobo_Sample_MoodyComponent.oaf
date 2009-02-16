@@ -1,0 +1,30 @@
+<oaf_info>
+	<oaf_server
+		iid="OAFIID:Bonobo_Sample_MoodyComponent_Factory"
+		type="exe"
+		location="/home/binnema/src/c/bonobo-toys/test/server/bonobo-sample-moody-component">
+
+		<oaf_attribute name="repo_ids" type="stringv">
+			<item value="IDL:Bonobo/GenericFactory:1.0"/>
+		</oaf_attribute>
+
+		<oaf_attribute name="name" type="string" value="BonoboSampleMoodyComponent factory"/>
+		<oaf_attribute name="description" type="string" value="A factory for BonoboSampleMoodyComponent components"/>
+	</oaf_server>
+
+	<oaf_server
+		iid="OAFIID:Bonobo_Sample_MoodyComponent
+		type="factory"
+		location="OAFIID:Bonobo_Sample_MoodyComponent_Factory">
+
+		<oaf_attribute name="repo_ids" type="stringv">
+			<item value="IDL:Bonobo/Sample/GoodMood:1.0"/>
+			<item value="IDL:Bonobo/Sample/BadMood:1.0"/>
+		</oaf_attribute>
+
+		<oaf_attribute name="name" type="string" value="BonoboSampleMoodyComponent component"/>
+		<oaf_attribute name="description" type="string" value="BonoboSampleMoodyComponent Component"/>
+
+	</oaf_server>
+
+</oaf_info>

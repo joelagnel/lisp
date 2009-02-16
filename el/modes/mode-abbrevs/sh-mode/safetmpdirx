@@ -1,0 +1,5 @@
+safetmpdir() {
+    test -d $HOME || exit 1
+    test -d $HOME/tmp || mkdir $HOME/tmp
+    echo $HOME/tmp/safetmp.`hostname`.$$
+}

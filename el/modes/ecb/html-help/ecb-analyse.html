@@ -1,0 +1,292 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="ecb-analyse">ecb-analyse</a>,
+Next:<a rel=next accesskey=n href="ecb-layout.html#ecb-layout">ecb-layout</a>,
+Previous:<a rel=previous accesskey=p href="ecb-history.html#ecb-history">ecb-history</a>,
+Up:<a rel=up accesskey=u href="Customizable-options.html#Customizable%20options">Customizable options</a>
+<hr><br>
+
+<h4>Group ecb-analyse</h4>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>analyse-bucket-element-face</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Basic face for displaying elements of buckets in the
+ECB-analyse-buffer. This defines the basic face for the elements of
+category-buckets like Context, Prefix, Completions etc. in the
+ECB-analyse-buffer.
+
+<p>Changes take first effect after finishing and reactivating ECB! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>analyse-bucket-node-face</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Basic face for displaying a bucket-node in the ECB-analyse-buffer. 
+This defines the basic face for the bucket-nodes like Context, Prefix,
+Completions etc. in the ECB-analyse-buffer.
+
+<p>Changes take first effect after finishing and reactivating ECB! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>analyse-buffer-after-create-hook</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Local hook running after the creation of the analyse-buffer. Every
+function of this hook is called once without arguments direct after
+creating the analyse-buffer of ECB and it's local key-map. So for
+example a function could be added which performs calls of
+<code>local-set-key</code> to define new key-bindings only for the
+analyse-buffer of ECB. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>analyse-buffer-name</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Name of the ECB analyse buffer. Because it is not a normal buffer for
+editing you should enclose the name with stars, e.g. "*ECB
+Analyse*".
+
+<p>If it is necessary for you you can get emacs-lisp access to the
+buffer-object of the ECB-analyse-buffer by this name, e.g. by a call
+of <code>set-buffer</code>.
+
+<p>Changes for this option at runtime will take affect only after
+deactivating and then activating ECB again! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>analyse-collapsed-buckets</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Buckets collapsed when displaying the current semantic analysis. The
+semantic analyse-modul offers several categories of analysis which are
+called buckets here. These are for example:
+
+<p>Context: The current context, which is the current function/method,
+variable, class etc. (what exactly depends on the programming
+language) point is in. This means not the current
+function/method/variable/class-name point stand on but the current
+surrounding context. Example: If point stays somewhere within a
+defun-definition in emacs-lisp or within a java-method then this defun
+rsp. method is the context. In object oriented languages this can be
+the full hierachy, i.e. not only the current method, but the current
+method, the class of this method, the superclass of this class and so
+on!
+
+<p>Arguments: The arguments of the context if the context is a
+function/method.
+
+<p>Local Variables: All accessible and bound local variables visible at
+current point.
+
+<p>Prefix: The currently parsed prefix, which is mostly the current
+identifier point stands on.
+
+<p>Assignee: See the semantic user-manual
+
+<p>Function: Current function-name point stands on.
+
+<p>Argument #: When point is located within a function-call then this is
+the number of the argument point stands on.
+
+<p>Completions: All possible completions for current prefix (see above). 
+This is probably the most helpful bucket.
+
+<p>If one of these categories/buckets are not needed per default then add
+the bucket-name (s.a.) to this option and ECB will per default
+collapse this bucket. So most needed buckets are better visible in the
+analyse-buffer. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>analyse-face</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Face used for highlighting current entry in the analyse buffer. If the
+face <code>ecb-default-highlight-face</code> is used then the display of all
+ECB-tree-buffers can be changed by modifying only the face
+<code>ecb-default-highlight-face</code>.
+
+<p>Changes take first effect after finishing and reactivating ECB! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>analyse-fontified-buckets</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Buckets whose elements should be fontified as in the methods-buffer. 
+If the name of a category/bucket is contained in this option then all
+elements of this bucket will be displayed as in the methods-buffer -
+at least if an element is a semantic-tag. This means if
+<code>ecb-font-lock-tags</code> is not nil these elements will be fontified
+and also displayed with an appropriate icon if possible. The default
+value does this only for the Context-bucket because for most of the
+other buckets this makes not really much sense.
+
+<p>For available buckets see <code>ecb-analyse-collapsed-buckets</code>.
+
+<p>For the faces used to display a bucket-node itself or bucket-elements
+not fontified see the options <code>ecb-analyse-bucket-node-face</code> rsp. 
+<code>ecb-analyse-bucket-element-face</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>analyse-gen-tag-info-fn</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Which info should be displayed for a tag of the analyse-buffer. If nil
+then the default information about a tag will be displayed. If a
+function then this function gets as argument the tag for which
+tag-information should be displayed. This function has to return a
+string which will be then display as tag-info. This string has to be
+fully formatted (e.g. must already include line-breaks if the tag-info
+should be displayed in several lines).
+
+<p>See <code>ecb-analyse-show-tag-info-fn</code> how the tag-info is displayed. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>analyse-general-face</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Basic face for the ECB analyse buffer. This defines the basic face the
+whole history buffer should displayed with. If the face
+<code>ecb-default-general-face</code> is used then the display of all
+ECB-tree-buffers can be changed by modifying only the face
+<code>ecb-default-general-face</code>.
+
+<p>Changes take first effect after finishing and reactivating ECB! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>analyse-show-node-info</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+When to display which node-info in the history-buffer. Define which
+node info should displayed after moving the mouse over a node (or
+after a shift click onto the node) in the history-buffer.
+
+<p>You can define "when" a node-info should be displayed: See
+<code>ecb-directories-show-node-info</code> for the possible choices.
+
+<p>You can define what info should be displayed:
+
+<ul>
+<li>name: The full name of the node
+<li>full-info: All infos available to a node. 
+</ul>
+
+<p>Do NOT set this option directly via setq but use always customize! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>analyse-show-tag-info-fn</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+How to display the tag-info for a tag of the analyse-buffer. The value
+of this option is a function which will be called with the info-string
+generated for the current tag of the analyse-buffer. This function
+must do all things necessary for displaying this info. When this
+function is called the window stored in
+<code>ecb-last-edit-window-with-point</code> is the selected window!
+
+<p>ECB offers two builtin ways: Display the info in the echo-area (via
+the function <code>message</code>) or in a temp-buffer in the edit-area (via
+the function <code>ecb-analyse-show-tag-info-in-temp-buffer</code>). Default
+is echo-area-display.
+
+<p>See also <code>ecb-analyse-gen-tag-info-fn</code>. 
+</td></tr>
+</table>
+
+</body></html>
+

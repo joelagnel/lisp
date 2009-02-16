@@ -1,0 +1,31 @@
+2002-01-22  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* Makefile (xemacs): New target: copy stuff to the XEmacs package
+	source directory.
+
+2002-01-02  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* contrib/Makefile (clean): Add target.
+	(all): Ditto.
+
+2001-12-06  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* Makefile.XEmacs (upstream-cvs-update): Remove target.
+	Suggested by Stephen Turnbull.
+
+	* Makefile: Make it work inside XEmacs, too.  From Stephen
+	J. Turnbull <stephen@xemacs.org>.
+	(MANIFEST): New directory layout.
+
+2001-11-07  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* Makefile (sourceforge): Submit tarballs via FTP automatically.
+
+2001-10-08  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* Makefile (tar): Add rules for more tarballs.
+
+2001-09-07  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* Makefile (Module): Rule for submitting to SourceForge.
+

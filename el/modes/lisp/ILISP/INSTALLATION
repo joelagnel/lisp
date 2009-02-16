@@ -1,0 +1,329 @@
+-*- Mode: Text -*-
+
+WELCOME TO ILISP.
+
+
+FIRST INSTALLATION STEP: UNPACKING AND COMPILING.
+
+Copy the ILISP distribution archive, e.g. ilisp-x.y.z.tar.gz, to the
+location where you would like to install it. Next extract the archive (you
+may need root privileges to perform these operations):
+
+% gzip -dc ilisp-x.y.z.tar.gz | tar xf -
+
+or:
+
+% unzip ilisp-x.y.z.zip
+
+Some configuration needs to be done before compiling the Emacs Lisp files
+that comprise ILISP.  Start with the Makefile file, in the section after
+the comment Various variables (you can safely ignore the variables for
+configuring packaging and distribution, which are intended for
+maintainers).
+
+First, set the EMACS variable to be the pathname of the Emacs you will
+be using ILISP with.  This is the Emacs that will be used to compile
+ILISP with.  Be sure to set `LN' to the name of your operating
+system's command for creating symbolic filesystem links, ESPECIALLY IF
+YOU ARE A WINDOWS USER.
+
+If your Emacs supports the `easymenu' package, it is possible to make ILISP
+add to Lisp mode buffers and buffers with inferior Lisp processes, or to
+Scheme mode buffers and buffers with inferior Scheme processes, an Ilisp
+menu with all available commands.  To enable this feature, set to T the
+variable ILISP-*ENABLE-CL-EASY-MENU-P* in `ilisp-def.el' for the Common
+Lisp dialects, and ILISP-*ENABLE-SCHEME-EASY-MENU-P* for Scheme dialects.
+Setting these variables also causes the default Lisp menu to be removed
+before displaying the Ilisp one.
+
+See the next section for additional configuration options and known
+problems for specific Lisp dialects.
+
+Run `make' or `make compile' to build ILISP from source.  Ignore any
+compilation warnings unless they result in ILISP not compiling completely.
+
+To activate ILISP you should add appropriate Emacs Lisp forms to your
+`.emacs' or to the system-wide `default.el' file, depending on who will be
+using ILISP.  These forms take care of starting it whenever you access a
+Lisp file or run an inferior Lisp process.  You can copy relevant portions
+of the sample file `ilisp.emacs', which also shows how to customize some
+ILISP features.
+
+You should add the directory where all of the ILISP Emacs Lisp files reside
+to your load-path.  There is an example of this in `ilisp.emacs'.
+
+As an alternative you could set up a `.ilisp' which contains the
+appropriate portions of `ilisp.emacs', in order to avoid cluttering too
+much `.emacs' or `default.el'.
+
+The first time a dialect is started, the interface files will complain
+about not being compiled, just ignore the message.  Once a Lisp dialect is
+started up, you should execute the command ilisp-compile-inits which will
+compile the `*.lisp' files and write them to the same directory as the
+ilisp files.
+
+The binary files should have a unique extension for each different
+combination of architecture and Lisp dialect.  You will need to change
+ILISP-INIT-BINARY-EXTENSION and ILISP-INIT-BINARY-COMMAND to get additional
+extensions.  The binary for each different architecture should be
+different.  If you want to build the interface files into a Lisp world, you
+will also need to set ILISP-LOAD-INITS to NIL in the same place that you
+change ILISP-PROGRAM to load the Lisp world.
+
+There is an ILISP-SITE-HOOK for initializing site specific stuff like
+program locations when ILISP is first loaded.  You may want to define
+appropriate autoloads in your system Emacs start up file.
+
+Example site init:
+
+;;; CMU site
+(setq ilisp-site-hook
+      '(lambda ()
+        (setq ilisp-motd "CMU ILISP V%s")
+        (setq expand-symlinks-rfs-exists t)
+        (setq allegro-program "/usr/local/acl5/lisp")
+        (setq lucid-program "/usr/misc/.lucid/bin/lisp")))
+
+Kent Pitman and Xanalys Inc. have made publicly available on the Web the
+Common Lisp HyperSpec, an HTML version of the full text of the ANSI Common
+Lisp specification.  Daniel Barlow, Stephen Carney and Erik Naggum
+independently developed Emacs Lisp packages for looking up Lisp symbols in
+the HyperSpec and displaying the relevant sections with a Web browser.
+ILISP includes all of them in the `extra' directory of the distribution
+tree. By default ILISP uses Naggum's package.  If you want to use one of
+the others, see the comments at the beginning of the corresponding files.
+
+The `ilisp.emacs' file provides sample instructions for making Naggum's
+package access a local copy of the HyperSpec. Since the package relies on
+the `browse-url' Emacs package, make sure that the latter is properly
+configured.
+
+Digital Press has made publicly available online, as a service to the Lisp
+community, the full text of the book ``Common Lisp, The Language'' (by Guy
+L. Steele Jr., 2nd edition, Digital Press, 1990, ISBN 1-55558-041-6;
+a.k.a. ``CLtL2'') in a number of formats, including HTML.  ILISP provides
+support, contributed by Utz-Uwe Haus, for looking up Lisp symbols in the
+HTML version of the book and displaying the relevant sections with a Web
+browser.  See the file `extra/cltl2.el' for more information on configuring
+this feature.
+
+The `ilisp.emacs' file provides sample instructions for making ILISP's
+CLtL2 support access a local copy of the book.  What has been said above
+about `browse-url' configuration also applies to CLtL2 lookup.
+
+Note that, althouth Steele's book is a well written and useful resource,
+it covers the Common Lisp language in the state it was a few years
+before ANSI standardization.  If you need an accurate description of
+ANSI Common Lisp, see the above mentioned HyperSpec instead.
+
+Previous versions of ILISP provided commands for accessing the online
+Common Lisp documentation shipped with Franz Inc.'s Allegro CL product
+(`fi:clman' module). The public availability of the HyperSpec, and the
+inclusion since version 5.9 of ILISP of the `hyperspec' packages, make
+access to the Franz documentation no longer necessary. So by default ILISP
+does not load the `fi:clman' module, but if you still want to use its
+commands set the ILISP-*USE-FI-CLMAN-INTERFACE-P* to T in `ilisp-def.el'.
+
+The ILISP documentation consists of a user manual and a reference card (the
+latter may not be up to date).  Both of them are in the `docs' directory of
+the distribution tree.
+
+The generation of GNU Info, DVI, PostScript and HTML versions of the
+documentation from the Texinfo and TeX source is controlled by the
+`Makefile' in the `docs' directory.  Run `make docs' or `make' to generate
+all of the formats.  If you are interested in only some of them then issue
+the appropriate command: `make info' for GNU Info, `make dvi' for DVI,
+`make ps' for PostScript and `make html' for HTML.  To remove the
+intermediate files produced during the generation of DVI output you can run
+`make tmpclean'.  Note that some of the output formats may not be supported
+for certain documents.
+
+The ILISP reference card is available as a TeX source file.  Check the
+comments at the beginning of the file if you need to generate a version
+with a different number of columns (the default is 3).
+
+
+SECOND INSTALLATION STEP: DIALECT REQUIREMENTS.
+
+ILISP assumes a minimum of CLtL2 compliance. This requirements
+immediately clashes with the problems of some KCL-derivativs,
+including GCL.  Here is a list of known problems for several CL
+implementations (we do not know whether there are problems with
+Scheme's - please let us know).
+
+o All Common Lisp dialects
+
+	Be sure that the variables:
+
+	ilisp-binary-extension
+	ilisp-init-binary-extension
+	ilisp-binary-command
+
+	Have the appropriate value.  Older versions of ILISP (< 5.8)
+	assumed a single CL installation and suggested a change to the
+	hook 'ilisp-site-hook' in the 'ilisp.emacs' file.
+
+	This should not be so anymore.
+
+
+o KCL, AKCL, Ibuki, GCL, and ECL
+
+        Be sure to get the latest CVS version of ECL.
+
+	- DEFPACKAGE
+	  You need to have your system configured with a
+	  DEFPACKAGE. You can either generate an image which contains
+	  it or you can arrange the init file to load it for you.
+
+	  You can find a DEFPACKAGE in the AI.Repository of CMU.
+
+	  If you do not want - for mysterious reasons - DEFPACKAGE in
+          your GCL, you can manually edit the files 'ilisp-pkg.lisp'
+          and 'cl-ilisp.lisp' at the DEFPACKAGE and EXPORT forms.
+
+	- LOOP
+	  Most likely the DEFPACKAGE will require a full fledged LOOP.
+	  The same instructions apply.
+
+
+o CMUCL
+
+	If you are interested in maintaining CMU CL or compiling it from
+	source try to set the variables:
+
+	cmulisp-source-directory-regexp
+	cmulisp-local-source-directory
+
+	to sensible values, e.g. set 'cmulisp-local-source-directory'
+	to "target:". Refer to CMUCL documentation for an explanation
+	of this setting.
+
+
+o Xanalys LispWorks (formerly Harlequin LispWorks)
+
+        On Windows and Linux, the LispWorks executable should be resaved
+        without the GUI.  In addition, on Windows it MUST be resaved as a
+        console application to ensure correct interaction with Emacs shell
+        buffers.  Create a script (let's call it `console.lisp') including
+        the following:
+
+          (load-all-patches)
+          (save-image "lw42-console" :console t :environment nil)
+          (quit)
+
+        and run it using:
+
+          <dir>/lispworks-4200 -init <dir>/console.lisp
+
+        When the `lw42-console' image has been created, it can be used as
+        the value of the `lispworks-program' variable in ILISP.
+
+        If you are using LispWorks 4.1 with Emacs 20.4 or higher on
+        Windows, then ensure you're at patch level 4.1.20. This patch
+        bundle includes patches (LSC #7270, LSC #7727 and LSC #7291)
+        that make it work with ILISP.  For more information check the
+        README file which comes with the bundle.
+
+        LispWorks users who wish to use the CAPI (LispWorks GUI toolkit)
+        via ILISP can create a suitable image with this script (call it
+        'console-capi.lisp'):
+
+          (in-package "CL-USER")
+          (load-all-patches)
+          (compile (defun my-restart () 
+                     #+Unix
+                     (capi:ensure-motif-libraries)
+                     (mp:initialize-multiprocessing)))
+          (save-image "lw-ilisp-capi" :restart-function 'my-restart 
+                                      :environment nil
+                                      #+Win32 :console #+Win32 t)
+          (quit)
+
+        This is because the CAPI requires multiprocessing, and on some Unix
+        platforms the GUI libraries that CAPI uses are normally loaded on
+        startup of the IDE, which we're bypassing with :environment nil for
+        ILISP.
+
+
+o Lucid
+
+	No known extra installation glitches
+
+
+o Allegro
+
+	No known extra installation glitches
+
+
+o CLISP
+
+        (The list below was provided by Valentino Kyriakides)
+
+        The following lists some unusual ILISP behaviour related to CLISP.
+        Some of these are of general interest, and should hopefully be
+        fixed in an upcomming ILISP distribution. Most of these points were
+        reported by Bruno Haible.
+
+        - On startup, ILISP presents a Lisp prompt and shortly afterwards
+          another Lisp prompt. This is somehow confusing.
+
+        - While prompted, a user can backspace over the prompt, or can move
+          the cursor down to inexistent lines, thus making the buffer look
+          bad.
+
+        - The history mode is unfortunately circular, which means that
+          after M-p M-n you don't get back your original empty line. Also,
+          a two- character input like "()" doesn't appear in the history.
+
+        - CLISP does not know that once it received a form for evaluation
+          the cursor is in column 0. Therefore (format t "~&") will output
+          a blank line. This results in too many blank lines.
+
+        - The default completion character for clisp (Tab) does not work.
+          Instead there are two different completion characters, with two
+          other keybindings.
+
+        - The Lisp code invisibly loaded into clisp is interpreted. Since
+          it is not user-visible, it could as well be compiled, for speed.
+
+        - In a CLISP debugger loop typing "abort" often throws you into the
+          next deeper debugging level, instead of leaving the actual
+          one. So you often have to retype "abort" x-times to get it work.
+
+        - When the ILISP/CLISP interaction hangs (blocks), you have to type
+          C-g to abort your last command, in order get the minibuffer work
+          again. After this you have to do a "M-x panic-lisp" to reassign
+          the ILISP/CLISP interaction.
+
+
+Scheme->C
+
+        - To get Scheme->C to work under ILISP it may be necessary to
+          create a custom executable with the following C foreign function:
+
+            #include <stdio.h>
+            void nobuff(){setbuf(stdout, (char*)0);}
+
+            (define-c-external (nobuff) void "nobuff")
+            (nobuff)
+
+
+TIPS
+
+o Microsoft Windows
+
+        You may check the document "Setting up an IDE with Emacs on
+        Windows", by Bill Clementson, which is part of the Common Lisp
+        Cookbook Project:
+
+          http://cl-cookbook.sourceforge.net/windows.html
+
+        It is a tutorial on setting up ILISP with CLISP, Corman Lisp
+        and LispWorks under Windows.
+
+o Enlightment window manager under Gnome
+
+        If ILISP popup windows unexpectedly keep the input focus, in the
+        Enlightment Configuration Editor choose the "Beahvior" item and
+        toggle off all the "[...] get keyboard focus" items.
+

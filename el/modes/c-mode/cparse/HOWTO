@@ -1,0 +1,529 @@
+Content-Type: text/enriched
+Text-Width: 70
+
+			 <bold>CPARSE C management</bold>
+			  mini users manual
+
+                            <underline>cparse v. 0.3</underline>
+	$Id: HOWTO,v 1.4 1996/04/11 22:36:40 zappo Exp $
+
+
+<underline>Table o' contents</underline>
+
+ 0 - Legal stuff
+ 1 - cparse
+ 2 - cparse comment (cpcomment)
+ 3 - cparse prototype manager (cproto)
+ 4 - Motivation, and desired affects.
+ 5 - cparse parts
+
+
+0) <underline>Legal Stuff</underline>.
+
+
+Copyright (C) 1994,1995, 1996 Eric M. Ludlam
+
+This document is free, and is about free software; you can
+redistribute it and/or modify it under the terms of the GNU General
+Public License as published by the Free Software Foundation; either
+version 2, or (at your option) any later version.
+
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+
+You may have received a copy of the GNU General Public License
+along with this program; if not, you can either send email to this
+program's author (see below) or write to:
+
+
+             The Free Software Foundation, Inc.
+             675 Mass Ave.
+             Cambridge, MA 02139, USA. 
+
+
+Please send bug reports, etc. to zappo@gnu.ai.mit.edu.
+
+1) <underline>Using cparse</underline>.
+
+
+   The code in <italic>cparse.el</italic> is designed for several distinct purposes,
+but two distinct and useful entry points.  The first is to parse C
+code.  By parse, I don't mean compile.  What cparse does is break a
+file down into major definitions.  All emacs actions do things to
+various text objects.  We have characters, words, and sentences.  Now,
+for C code, we can define Included files, Defines, functions,
+variables, even defuns, and defvars from emacs c source code.
+
+
+The command <italic>cparse-listparts</italic> will parse the buffer in this way, and
+then list the parts in an electric buffer.  You can wander about with
+the arrows, and use SPC to ping that definitions start.  Additional
+keys are described under describe mode.
+
+
+  The command <italic>cparse-open-on-line</italic> will take the word under the cursor,
+and then parse the current buffer, looking for a definition of the
+same name.  If it isn't to be found, it also searches the header files
+included by the current c buffer.  Please see the comments at the
+beginning of cparse.el for extensive details on how the search works.
+
+
+  <italic>open-on-line</italic> may seem like a repeat for etags, but it is different
+in that it will dynamically update it self when things change, and in
+addition, it will parse outwardly for each embedded scope in a
+function.  (If you work for a company in which they frown upon a
+plethora of unaccounted for functions (determined in detailed design),
+you know why this is needed.)
+
+
+  A file is considered "changed" when it's size is different.  This is
+a loose restriction, but holds true in most circumstances, and when
+comparing lists against file sizes. In addition, it will examine all
+headers, including things in /usr/include, and anywhere else if you
+set cparse-include-list to additional directories.  Because cparse
+always remembers where it's been, the second search usally takes under
+1 second to complete even when going through /usr/include/X11 include
+trees on a whimpy 486/50 running linux.
+
+
+  configuration items are:
+  <bold>cparse-search-system</bold> (t) : if t checks system files, <<stdio.h> in
+               addition to local includes "myheader.h"
+  <bold>cparse-brief-find-file-hooks</bold> (nil) : When loading headers for
+               searching, do not run all the normal hooks (notably,
+               hilit19) and instead use these.  Speeds search up
+               considerably.
+  <bold>cparse-query-depth</bold> (2) : depth of search when recursively searching
+               headers.  When all headers included by the current
+               source is searched, it then searches all headers
+               included in those headers until this depth.  Then
+               cparse queries if you wish to continue.
+  <bold>cparse-include-list</bold> ( "/usr/include" "." ".." ) : list of
+               directories to search for headers.
+  <bold>cparse-show-comments</bold> (nil) : default value for PARTS buffer.  t
+               means show the comments.
+
+2) <underline>Using cparse commenter (cpcomment)</underline>
+
+
+  <italic>cpcomment</italic> is designed to aid in the creation of comments.  Its main
+goal is to save programmers time typing in all those "/* Thingy: name"
+fields.  It has two major entry points.
+
+  <italic>cpc-insert-function-comment</italic> is designed to insert or modify a
+comment just before the current function definition.  The structure of
+this comment is defined in the variable <italic>cpc-function-comment</italic>.  It has
+various tokens which represent definable things such as the function
+name, descriptions, parameters, histories and good things like that.
+Descriptions, in almost all cases, are auto-commented with the
+best-guess pseudo english description a simple list-matching englifier
+can do.
+
+
+  To use <italic>cpc-insert-function-comment</italic>, place the cursor anywhere in a c
+function definition.  Then press the magic button you bind to this
+function.  First, it identifies the current function, and checks if
+there is already a header.  If not, it creates one, and if it exists,
+it modifies it.  Modification includes checking commented parameters
+with existing parameters, and adding to the history list.  The default
+string looks like this:
+
+
+/*
+ * Function: %F
+ *
+ * %f  %D%p
+ *
+ * Returns:     %R
+ * Parameters:  %P
+ * History:
+ * %H
+ */
+
+
+Where the tokens are:
+  <bold>%F</bold> - function name
+  <bold>%D</bold> - Made up documentation
+  <bold>%f</bold> - Place, where everything before the point is the distance to set
+       in the fill prefix.  Allows a first line in paragraph indent
+  <bold>%p</bold> - Where to place point after insertion of a new header
+  <bold>%R</bold> - Returns
+  <bold>%P</bold> - Parameter list
+  <bold>%H</bold> - History insertion point
+
+  The parts %f and %p can be confusing, so here is an example:
+
+
+ * Moose: %f%D%p
+
+
+ Will set fill prefix to ` *         `, and put the point AFTER the
+description.  The `Moose:` will not be in the prefix.  The default
+value shows the equivalent of a hanging indent.
+
+In addition, <bold>%P</bold> and <bold>%H</bold> all have expansion tokens which are:
+
+<bold>%P</bold> will form a list on top of eachother.  Each list element is defined
+by cpc-param-element which defaults to "%P - %D", which supports the
+following tokens:
+
+
+ <bold>%P</bold> - Parameter name spaced to length of max param
+ <bold>%p</bold> - Parameter name with no padding
+ <bold>%R</bold> - Type of element
+ <bold>%D</bold> - Description of parameter as known by cpc.
+
+
+<bold>%H</bold> is the history list.  Each time cpc-insert-function-comment is
+called, and new history element is added to the end.  The default
+expression is "%-7U %-10D %C" which supports the following tokens:
+
+
+  <bold>%U</bold> - Username, initials, what have you.
+  <bold>%D</bold> - The current date formatted as in cpc-date-element
+  <bold>%S</bold> - System Change id, SCCS vers, major change comment, etc
+  <bold>%C</bold> - Auto comment area, cursor goes here for new elts.
+
+
+The <bold>%U</bold> token is defined by cpc-my-initials, which defaults to
+(user-login-name).  The <bold>%D</bold> token is a date element, as defined in the
+variable cpc-date-element.  That defaults to "%M/%D/%y".  It has many
+many tokens of various cases which can support almost all types of
+date formats.  <bold>%S</bold> is a system change token.  It is defined in
+cpc-current-spr.  Just set this to whatever fix you are working on.
+%C is the comment field.  New comments will say "Created", and
+modified comments will autocomment when the parameters to a function
+change.
+
+
+  <italic>cpc-insert-new-file-header</italic> is designed to insert a new comment at
+the beginning of a buffer. (regardless of current context)  It's
+structure is modified in the contents of cpc-file-comment.  It has
+tokens which support various descriptions, copyright notices of
+various types, and a history list.  It also controls the match tokens
+used by cpc-comment to identify the associated header file.  The
+default format is:
+
+
+/* %B
+ *
+ * Copyright (C) %Y %O
+ *
+ * %N
+ * 
+ * Description:
+ * 
+ *   %D
+ * 
+ * History:
+ * %H
+ *
+ * Tokens: %T
+ */
+
+
+  The supported tokens are:
+ <bold>%B</bold> - Brief description of the file (Auto-comment by file name)
+ <bold>%D</bold> - Made up documentation
+ <bold>%N</bold> - Copyright notice for your organization
+ <bold>%O</bold> - Owner (full name of copyright holder held in cpc-copyright-holder
+ <bold>%H</bold> - History elements
+ <bold>%T</bold> - cproto header id token.  Always is form 'token file.h' where
+      token is defined in cpr-header-token, and file.h is the
+      relational file name of the header.  If you wish to use cproto's
+      features, you must have this somewhere in the header.
+ <bold>%Y</bold> - Year
+
+<bold>%B</bold> will query the user for a description.  <bold>%D</bold> doesn't do anything yet.
+<bold>%N</bold> will query for a file with a copyright notice in it, unless you set
+the variable cpc-copyright-notice-file variable.  The description will
+automatically get the string before the %N token inserted down the
+side. <bold>%O</bold> is defined by cpc-copyright-holder and defaults to your full
+system name.  <bold>%H</bold> is the same as with the functions.  <bold>%T</bold> is a place
+where I can add more tokens if needed.  <bold>%Y</bold> is the year, which is used
+when defining when your copyright takes effect.
+
+If the file you are adding a comment to happens to end in .h, then
+variable cpc-header-comment is used instead of <italic>cpc-file-comment</italic>.  It
+defaults to:
+
+
+/*
+ * Copyright (c) %Y %O
+ *
+ * %N
+ * 
+ * History:
+ * %H
+ */
+
+
+and has all the same control tokens.
+
+
+There are three places where auto-commenting takes place.  That is for
+functions, for function parameters, and for the history of functions.
+
+These are all partially controlled through the following variables:
+
+
+  <bold>cpc-autocomment-function-alist</bold> - alist of regular expression
+                matching text, and some pseudo english to use when
+                that is found.  This should consist of VERBS only.
+                VERBS go first, and are usually only found in
+                functions, since you call functions to VERB things on
+                data.  This variable can be modified to include any
+                nifty verbs you like to use a lot.
+  <bold>cpc-autocomment-common-noun-abbrevs</bold> - This is a list of relatively
+                common nouns used in function and variable names.
+                Since I do a lot of networking, it includes lots of
+                networking types nouns.  This too can be modified to
+                include any nouns you use frequently.
+  <bold>cpc-autocomment-return-first-alist </bold>- this contains some expressions
+                to match return types which may affect the way you
+                comment a function.  For instance "static" will signal
+                cpc to automagically add "Locally defined..." to the
+                comment.
+  <bold>cpc-autocomment-return-last-alist </bold>- This contains some expression to
+                parse out what the return type is (usually structures,
+                unions, and the like).  This is then added AFTER the
+                VERB.
+  <bold>cpc-autocomment-param-alist </bold>- List of common names for your
+                parameters, and how you say them in english.
+  <bold>cpc-autocomment-param-type-alist </bold>- list of parameter types, and how
+                they affect how they are commented in your list of
+                parameters.
+  <bold>cpc-new-hist-comment </bold>- string used when a comment is created as a
+                history element.  Default: "Created"
+  <bold>cpc-autocomment-modify-alist </bold>- List of ways the function has been
+                modified and how to comment that.  Currently only
+                supports a changed in the number of parameters.
+
+
+  An example of the commenter at work results in:
+
+
+/*
+ * Function: AllocMyObj
+ *
+     #1                             #2
+ *   Locally defined function which allocates and initializes a new
+ * object My object
+   #3     #4
+ *
+ * Returns:     static struct MyObj  - 
+ * Parameters:  Ctxt    - Context
+ *              PartOne - Number of Part One
+ * History:
+ * zappo   9/23/94    Created 
+ */
+static struct MyObj AllocMyObj(Ctxt, PartOne)
+     struct context *Ctxt;
+     int PartOne;
+{
+
+}
+
+
+Notice how the description is build out of the lists documented.  #1
+notices the "static" definition, #2 sees the keyword "alloc".  #3
+noticed the noun "obj", and #4 is the return type run through the
+programmer to english converted.
+
+
+Also notice the common variable Ctxt was seen, and the variable
+PartOne was commented based on type (int) and it's name run through
+the programmer to english converter.
+
+
+Lastly, their history element was done with the Create rule.
+
+The last thing to mention here, is the function
+<italic>cpc-programmer->english</italic> function.  It works by taking the string apart
+based on the existence of "_" or case change.  Thus "PartOne" is
+turned into "Part one".  In addition, each piece found is matched
+against the list of nouns.  Thus "MyObj" is turned into "My object."
+
+The functionality of the file comments is the same, but there is no
+auto-commenting.
+
+3) <underline>Cparse prototype manager (cproto.el)</underline>
+
+
+   There is one entry point to this program which accomplishes, and
+checks a lot.  The function to use is <italic>cpr-store-in-header</italic>.  When this
+is called while the point is on a function or variable definition, 
+the parts of that definition is read in.  The next step is to identify
+the header file.  If the header token defined in cpr-header-token is
+not found in that comment, then the user is asked for the header, and
+the option to add it into the comment is given.  If there is no header
+at the beginning of the file, and option to insert one is given.  If
+the user lets this happen, the rules under cpcomment are followed.
+
+
+   Next, the text is searched to verify that the file includes that
+header file, and an option to put it in for you is offered.  Lastly,
+the header file is loaded in, parsed, and the definition inserted.  If
+the header doesn't exist, it is created, and it's location is based on
+the values of <italic>cpr-compiler-header-dir</italic>, which specifies a place the
+compiler looks for include files (See -I option on most compilers) and
+the value of cpr-header-dir, which just specifies an initial prompt
+when being queries for a new header.
+
+
+   Next, that header files is searched for where the definition should
+go.  For each name in the definition (Where "int a, b, c;" creates 3)
+the following procedure occurs.  First, an definition of the same type
+is searched for.  If it exists, it is replaced.  Next, a comment with
+the name of the C files as it's comment is searched for.  Variables
+come directly after that, and function prototypes after that.  Last,
+the string "/* Prototypes:: */" is searched for.  This string is found
+in the variable cpr-new-header-format.  What is really searched for is
+the string found before and after the %E token, which can be anything
+you like.  See documentation for this variable for more details.  Once
+that is found, and new comment with the current file name is placed in
+there, and the prototypes are added.
+
+
+4) <underline>Motivation and desired effects.</underline>
+
+
+   When I first started thinking about donating a program to the FSF,
+I thought it would be really neat and all that good stuff that
+programmers usually feel when they know something they wrote will
+actually prove useful.  Then I read the GNU Coding Standards, and
+looked again at my code.  Gack!  You could almost tell what time of
+night and how much coke I had drunk in order to get my class project
+in on time.
+   Later, while working for a government contractor, I was subjected
+to their rules, which were even more stringent.  I promptly tired of
+typing all those comments in, and the process of including in various
+templates and all that sort of icky stuff.  That inspirred cpcomment.
+I also had difficulty keeping track of the 300+ c prototypes in
+various and sundry headers supporting multiple libraries of math, and
+physics functions.  This spawned off cproto.  Lastly, finding parts
+from different places proved a rugged task, and etags was ok, but my
+previous two programs proved inadequate when it came to complex
+situations, and cursor positioning was important, and easily
+misguided.  My desire to easily access the parts of a C file prompted
+cparse.  This made getting at parts so easy, I re-wrote cpcomment and
+cproto to use it, cutting their sizes down considerably, and making an
+etags equivalent in the process.
+   Though this was often inspired by work, I found it more useful for
+my revised etalk program, and customized almost all of my comment and
+prototypers on its source.
+
+   My hope is that cparse will allow other programmers to easily
+access simple parts of a c file to do other nice things.
+Liner-uppers, comment adjusters and the like would all benefit from
+the vectors generated by cparse.  The next section describes what can
+be found in a cparse vector.
+
+5) <underline>cparse parts</underline>
+
+
+   When cparse is run, it returns a list of vectors defining, in
+order, what is in it.  A vector looks like this:
+
+
+   [ type string name start end datum1 array-part ]
+
+
+   These elements can be accessed with the following functions:
+cparse-type, cparse-str, cparse-name, cparse-start, cparse-end,
+cparse-datum and cparse-array.  Also available is cparse-returns,
+which will take the vector and look up the return value in the code.
+
+The parts are the following:
+type - the type of c part.  This can be one of the following:
+       <bold>comment </bold>- c comment
+       <bold>inc-l   </bold>- local include definition (#include "myheader.h")
+       <bold>inc-s   </bold>- system include definition (#include <<stdio.h>)
+       <bold>define  </bold>- defined constant (#define FOO 3.141)
+       <bold>type    </bold>- a defined type (struct, union, enum)
+       <bold>typedef </bold>- a typedefed value (typedef BAR int)
+       <bold>vardef  </bold>- a variable definition
+       <bold>fndef   </bold>- a function definition
+       <bold>fnprot  </bold>- a function prototype
+       <bold>defun   </bold>- an emacs DEFUN statement
+       <bold>defvar  </bold>- an emacs DEFVAR statement
+
+
+<bold>string </bold>- outdated element containing the contents between start and
+       end.  Now it is almost always nil.
+<bold>name </bold>- The name of the definition.  if we parse "int foo;" then we
+       will have "foo" as the name.  For an include, the name is the
+       included header file.  This element is sometimes a list, which
+       means there is one definition for multiple names, such as:
+       "int a, b = 2, c;"
+<bold>start </bold>- Where in the buffer the definition starts
+<bold>end </bold>- Where in the buffer the definition ends.  Often trailing
+       comments are included in a definition, depending upon their
+       position.
+<bold>datum1 </bold>- Spare spot where return data is stored.  This will often
+       contain the buffer from whence this definition was derived.
+<bold>array-part </bold>- t if the definition is a variable, and an array.  The
+       value in  brackets is not saved.
+
+
+There are several things you can do with these definitions as well.
+I will briefly list them here.  See the document strings for more
+details.  They are:
+
+
+<bold>cparse-expand-list </bold>- Expand a list of definitions so that any compound
+       elements (from "int a, b, c;") are expanded into several
+       vectors instead of just one.
+<bold>cparse-goto-vect-def </bold>- Goto the place defined by the vector.
+
+
+There are several ways to get a definition from C text as well.  They
+are:
+
+
+<bold>cparse-on-major-sexp </bold>- Return a vector describing the text the cursor
+       is on.  This means the function, comment, or whatever the
+       cursor is in.  nil is returned if point is on whitespace
+       between parts.
+<bold>cparse-enclosing-expression </bold>- Return a list of parts from within the
+       points enclosing scope.  Thus, the code:
+
+
+       if(foo)
+         {
+           int bar; -!-
+           bar = foo++;
+         };
+
+
+       with -!- being the point, will return a list including bar,
+       even though it is within a function which encloses everything
+       the cursor is in.  An optional parameter specifies how many
+       levels out to search.
+<bold>cparse-find-name </bold>- Search the buffer for a definition with the name
+       passed in.
+<bold>cparse-open-on-line </bold>- Grab word under point, and do the same thing
+       cparse-find-name does.
+<bold>cparse-readparams </bold>- Get a list of parameters to function described in
+       vector passed in.
+
+
+For more details on searching, see the file comment in cparse.  It is
+quite verbose.
+
+
+Additional functions to look at header files are also included.  They
+are:
+
+
+<bold>cparse-load-header </bold>- Finds a header based on list of places where
+       headers may live in /usr/include.  It is interactive.
+<bold>cparse-find-header </bold>- This loads a header with the fast-load hooks,
+       based on the list of possible locations.
+<bold>cparse-filedb-find </bold>- check to see if this file has already been
+       parsed, and use that parse definition without loading the file
+       into a buffer.

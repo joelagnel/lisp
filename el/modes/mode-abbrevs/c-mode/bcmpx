@@ -1,0 +1,1 @@
+bcmp(<field "const void *A1">, <field "const void *A2">, <field "size_t SIZE">)<endpoint>

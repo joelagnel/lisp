@@ -1,0 +1,42 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="User%20interface">User interface</a>,
+Next:<a rel=next accesskey=n href="Background-information.html#Background%20information">Background information</a>,
+Previous:<a rel=previous accesskey=p href="Auto.-option-upgrading.html#Auto.%20option-upgrading">Auto. option-upgrading</a>,
+Up:<a rel=up accesskey=u href="Auto.-option-upgrading.html#Auto.%20option-upgrading">Auto. option-upgrading</a>
+<hr><br>
+
+<h4>User interface for option-upgrading</h4>
+
+<p>There are two interactive commands (see <a href="Interactive-ECB-commands.html#Interactive%20ECB%20commands">Interactive ECB commands</a>):
+
+<ul>
+<li><code>ecb-upgrade-options</code>:
+Does all necessary beginning with a incompatibility-check for all
+options, upgrading/resetting incompatible options and ending with the
+display of all upgraded or reset options.
+
+<li><code>ecb-display-upgraded-options</code>:
+Displays an information-buffer which options have been upgraded or
+reset. Offers two buttons where the user can decide if the upgraded
+options should also being saved by ECB for future settings or if the
+buffer should be killed. 
+</ul>
+
+<p>If the option <code>ecb-auto-compatibility-check</code> has a non-nil value
+(which is the default) then ECB does all this stuff automatically at
+startup. This is very recommended!
+
+<p>If you are interested in some background information, read
+<a href="Background-information.html#Background%20information">Background information</a>!
+
+</body></html>
+

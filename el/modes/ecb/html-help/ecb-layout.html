@@ -1,0 +1,929 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="ecb-layout">ecb-layout</a>,
+Next:<a rel=next accesskey=n href="ecb-compilation.html#ecb-compilation">ecb-compilation</a>,
+Previous:<a rel=previous accesskey=p href="ecb-analyse.html#ecb-analyse">ecb-analyse</a>,
+Up:<a rel=up accesskey=u href="Customizable-options.html#Customizable%20options">Customizable options</a>
+<hr><br>
+
+<h4>Group ecb-layout</h4>
+
+<p>This group contains settings for the screen-layout of the ECB:
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>activate-before-new-frame-created-hook</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Normal hook run before the new ECB-frame is created if
+<code>ecb-new-ecb-frame</code> is not nil (otherwise this hook is not
+evaluated). 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>advice-window-functions</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Advice functions to be more intelligent if used with ECB. You can
+choose the following functions to be adviced by ECB so they behave as
+if the edit-window(s) of ECB would be the only windows(s) of the
+ECB-frame:
+
+<ul>
+<li><code>other-window</code>
+For this one see also the option <code>ecb-other-window-behavior</code>! 
+<li><code>delete-window</code>
+<li><code>delete-other-windows</code>
+<li><code>delete-windows-on</code>
+<li><code>split-window-horizontally</code>
+<li><code>split-window-vertically</code>
+<li><code>split-window</code>
+If this advice is enabled then <code>split-window-vertically</code> and
+<code>split-window-horizontally</code> are autom. enabled too! 
+<li><code>switch-to-buffer</code>
+<li><code>switch-to-buffer-other-window</code>
+<li><code>display-buffer</code>
+Especially if <code>ecb-compile-window-height</code> is not nil it is
+strongly recommended not to disable this advice! 
+<li><code>other-window-for-scrolling</code>
+If this advice is enabled then the behavior of the following functions
+depends on <code>ecb-other-window-behavior</code>:
+<ul>
+<li><code>scroll-other-window</code>
+<li><code>scroll-other-window-down</code>
+<li><code>beginning-of-buffer-other-window</code>
+<li><code>end-of-buffer-other-window</code>
+</ul>
+<li><code>balance-windows</code>:
+Only the edit-windows are balanced
+</ul>
+
+<p>For working most conveniently with ECB it is the best to advice all
+these functions, because then all the standard shortcuts of these
+functions are also usable with ECB without doing anything else. Also
+other packages can interact best with ECB if these functions are all
+adviced. If these adviced functions are called in another frame than
+the ECB-frame they behave all exactly like the not adviced versions!
+
+<p>But please read also the following:
+
+<p>Normally all packages should work correct with ECB and it´s adviced
+functions but if there occur problems with a package cause of some of
+these adviced functions ECB offers the following fall-back solution:
+
+<ol type=1 start=1>
+</p><li>Deactivate in <code>ecb-advice-window-functions</code> all the
+adviced-functions which make problems with other packages. 
+<li>For every of the advice-able functions &lt;adv-func&gt; ECB offers a
+interactively function named "ecb-&lt;adv-func&gt;" which does exactly the
+same as the adviced version of &lt;adv-func&gt;. Use "ecb-&lt;adv-func&gt;"
+instead the original one to get the proper ECB behavior even if the
+function is not adviced anymore. 
+<li>You can bind in <code>ecb-activate-hook</code> the standard-shortcut of
+&lt;adv-func&gt; to "ecb-&lt;adv-func&gt;" and rebind it in
+<code>ecb-deactivate-hook</code> to &lt;adv-func&gt;. 
+<li>Now you have the best of both worlds: The problematic package works
+and you have the ECB-behavior of &lt;adv-func&gt; as if it would be adviced.
+</ol>
+
+<p>Here is an example: Suppose you must deactivating the advice for
+<code>switch-to-buffer-other-window</code>. Then you deactivate this
+function with this option and you can use
+<code>ecb-switch-to-buffer-other-window</code> instead. Bind the shortcut
+you normally use for <code>switch-to-buffer-other-window</code> to
+<code>ecb-switch-to-buffer-other-window</code> (use <code>ecb-activate-hook</code>
+for this) and rebind it to the original function in the
+<code>ecb-deactivate-hook</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>advice-window-functions-signal-error</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Signal an error if an adviced function can not do its job. If not nil
+then an error is signaled if one of the adviced functions (see
+<code>ecb-advice-window-functions</code>) can not do its job. So for example
+if the user tries to split the compile-window or an ecb-tree-window or
+if one tries to switch to another buffer in one of the
+ecb-tree-windows. For details see the documentation of each of the
+adviced functions to get info when an error is signaled.
+
+<p>If this option is nil then no error is signaled but the called adviced
+function does simply nothing.
+
+<p>Default is nil but it can also be useful to signal errors - so you see
+when call a function in a situation which is not supported by this
+function. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>fix-window-size</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Fix size of the ECB-windows/buffers even after frame-resizing. The fix
+type (valid values are nil, t, width and height) can either be set on
+a layout-basis (means a different value for each layout) or one value
+can be set for all layouts.
+
+<p>For a detailed description of the valid values see description of
+<code>window-size-fixed</code> which is newly introduced in GNU Emacs 21 and
+is only available there. Therefore this option takes only effect with
+GNU Emacs 21.
+
+<p>Note1: Manually resizing the ECB-windows via <code>enlarge-window</code>,
+<code>shrink-window</code>, <code>mouse-drag-vertical-line</code> and
+<code>mouse-drag-mode-line</code> is still possible even if the window-sizes
+are fixed for frame-resizing!
+
+<p>Note2: The description of <code>window-size-fixed</code> in the
+Elisp-info-manual is more detailed than the description offered by
+<kbd>C-h v</kbd>!
+
+<p>Note3: With current Emacs 21.2.X there seems to be no distinction
+between <code>width</code>, <code>height</code> and <code>t</code>. Therefore this
+option takes no effect (means all ecb-windows have always unfixed
+sizes) if <code>ecb-compile-window-height</code> is not <code>nil</code>.
+
+<p>Per default no window-size fixing has been done. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>hide-ecb-windows-after-hook</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Hooks run direct after the ECB windows have been hidden. Hiding was
+done either by <code>ecb-toggle-ecb-windows</code> or
+<code>ecb-hide-ecb-windows</code>.
+
+<p>IMPORTANT: Hiding the ECB-windows is internally done by calling
+<code>ecb-redraw-layout</code> and therefore also the hooks
+<code>ecb-redraw-layout-before-hook</code> and
+<code>ecb-redraw-layout-after-hook</code> are evaluated. The hook-sequence
+is analogous to that described in
+<code>ecb-show-ecb-windows-after-hook</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>hide-ecb-windows-before-hook</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Hook run direct before the ECB windows will be hidden. Hiding is done
+either by <code>ecb-toggle-ecb-windows</code> or
+<code>ecb-hide-ecb-windows</code>. This means that at runtime of this hook
+all the ECB-tree-windows of current layout are visible.
+
+<p>IMPORTANT: Hiding the ECB-windows is internally done by calling
+<code>ecb-redraw-layout</code> and therefore also the hooks
+<code>ecb-redraw-layout-before-hook</code> and
+<code>ecb-redraw-layout-after-hook</code> are evaluated. The hook-sequence
+is analogous to that described in
+<code>ecb-show-ecb-windows-before-hook</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>ignore-display-buffer-function</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Adviced <code>display-buffer</code> ignores <code>display-buffer-function</code>. 
+This means, that the adviced version of <code>display-buffer</code> (see
+<code>ecb-advice-window-functions</code>) ignores the value of
+<code>display-buffer-function</code> when called for the <code>ecb-frame</code>. 
+If this variable should not be ignored then the function of
+<code>display-buffer-function</code> is completely responsible which window
+is used for the buffer to display - no smart ECB-logic will help to
+deal best with the ECB-window-layout! You can define if and when
+<code>display-buffer-function</code> should be ignored:
+
+<ul>
+<li>only when persistent compile window is used - i.e. if
+<code>ecb-compile-window-height</code> is not nil
+
+<li>always when ECB is active - that means ignore when ECB is active
+otherwise not - this is the default value
+
+<li>never, the adviced version of <code>display-buffer</code> always uses the
+value of <code>display-buffer-function</code> if the value is a function. 
+</ul>
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>ignore-special-display</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Ignore special-display-handling. This means, that all values of
+<code>special-display-function</code>, <code>special-display-buffer-names</code>
+and <code>special-display-regexps</code> are ignored
+
+<ul>
+<li>only when persistent compile window is used - i.e. if
+<code>ecb-compile-window-height</code> is not nil - this is the default
+value.
+
+<li>always when ECB is active - that means no special-display-handling of
+buffers when ECB is active
+
+<li>never, i.e. special-dislay-handling depends on the values of the
+options <code>special-display-function</code>,
+<code>special-display-buffer-names</code> and
+<code>special-display-regexps</code>.
+
+</ul>
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>layout-always-operate-in-edit-window</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Adviced window functions work always in the edit-window. If we are in
+an ECB special buffer (methods, directories, etc), and any of the
+adviced windowing functions is called interactively (see
+<code>ecb-advice-window-functions</code>), we will select first an
+edit-window according to the value of
+<code>ecb-mouse-click-destination</code>. This is useful if you have any
+functions that use such functions and you don't want them to fail with
+an error complaining that the current buffer can not be split, or
+something similar.
+
+<p>Because this may not be desirable in all situations and for all
+adviced functions this can be enabled separately for every advicable
+function (see also <code>ecb-advice-window-functions</code>). If the symbol
+of an adviced function is contained in the value of this option, then
+a edit-window is first selected otherwise either an error is
+reported or some other special reaction (depends on
+<code>ecb-advice-window-functions-signal-error</code>); see the
+documentation of the adviced functions for this.
+
+<p>For <code>other-window</code>, <code>other-window-for-scrolling</code> and
+<code>switch-to-buffer-other-window</code> this makes no sense, therefore
+you can not enable this for them.
+
+<p>Per default this is enabled for <code>switch-to-buffer</code> and
+<code>display-buffer</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>layout-debug-mode</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Write debug-information about layout-operations in the
+Messages-buffer. Normally there should be no need to set this option
+to true but if there are problems to display buffers in the
+compile-window of ECB (e.g. buffers which should be displayed there
+aren't or the temporally enlarging-mechanism does not do what you
+think it should do etc...) then please do the following steps:
+
+<ol type=1 start=1>
+</p><li>Set <code>ecb-layout-debug-mode</code> to not nil
+
+<li>Reproduce the wrong behavior exactly by repeating all the operations
+which lead to the problem.
+
+<li>Now send immediately a bug report with
+<code>ecb-submit-problem-report</code>.
+
+<li>Set <code>ecb-layout-debug-mode</code> back to nil if you do not want
+further debugging output in the *Messages* buffer
+</ol>
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>layout-name</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Select a window layout of ECB. Value is any arbitrary string. There are
+four different types of layouts: left, right, top and left-right,
+which means the location of the ECB-tree-windows in the ECB-frame. 
+Currently there are 20 predefined layouts; names see below. You can
+savely try out any of them by changing this value and saving it only
+for the current session. If you are sure which layout you want you can
+save it for future sessions. To get a picture of the layout for name
+&lt;name&gt; call `ecb-show-layout-help'. <code>ecb-layout-function-9</code>.
+
+<p>Currently available layouts:
+
+<ul>
+<li>Left layouts:
+left1 left2 left3 left4 left5 left6 left7 left8 left9 left10 left11
+left12 left13 left14 left15
+
+<li>Right layouts:
+right1
+
+<li>Top layouts:
+top1 top2
+
+<li>Left-right layouts:
+leftright1 leftright2
+</ul>
+
+<p>Regardless of the settings you define here: If you have destroyed or
+changed the ECB-screen-layout by any action you can always go back to
+this layout with <code>ecb-redraw-layout</code>
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>layout-window-sizes</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Specifies the sizes of the ECB windows for each layout. The easiest
+way (and also the strongly recommended way) to change this variable is
+to change the window sizes by dragging the window borders using the
+mouse and then store the window sizes by calling the command
+<code>ecb-store-window-sizes</code>. Next time the layout is redrawn the
+values stored in this option will be used.
+
+<p>If <code>ecb-store-window-sizes</code> is used then the windows sizes are
+stored per default as fractions of current frame-width and -height of
+the ecb-frame, so the stored values will "work" for other frame
+sizes too. But if you call <code>ecb-store-window-sizes</code> with a
+prefix-argument then the fixed values of current width and height are
+stored!
+
+<p>If this option is set "by hand" (i.e. not by
+<code>ecb-store-window-sizes</code>) then the following is important:
+<ul>
+<li>It is recommended to use fractions of frame-width and -height!. 
+<li>The order of the sequence of the inserted window sizes must be the same as
+<code>other-window</code> (the not-adviced version!) would walk! 
+</ul>
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>maximize-ecb-window-after-selection</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+If not nil maximize current tree-window after selection. When
+selecting another not-tree-window after such an automatic maximizing
+all tree-windows of current layout are displayed again. But a
+tree-window is not maximized if either a node has been selected via
+primary- oder secondarc mouse-button or the popup-menu of that
+tree-buffer has been opened. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>maximize-next-after-maximized-select</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Maximizes the next logical tree-window after a maximized
+node-selection. Selecting a node in a maximized tree-window is handled
+very smart by ECB:
+
+<p>If a tree-buffer-name is not contained in this option then selecting a
+node in this maximized tree-buffer automatically "minimizes" that
+tree-window (i.e. displays all windows of the current layout) so the
+user can perform the next logical step (e.g. the next logical step
+after selecting a directory in the directories-buffer is to select a
+source-file - therefore the sources-buffer of current layout has to be
+displayed - if the current layout contains one; the next logical step
+of selecting a source-file is probably to jump to a certain tag via
+the methods-buffer).
+
+<p>If a tree-buffer-name is contained in this option then selecting a
+node in this tree-buffer automatically maximizes the next logical
+tree-window (e.g. directories -&gt; sources, sources/history -&gt;
+methods). But if the current maximized tree-buffer is also contained
+in the option <code>ecb-tree-do-not-leave-window-after-select</code> (see
+also the tree-buffer-command
+<code>ecb-toggle-do-not-leave-window-after-select</code> which is bound to
+<code>C-t</code> in each tree-buffer) then ECB does *not* maximize the next
+logical tree-window but point stays in the currently maximized
+tree-buffer so for example the user can select more than one node
+(e.g. more than one source-file from the sources-buffer.
+
+<p>The tree-buffer-name can either be defined as plain string or with a
+symbol which contains the buffer-name as value. The latter one is
+recommended for the builtin ECB-tree-buffers because then simply the
+related option-symbol can be used (e.g. 
+<code>ecb-directories-buffer-name</code>, <code>ecb-sources-buffer-name</code> or
+<code>ecb-history-buffer-name</code>).
+
+<p>In future versions this option will probably also allow to define the
+next logical tree-buffer for a tree-buffer - currently this is
+hard-coded as follows:
+<ul>
+<li>directories -next-logical-&gt; sources
+<li>sources     -next-logical-&gt; methods
+<li>history     -next-logical-&gt; methods. 
+</ul>
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>maximize-next-after-maximized-select</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Maximizes the next logical tree-window after a maximized
+node-selection. Selecting a node in a maximized tree-window is handled
+very smart by ECB:
+
+<p>If this option is nil then selecting a node in a maximized
+directories- sources- or history-tree-buffer automatically
+"minimizes" that tree-window (i.e. displays all windows of the
+current layout) so the user can perform the next logical step (e.g. 
+the next logical step after selecting a directory in the
+directories-buffer is to select a source-file - therefore the
+sources-buffer of current layout has to be displayed - if the current
+layout contains one; the next logical step of selecting a source-file
+is probably to jump to a certain tag via the methods-buffer).
+
+<p>If this option is not nil then selecting a node in a maximized
+directories- sources- or history-tree-buffer automatically maximizes
+the next logical tree-window (directories -&gt; sources, sources/history
+-&gt; methods). But if the current maximized tree-buffer is contained in
+the option <code>ecb-tree-do-not-leave-window-after-select</code> (see also
+the tree-buffer-command
+<code>ecb-toggle-do-not-leave-window-after-select</code> which is bound to
+<code>C-t</code> in each tree-buffer) then ECB does *not* maximize the next
+logical tree-window but point stays in the currently maximized
+tree-buffer so for example the user can select more than one
+source-file from the sources-buffer. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>new-ecb-frame</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Create a new frame at activation time of ECB. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>other-window-behavior</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+The behavior of ECB concerning getting an "other window". This has
+an effect if either <code>other-window</code> or
+<code>other-window-for-scrolling</code> is adviced by ECB, see
+<code>ecb-advice-window-functions</code>. The following settings are
+possible:
+
+<p><code>all</code>:
+
+<p>ECB will cycle through all windows of the ECB-frame or scroll simply
+the next window in the ECB-frame, means it behaves like the original
+<code>other-window</code> rsp. the original
+<code>other-window-for-scrolling</code>.
+
+<p><code>only-edit</code>:
+
+<p>ECB will only cycle through the edit-windows of ECB or only scroll
+another edit-window. If the selected window is not an edit-window then
+it behaves like with value <code>all</code>.
+
+<p><code>edit-and-compile</code>:
+
+<p>Like <code>only-edit</code> plus the compile window if any. If the selected
+window is neither an edit-window nor the compile-window then it
+behaves like with value <code>all</code>.
+
+<p><code>smart</code>:
+
+<p>With this setting ECB tries to choose the
+<code>other-window</code>-destination or the "other window" to scroll in a
+smart and intuitive way: If point is in one of the edit-windows and if
+the edit-area is splitted then always the "next" edit-window is
+choosen (whereas the next edit-window of the last edit-window is the
+first edit-window)- if the edit-area is unsplitted then the
+compile-window is used if there is one. In the context of an
+<code>other-window</code>-call the <var>ARG</var> of <code>other-window</code> will be
+taken into account.
+
+<p>If one of the special ecb-windows is selected then always the "next"
+ecb-window is choosen (whereas the next ecb-window of the last
+ecb-window is the first ecb-window). In the context of an
+<code>other-window</code>-call the <var>ARG</var> of <code>other-window</code> will be
+taken into account. If there is only one ecb-window then ECB considers
+also the edit-windows
+
+<p>If the compile-window is selected then always the last edit-window
+which had the point will be used unless <code>other-window</code> has been
+called with a prefix-argument unequal 1.
+
+<p>If there is an active minibuffer:
+
+<p>Regardless of the allowed values above ECB handles the situation of an
+active minibuffer during a call to <code>other-window</code> or
+<code>scroll-other-window</code> like follows:
+
+<p>If the minibuffer-window is selected then ECB always chooses the
+window <code>minibuffer-scroll-window</code> points to (when this variable
+is set, otherwise the compile-window or the last selected edit-window
+is choosen) when the called command is called to choose the 1. next
+window (always true for scrolling another window or true when
+<code>other-window</code> called without prefix-arg or with prefix-arg equal
+1). Otherwise the window ARG steps away is choosen (in case of
+<code>other-window</code>).
+
+<p>If there is an active minibuffer but the minibuffer-window is not
+selected then <code>other-window</code> and <code>scroll-other-window</code>
+behave like the original version.
+
+<p>In addition to the allowed values above the value of this option can
+also be a function:
+
+<p>A function:
+
+<p>This function gets seven arguments:
+<ol type=1 start=1>
+</p><li>A canonical list of all currently visible windows of the
+<code>ecb-frame</code>
+<li>A canonical list of all currently visible edit-windows
+<li>A canonical list of all currently visible ecb-windows
+<li>The window-object of the compile-window if there is any. 
+<li>The minibuffer-window of the ECB-frame if there is an active
+minibuffer. 
+<li>The result of the function <code>ecb-where-is-point</code> - see the
+documentation of this function for details. 
+<li>An integer which indicates how many steps away from the current
+selected window the "other-window" is. Is nil when this function is
+called in another context then for <code>other-window</code>.
+</ol>
+
+<p>The function has to return a window-object which is then used as
+"other window" for the command <code>other-window</code> or for scrolling
+another window (e.g. with <code>scroll-other-window</code>). Such a function
+has to handle properly all situation for itself. 
+<code>ecb-get-other-window-smart</code> is an example for such a function. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>redraw-layout-after-hook</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Hooks run direct before the ECB windows will be shown either by
+<code>ecb-toggle-ecb-windows</code> or <code>ecb-show-ecb-windows</code>. This
+means that at runtime of this hook the ECB-windows are already
+visible. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>redraw-layout-before-hook</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Hooks run direct before the ECB-layout will be redrawn by either
+<code>ecb-redraw-layout</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>redraw-layout-quickly</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+If non-nil, we will attempt to redraw the layout quickly. Please read
+also carefully the documentation of <code>ecb-redraw-layout</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>select-edit-window-on-redraw</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Select the first edit window on <code>ecb-redraw-layout</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>show-ecb-windows-after-hook</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Hooks run direct before the ECB windows will be shown either by
+<code>ecb-toggle-ecb-windows</code> or <code>ecb-show-ecb-windows</code>. This
+means that at runtime of this hook the ECB-windows are already
+visible.
+
+<p>IMPORTANT: Showing the hidden ECB-windows is internally done by
+calling <code>ecb-redraw-layout</code> and therefore also the hooks
+<code>ecb-redraw-layout-before-hook</code> and
+<code>ecb-redraw-layout-after-hook</code> are evaluated. So there is the
+following sequence of hooks during the process of showing the hidden
+ECB-windows:
+<ol type=1 start=1>
+</p><li><code>ecb-show-ecb-windows-before-hook</code>
+<li><code>ecb-redraw-layout-before-hook</code>
+<li>&lt;redrawing the layout to show the hidden ECB-windows&gt;
+<li><code>ecb-redraw-layout-after-hook</code>
+<li><code>ecb-show-ecb-windows-after-hook</code>
+</ol>
+So be aware which code you add to which hook! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>show-ecb-windows-before-hook</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Hooks run direct before the ECB windows will be shown either by
+<code>ecb-toggle-ecb-windows</code> or <code>ecb-show-ecb-windows</code>. This
+means that at runtime of this hook the ECB-windows are still hidden.
+
+<p>IMPORTANT: Showing the hidden ECB-windows is internally done by
+calling <code>ecb-redraw-layout</code> and therefore also the hooks
+<code>ecb-redraw-layout-before-hook</code> and
+<code>ecb-redraw-layout-after-hook</code> are evaluated. So there is the
+following sequence of hooks during the process of showing the hidden
+ECB-windows:
+<ol type=1 start=1>
+</p><li><code>ecb-show-ecb-windows-before-hook</code>
+<li><code>ecb-redraw-layout-before-hook</code>
+<li>&lt;redrawing the layout to show the hidden ECB-windows&gt;
+<li><code>ecb-redraw-layout-after-hook</code>
+<li><code>ecb-show-ecb-windows-after-hook</code>
+</ol>
+So be aware which code you add to which hook! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>split-edit-window-after-start</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Sets if and how the edit window should be splitted after ECB-start. 
+But be aware: This option determines only if and how the edit-window
+should be splitted at start-time of ECB. There are five different
+values allowed for this option:
+
+<ul>
+<li><code>nil</code>:
+Do not split the edit-area of ECB after activation, i.e. there will be
+only one edit-window after starting ECB.
+
+<li><code>horizontal</code>:
+Split the edit-area in 2 edit-windows side by side.
+
+<li><code>vertical</code>:
+Split the edit-area in 2 edit-windows, one above the other.
+
+<li><code>before-activation</code>:
+Split the edit-area as before the ECB-start, i.e. the edit-area will
+have after start a window-layout as the whole frame had before the
+start of ECB.
+
+<li><code>before-deactivation</code>:
+Split the edit-area into a window-layout ECB had in its edit-area
+direct before the ECB-deactivation. This value preserves the full
+state between activations of ECB, i.e. the visibility of the
+ECB-windows, the visibility of a compile-window and also the full
+split-state of the edit-area. But this can only be done if important
+layout-options have not been changed in the meanwhile. These are the
+options <code>ecb-layout-name</code>, <code>ecb-compile-window-height</code>,
+<code>ecb-compile-window-width</code>, <code>ecb-windows-width</code> and
+<code>ecb-windows-height</code>. 
+</ul>
+
+<p>Default value is <code>before-deactivation</code>.
+
+<p>Some remarks to the value <code>before-activation</code>: If this value has
+been set then ECB needs three permanent adivces even when ECB is
+deactivated: <code>split-window</code>, <code>delete-window</code> and
+<code>delete-other-windows</code>. But these advices do not change any
+behavior of these functions but only storing in an internal
+ECB-variable the facts that a window has been splitted or deleted. In
+addition to this these advices are 100% error-save, means the
+functionality of the original functions will be performed in every(!) 
+case even if within the advice an error occurs (but normally there can
+no errors occur in these advices because they are very simple). 
+Conclusion: If you want really all ECB-advices being disabled after
+deactivating ECB then you have to set this option to other values then
+<code>before-activation</code>. But setting this variable to this value is
+really completely save. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>toggle-layout-sequence</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Toggle sequence for layout toggling with <code>ecb-toggle-layout</code>. 
+Every element of this list has to be a valid layout-name i.e. either
+one of the predefined layouts or one of the user-defined layouts.
+
+<p>You can add here as many layouts as you want but to use this option
+most effective you should not add more than 2 or 3 layouts so every
+layout can be accessed very fast by toggling with
+<code>ecb-toggle-layout</code>. It is also senseful to add layouts which
+have the same principal outline, i.e. all their tree-buffers are on
+the same side of the frame and the tree-buffer-"column" (or
+-"row") has identical size for the layouts.
+
+<p>Recommended values are for example:
+
+<ul>
+<li>("left10" "left15"), toggles between methods and directories/history
+<li>("left10" "left13"), toggles between methods and directories
+<li>("left10" "left14"), toggles between methods and history
+<li>("left10" "left13" "left14"), toggles between methods, history and directories
+</ul>
+
+<p>See also option <code>ecb-show-sources-in-directories-buffer</code>.
+
+<p>This option makes only sense if the value is a list with more than 1
+element! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>windows-height</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+The height of the ECB windows in lines for top-layouts. If the number
+is less than 1.0 the width is a fraction of the frame height. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>windows-width</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+The width of the ECB windows in columns for left- and right layouts. 
+If the number is less than 1.0 the width is a fraction of the frame
+width. 
+</td></tr>
+</table>
+
+</body></html>
+

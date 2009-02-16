@@ -1,0 +1,1105 @@
+\input texinfo
+
+@c This is the `doc/eev.texi' file of GNU eev.
+@c Copyright (C) 2004 Free Software Foundation, Inc.
+@c Copying and distribution of this file, with or without modification, are
+@c permitted provided the copyright notice and this notice are preserved.
+@c Author and version: Eduardo Ochs, 2005feb16
+
+@c Note that this document is still very preliminary.
+
+@c (setq ee-hyperlink-prefix "@c ")
+@c (setq ee-comment-prefix "@c")
+@c (find-texinode "Emacs Editing")
+@c (find-texinode "Updating Commands")
+@c (find-texinode "Updating Requirements")
+@c (find-eev "README")
+
+@c (find-texinode "Concept Index")
+@c (find-node "(texinfo)makeinfo options" "\n`--html'\n")
+
+@c (find-node "(texi2html)")
+@c (find-node "(texi2html)whytexi2html")
+
+@ignore
+
+# (find-status   "texi2html")
+# (find-vldifile "texi2html.list")
+# (find-udfile   "texi2html/")
+
+(defun ei ()
+  (interactive)
+  (find-estring
+   (format "%s\n%S"
+           (find-sh0 "cd ~/eev-current/doc/; makeinfo eev")
+           ' (find-node "(eev)Top")
+           )))
+
+cd ~/info/
+ln -sf ~/eev-current/doc/eev.info .
+
+@end ignore
+
+@c (find-sh "cd ~/eev-current/doc/; makeinfo eev && cp -v eev.info ~/info/")
+@c (find-sh "cd ~/eev-current/doc/; makeinfo eev")
+@c (find-sh "rm -Rv ~/eev-current/doc/eev/; cd ~/eev-current/doc/; makeinfo --html eev")
+@c (find-eevnode "")
+
+@c (eev     "cd ~/eev-current/doc/; makeinfo eev")
+@c (eev     "cd ~/eev-current/doc/; texi2dvi eev.texi && rexdvi eev.dvi")
+@c (find-fline "~/eev-current/doc/eev.info")
+@c (find-node "(eev)Top")
+
+@c (remove-from-keymap texinfo-mode-map ?\")
+@c (define-key texinfo-mode-map "\"" 'texinfo-insert-quote)
+@c (find-efile "textmodes/texinfo.el" "if texinfo-mode-map" "texinfo-insert-quote")
+
+
+@setfilename eev.info
+@settitle eev
+
+@node    Top, Introduction, (dir), (dir)
+
+To edit this: (find-eevfile "doc/eev.texi")
+
+@menu
+* Introduction::                What are eev and e-scripts.
+* Reading E-scripts::           
+* Installing eev::              Installing, uninstalling, and how to run eev
+                                without installing it.
+* Executing Regions::           
+* Hyperlinks::                  Elisp one-liners used as hyperlinks.
+* Technicalities::              
+* Projects::                    
+* Two Halves::                  
+* Concept Index::               This index has two entries.
+
+@detailmenu
+ --- The Detailed Node Listing ---
+
+Introduction
+
+* History Editors::             Many programs include tiny editors.
+* E-scripts::                   What are eev and e-scripts.
+* Between Code and Actions::    Everything can be automated, in theory.
+* Sharing E-scripts::           Reasons for sharing information.
+* The Eev Manifesto::           The original Eev Manifesto, written in 1999.
+* Basic Examples::              
+* No Autodetection::            
+* Bounded Regions::             
+
+Installing eev
+
+* Changes to rcfiles::          
+* Automatic Installation::      
+* Automatic Uninstallation::    
+* make preinstall-rc::          Preparing the new rcfiles.
+* make diff-rc::                Comparing the new rcfiles with the current ones.
+* make install-rc::             Installing the new rcfiles.
+* Running Without Installing::  Trying eev without installing it.
+
+Executing Regions
+
+* Kinds of Regions::            Emacs's region, bounded regions, lines, sexps.
+* Kinds of Actions::            Saving, evaluating, executing, signaling.
+* eesteps::                     Loading an executing series of Elisp actions.
+* Defaults for Bounded Regions::  Delimiters, action, how to highlight.
+* Flashing::                    Highlighting the region temporarily
+* Channels::                    Sending lines through communication channels.
+
+Hyperlinks
+
+* Kinds of Hyperlinks::         To files, info, man, Emacs structures, etc.
+* Pos-Spec Lists::              Pointing to a position in a page.
+* code-c-d::                    Generating many hyperlink functions at once.
+* Generating Hyperlinks::       Generating many hyperlinks at once.
+
+Technicalities
+
+* Glyphs::                      
+* Compose Pairs::               
+* ee-expand::                   
+
+Projects
+
+* Tutorials for Languages::     
+* Internet Skills for Disconnected People::  
+* Quick References::            
+
+Splitting Eev in Two Halves (and Their Frontier)
+
+* Saving::                      Saving temporary scripts.
+* Links::                       
+* Actions to Code in Emacs::    
+* Hybrid Functions::            
+* More on Hyperlinks::          
+
+@end detailmenu
+@end menu
+
+@node    Introduction, Reading E-scripts, Top, Top
+@chapter Introduction
+
+@menu
+* History Editors::             Many programs include tiny editors.
+* E-scripts::                   What are eev and e-scripts.
+* Between Code and Actions::    Everything can be automated, in theory.
+* Sharing E-scripts::           Reasons for sharing information.
+* The Eev Manifesto::           The original Eev Manifesto, written in 1999.
+* Basic Examples::              
+* No Autodetection::            
+* Bounded Regions::             
+@end menu
+
+@node    History Editors, E-scripts, Introduction, Introduction
+@section History Editors
+
+Many interactive programs - for example shells and interpreters for
+certain programming languages - keep a history of the last commands
+that they received.  This allows the user to edit these commands and
+execute them again, with or without changes. Let's call these editing
+facilities ``history editors''.
+
+The main idea of eev is that if we routinely use programs A, B, C and
+D then we don't need to restrict ourselves to A, B, C and D's built-in
+history editors: Emacs can function as an ``auxiliary history editor''
+for them.  We can use a single running Emacs to edit and send commands
+for all these programs.  And when we use Emacs 
+
+
+
+Using a single running Emacs can edit commands for
+
+ - a global one, in fact [capable of dealing with several
+programs, unifying the histories, supporting comments and hyperlinks]
+
+These history editors have several deficiencies. [They are different
+from program to program; they don't have all the facilities of a
+full-blown text editor]
+
+[Mention comments and hyperlinks; stuff for several programs in the
+same file]
+
+[Saving history; editing history; keeping a log; several separate
+logs]
+
+@c Vários programas interativos - por exemplo shells e certas
+@c linguagens de programação - mantêm um histórico dos ultimos
+@c comandos recebidos, e permitem que o usuário edite estes comandos e
+@c os execute de novo, com ou sem alterações; às vezes estes programas
+@c até contêm pequenos editores de texto embutidos.
+
+@c A idéia do eev é não nos restringirmos somente a estas ferramentas
+@c simplificadas de edição de comandos - que ainda por cima são
+@c diferentes de programa a programa. Com o eev o Emacs passa a poder
+@c ser utilizado como um "editor universal de comandos" - os e-scripts
+@c são como se fossem históricos globais de comandos dados para o
+@c sistema, mas podendo ser editados como arquivos de texto comuns,
+@c podendo conter todo tipo de comentário e de hiperlink, e podendo
+@c conter comandos para vários programas e linguagens.
+
+
+
+@node    E-scripts, Between Code and Actions, History Editors, Introduction
+@section E-scripts
+
+Eev is a library that adds support for "e-scripts" to Emacs. E-scripts
+are files of "executable notes" about how to do certain computer tasks.
+
+A typical e-script is a plain text file in which some parts are
+written in human languages, like English, and other parts are blocks
+of code in certain programming languages or sequences of commands for
+certain computer programs.  A single e-script file may contain blocks
+of code and commands for several different languages and programs.
+
+We are used to the idea that if a file `myescript.e' contains
+executable code then there is a way to execute it; maybe there's a
+program, `myprog', such that running `prog myescript.e' will execute
+the e-script.  But the situation with e-scripts is quite different
+from that.
+
+There's no way to execute a whole e-script file at once. Instead, the
+user selects interactively a region of the e-script while editing it
+in Emacs, and then ask Emacs to execute it in some way. It is always
+up to the user to decide in which way to execute the selected region -
+or, in other words, to determine ``in which language the contents of
+the region are written''. Emacs never tries to guess the language - or
+the region - by itself.
+
+Executing means different things for different languages and for
+different programs.  If the region is to be executed as Emacs Lisp
+code, then executing it means applying two Elisp functions to the
+contents of the region: `read' and `eval'.  If the region is to be
+sent as a series of commands to an external shell, then it is saved as
+a temporary file - a ``temporary script'' -, so that then we can
+switch to the shell prompt and execute that temporary script. And if
+the region is to be sent as input to some external interactive program
+with which Emacs has established a certain kind of ``communication
+channel'', then executing that means saving the region to a temporary
+file and then sending a signal to the external program to tell it that
+more input has just been made available.
+
+There's one kind of executable block that is especially common:
+one-liners in Elisp, being used as hyperlinks. For example: in
+
+@example
+# (find-node "(make)Automatic" "$@@")
+# (find-man "1 bash" "echo [-neE]" "\\t")
+cd /tmp
+touch first; sleep 1; touch second
+@{ echo 'first: second'
+  echo -e '\t@@echo $@@ is older than $<'
+@} > Makefile
+make
+@end example
+
+the whole thing - eight lines - can be executed as shell code, and
+then the first two lines will be treated as comments; but we can also
+put the cursor at the end of any of the `#' lines and type a key
+sequence - `M-e' - that means ``go to the end of the line and then
+execute the Elisp expression that comes before the cursor''; then the
+`#' at the beginning of the line will not be considered, only the
+thing between parentheses - the `#' will be beyond the limits of the
+region - and the effect will be that Emacs will open a certain manpage
+or Info page and jump to a specific position.  That is, executing that
+expression works like following a hyperlink.
+
+[mention defaults, and few keystrokes].
+
+
+
+@c ...
+
+@c Old stuff:
+
+@c An e-script is a file containing notes about how to do a certain
+@c computer task. Some parts of an e-script are written in English or
+@c in other human languages, and are not intended to be interpreted by
+@c the computer in any way; other parts contain logs of the
+@c interactions with the programs that were involved in the task, in a
+@c form that allows not only inspection and textual modification but
+@c also controlled ``re-execution'' - that is, repeating that
+@c interaction in another moment, with or without modification, from
+@c the steps registered in the log, without the need to repeat each
+@c keystroke or mouse-click by hand.
+
+@c So: e-scripts are a way of taking ``executable notes'' of what you
+@c do. If you interact with the system using Emacs and Eev then notes
+@c in e-script form are produced more or less automatically, and
+@c redoing things that you've already done before becomes trivial.
+
+
+@node    Between Code and Actions, Sharing E-scripts, E-scripts, Introduction
+@section Between Code and Actions
+
+An ``action'' can be ``recorded'' as text by writing down code that
+produces that action when executed - remember that code is text! The
+transformation
+
+@example
+               ``action": effect
+    code   ->     of executing
+                   the code
+@end example
+
+is natural for the computer; the opposite direction,
+
+@example
+                  code that
+   action   ->    produces
+                 that action
+@end example
+
+is not. For many actions we may know how to do that by hand, and for
+some kinds of actions there are tools to automatically generate the
+corresponding code; we will discuss some of these tools later (section
+"Following and Creating Elisp Hyperlinks", below).
+
+@example
+# (find-eevfile "README" "If our \"action\" is")
+@end example
+
+[Ways to trigger a stored action]
+
+
+@node    Sharing E-scripts, The Eev Manifesto, Between Code and Actions, Introduction
+@section Sharing E-scripts
+
+[I should write something new here, but for the moment the original
+``Eev Manifesto'' should do, with some added comments]
+
+[I believe that in a few decades...]
+
+[You are not forced to share your e-scripts.]
+
+[If you are releasing a program...]
+
+
+
+@node    The Eev Manifesto, Basic Examples, Sharing E-scripts, Introduction
+@section The Eev Manifesto
+
+
+
+The eev Manifesto
+=================
+
+I)
+
+Do you remember your first Unix days, when you were always asking
+yourself questions like "how do I compile this?", "how do I install
+this stuff?", "and now, how do I run it?", "how do I generate html
+from this file?"?
+
+Do you remember how you marvelled at the first time you ran a "make"
+on a package and you saw echoed each of the commands that were used to
+generate binaries and docs from the source? Have you had the same
+feeling I've had, that by understanding those commands we would have
+access to the tricks that the owner of the package knew, and that we'd
+learn which were the "important" programs and in what way the experts
+used them?
+
+II)
+
+Everybody is fluent in only a small fraction of all Unix commands. If
+you could "listen" to how the Unix gurus "speak" to their machines you
+would learn which "words" are related to solving a particular task,
+and learn how they fit in "sentences". By checking the "dictionary
+entries" for them (i.e., manpages, info pages, READMEs, source code,
+etc) you could learn the real meaning of them. But then you'd be
+learning Unix by immersion, from real use, instead of having to rely
+only on "textbooks", "dictionaries" and sometimes "Rosetta stones",
+"graffitis on toilet walls" and "old newspapers".
+
+The fact is that you can make a record of how you "speak" Unix, and
+more, you can become a lot more productive if you do so. Many tasks
+consist on short fixed sequences of commands: connecting to your ISP
+via modem, unpacking a source package and recompiling it, printing a
+text file in two-column mode, and so on. The trick is that with some
+functions defined in eev.el you can write these sequences of commands
+in a plain text file, then mark a block of this file with your editor
+(which must be Emacs for this to work), then tell a shell to execute
+only the commands in that block; in this way you can easily execute
+only portions of what would otherwise have to be a monolythic script;
+this is great for when you're not sure if everything works, or if you
+just want to do some steps. Also, it would be easy to change bits of
+the "script" before execution, as you'll be doing things from inside
+an editor.
+
+There is also another trick. Scripts allow "comments", that is, lines
+that are not executed; generally the convention is that lines that
+start with "#" are comments. So we can place lines like these in a
+script:
+
+  # (find-enode "Picture" "C-c c-c")
+
+The expression "(find-enode "Picture")" is an Emacs command (in Lisp)
+that means: open the "info page" called "Picture", from the Emacs
+manual, treating it as a file; then place the cursor after the first
+occurrence of the string "C-c c-c" there. To execute this command,
+i.e., to make emacs go to that point on that page, you just have to
+put the cursor after the ")" and type C-x C-e. There are many other
+similar commands, that will open specific files or specific manpages,
+with various ways of searching. These "hyperlinks" are especially
+interesting if you want to record from where you got some piece of
+information relevant to the "script" you're writing; this is very
+useful, for example, on "scripts" you haven't finished and on which
+you plan to work more someday, or on scripts you want to send to
+someone.
+
+Just as hyperlinks have many flavors, the function that executes a
+block also has variants: a block can be executed by the Tcl
+interpreter instead of the shell, or can be run through LaTeX, just to
+pick some examples. See the docs on eev.el
+(<http:/angg.twu.net/eev-current/README.html>).
+
+III)
+
+I have placed essentially all my "scripts" written in this way (I call
+them "e-scripts") in a public place (<http:/angg.twu.net/e/>). They
+contain almost everything I know about Unix.
+
+If you like this idea, please get in touch, send comments, ask
+questions -- about e-scripts or questions whose answer could become an
+e-script chunk -- or send me your e-scripts when you have some, or
+even ask for help on setting up your own e-script collection or
+e-script public site... anything! By asking good questions you can
+help me make the documentation get better.
+
+I really want to make this e-scripts idea spread. Learning Unix -- or
+simply more Unix -- could be made easier for everybody... please help!
+E-scripts are funnier to use, and easier to write, than texts that
+tell everything in terms of "press this, do that". A lot of effort and
+money are being invested now on these kinds of text, and they're often
+very depressing. Let's try to save the world from them, at least a
+bit, and maybe this money will be directed to better things. And
+teaching people Unix tricks will be both easier and funnier.
+
+Eduardo Ochs, 1999dec18.
+
+
+
+
+@node    Basic Examples, No Autodetection, The Eev Manifesto, Introduction
+@section Basic Examples: Shell Commands and Hyperlinks
+
+If our ``action'' is to enter these commands in a shell,
+
+@example
+cd /home/backups/
+tar -tvzf persephone-2002jun10.tar.gz > ~/.files
+grep books.db ~/.files
+@end example
+
+@noindent then we can record that by just pasting the commands to Emacs (by the
+way, in this case it is the way of playing back the commands that is
+not obvious! See the screenshot below for the trick). But now suppose
+that we have just found a piece of interesting information in the
+documentation (in Info) for Zsh, in the node called ``Process
+Substitution'', around the first occurrence of the string
+@code{=(...)} in the text - how do we create a ``hyperlink'' to that,
+that is, one whose action when ``followed'' will be to take us to that
+page and to put the cursor at that point? The elisp expression below
+does the job:
+
+@example
+(find-node "(zsh)Process Substitution" "=(...)")
+@end example
+
+We can execute it by placing the cursor after it and typing @key{C-x
+C-e}, or by placing the cursor anywhere in the line and typing
+@key{M-e}. Note: @key{C-x C-e} is standard in Emacs, while (this
+behaviour for) @key{M-e} is defined in eev; @code{find-node} is from
+eev, but Emacs comes with several functions that make sense as
+hyperlinks, for example:
+
+@example
+(find-file "/etc/fstab")
+(info "(zsh)Process Substitution")
+(info "(emacs)Lisp Eval")
+(man "ls")
+(describe-key "\C-x\C-e")
+(describe-function 'eval-last-sexp)
+(where-is 'eval-last-sexp)
+@end example
+
+These ``hyperlink'' functions that are native to Emacs do not accept the
+extra arguments specifying where to move the cursor to, but all the
+functions in eev do (these extra arguments are called ``pos-spec-list"s
+in eev, by the way).
+
+Note that these ``elisp hyperlinks'' can appear inside comments in code
+for other languages:
+
+@example
+# (find-node "(zsh)Process Substitution" "=(...)")
+function catcat () @{ echo "Temp file: $1"; cat $1; tac $1 @}
+catcat =(echo foo; echo bar; echo plic)
+@end example
+
+This is a valid block of shell commands - code for one language can
+appear inside code for another language.
+
+
+@node    No Autodetection, Bounded Regions, Basic Examples, Introduction
+@section Languages are never auto-detected
+
+Eev does not try to recognize automatically what are the limits of a
+block of code, or in which language a block was written. This is not a
+bug or a missing feature --- it is a deliberate design decision.
+(Actually in the beginning there was no autodetection because I didn't
+know how to implement it; but then I found that having no
+autodetection had certaing advantages
+
+It would be very hard to make a system supporting several languages if
+the limits of each block had to be found automatically, and if each
+language had to identified.
+
+In eev the boundaries of the block and the language are always
+selected @i{interactively}: the user selects the block and then issues
+a command meaning ``execute the block as code in the language
+such-and-such'' (or, in the worst case, ``execute the block as code in
+the default language'').
+
+Thanks to that the implementation of eev is very simple -
+and adding support for additional languages is quite easy.
+
+[To do, maybe: include a list of currently supported languages, and
+write a (big) section about Interacting with Unsupported Things].
+
+
+
+
+@node    Bounded Regions,  , No Autodetection, Introduction
+@section Bounded Regions
+
+
+The commented screenshot below illustrates one way of sending commands
+to a shell - by putting the cursor inside a ``delimited region'' and
+typing @key{F3}, then going to shell and running `ee' there.
+
+@example
+(find-eimage0 "doc/shot-f3.png" 1 nil "40%")
+@end example
+
+It is also possible to do something similar with regions that are not
+bounded by delimiters; just mark the region in the usual way in Emacs,
+by setting the ``mark'' and moving the ``point'', then type M-x eev.
+
+One variation: if you mark a region and issue @key{M-x eelatex}
+instead of @key{M-x eev} then the region will be ``sent to @LaTeX{}''
+instead of to the shell; the region will be written in a temporary
+.tex file, and the temporary script will receive commands to run latex
+on the temporary .tex file and display the resulting .dvi file; after
+@key{M-x eelatex} you switch to a shell and run `ee' there.
+
+@example
+(find-enode "Mark")
+@end example
+
+By the way, the name `eev' stands for something like
+"Emacs-execute-(in a shell)-verbosely". It was one of the first Emacs
+Lisp functions that I wrote, and as I was executing it several
+hundreds of times a day it had to have a very short name that would be
+very easy to type.
+
+
+
+@node    Reading E-scripts, Installing eev, Introduction, Top
+@chapter Reading E-scripts
+
+Understanding an e-script file; examples
+
+@node    Installing eev, Executing Regions, Reading E-scripts, Top
+@chapter Installing eev
+
+Installing eev means not only making Emacs load eev's functions, but
+also adding commands to several programs -- Bash, Zsh, GDB, Tclsh,
+Python, Perl, Fvwm, etc -- to make it easy to execute the temporary
+scripts from them.
+
+[The added command is usually called `ee'. Explain the security
+issues.]
+
+@example
+(find-eevfile "README")
+(find-eevfile "INSTALL")
+(find-eevfile "Makefile")
+(find-eevrcfile "README")
+(find-eevrcfile "tmp/")
+(find-eevrcfile "tmp/README")
+@end example
+
+@menu
+* Changes to rcfiles::          Adding an `ee' command to .bashrc, .gdbinit...
+* Automatic Installation::      The easy way.
+* Automatic Uninstallation::    The easy way can be undone easily.
+* make preinstall-rc::          Preparing the new rcfiles.
+* make diff-rc::                Comparing the new rcfiles with the current ones.
+* make install-rc::             Installing the new rcfiles.
+* Running Without Installing::  Trying eev without installing it.
+@end menu
+
+@node    Changes to rcfiles, Automatic Installation, Installing eev, Installing eev
+@section Changes to rcfiles
+
+@node    Automatic Installation, Automatic Uninstallation, Changes to rcfiles, Installing eev
+@section Automatic Installation
+
+@node    Automatic Uninstallation, make preinstall-rc, Automatic Installation, Installing eev
+@section Automatic Uninstallation
+
+@node    make preinstall-rc, make diff-rc, Automatic Uninstallation, Installing eev
+@section make preinstall-rc
+
+@node    make diff-rc, make install-rc, make preinstall-rc, Installing eev
+@section make diff-rc
+
+@node    make install-rc, Running Without Installing, make diff-rc, Installing eev
+@section make install-rc
+
+@node    Running Without Installing,  , make install-rc, Installing eev
+@section Running Without Installing
+
+
+
+@node    Executing Regions, Hyperlinks, Installing eev, Top
+@chapter Executing Regions
+
+@menu
+* Kinds of Regions::            Emacs's region, bounded regions, lines, sexps.
+* Kinds of Actions::            Saving, evaluating, executing, signaling.
+* eesteps::                     Loading an executing series of Elisp actions.
+* Defaults for Bounded Regions::  Delimiters, action, how to highlight.
+* Flashing::                    Highlighting the region temporarily
+* Channels::                    Sending lines through communication channels.
+@end menu
+
+@node    Kinds of Regions, Kinds of Actions, Executing Regions, Executing Regions
+@section Kinds of Regions
+
+Current kinds of regions: Emacs's region (example, M-x eev), bounded
+regions (M-x eev-bounded or <f3>), sexp before point (M-E and <digit>
+M-E), sexp before eol (M-e and <digit> M-e), current line (<f9>, i.e.,
+eechannel-do-this-line), no region (for eesteps-do-step).
+
+@node    Kinds of Actions, eesteps, Kinds of Regions, Executing Regions
+@section Kinds of Actions
+
+Building blocks: executing as Lisp, saving to a file, running through
+a shell immediately, flashing, sending a signal, executing one of the
+stored steps.
+
+@node    eesteps, Defaults for Bounded Regions, Kinds of Actions, Executing Regions
+@section eesteps
+
+Try this: execute:
+
+@example
+(eesteps '("C-x b * scratch * RET"
+	     "foobar"
+           "3*<left>"
+           (insert "!")))
+@end example
+
+then type @key{F12} four times, slowly.  Emacs will:
+
+@enumerate
+@item
+switch to the buffer "*scratch*"
+@item
+insert "foobar"
+@item
+move the point left three characters
+@item
+insert "!".
+@end enumerate
+
+Typing another @key{F12} will give an error ("No more steps").
+
+Here's how this works, internally: the variable `eesteps-list' holds a
+list of "steps" to execute, and the variable `eesteps-pos' holds a
+pointer (a number) saying where we are in that list; the function
+`eesteps' receives a list of steps, stores that in `eesteps-list' and
+resets `eesteps-pos' to 0.
+
+The steps in `eesteps-list' can be either lists -- and in this case
+executing the step means evaluating the list -- or strings; strings
+are interpreted as sequences of keys, written in the verbose format
+used by `edmacro-mode'.
+
+@example
+(find-eev "eev-dev.el" "eesteps")
+(find-eev "eev-dev.el" "eek")
+(find-eev "eev-dev.el" "eek0")
+(find-efile "")
+(find-efile "edmacro.el")
+@end example
+
+The function @code{eek} is a kind of ``hyperlink to executing a key
+sequence''; it is used by @code{eesteps-do-step}. @code{eek0} is
+similar but uses Emacs's native format for keyboard macros, which is
+usually more compact and harder to read.
+
+[Problem: eek and eek0 run their strings as macros, but macros runs
+in a kind of non-verbose mode - M-w doesn't give visual feedback]
+
+
+@node    Defaults for Bounded Regions, Flashing, eesteps, Executing Regions
+@section Defaults for Bounded Regions
+
+@node    Flashing, Channels, Defaults for Bounded Regions, Executing Regions
+@section Flashing
+
+@node    Channels,  , Flashing, Executing Regions
+@section Channels
+
+This is a new feature that is très chic: controlling several programs
+at the same time. Click on the screenshot to enlarge.
+
+@example
+(find-eimage0 "doc/shot-f9.png" 1 nil "40%")
+(find-eev "eegchannel")
+@end example
+
+
+News: we can use the same trick - save the "line" in a file, then send
+a SIGUSR1 to the process responsible for the channel - with strings
+that are not necessarily lines and with controlling processes that are
+no eegchannel; see:
+
+@example
+(find-eevex "python.e" "eechannel-python")
+(find-eevex "tcltk.e"  "eechannel-tcl")
+@end example
+
+
+
+
+
+@node    Hyperlinks, Technicalities, Executing Regions, Top
+@chapter Hyperlinks
+
+@menu
+* Kinds of Hyperlinks::         To files, info, man, Emacs structures, etc.
+* Pos-Spec Lists::              Pointing to a position in a page.
+* code-c-d::                    Generating many hyperlink functions at once.
+* Generating Hyperlinks::       Generating many hyperlinks at once.
+@end menu
+
+@node    Kinds of Hyperlinks, Pos-Spec Lists, Hyperlinks, Hyperlinks
+@section Kinds of Hyperlinks
+
+@node    Pos-Spec Lists, code-c-d, Kinds of Hyperlinks, Hyperlinks
+@section Pos-Spec Lists
+
+@node    code-c-d, Generating Hyperlinks, Pos-Spec Lists, Hyperlinks
+@section code-c-d
+
+@node    Generating Hyperlinks,  , code-c-d, Hyperlinks
+@section Generating Hyperlinks
+
+
+@node    Technicalities, Projects, Hyperlinks, Top
+@chapter Technicalities
+
+@menu
+* Glyphs::                      
+* Compose Pairs::               
+* ee-expand::                   
+@end menu
+
+@node    Glyphs, Compose Pairs, Technicalities, Technicalities
+@section Glyphs
+
+To type the red stars in these delimiters, use C-q C-o. This inserts
+a "literal C-o" in the text, whose ascii code is 15; it would
+normally be displayed as "^O", but we change that to a red star
+using "glyphs" (see the file glyphs.el). glyphs.el defines several
+other non-standard glyphs, like "«" and "»". We can enter those
+typing M-, < < and M-, > >, respectively. The function associated to
+`M-,', `compose-two-keys', is defined in compose.el. Neither glyphs
+nor these "compose pairs" would be strictly needed for eev, but I
+find them convenient.
+
+@example
+(find-eev "glyphs.el")
+(find-eev "compose.el")
+@end example
+
+
+@node    Compose Pairs, ee-expand, Glyphs, Technicalities
+@section Compose Pairs
+
+@node    ee-expand,  , Compose Pairs, Technicalities
+@section ee-expand
+
+
+@node    Projects, Two Halves, Technicalities, Top
+@chapter Projects
+
+@menu
+* Tutorials for Languages::     
+* Internet Skills for Disconnected People::  
+* Quick References::            
+@end menu
+
+@node    Tutorials for Languages, Internet Skills for Disconnected People, Projects, Projects
+@section Tutorials for Languages
+
+@node    Internet Skills for Disconnected People, Quick References, Tutorials for Languages, Projects
+@section Internet Skills for Disconnected People
+
+@node    Quick References,  , Internet Skills for Disconnected People, Projects
+@section Quick References
+
+
+
+
+@node    Two Halves, Concept Index, Projects, Top
+@chapter Splitting Eev in Two Halves (and Their Frontier)
+
+Eev is mainly composed of two parts: one that deals with creating and
+following elisp hyperlinks, and another one that is concerned with
+selecting some region of a text and sending it to an external program.
+Usually the externel program is a shell, and ``sending'' the region
+means just saving it into a certain file --- a ``temporary script''.
+
+Actually this divison in two parts doesn't work very well --- the
+frontier is blurry. In both halves what happens is that we are
+executing something.
+
+[Doing something means executing code.]
+
+[When we follow a hyperlink with M-e the code is visible; when we
+type, say, M-x eev, the code for eev is not visible, but it's not hard
+to access, either. And the code that executes backward-sexp /
+buffer-substring / read / eval is also not visible.]
+
+[In a sense, M-x eev is just half of the execution of something; we
+still need to go to a shell and make it do the rest. But it is also a
+task complete in itself --- save the region somewhere.]
+
+[Actually we are doing bigger tasks. What we are doing on the computer
+is just a part of them.]
+
+
+
+@menu
+* Saving::                      Saving temporary scripts.
+* Links::                       
+* Actions to Code in Emacs::    
+* Hybrid Functions::            
+* More on Hyperlinks::          
+@end menu
+
+@node    Saving, Links, Two Halves, Two Halves
+@section Saving Temporary Scripts
+
+@example
+(find-eimage0 (ee-eevfile "doc/diag-save.jpg") 1 0 'inline)
+@end example
+
+The diagram above shows what is involved in writing some lines of
+code for an external program (most typically a shell) in Emacs and
+then making the program execute those lines. I've made a commented
+screenshot about that:
+
+
+
+
+
+@example
+(find-eevfile "doc/shot-f3.png")
+@end example
+
+The "technically simpler" way - that is, the one involving less
+functions - to send commands to a shell is to write the commands as
+text in a buffer, then mark the region containing these commands,
+then type `M-x eev'; that will save the region in a certain
+temporary file. The name of that file is given by a certain
+environment variable - $EE, usually set to ~/eev-current/tmp/ee.sh -
+and that value of variable is set in rcfiles - check your .bashrc,
+.zshrc and .emacs after installation. Then to execute these commands
+we go to a shell and type `ee'; `ee' is a shell function (also
+defined in .bashrc/.zshrc) that "sources" the contents of $EE.
+
+It is usually more practical to write the commands inside a "region"
+bounded by delimiters (see the "shot-f3.png" screenshot above), then
+just place the cursor inside that region and type <f3>. By default
+<f3> will execute `eev-bounded', that will run `eev' in that bounded
+region; but there are several ways to change this default. The
+variable `eeb-defaults' contains the "default bounded function", the
+delimiters to use, and other things; if you another "bounded
+function" explicitly, say, with `M-x eelatex-bounded', that will set
+the defaults - the next time you time <f3> it will run
+`eelatex-bounded' using block delimiters that make more sense for
+LaTeX - "\n%\n" instead of "\n#\n". So actually <f3> runs
+`eeb-default'.
+
+[Actually the diagram is a bit misleading... eev-bounded calls
+eeb-default[s], or something like that. Explain and show how the old
+implementation was]
+
+@example
+(find-eev "eev-dev.el")
+@end example
+
+@node    Links, Actions to Code in Emacs, Saving, Two Halves
+@section The other half: following and creating Elisp hyperlinks
+
+@example
+(find-eimage0 "doc/diag-links.jpg" 1 2 'inline)
+@end example
+
+Emacs's support for executing Lisp expressions
+(a.k.a. "S-expressions", or "sexps") embedded in any kind of text
+lets us put some simple types of hyperlinks anywhere; for example,
+typing `C-x C-f /usr/share/doc/bash' or `M-x find-file
+/usr/share/doc/bash' has the same effect as placing the cursor after
+the text (find-file "/usr/share/doc/bash") and executing that with
+C-x C-e or with M-e; the effect is to create a buffer visiting
+/usr/share/doc/bash/ - that, incidentally, is a directory, so the
+buffer will be in "dired mode".
+
+Eev defines the function `find-fline', that is a bit more adequate
+than `find-file' for hyperlinks. For example,
+
+@example
+(find-fline "/usr/share/doc/bash/" "FAQ")
+@end example
+
+will do the same but will also place the cursor after the first
+occurence of the string "FAQ" in the buffer. Most hyperlinks
+functions in eev support this kind of finer control; the optional
+arguments after the file name are called the "pos-spec-list".
+
+If we need to create links to several files inside a certain
+directory we can use `code-c-d': for example, (code-c-d "ud"
+"/usr/share/doc/") will define a function `find-udfile' and several
+others with names like `find-ud___' `ee-ud___'.
+
+Until some time ago we had to write almost all these hyperlinks by
+hand - there were a function called `inn', that would insert a
+hyperlink to the last Info node visited, and `dff' and `dfa', that
+would convert lines containing names of Debian packages into
+hyperlinks to their descriptions, to their lists of files and to
+their documentation directory, but just that.  Then in November of
+2004 I got an idea for a group of functions that would take either a
+file being visited, or a name of an Emacs Lisp function, or a key
+sequence, or several other things, and would create a temporary
+buffer containing several interesting hyperlinks about that thing.
+For example: typing `M-h f' on a buffer visiting
+/usr/share/doc/bash/examples/ gives us a buffer like this:
+
+@example
+ ___________________________________________________________ 
+|(find-file-links "/usr/share/doc/bash/examples/")          |
+|                                                           |
+|(find-fline "/usr/share/doc/bash/examples/")               |
+|                                                           |
+|(find-bashfile "examples/")                                |
+|(find-udfile "bash/examples/")                             |
+|                                                           |
+|                                                           |
+|                                                           |
+|--:**  *Elisp hyperlinks*   All L9      (Fundamental)------|
+|___________________________________________________________|
+@end example
+
+
+In this case there aren't any surprising hyperlinks (but try @key{M-h
+M-k <del>}, @key{M-h M-v ctl-x-map} or @key{M-h M-d bash}!) but it is
+clear that we can not only follow each of these hyperlinks but also
+edit them and copy them to more permanent places.
+
+There are a few special keys for working on these hyperlinks. @key{M-h
+M-2} or @key{M-h 2} will duplicate the current line, @key{M-h M-y} ---
+the name is to remind us of @key{C-y} --- will paste the last element
+of the kill ring as a pos-spec; for example, if the last string we
+killed (say, with @key{C-w}) was ``scripts'' then @key{M-h M-2 M-h
+M-y} will transform:
+
+@example
+(find-udfile "bash/examples/")
+@end example
+
+into:
+
+@example
+(find-udfile "bash/examples/")
+(find-udfile "bash/examples/" "scripts")
+@end example
+
+There are currently no special keys to help us build code-c-d
+expressions --- but check this:
+
+@example
+(find-efile "hippie-exp.el")
+(global-set-key [f11] 'hippie-expand)
+@end example
+
+then try to type part of a file name and use @key{f11} to complete it.
+
+See (find-eev "eev-insert.el")
+
+
+@node    Actions to Code in Emacs, Hybrid Functions, Links, Two Halves
+@section Emacs's tools for transforming actions into code
+
+[To be written. Mention debugging, C-h k, interactive calls, keymaps,
+modes.]
+
+
+
+@node    Hybrid Functions, More on Hyperlinks, Actions to Code in Emacs, Two Halves
+@section The frontier: hybrid functions
+
+[To be written.]
+
+#
+# (eev-bounded)
+wget --help
+
+#
+# (eev "wget --help")
+# (find-sh "wget --help")
+
+#
+inkscape $EEVDIR/doc/diag-save.svg
+#
+# (eev "inkscape $EEVDIR/doc/diag-save.svg &")
+
+eev or find-sh0 links inside lisp comments
+eev or find-sh  links inside shell comments
+
+hybrid links will exist every time that we are learning a new program
+and still don't know how to make links to it using more common-looking
+links.
+
+
+@node    More on Hyperlinks,  , Hybrid Functions, Two Halves
+@section More on hyperlinks (plus garbage)
+
+[Fix this, give examples]
+
+[and so we don't need to quote portions of external texts inside an
+e-script; instead, we can point directly to the original sources. Eev
+defines many kinds of "hyperlinks" like these: for text files, for
+info manuals, for manpages, for ps/pdf/dvi/html files, for the output
+of shell commands, for Emacs's own source code in Lisp or in C, for
+Debian packages, for images, and a few others.]
+
+The two hyperlinks below are equivalent:
+
+  (find-man "1 expect" "\nCOMMANDS" "\n       interact [string1 body1] ...")
+  (find-expcommand "interact [string1 body1] ...")
+
+The first one opens the manpage for the program Expect (like "man 1
+expect"), then searches for the first ocurrence of a newline followed
+by the string "COMMANDS" -- that's the beginning of the section of the
+manpage that describes expect's commands --, then searches for the
+first place after that where the string "interact [string1 body1] ..."
+(preceded by a newline and exactly 8 spaces) occurs; that's the point
+of the manpage where is the description of the command "interact".
+
+the underlying idea (or "belief"?) is that we should be able to
+"record" all kinds of textual interactions with the machine in
+e-scripts, in a way that will let us "play back" these interactions
+later - maybe with modifications - and maybe even share them with
+other people.
+
+Also: readability. Recording the way to open up an info page as a
+series of keys is not very useful... (give an example). Idem for
+mouseclicks. Show how commands in Gimp have textual names:
+
+# (find-sh "cd ~/.gimp-2.0/; sort menurc")
+
+E-scripts may be a more powerful way to communicate
+actions and procedures than either finished programs or texts and
+how-tos, which usually describe most of the steps using human
+languages.
+
+
+
+
+
+
+
+
+
+
+@cindex Sample index entry
+
+@node    Concept Index,  , Two Halves, Top
+@unnumbered Concept Index
+
+@printindex cp
+@contents
+@bye
+
+@c Local Variables:
+@c coding:  raw-text-unix
+@c modes:   (fundamental-mode emacs-lisp-mode texinfo-mode)
+@c sentence-end-double-space: t
+@c End:

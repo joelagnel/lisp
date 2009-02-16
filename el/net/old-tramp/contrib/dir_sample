@@ -1,0 +1,17 @@
+This is the sample file ...dir_sample.  Use it as a skeleton
+dir file to make a tramp.info entry.  It will be concatenated
+into the rest of the info heirarchy if your info files are
+set up correctly.
+
+File: dir,	Node: Top	This is the top of the INFO tree
+
+  This (the Directory node) gives a menu of major topics.
+  Typing "q" exits, "?" lists all Info commands, "d" returns here,
+  "h" gives a primer for first-timers,
+  "mEmacs<Return>" visits the Emacs manual, etc.
+
+  In Emacs, you can click mouse button 2 on a menu item or cross reference
+  to select it.
+
+* Menu:
+

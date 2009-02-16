@@ -1,0 +1,19 @@
+;; Object ecb/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "ecb/"
+  :tables (list 
+   (semanticdb-table "ecb.el"
+    :major-mode 'emacs-lisp-mode
+    :tags 'nil
+    :file "ecb.el"
+    )
+   (semanticdb-table "ecb-speedbar.el"
+    :major-mode 'emacs-lisp-mode
+    :tags 'nil
+    :file "ecb-speedbar.el"
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

@@ -1,0 +1,58 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Standard%20activation">Standard activation</a>,
+Next:<a rel=next accesskey=n href="Automatic-activation.html#Automatic%20activation">Automatic activation</a>,
+Previous:<a rel=previous accesskey=p href="Activation-and-Deactivation.html#Activation%20and%20Deactivation">Activation and Deactivation</a>,
+Up:<a rel=up accesskey=u href="Activation-and-Deactivation.html#Activation%20and%20Deactivation">Activation and Deactivation</a>
+<hr><br>
+
+<h3>Standard activation and deactivation</h3>
+
+<p>Call <kbd>M-x ecb-activate</kbd> and <kbd>M-x ecb-deactivate</kbd> to activate
+or deactivate ECB<a rel=footnote href="#fn-1"><sup>1</sup></a>. If you want ECB started in a
+new frame see the option <code>ecb-new-ecb-frame</code> (default is nil). 
+<code>ecb-activate</code> always raises and selects the ECB-frame even if
+ECB is already started.
+
+<p>Because ECB is a global minor-mode it can also be
+(de)activated/toggled by <kbd>M-x ecb-minor-mode</kbd>.
+
+<p><a name="Activation%20hook-sequence"></a>
+The following sequence of hooks is evaluated during activation of ECB:
+<ol type=1 start=1>
+</p><li><code>ecb-before-activate-hook</code>
+<li>&lt;All actions for activation but no layout drawing&gt;
+<li><code>ecb-activate-before-layout-draw-hook</code>
+<li><code>ecb-redraw-layout-before-hook</code>
+<li>&lt;Drawing the layout&gt;
+<li><code>ecb-redraw-layout-after-hook</code>
+<li><code>ecb-activate-hook</code>
+</ol>
+
+<p><a name="Deactivation%20hook-sequence"></a>
+The following sequence of hooks is evaluated during deactivation of
+ECB:
+<ol type=1 start=1>
+</p><li><code>ecb-before-deactivate-hook</code>
+<li>&lt;All actions for deactivation of ECB&gt;
+<li><code>ecb-deactivate-hook</code>
+</ol>
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>Activation is also possible via the menu
+``Tools --&gt; Start Code Browser (ECB)''.</p>
+
+</ol><hr>
+
+</body></html>
+

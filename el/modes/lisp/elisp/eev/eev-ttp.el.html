@@ -1,0 +1,460 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eev-ttp.el (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #b0c4de;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .doc {
+      }
+      .eev-glyph-face-yellow-on-red {
+        /* eev-glyph-face-yellow-on-red */
+        color: #ffff00;
+        background-color: #ff0000;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .negation-char {
+      }
+      .regexp-grouping-backslash {
+      }
+      .regexp-grouping-construct {
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #98fb98;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #ffc0cb;
+        font-weight: bold;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;; </span><span class="comment">eev-ttp.el: support for storing hyperlinks targets inside text properties.
+</span><span class="comment-delimiter">;; </span><span class="comment">Copyright (C) 2005 Free Software Foundation, Inc.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This file is part of GNU eev.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is free software; you can redistribute it and/or modify
+</span><span class="comment-delimiter">;; </span><span class="comment">it under the terms of the GNU General Public License as published by
+</span><span class="comment-delimiter">;; </span><span class="comment">the Free Software Foundation; either version 2, or (at your option)
+</span><span class="comment-delimiter">;; </span><span class="comment">any later version.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is distributed in the hope that it will be useful,
+</span><span class="comment-delimiter">;; </span><span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of
+</span><span class="comment-delimiter">;; </span><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU General Public License for more details.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">You should have received a copy of the GNU General Public License
+</span><span class="comment-delimiter">;; </span><span class="comment">along with GNU Emacs; see the file COPYING.  If not, write to the
+</span><span class="comment-delimiter">;; </span><span class="comment">Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+</span><span class="comment-delimiter">;; </span><span class="comment">Boston, MA 02111-1307, USA.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Author:     Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Maintainer: Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Version:    2005may20
+</span><span class="comment-delimiter">;; </span><span class="comment">Keywords:   e-scripts, hyperlinks, hypertext
+</span>
+<span class="comment-delimiter">;;; </span><span class="comment">Commentary:
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Danger! Danger! This is a piece of VERY IMMATURE EXPERIMENTAL
+</span><span class="comment-delimiter">;; </span><span class="comment">SOFTWARE! I'm only including it in the eev package because it has
+</span><span class="comment-delimiter">;; </span><span class="comment">some interesting ideas that I would like to make public and to
+</span><span class="comment-delimiter">;; </span><span class="comment">discuss with some of the people from the mailing list!
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">The main idea, short form: there are several packages for hypertext
+</span><span class="comment-delimiter">;; </span><span class="comment">for emacs around - planner, howm, what else? - and each one of them
+</span><span class="comment-delimiter">;; </span><span class="comment">offers a few kinds of hyperlinks, which implement a limited class
+</span><span class="comment-delimiter">;; </span><span class="comment">of "actions" that are performed when we "follow" these
+</span><span class="comment-delimiter">;; </span><span class="comment">links... actually these packages also implement "lisp://" or
+</span><span class="comment-delimiter">;; </span><span class="comment">"%lisp%" hyperlinks that can hold arbitrary Lisp code, and so links
+</span><span class="comment-delimiter">;; </span><span class="comment">can do anything; but what happens if we try a simpler solution, in
+</span><span class="comment-delimiter">;; </span><span class="comment">which we implement only one kind of hyperlink, whose action is to
+</span><span class="comment-delimiter">;; </span><span class="comment">evaluate a piece of Lisp? Also, what happens if the same process
+</span><span class="comment-delimiter">;; </span><span class="comment">that associates some Lisp code to a region of text can also
+</span><span class="comment-delimiter">;; </span><span class="comment">associate arbitrary text properties? Think on an enriched mode on
+</span><span class="comment-delimiter">;; </span><span class="comment">steroids, with tools for making parts of the text "active"...
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">The main idea, long form: text with arbitrary text properties can
+</span><span class="comment-delimiter">;; </span><span class="comment">be stored in files if the properties are converted to an "unpacked"
+</span><span class="comment-delimiter">;; </span><span class="comment">form; files in a certain format where the text properties appear
+</span><span class="comment-delimiter">;; </span><span class="comment">textually and side-by-side with the text that they apply to can be
+</span><span class="comment-delimiter">;; </span><span class="comment">"packed" into Emacs's notion of "text with properties". An example:
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;                                  </span><span class="comment">unpack         
+</span><span class="comment-delimiter">;;                                 </span><span class="comment">&lt;------
+</span><span class="comment-delimiter">;;   </span><span class="comment">^Asome text^B:file "~/foo"^C  ------&gt;   some text
+</span><span class="comment-delimiter">;;                                  </span><span class="comment">pack   (ttp-src ":file \"~/foo\""
+</span><span class="comment-delimiter">;;                                          </span><span class="comment">ttp-action (find-fline "~/foo")
+</span><span class="comment-delimiter">;;                                        </span><span class="comment">ttp-message "(find-fline \"~/foo\")"
+</span><span class="comment-delimiter">;;                                        </span><span class="comment">category ttp-link)
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">I'm writing "^A", "^B" and "^C" for what are actually "\^A", "\^B"
+</span><span class="comment-delimiter">;; </span><span class="comment">and "\^C" respectively, i.e., chars 1, 2, 3.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Note the property "(category ttp-link)" in the "some text" above; by
+</span><span class="comment-delimiter">;; </span><span class="comment">doing
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;   </span><span class="comment">(setplist 'ttp-link '(face ...))
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">we can make it display in another face; there are also some overlay
+</span><span class="comment-delimiter">;; </span><span class="comment">tricks that I'm not going to describe now (the code is not ready!)
+</span><span class="comment-delimiter">;; </span><span class="comment">that let us use the packed thing as a hyperlink.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">About the data structures: internally we deal with "^A...^B...^C"s
+</span><span class="comment-delimiter">;; </span><span class="comment">chunks in a buffer by passing around 6-uples of the form (SA EA SB
+</span><span class="comment-delimiter">;; </span><span class="comment">EB SC EC) that tell the starting and ending positions of the ^A, ^B
+</span><span class="comment-delimiter">;; </span><span class="comment">and ^C; I call these structures "seabc"s in the code. Similarly, a
+</span><span class="comment-delimiter">;; </span><span class="comment">"packed chunk" is represented by a pair (S E). The (slightly
+</span><span class="comment-delimiter">;; </span><span class="comment">outdated) chart below shows some of the main conversions that
+</span><span class="comment-delimiter">;; </span><span class="comment">appear in the code:
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;     </span><span class="comment">sa,ea,sb,eb,sc,ec &lt;-- sa &lt;-- point
+</span><span class="comment-delimiter">;;     </span><span class="comment">:        |   ^
+</span><span class="comment-delimiter">;;     </span><span class="comment">:        v   :                            | ^
+</span><span class="comment-delimiter">;;     </span><span class="comment">:    propstr-+                            | |
+</span><span class="comment-delimiter">;;     </span><span class="comment">:      |   ^ :                     packing| |unpacking
+</span><span class="comment-delimiter">;;     </span><span class="comment">:      v   | :                            | |
+</span><span class="comment-delimiter">;;     </span><span class="comment">: proplist | :                            v |
+</span><span class="comment-delimiter">;;     </span><span class="comment">:   :      | :                             
+</span><span class="comment-delimiter">;;     </span><span class="comment">:   :      | :
+</span><span class="comment-delimiter">;;     </span><span class="comment">\...+....&gt; s,e &lt;---- s &lt;---- point
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">The code is divided into four main sections: (1) packing, (2)
+</span><span class="comment-delimiter">;; </span><span class="comment">unpacking, (3) overlays (which are used for highlighting packed
+</span><span class="comment-delimiter">;; </span><span class="comment">hyperlinks, displaying their targets in the echo area, and using a
+</span><span class="comment-delimiter">;; </span><span class="comment">special keymap when point is over a packed hyperlink), and (4)
+</span><span class="comment-delimiter">;; </span><span class="comment">ttp-mode, which activates overlays and displays targets.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">As the code is still very messy there's a section (5) too, which
+</span><span class="comment-delimiter">;; </span><span class="comment">holds the "rest".
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Problems: no way to pack and unpack many "links" at once (coming
+</span><span class="comment-delimiter">;; </span><span class="comment">soon!) - save a buffer with packed links while they are packed and
+</span><span class="comment-delimiter">;; </span><span class="comment">you lose the information about their properties - the message that
+</span><span class="comment-delimiter">;; </span><span class="comment">shows the target of the link is always displayed, ideally it should
+</span><span class="comment-delimiter">;; </span><span class="comment">only be displayed when it will not obscure important messages - the
+</span><span class="comment-delimiter">;; </span><span class="comment">packer is still very dumb, it is tuned to produce only hyperlinks
+</span><span class="comment-delimiter">;; </span><span class="comment">(not arbitrary text properties; but this will be fixed soon).
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">(find-eCvariable 'post-command-hook)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-eCvariable 'echo-area-clear-hook)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-ecvssrcfile "keyboard.c" "\ncommand_loop_1" "Clear the echo area.")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-eetcfile "NEWS" "echo-area-clear-hook")
+</span>
+
+
+<span class="comment-delimiter">;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Section 1: packing, i.e., working on `</span><span class="comment"><span class="constant">seabc</span></span><span class="comment">'s, and converting
+</span><span class="comment-delimiter">;; </span><span class="comment">"^Atext^Bpropstr^C"s to "text"s (with properties).
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="ttp-point-to-sa"><span class="function-name">ttp-point-to-sa</span></a> ()
+  <span class="doc">"If point is under a ^A then return point, otherwise search for the
+closest ^A before point and return its position (error if not found)."</span>
+  (<span class="keyword">if</span> (eq (char-after) ?\^A) (point)
+    (<span class="keyword">save-excursion</span> (search-backward <span class="string">"\^A"</span>) (point))))
+
+(<span class="keyword">defun</span> <a name="ttp-sa-to-seabc"><span class="function-name">ttp-sa-to-seabc</span></a> (sa)
+  <span class="doc">"If SA points to the beginning of an expression like
+\"^Aoriginaltext^Bpropstr^C\" then return (SA EA SB EB SC EC);
+otherwise return nil."</span>
+  (<span class="keyword">save-excursion</span>
+    (goto-char sa)
+    (<span class="keyword">if</span> (looking-at <span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">\^A</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\^A\^B\^C]*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">\^B</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\^A\^B\^C]*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">\^C</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span>)
+        (list (match-beginning 1) (match-end 1)
+              (match-beginning 2) (match-end 2)
+              (match-beginning 3) (match-end 3)))))
+
+(<span class="keyword">defun</span> <a name="ttp-seabc-to-propstr"><span class="function-name">ttp-seabc-to-propstr</span></a> (seabc)
+  <span class="doc">"SEABC is a list (SA EA SB EB SC EC); return the text between EB and SC."</span>
+  (buffer-substring-no-properties (nth 3 seabc) (nth 4 seabc)))
+
+(<span class="keyword">defun</span> <a name="ttp-propstr-to-proplist"><span class="function-name">ttp-propstr-to-proplist</span></a> (propstr)
+  <span class="doc">"This function is very dumb now - just a `</span><span class="doc"><span class="constant">read</span></span><span class="doc">'. That should change soon."</span>
+  (read propstr))
+
+(<span class="keyword">defun</span> <a name="ttp-seabc-proplist-pack"><span class="function-name">ttp-seabc-proplist-pack</span></a> (seabc proplist)
+  <span class="doc">"SEABC is a list (SA EA SB EB SC EC) pointing to a text like
+\"^Aoriginaltext^Bpropstr^C\" and PROPLIST is a plist; keep just
+\"originaltext\", setting its properties to proplist."</span>
+  (delete-region (nth 2 seabc) (nth 5 seabc))
+  (set-text-properties (nth 1 seabc) (nth 2 seabc) proplist)
+  (delete-region (nth 0 seabc) (nth 1 seabc)))
+
+
+<span class="comment-delimiter">;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Section 2: unpacking, i.e., converting `</span><span class="comment"><span class="constant">se</span></span><span class="comment">'s to `</span><span class="comment"><span class="constant">seabc</span></span><span class="comment">'s, and
+</span><span class="comment-delimiter">;; </span><span class="comment">"text"s to "^Atext^Bpropstr^C"s:
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="ttp-point-to-s"><span class="function-name">ttp-point-to-s</span></a> ()
+  <span class="doc">"A stubbish function - this is no real good."</span>
+  (<span class="keyword">let*</span> ((pos (1+ (point)))
+         (s (previous-single-property-change pos 'ttp-src)))
+    s))
+
+(<span class="keyword">defun</span> <a name="ttp-s-to-se"><span class="function-name">ttp-s-to-se</span></a> (s)
+  <span class="doc">"Convert S to a structure (S E), indicating a range with constant
+ttp-src property. If E would be equal to S then return nil instead."</span>
+  (<span class="keyword">let</span> ((e (next-single-property-change s 'ttp-src)))
+    (<span class="keyword">if</span> e (list s e)
+      (<span class="keyword">if</span> (&gt; (point-max) s) (list s (point-max))))))
+
+(<span class="keyword">defun</span> <a name="ttp-se-to-propstr"><span class="function-name">ttp-se-to-propstr</span></a> (se)
+  <span class="doc">"SE is a pair (S E); return the text property ttp-src at S."</span> 
+  (get-text-property (car se) 'ttp-src))
+
+(<span class="keyword">defun</span> <a name="ttp-se-propstr-unpack"><span class="function-name">ttp-se-propstr-unpack</span></a> (se propstr)
+  <span class="doc">"SE is a pair (S E) and PROPSTR is a string; insert stuff before S and
+after E such that \"originaltext\" becomes \"^Aoriginaltext^Bpropstr^C\".
+This function removes all text properties on originaltext."</span>
+  (<span class="keyword">save-excursion</span>
+    (goto-char (cadr se))
+    (insert-before-markers <span class="string">"\^B"</span> propstr <span class="string">"\^C"</span>))
+  (set-text-properties (car se) (cadr se) nil)
+  (<span class="keyword">save-excursion</span>
+    (goto-char (car se))
+    (insert-before-markers <span class="string">"\^A"</span>)))
+
+
+
+<span class="comment-delimiter">;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Section 3: overlays
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;;;;</span><span class="comment">
+</span>
+(<span class="keyword">defvar</span> <a name="ttp-overlay"><span class="variable-name">ttp-overlay</span></a> nil
+  <span class="doc">"The one (global) overlay used for the active link."</span>)
+(<span class="keyword">defvar</span> <a name="ttp-active-keymap"><span class="variable-name">ttp-active-keymap</span></a> nil <span class="doc">"The keymap for active links."</span>)
+(<span class="keyword">defvar</span> <a name="ttp-active-plist"><span class="variable-name">ttp-active-plist</span></a>  nil <span class="doc">"The overlay property list for active links."</span>)
+
+(<span class="keyword">defun</span> <a name="ttp-overlay-destroy"><span class="function-name">ttp-overlay-destroy</span></a> ()
+  <span class="doc">"Destroy the current ttp-overlay."</span>
+  (<span class="keyword">when</span> ttp-overlay (delete-overlay ttp-overlay) (setq ttp-overlay nil)))
+
+(<span class="keyword">defun</span> <a name="ttp-overlay-create"><span class="function-name">ttp-overlay-create</span></a> (se plist messagefmt <span class="type">&amp;rest</span> args)
+  <span class="doc">"Destroy the current ttp-overlay, create a new one, and issue a message."</span>
+  (ttp-overlay-destroy)
+  (setq ttp-overlay (make-overlay (car se) (cadr se)))
+  (<span class="keyword">while</span> plist
+    (overlay-put ttp-overlay (car plist) (cadr plist))
+    (setq plist (cddr plist)))
+  (<span class="keyword">let</span> ((message-log-max nil)
+        (message-truncate-lines nil))
+    (apply 'message messagefmt args)))
+
+<span class="comment-delimiter">;; </span><span class="comment">(if ttp-active-keymap () ...)
+</span>(setq ttp-active-keymap (make-sparse-keymap))
+(define-key ttp-active-keymap <span class="string">"\M-e"</span> 'ttp-do-action)
+
+(setq ttp-active-plist `(face (<span class="builtin">:underline</span> t) keymap ,ttp-active-keymap))
+
+<span class="comment-delimiter">;; </span><span class="comment">A test:
+</span>(<span class="keyword">defun</span> <a name="ttp-foo"><span class="function-name">ttp-foo</span></a> () (interactive)
+  (ttp-overlay-create (list (point) (mark)) ttp-active-plist <span class="string">"-&gt; ttp-foo..."</span>))
+
+
+<span class="comment-delimiter">;; </span><span class="comment">(defun ttp-overlay-create-from-se (se)
+</span><span class="comment-delimiter">;; </span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">(defun ttp-overlay-update ()
+</span><span class="comment-delimiter">;;   </span><span class="comment">(ttp-overlay-destroy)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(if (text-prop-ttp-src)
+</span><span class="comment-delimiter">;;       </span><span class="comment">(let ((se ttp-point-to-se)
+</span><span class="comment-delimiter">;; </span><span class="comment">         (
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Not being used yet:
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defun</span> <a name="ttp-set-category"><span class="function-name">ttp-set-category</span></a> (symbol plist)
+  (set symbol plist)
+  (setplist symbol plist))
+
+(ttp-set-category 'ttp-active
+                  `(face (<span class="builtin">:underline</span> t)
+                    keymap ,ttp-active-keymap))
+
+
+
+
+
+<span class="comment-delimiter">;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Section 4: ttp-mode
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;;;;</span><span class="comment">
+</span>
+(<span class="keyword">defvar</span> <a name="ttp-overlay-mode-map"><span class="variable-name">ttp-overlay-mode-map</span></a> nil)
+(setq ttp-overlay-mode-map (make-sparse-keymap))
+<span class="comment-delimiter">;; </span><span class="comment">(define-key ttp-overlay-mode-map "\M-t"  'ttp-overlay-mode-update)
+</span>(define-key ttp-overlay-mode-map <span class="string">"\C-cp"</span>    'ttp-pack)
+(define-key ttp-overlay-mode-map <span class="string">"\C-c\C-p"</span> 'ttp-pack)
+(define-key ttp-overlay-mode-map <span class="string">"\C-cu"</span>    'ttp-unpack)
+(define-key ttp-overlay-mode-map <span class="string">"\C-c\C-u"</span> 'ttp-unpack)
+
+(<span class="keyword">define-minor-mode</span> <a name="ttp-overlay-mode"><span class="function-name">ttp-overlay-mode</span></a>
+  <span class="doc">"Toggles ttp link tracking and ttp link packing/unpacking keys."</span>
+  <span class="builtin">:init-value</span> t <span class="builtin">:global</span> t)
+
+(<span class="keyword">defun</span> <a name="ttp-on-link-p"><span class="function-name">ttp-on-link-p</span></a> (<span class="type">&amp;optional</span> pos)
+  <span class="doc">"Tells if POS (or point) is on a ttp link.
+This function just returns the value of the ttp-src property at POS."</span>
+  (get-text-property (or pos (point)) 'ttp-src))
+
+(<span class="keyword">defun</span> <a name="ttp-overlay-mode-update"><span class="function-name">ttp-overlay-mode-update</span></a> ()
+  <span class="doc">"Update the ttp overlay and the link message shown in the echo area.
+If there's no link at point then just make sure there's no ttp-overlay."</span>
+  (interactive)
+  (<span class="keyword">let</span> ((ttp-src (ttp-on-link-p)))
+    (<span class="keyword">if</span> ttp-src
+        (ttp-overlay-create (ttp-s-to-se (ttp-point-to-s))
+                            ttp-active-plist
+                            <span class="string">"-&gt; %s"</span> ttp-src)
+      (ttp-overlay-destroy))))
+
+(<span class="keyword">defun</span> <a name="ttp-overlay-mode-update-maybe"><span class="function-name">ttp-overlay-mode-update-maybe</span></a> ()
+  <span class="doc">"This function is run at post-command-hook.
+If ttp-overlay-mode is off it is a no-op; overlays (and messages) are only
+updated when ttp-overlay-mode is on."</span>
+  (<span class="keyword">if</span> ttp-overlay-mode (ttp-overlay-mode-update)))
+
+
+
+<span class="comment-delimiter">;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Misc things
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="ttp-propstr-to-proplist-1"><span class="function-name">ttp-propstr-to-proplist-1</span></a> (propstr)
+  <span class="doc">"Convert a propstr from a ^Atext^Bpropstr^C to a plist (in a certain way)"</span>
+  (<span class="keyword">let*</span> ((lst (read propstr)))          <span class="comment-delimiter">; </span><span class="comment">was (concat "(" propstr "\n)")
+</span>    `(face (<span class="builtin">:foreground</span> <span class="string">"green"</span>)
+      ttp-action ,lst
+      ttp-src ,propstr)))
+
+(<span class="keyword">defun</span> <a name="ttp-point-to-seabc"><span class="function-name">ttp-point-to-seabc</span></a> ()
+  <span class="doc">"Return a seabc for the ^A...^B...^C around point, aborts if there is none."</span>
+  (<span class="keyword">let*</span> ((sa (ttp-point-to-sa))
+         (seabc (ttp-sa-to-seabc sa)))
+    (<span class="keyword">if</span> (not seabc)
+        (<span class="warning">error</span> <span class="string">"No ^A...^B...^C structure around or before point"</span>))
+    (<span class="keyword">if</span> (&lt;= (nth 5 seabc) (point))
+        (<span class="warning">error</span> <span class="string">"No ^A...^B...^C structure around point"</span>))
+    seabc))
+
+(<span class="keyword">defun</span> <a name="ttp-pack"><span class="function-name">ttp-pack</span></a> ()
+  <span class="doc">"Pack the ^A...^B...^C around point, aborts if there is none."</span>
+  (interactive)
+  (<span class="keyword">let*</span> ((seabc (ttp-point-to-seabc))
+         (propstr (ttp-seabc-to-propstr seabc))
+         (proplist (ttp-propstr-to-proplist-1 propstr)))
+    (ttp-seabc-proplist-pack seabc proplist)))
+
+(<span class="keyword">defun</span> <a name="ttp-unpack"><span class="function-name">ttp-unpack</span></a> ()
+  <span class="doc">"Unpack the ttp link around point into an ^A...^B...^C."</span>
+  (interactive)
+  (<span class="keyword">let</span> ((propstr (get-text-property (point) 'ttp-src)))
+    (<span class="keyword">if</span> (not propstr)
+        (<span class="warning">error</span> <span class="string">"Point is not on a ttp link"</span>))
+    (ttp-se-propstr-unpack (ttp-s-to-se (ttp-point-to-s)) propstr)))
+
+(<span class="keyword">defun</span> <a name="ttp-do-action"><span class="function-name">ttp-do-action</span></a> ()
+  <span class="doc">"Execute (with eval) with ttp-action property of the char at point."</span>
+  (interactive)
+  (eval (get-text-property (point) 'ttp-action)))
+
+<span class="comment-delimiter">;; </span><span class="comment">An early test: use propertize to make a string with ttp-src message
+</span><span class="comment-delimiter">;; </span><span class="comment">and a colored face.
+</span>' (insert
+   <span class="string">"\n;; ab"</span>
+   (propertize <span class="string">"0123456"</span>
+               'face '(<span class="builtin">:foreground</span> <span class="string">"orange"</span>)
+               'ttp-src <span class="string">"Foo!"</span>)
+   <span class="string">"cdef"</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">For taking a screenshot...
+</span><span class="comment-delimiter">;; </span><span class="comment">(eev "emacs-cvs ~/elisp/eev-ttp.el -geometry 36x16 &amp;")
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">For debugging and convenience...
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunctiondescr 'edmacro-mode)
+</span><span class="comment-delimiter">;; </span><span class="comment">(add-hook    'post-command-hook 'ttp-overlay-mode-update-maybe)
+</span><span class="comment-delimiter">;; </span><span class="comment">(remove-hook 'post-command-hook 'ttp-overlay-mode-update-maybe)
+</span><span class="comment-delimiter">;; </span><span class="comment">(add-hook    'post-command-hook 'ttp-overlay-mode-update-maybe nil 'local)
+</span><span class="comment-delimiter">;; </span><span class="comment">(remove-hook 'post-command-hook 'ttp-overlay-mode-update-maybe 'local)
+</span><span class="comment-delimiter">;; </span><span class="comment">(setq debug-on-error t)
+</span><span class="comment-delimiter">;; </span><span class="comment">(setq debug-on-error nil)
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">The "real" test. Run these things to understand what this is all about.
+</span><span class="comment-delimiter">;; </span><span class="comment">A screenshot (of the demo below):
+</span><span class="comment-delimiter">;; <img src="doc/shot-eev-ttp.png" border=0></span><span class="comment">
+</span>' (load-file (buffer-file-name))
+' (add-hook    'post-command-hook 'ttp-overlay-mode-update-maybe)
+' (eesteps '((find-estring
+              (concat <span class="string">" \^Afstab\^B(find-fline \"/etc/fstab\")\^C\n"</span>
+                      <span class="string">" \^Aetc\^B(find-fline \"/etc/\")\^C\n"</span>))
+             <span class="string">"&lt;right&gt;"</span> <span class="string">"&lt;&lt;ttp-pack&gt;&gt;"</span>
+             <span class="string">"&lt;down&gt;"</span>  <span class="string">"&lt;&lt;ttp-pack&gt;&gt;"</span>
+             <span class="string">"&lt;up&gt;"</span> <span class="string">"&lt;right&gt;"</span>
+             <span class="string">"&lt;&lt;ttp-do-action&gt;&gt;""&lt;&lt;kill-this-buffer&gt;&gt;"</span>
+             <span class="string">"&lt;&lt;ttp-unpack&gt;&gt;"</span>
+             ))
+
+
+<span class="eev-glyph-face-yellow-on-red">L</span>
+<span class="comment-delimiter">;; </span><span class="comment">Local Variables:
+</span><span class="comment-delimiter">;; </span><span class="comment">coding:          raw-text-unix
+</span><span class="comment-delimiter">;; </span><span class="comment">modes:           (fundamental-mode emacs-lisp-mode)
+</span><span class="comment-delimiter">;; </span><span class="comment">End:
+</span></pre>
+  </body>
+</html>

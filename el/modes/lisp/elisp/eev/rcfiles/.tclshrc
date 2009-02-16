@@ -1,0 +1,15 @@
+# -*- mode: tcl -*-
+# This is the `rcfiles/.tclshrc' file of GNU eev.
+# This file is in the public domain.
+# Author and version: Eduardo Ochs, 2005jan07
+
+# The installation scripts of eev add the definition below to your
+# "~/.tclshrc". This file is not used. Duh.
+#
+# (find-eev "rcfiles/change" "eev_chunk_for_dottclshrc")
+# (find-eev "eev-dev.el" "ee-setenv")
+
+proc ee {} {
+  global env
+  uplevel #0 source $env(EEVTMPDIR)/ee.tcl
+}

@@ -1,0 +1,42 @@
+Install imaxima by unpacking the tarball and doing the usual incantation
+
+     ./configure
+     make
+     make install
+
+and put
+
+     (autoload 'imaxima "imaxima" "Image support for Maxima." t)
+
+in your `.emacs' file.
+
+If you want to use imath-mode, put
+
+     (autoload 'imath-mode "imath" "Interactive Math minor mode." t)
+
+in your `.emacs' file, too.
+
+To do line breaking imaxima requires the LaTeX package `breqn', which
+can be downloaded from `ftp://ftp.ams.org/pub/tex/'.
+
+The files in `breqn' must be installed in a place where TeX can find
+them.  In a typical teTeX installation you should put the `*.sty' and
+`*.sym' files in
+
+     `/usr/share/texmf/tex/latex/breqn/'
+
+and the documentation files in
+
+     `/usr/share/texmf/doc/latex/breqn/'.
+
+The files can also be installed in a number of other places - consult
+your TeX documentation for details.
+
+Now run `texhash' after installing the files.  You can use `kpsewhich'
+to verify that TeX is able to find the files, e.g.
+
+     kpsewhich breqn.sty
+
+To get the best image quality a fairly recent version of Ghostscript
+is recommended.  See the Info manaul for options suitable for using
+older versions of Ghostscript or not using Ghostscript at all

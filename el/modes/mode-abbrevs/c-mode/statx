@@ -1,0 +1,1 @@
+int stat(<cursor>const char *file_name, struct stat *buf);

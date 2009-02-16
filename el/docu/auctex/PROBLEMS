@@ -1,0 +1,35 @@
+* -*- outline -*- 
+
+* You are using Emacs 18 or 19, or XEmacs 19.
+
+Upgrade.  AUC TeX requires at least Emacs 20 or XEmacs 20.
+
+* You are using Win32.
+
+See <URL: http://www.math.auc.dk/~dethlef/Tips/>.
+
+* None if this completion or multifile stuff works...
+
+It must be enabled first, insert this in your emacs:
+
+	(setq-default TeX-master nil)
+	(setq TeX-parse-self t)
+	(setq TeX-auto-save t)
+
+Read also the chapters about parsing and multifile documents in the
+manual.  
+
+* When I save `foo.bib' AUC TeX forgets the information in `foo.tex'.
+
+For various reasons, AUC TeX ignores the extension when it store
+information about a file, so you should use unique base names for your
+files.  E.g. rename `foo.bib' to `foob.bib'.
+
+* TeX-save-document does not work.
+
+Make sure TeX-check-path contains "./" somewhere.
+
+* Ispell does not ignore TeX macros.
+
+GNU ispell 4.0 does not understand TeX.  Upgrade to International
+Ispell 3.1 which works much better on TeX documents.

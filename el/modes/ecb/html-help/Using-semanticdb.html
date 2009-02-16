@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Using%20semanticdb">Using semanticdb</a>,
+Previous:<a rel=previous accesskey=p href="Window-managers-and-ECB.html#Window-managers%20and%20ECB">Window-managers and ECB</a>,
+Up:<a rel=up accesskey=u href="Tips-and-tricks.html#Tips%20and%20tricks">Tips and tricks</a>
+<hr><br>
+
+<h3>Using semanticdb to jump to type-tags defined in other files</h3>
+
+<p>In OO-languages like CLOS, eieio and C++ there can be type-tags in the
+method-buffer which are somehow virtual because there is no definition
+in the current source-file. But such a virtual type collects all its
+outside defined members like methods in C++ which are defined in the
+<code>*.cc</code> file whereas the class-definition is defined in the
+associated header-file. ECB uses semanticdb to open the definition-file
+of such a tag and to jump to the definition of this tag. Same for
+parent-tags in the methods-buffer. This feature can only work
+correctly if semanticdb is well configured!
+
+<p>Here is a C++-example:
+
+<p>This class is defined in a file <code>ParentClass.h</code>:
+
+<br><pre>class ParentClass
+{
+protected:
+  int p;
+};
+</pre>
+
+<p>This class is defined in a file <code>ClassWithExternals.h</code>
+
+<br><pre>#include "ParentClass.h"
+
+class ClassWithExternals : public ParentClass
+{
+private:
+  int i;
+
+public:
+  ClassWithExternals();
+  ~ClassWithExternals();
+};
+</pre>
+
+<p>Both the constructor and the destructor of the class
+"ClassWithExternals" are defined in a file
+<code>ClassWithExternals.cc</code>:
+
+<br><pre>#include "test.h"
+
+ClassWithExternals::ClassWithExternals(int i,
+                                       boolean b,
+                                       char c)
+{
+  return;
+}
+
+void
+ClassWithExternals::~ClassWithExternals()
+{
+  return;
+}
+</pre>
+
+<p>ECB displays the contents of <code>ClassWithExternals.cc</code> in its methods-buffer like
+follows:
+
+<br><pre>[-] [Includes]
+ `- test.h
+[-] ClassWithExternals
+ |  +ClassWithExternals (+i:int, +b:class boolean, +c:char):ClassWithExternals
+ `- +~ClassWithExternals ():void
+</pre>
+
+<p>Both the constructor and the destructor of the class
+"ClassWithExternals" are grouped under their class-type. ECB now
+uses semanticdb to jump to the definition of class
+"ClassWithExternals" when you click onto the type-node
+"ClassWithExternals" in the methods-buffer.
+
+<p>The contents of <code>ClassWithExternals.h</code> are displayed like
+follows:
+
+<br><pre>[-] [Includes]
+ `- ParentClass.h
+[-] ClassWithExternals:class
+ |  [-] [Parents]
+ |   `- ParentClass
+ |  [-] [Variables]
+ |   `- -i:int
+ |  +ClassWithExternals ():ClassWithExternals
+ |  +~ClassWithExternals ():void
+ `- [+] [Misc]
+</pre>
+
+<p>ECB uses semanticdb to jump to the definition of the class
+"ParentClass" when you click onto the node "ParentClass".
+
+<p>To enable this feature <code>global-semanticdb-minor-mode</code> must be
+enabled and semanticdb must be correctly configured. This means
+mainly that the option <code>semanticdb-project-roots</code> must be setup
+well. See the manual of semanticdb for further informations about
+this.
+
+</body></html>
+

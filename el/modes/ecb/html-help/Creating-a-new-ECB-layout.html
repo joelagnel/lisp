@@ -1,0 +1,143 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Creating%20a%20new%20ECB-layout">Creating a new ECB-layout</a>,
+Previous:<a rel=previous accesskey=p href="Fixing-window-sizes.html#Fixing%20window%20sizes">Fixing window sizes</a>,
+Up:<a rel=up accesskey=u href="The-ECB-layout.html#The%20ECB-layout">The ECB-layout</a>
+<hr><br>
+
+<h4>Interactively creating new layouts</h4>
+
+<p>If you want to create your own ECB-layout then you can do this very
+easy "by example" with the command <code>ecb-create-new-layout</code>. 
+This command creates a new empty frame and offers a small set of keys
+to create the new layout by splitting windows. 
+<code>ecb-create-new-layout</code> and this couple of keys are your guide
+during the layout-creation-process<a rel=footnote href="#fn-1"><sup>1</sup></a>.
+
+<p>After calling <code>ecb-create-new-layout</code> you will be asked which
+type of layout you want to create: "left", "right", "top" or
+"left-right". Here you specify where the ECB-tree-windows/buffers
+should be located in the ECB-frame:
+
+<ul>
+<li>left: All ECB-tree-windows are located on the left side
+<li>right: All ECB-tree-windows are located on the right side
+<li>top: All ECB-tree-windows are located on the top side
+<li>left-right: All ECB-tree-windows are located on the left and
+right side
+</ul>
+
+<p>Depending on the type you choose the window is splitted by the values
+of the options <code>ecb-windows-width</code> (types "left", "right" and
+"left-right") or <code>ecb-windows-height</code> (type "top").
+
+<p>Afterwards you will see a frame like follows (here the layout-type is
+"left-right"):
+
+<br><pre>-----------------------------------------------------------------
+|&lt;point&gt;       |                                   |            |
+|              | ECB-layout creation mode          |            |
+|              | ========================          |            |
+|              |                                   |            |
+|              | &lt;This is a persistent help-screen&gt;|            |
+|              |                                   |            |
+|              |                                   |            |
+|              |                                   |            |
+|              |                                   |            |
+|              |                                   |            |
+|              |                                   |            |
+|              |                                   |            |
+|              |                                   |            |
+|              |                                   |            |
+|              |                                   |            |
+-----------------------------------------------------------------
+               |
+               |   ,---
+               `---| Splitted by the value of <code>ecb-windows-width</code>.
+                   `---
+</pre>
+
+<p>The big window (here the middle window) will be the edit-area of the
+new layout and can not be selected, deleted or splitted during the
+creation process. It displays the help-screen for the layout-creation
+mode. Here all the available commands are displayed.
+
+<p>The small window(s) (here the left and right windows) can be splitted
+by you wherever you want (<kbd>C-s</kbd>). The left one contains the point. 
+You must give every ECB-tree-window you create a type (<kbd>C-t</kbd>)
+which can be either
+
+<ul>
+<li>One of the built-in types
+
+<p>This can be either "directories", "sources", "methods",
+"history" or "speedbar".
+
+</p><li>Any user-defined type:
+
+<p>In this case you insert "other" after hitting <kbd>C-t</kbd> and you will
+then be asked for the name of the user-defined type. You can insert
+any arbitrary type name X. But to get this layout working you have to
+define a function with name <code>ecb-set-X-buffer</code> whereas X is the
+name of the user-defined type you have specified during
+layout-creation.
+
+<p>This function <code>ecb-set-X-buffer</code> must be defined with the macro
+<code>defecb-window-dedicator</code> and has to switch to the buffer you
+want to display in this window. This macro automatically ensures that
+this window is dedicated to that buffer.
+
+<p>Here is an example: Suppose you have inserted as type name "example"
+then you have to define and load a function
+<code>ecb-set-example-buffer</code> which could be defined like follows:
+
+<br><pre>(defecb-window-dedicator ecb-set-example-buffer " *ECB example-buf*"
+  (switch-to-buffer (get-buffer-create " *ECB example-buf*")))
+</pre>
+
+<p>If you forget to define such a function for the user-defined type then
+nevertheless ECB will draw this layout but it will use the
+default-function <code>ecb-set-default-ecb-buffer</code> instead. 
+</ul>
+
+<p>If you are satisfied with your new layout just hit <kbd>C-q</kbd>. You will
+be asked for a new layout-name (TAB-completion is offered to get a
+list of all names already in use) and after inserting a new(!) name
+the new layout is saved in the file defined by the option
+<code>ecb-create-layout-file</code>. The new layout is now available via the
+option <code>ecb-layout-name</code>.
+
+<p>There is no need for you to load the file
+<code>ecb-create-layout-file</code> manually into your Emacs because it's
+automatically loaded by ECB!
+
+<p><strong>Please note</strong>: During the layout-creation process only the
+commands displayed in the help-screen are available. ALL other
+commands are temporally disabled (even the mouse-commands).
+
+<p>For programming new layouts with emacs-lisp see <a href="The-layout-engine.html#The%20layout-engine">The layout-engine</a>.
+
+<p>With the command <code>ecb-delete-new-layout</code> you can delete
+previously created layouts (TAB-completion is offered for all names of
+user created layouts).
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>During the creation
+process you will be asked in the minibuffer for several options; here
+you can use TAB-completion and an ``empty'' RET chooses always the
+first option!</p>
+
+</ol><hr>
+
+</body></html>
+

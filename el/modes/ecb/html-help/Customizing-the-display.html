@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Customizing%20the%20display">Customizing the display</a>,
+Next:<a rel=next accesskey=n href="Rebuilding-the-Methods.html#Rebuilding%20the%20Methods">Rebuilding the Methods</a>,
+Previous:<a rel=previous accesskey=p href="Expanding.html#Expanding">Expanding</a>,
+Up:<a rel=up accesskey=u href="The-Methods-buffer.html#The%20Methods%20buffer">The Methods buffer</a>
+<hr><br>
+
+<h4>Customizing the display of the Methods-buffer</h4>
+
+<p>The ECB-Methods buffer is probably the most important browsing window
+offered by ECB. It displays all parsing informations of the current
+source-buffer (the buffer displayed in the current active
+edit-window).
+
+<p>Normally ECB gets all informations displayed in this Methods-buffer
+from the semantic-library - at least for semantic-sources. This
+library parses auto. the current source-buffer in the edit-window of
+ECB and returns all information in form of <dfn>tags</dfn> to ECB which
+displays them in a browse-able form in its Method-buffer. See <a href="ECB-Methods-buffer.html#ECB%20Methods-buffer">ECB Methods-buffer</a> for information how to use the Methods-buffer.
+
+<p>There are several options to customize which tags ECB should display
+in general, if the tags should be collapsed or expanded, how to
+fontify them (i.e. syntax-highlighting) and something more.
+
+<dl>
+<dt><code>ecb-show-tags</code>
+<dd>With the option <code>ecb-show-tags</code> you specify how ECB should
+display the tags returned by the semantic parser. Semantic divides its
+tags in several so called <dfn>tag classes</dfn>. A tag-class is always a
+symbol and can be for example <code>type</code> (tags which represent a
+class<a rel=footnote href="#fn-1"><sup>1</sup></a>, a interface, an enumeration etc.),
+<code>function</code> (tags which represent function or methods),
+<code>variable</code> (variables and attributes), <code>include</code>
+(import-statements) etc. There is no predefined superset of allowed
+tag-class-symbols because each language-parser can define its own
+tag-classes. But to get an overview of the most common tag-classes see
+the default value of the option <code>ecb-show-tags</code>.
+
+<p>With the option <code>ecb-show-tags</code> you can now specify how ECB
+should display tags of a certain tag-class in a certain major-mode. 
+You can tell ECB that all tags of a tag-class <code>X</code> should be
+displayed in an expanded bucket and all tags of a tag-class <code>Y</code>
+should be displayed in a collapsed bucket and all tags of a tag-class
+<code>Z</code> should be displayed flattened (means not contained in a
+expandable/collapsable bucket-node). These settings can be made
+separately for each major-mode but you can also define a
+default-display which takes effect when for a major-mode no special
+setting can be found in <code>ecb-show-tags</code>.
+
+<p>For every tag-class you can tell ECB how the tags should be sorted.
+
+<br><dt><code>ecb-font-lock-tags</code>
+<dt><code>ecb-type-tag-display</code>
+<dd>How to fontify the tags in the Method-buffer
+
+<br><dt><code>ecb-tag-display-function</code>
+<dd>ECB and semantic offer several predefined functions for displaying the
+tags. Here you can customize, what informations tags should
+contain (only the method-name or the whole signature or something
+else) and what notation should be used, e.g. UML or not.
+
+</dl>
+
+<p>These are the most important options for this topic but it is
+recommended to have a look into the customize-group <code>ecb-methods</code>
+(see <a href="ecb-methods.html#ecb-methods">ecb-methods</a>) and check all the options offered there!
+
+<p>All these options are only relevant for semantic-sources and take no
+effect for non-semantic-sources!
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>Do not confuse the term ``class'' in the context of a
+tag, which means the class of the tag and which is a semantic-term and
+a ``class'' in the context of an object oriented language like Java or
+C++! Normally the surrounding context sould be sufficient to
+understand which type of ``class'' is meant whenever the term
+``class'' is used in this manual.</p>
+
+</ol><hr>
+
+</body></html>
+

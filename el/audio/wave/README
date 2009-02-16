@@ -1,0 +1,42 @@
+This package enables Emacs to view, play and split raw PCM sound
+files.
+
+I wrote it because I sample lots of vinyl to be able to play it in a
+more convenient manner -- namely, from my hard disk.  So, I sample one
+LP a go and then split the ~600MB raw PCM file into chunks with the
+vsplit program.  It tries to find pauses in the sound and splits the
+files there.  However, some albums have much hiss and cracle and pop,
+so it's not able to find the pauses.  Which brings us to what this
+package does: It displays the PCM files in a buffer, allows you to
+zoom in on areas, mark positions for splitting and play arbitrary
+areas.  So, it's not a traditional sound editor -- it's very much
+geared towards splitting large files up into smaller chunks.
+
+It requires ALSA 0.9.0beta6 with the patch in this package applied.
+This is to allow alsaplayer to seek to a specific place in the file,
+so that you can play from anywhere in the raw PCM file.
+
+How to use it:
+
+Type "make" in this directory.  Move "bsplit" and "summarize" to some
+directory you have in your exec path.  Move wave.el to some directory
+you have in your `load-path'.  Put the following in your .emacs:
+
+(autoload 'wave-file "wave" nil t)
+
+The C programs wants stereo, 16 bit, 44.1kHz raw PCM files.  If you
+have wav files, you can use sox to convert them to raw PCM like this:
+
+  sox file.wav -c 2 -s -w -r 44100 file.raw
+
+Then type `M-x wave-file RET /some/file.raw'.  You will then be
+presented with a buffer displaying the contents of the file, and you
+can zoom with the `z' command, `q' will unzoom (or quit if you're
+already unzoomed), `s' will set a split point, and `S' will split the
+file using the external bsplit program.
+
+This is neither big nor clever, but it does what I want it to do.
+
+This software is released under the GNU GPL.  
+
+Lars Magne Ingebrigtsen <larsi@gnus.org>

@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>NEWS (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .outline-1 {
+        /* outline-1 */
+        color: #ff4500;
+      }
+      .outline-2 {
+        /* outline-2 */
+        color: #eeb422;
+      }
+      .outline-3 {
+        /* outline-3 */
+        color: #32cd32;
+      }
+      .outline-4 {
+        /* outline-4 */
+        color: #1e90ff;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+This is the `NEWS' file of GNU eev.
+Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+Copying and distribution of this file, with or without modification,
+are permitted provided the copyright notice and this notice are preserved.
+Author and version: Eduardo Ochs, 2006feb01.
+Please use eev-current instead of eev-0.95.0, 0.95.0 is several months
+old and -current is almost becoming 0.95.1.
+Latest version: &lt;<a href="http://angg.twu.net/eev-current/NEWS">http://angg.twu.net/eev-current/NEWS</a>&gt;
+      htmlized: &lt;<a href="http://angg.twu.net/eev-current/NEWS.html">http://angg.twu.net/eev-current/NEWS.html</a>&gt;
+    See also:   &lt;<a href="http://angg.twu.net/eev-current/README.html">http://angg.twu.net/eev-current/README.html</a>&gt;
+                &lt;<a href="http://angg.twu.net/eev-current/INSTALL.html">http://angg.twu.net/eev-current/INSTALL.html</a>&gt;
+                &lt;<a href="http://angg.twu.net/eev-current/EMACS.html">http://angg.twu.net/eev-current/EMACS.html</a>&gt;
+                &lt;<a href="http://angg.twu.net/eev-current/">http://angg.twu.net/eev-current/</a>&gt;
+
+
+News:
+
+<span class="outline-1">* Now eev has a mailing list at Savannah:</span>
+  &lt;<a href="http://lists.nongnu.org/mailman/listinfo/eev">http://lists.nongnu.org/mailman/listinfo/eev</a>&gt; (to subscribe, etc),
+  &lt;<a href="http://lists.gnu.org/archive/html/eev">http://lists.gnu.org/archive/html/eev</a>&gt; (for the archive).
+
+
+<span class="outline-1">* Lots of changes in the documentation, mainly at the file `README'.</span>
+  The concepts have become clearer.  See: <a href="README.html">(find-eev "README")</a>
+
+
+<span class="outline-1">* Installation: the installation procedure involves changing some of</span>
+  your rcfiles (.emacs, .bashrc, .zshrc, etc), but now "make
+  preinstall" creates the modified files in a temporary directory and
+  creates scripts there to install the new versions and also to go
+  back to the previous versions. Do "make install" to install the new
+  versions and "make uninstall" to uninstall.
+
+
+<span class="outline-1">* Highlighting:</span>
+
+<span class="outline-2">** F3 now highlights temporarily the bounded region.</span>
+   See: <a href="doc/shot-f3.png">(find-eevfile "doc/shot-f3.png")</a>
+<span class="outline-2">** M-0 M-e highlight the previous sexp instead of executing it.</span>
+   See below for other prefix arguments affecting M-e.
+
+
+<span class="outline-1">* Many kew kinds of elisp hyperlinks. Here are just a few of them:</span>
+
+<span class="outline-2">** (find-sh COMMAND)  runs COMMAND and shows its output in a buffer.</span>
+<span class="outline-2">** (find-sh0 COMMAND) runs COMMAND and shows its output in the echo</span>
+   area.
+<span class="outline-2">** (find-epp OBJECT)  pretty-prints OBJECT and shows it in a buffer.</span>
+<span class="outline-2">** (find-epp0 OBJECT) pretty-prints OBJECT in a compact way and shows</span>
+   it in the echo area.
+<span class="outline-2">** (find-efunctionpp SYMBOL) pretty-prints the internal representation</span>
+   of the function given by SYMBOL.
+<span class="outline-2">** (find-estring STRING) shows STRING in a buffer.</span>
+<span class="outline-2">** (find-eimage0 FNAME) displays the image FNAME in the current buffer,</span>
+   "inlined" - i.e., in place of the sexp.
+
+<span class="outline-2">** Background processes:</span>
+<span class="outline-3">*** (eebg-xdvi DVIFILE) starts "xdvi DVIFILE" as a background process.</span>
+<span class="outline-3">*** (eebg-gv PSORPDFFILE) starts "gv DVIFILE" as a background process.</span>
+<span class="outline-3">*** (eebg-channel-xterm CHANNEL) starts a xterm "listening on CHANNEL".</span>
+    See: <a href="doc/shot-f9.png">(find-eevfile "doc/shot-f9.png")</a>
+
+
+
+<span class="outline-1">* Keyboard changes:</span>
+
+<span class="outline-2">** eev doesn't change the global keymap anymore. All of eev's key</span>
+   sequences are now in `eev-mode-map', and there's a global minor
+   mode, `eev-mode', whose only function is to make the `eev-mode-map'
+   keymap active. Loading eev.el turns on eev-mode. If you define your
+   own version of `eev-mode-map' before loading eev.el then eev.el
+   will use your map without modifying it in any way.
+
+<span class="outline-2">** Keys for executing sexps (M-e and M-E):</span>
+
+<span class="outline-3">*** M-e (`eek-eval-sexp-eol') now accepts a prefix argument:</span>
+
+<span class="outline-4">**** M-0 M-e just highlights the sexp temporarily.</span>
+<span class="outline-4">**** M-1 M-e shows the text of the sexp in the echo area.</span>
+<span class="outline-4">**** M-2 M-e shows the sexp as a list object in the echo area.</span>
+<span class="outline-4">**** M-3 M-e executes the sexp without showing the result in the echo area.</span>
+<span class="outline-4">**** M-4 M-e executes the sexp with debugging on.</span>
+<span class="outline-4">**** M-5 M-e executes the sexp with `debug-on-error' on.</span>
+<span class="outline-4">**** M-8 M-e executes the sexp and pretty-prints its output in a buffer.</span>
+<span class="outline-4">**** M-9 M-e executes an `(interactive ...)' clause in a useful way.</span>
+
+<span class="outline-3">*** M-E (`eek-eval-last-sexp') acts like M-e, but without moving point to</span>
+    end-of-line first.
+
+<span class="outline-2">** Keys for getting rid of unwanted bufers (M-k and M-K):</span>
+   M-k now runs `kill-this-buffer' instead of `kill-buffer'.
+   `kill-buffer' always asked for a confirmation, while
+   `kill-this-buffer' usually only asks when the buffer is modified
+   and is associated to a file. M-K runs `bury-buffer'.
+
+<span class="outline-2">** Keys for generating temporary buffers with lists of hyperlinks:</span>
+   M-h M-k (`find-ekey-links')      - for an Emacs key sequence
+   M-h M-f (`find-efunction-links') - for Elisp function
+   M-h M-v (`find-evariable-links') - for an Elisp variable
+   M-h M-i (`find-einfo-links')     - for Info nodes
+   M-h M-m (`find-manpage-links')   - manpage for command at point
+   M-h m   (`find-last-manpage-links') - current manpage
+   M-h f   (`find-file-links')      - for the current file
+   M-h M-d (`find-debpkg-links')    - for a Debian package
+
+<span class="outline-2">** Keys for refining hyperlinks:</span>
+   M-h 2 or M-h M-2 (`eemklinks-duplicate-this-line') and
+   M-h M-y ('eemklinks-yank-pos-spec'). These are better illustrated
+   by an example; see the documentation for the function `eesteps' for
+   how to run it.
+
+     (eesteps '(
+       <a href="http://www.gnu.org/software/emacs/manual/html_node/Lisp-Eval.html">(find-enode "Lisp Eval")</a>
+       (search-forward "`defvar'")
+       "C-SPC C-SPC 8*&lt;left&gt;"
+       "M-w"     
+       "M-h M-i"
+       (search-forward "find-enode")
+       "M-h M-2"
+       "M-h M-y"
+       "C-a"
+       "C-SPC C-SPC &lt;down&gt;"
+       "M-w"
+       "C-x b *scratch*"
+       "C-y"
+       "M-e"
+     ))
+
+
+<span class="outline-1">* `eesteps': support for programming a series of Emacs actions and</span>
+  executing them one by one; by default the key to execute the next
+  action is &lt;f12&gt;. See: <a href="eev-dev.el.html#eesteps">(find-eev "eev-dev.el" "eesteps")</a>
+
+
+<span class="outline-1">* Support for running external programs and sending them input one</span>
+  line at a time without having to switch out from Emacs. There's a
+  "commented screenshot" showing this in action:
+
+    <a href="doc/shot-f9.png">(find-eevfile "doc/shot-f9.png")</a>
+    &lt;<a href="http://angg.twu.net/eev-current/doc/shot-f9.png">http://angg.twu.net/eev-current/doc/shot-f9.png</a>&gt;
+
+  and here are some links to relevant files and functions:
+
+    <a href="eegchannel.html">(find-eev "eegchannel")</a>
+    <a href="eev-dev.el.html#eechannel-do-this-line">(find-eev "eev-dev.el" "eechannel-do-this-line")</a>
+
+
+<span class="outline-1">* Support for running programs inside Emacs and sending commands to</span>
+  them one line at a time. See:
+
+    (find-efunctiondescr 'eepitch-this-line)
+  
+
+
+
+Note: this file is incomplete - as all the documentation of eev - but
+I've been delaying the release for too long!
+
+About the htmlization of this file: I find the default colors of
+outline-mode ugly, so I changed changed them...
+  <a href="htmlize-eev.el.html#htmlize-eev-files">(find-eev "htmlize-eev.el" "htmlize-eev-files")</a>
+  (require 'htmlize-eev)
+  (my-outline-colors)
+
+<span class="outline-1">* Foo</span>
+<span class="outline-2">** bar</span>
+<span class="outline-3">*** plic</span>
+<span class="outline-4">**** bletch</span>
+
+Local variables:
+mode: outline
+coding: raw-text-unix
+paragraph-separate: "[  ]*$"
+end:
+</pre>
+  </body>
+</html>

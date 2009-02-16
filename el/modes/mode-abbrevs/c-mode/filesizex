@@ -1,0 +1,11 @@
+inline off_t file_size(const char * filename)
+{
+    struct stat stat_out;
+    if (stat(filename, &stat_out) != 0) {
+        fprintf(stderr, "ERROR: file %s does not exist at %s:%d\n",
+                filename, __FILE__, __LINE__);
+        exit(1);
+    }
+    off_t out = stat_out.st_size;
+    return out;
+}

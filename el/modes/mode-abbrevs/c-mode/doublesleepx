@@ -1,0 +1,7 @@
+inline void doublesleep(double secs)
+{
+    double frac;
+	frac = secs - (int)secs;
+    sleep((int)secs);
+    usleep((long)(frac * 1000000.0));
+}

@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Tree-buffer%20basics">Tree-buffer basics</a>,
+Next:<a rel=next accesskey=n href="Tree-buffer-styles.html#Tree-buffer%20styles">Tree-buffer styles</a>,
+Previous:<a rel=previous accesskey=p href="Basic-interactors.html#Basic%20interactors">Basic interactors</a>,
+Up:<a rel=up accesskey=u href="Basic-interactors.html#Basic%20interactors">Basic interactors</a>
+<hr><br>
+
+<h4>General introduction into tree-buffers</h4>
+
+<p>ECB displays most of its informations (e.g. about directory-structures
+or file-contents) in so called <dfn>tree-buffers</dfn> which means the
+display of such a tree-buffer is structured in a tree consisting of
+<dfn>tree-nodes</dfn>. Every line in a tree-buffer displays exactly one
+tree-node. Each node can have any arbitrary number of
+<dfn>children</dfn>-nodes. If a tree-node has no children then it is called
+a <dfn>leaf</dfn>.
+
+<p>Each tree-buffer of ECB is displayed in an own special
+ECB-window/buffer which is read-only ie. not editable.
+
+<p>The difference between a natural tree like a fir and an ECB-tree is
+that the root(-node) of a tree-buffer is not visible but only its
+children. In the example below the nodes parent-node-1 and
+parent-node-2 are the children of the invisible root-node.
+
+<p>If a tree-node contains at least one child it is displayed with a
+special expand/collapse-symbol (see the example below). This symbol
+allows expanding (rsp. collapsing) the tree-node wheras expanding
+means to display the children-nodes and collapsing means to hide the
+childrens of a tree-node.
+
+<p>Here is an example of a tree-buffer:
+
+<br><pre>[+] parent-node-1  -------.
+[-] parent-node-2  -------|
+    [-] expanded  --------|
+        leaf-node-1  -----|
+        leaf-node-2  -----|-----[tree-nodes]
+        leaf-node-3  -----|
+        leaf-node-4  -----|
+    [+] collapsed  -------´
+     |
+     `-----------------[expand/collapse-symbol]
+</pre>
+
+<p>In most cases an action is triggered when clicking with the mouse onto
+a tree-node<a rel=footnote href="#fn-1"><sup>1</sup></a> (e.g. clicking onto "leaf-node-1" or
+"parent-node-1" in the example above). Which actions depends on the
+type of the tree-buffer. For example clicking on a tree-node in the
+ECB-sources-buffer (which is the name of a source-file) opens the
+relelated file in the edit-area of ECB (see <a href="ECB-Sources-buffer.html#ECB%20Sources-buffer">ECB Sources-buffer</a>)
+whereas clicking onto a node in the ECB-methods-buffer (which is the
+name of a tag in the current source-file displayed in the edit-area)
+"jumps" to the location of this tag in the source-buffer in the
+edit-area (see <a href="ECB-Methods-buffer.html#ECB%20Methods-buffer">ECB Methods-buffer</a>).
+
+<p>Almost every interactor of ECB offers a special popup-menu when
+clicking with the right mouse-button (of course also possible via
+keyboard, see <a href="Using-the-keyboard.html#Using%20the%20keyboard">Using the keyboard</a>) onto a tree-node (e.g. some
+senseful actions possible for directory-nodes like grepping this
+directory or performing version-control actions for this directory or
+something else).
+
+<p>See <a href="ECB-Directories-buffer.html#ECB%20Directories-buffer">ECB Directories-buffer</a>, <a href="ECB-Sources-buffer.html#ECB%20Sources-buffer">ECB Sources-buffer</a>, <a href="ECB-Methods-buffer.html#ECB%20Methods-buffer">ECB Methods-buffer</a> and <a href="Add-on-interactors.html#Add-on%20interactors">Add-on interactors</a> for a detailed
+description which actions are triggered and which popup-menus are
+offered in all the interactors of ECB.
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>Of course using the keyboard is also possible,
+see <a href="Using-the-keyboard.html#Using%20the%20keyboard">Using the keyboard</a>.</p>
+
+</ol><hr>
+
+</body></html>
+

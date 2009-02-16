@@ -1,0 +1,1 @@
+pack(side=<choose><choice "TOP"><choice "LEFT"><choice "RIGHT"><choice "BOTTOM"></choose>, expand=<choose><choice "NO"><choice "YES"></choose>, fill=<choose><choice "NONE"><choice "X"><choice "Y"><choice "BOTH"></choose>, padx=<field "0">, pady=<field "0">)

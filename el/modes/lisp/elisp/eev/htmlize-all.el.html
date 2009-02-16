@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>htmlize-all.el (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;; </span><span class="comment">This is just a quick hack to make the htmlizer independent of my
+</span><span class="comment-delimiter">;; </span><span class="comment">.emacs and callable from the command line.
+</span><span class="comment-delimiter">;; </span><span class="comment">Author and version: Eduardo Ochs, 2005apr07
+</span><span class="comment-delimiter">;; </span><span class="comment">This file is in the Public Domain.
+</span>
+(add-to-list 'load-path default-directory)
+(load-library <span class="string">"eev.el"</span>)         <span class="comment-delimiter">; <a href="eev.el.html">(find-eev "eev.el")</a></span><span class="comment">
+</span>(load-library <span class="string">"eev-langs.el"</span>)   <span class="comment-delimiter">; <a href="eev-langs.el.html">(find-eev "eev-langs.el")</a></span><span class="comment">
+</span>(load-library <span class="string">"eev-insert.el"</span>)  <span class="comment-delimiter">; <a href="eev-insert.el.html">(find-eev "eev-insert.el")</a></span><span class="comment">
+</span>(load-library <span class="string">"eev-glyphs.el"</span>)  <span class="comment-delimiter">; <a href="eev-glyphs.el.html">(find-eev "eev-glyphs.el")</a></span><span class="comment">
+</span>(load-library <span class="string">"eev-compose.el"</span>) <span class="comment-delimiter">; <a href="eev-compose.el.html">(find-eev "eev-compose.el")</a></span><span class="comment">
+</span>(eev-set-aliases)               <span class="comment-delimiter">; <a href="eev.el.html">(find-eev "eev.el")</a></span><span class="comment">
+</span>(eev-set-default-glyphs)
+<span class="comment-delimiter">;;</span><span class="comment">
+</span>(load-library <span class="string">"htmlize-eev.el"</span>) <span class="comment-delimiter">; <a href="htmlize-eev.el.html">(find-eev "htmlize-eev.el")</a></span><span class="comment">
+</span>(code-c-d-anchor <span class="string">"angg"</span> <span class="string">"~/"</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">(if (getenv "DEBUG_ON_ERROR") (setq debug-on-error t))
+</span>(setq debug-on-error t)
+
+(htmlize-eev-files)
+
+<span class="comment-delimiter">;; </span><span class="comment">The e-script below needs this in ~/elisp/:
+</span><span class="comment-delimiter">;; </span><span class="comment">http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el
+</span>
+'
+(eev <span class="string">"
+cd ~/eev-current/
+emacs-cvs -Q --geometry +200+100 -l ~/elisp/htmlize.el -l htmlize-all.el
+"</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">Note: emacs21 is not so happy with htmlize-all.el as CVS emacs, and
+</span><span class="comment-delimiter">;; </span><span class="comment">its font-locking modes have fewer colors. Let's stick to CVS emacs
+</span><span class="comment-delimiter">;; </span><span class="comment">for now.
+</span></pre>
+  </body>
+</html>

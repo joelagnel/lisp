@@ -1,0 +1,3 @@
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.bind(('', 0))
+s.sendto(<cursor>message, (host, port))

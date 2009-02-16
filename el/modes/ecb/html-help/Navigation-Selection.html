@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Navigation%2fSelection">Navigation/Selection</a>,
+Next:<a rel=next accesskey=n href="Incremental-search.html#Incremental%20search">Incremental search</a>,
+Previous:<a rel=previous accesskey=p href="Using-the-keyboard.html#Using%20the%20keyboard">Using the keyboard</a>,
+Up:<a rel=up accesskey=u href="Using-the-keyboard.html#Using%20the%20keyboard">Using the keyboard</a>
+<hr><br>
+
+<h4>Navigation and Selection in a tree-buffer</h4>
+
+<p>In the ECB-buffers RETURN and TAB are the most important keys:
+
+<ul>
+<li>RETURN does the same as the primary button and C-RETURN does the same
+as the secondary button. S-RETURN is the same as the SHIFT-click or
+POWER-click. The terms "primary", "secondary", "SHIFT-" and
+"POWER-click" are explained in <a href="Using-the-mouse.html#Using%20the%20mouse">Using the mouse</a>. See also the
+option <code>ecb-tree-do-not-leave-window-after-select</code> and the
+function <code>ecb-toggle-do-not-leave-window-after-select</code> which is
+bound to <kbd>C-t</kbd> in each tree-buffer of ECB!
+
+<p>For all RETURN (and S-RETURN and C-RETURN) hits the position of the
+point within the current node-line is irrelevant! This is for
+conveniance.
+
+</p><li>TAB always expands or collapses expandable nodes. 
+</ul>
+
+<p>The RETURN and TAB keys can not be (re)defined with <code>ecb-key-map</code>!
+
+<p>If you set <code>ecb-tree-navigation-by-arrow</code> to not nil then the
+arrow keys work in the ECB tree-window in the following smart way:
+
+<ul>
+<li>Left-arrow: If node is expanded then it will be collapsed otherwise
+(i.e. current node is either not expandable or not expanded) point
+jumps to the next "higher" node in the hierarchical tree (higher
+means the next higher level or - if no higher level available
+- the next higher node on the same level).
+
+<li>Right-arrow: If node is expandable but not expanded then it will be
+expanded. Otherwise (i.e. current node is either not expandable or
+already expanded) point jumps to the next following node (which is the
+first subnode in case of an already expanded node or simply the next
+node in the following line).
+
+<li>Up- and down-arrow: Point jumps to the first character of the previous
+(up) rsp. next node (down). "First" character means either the first
+character of the expand-symbol (in case
+<code>ecb-tree-expand-symbol-before</code> is not nil) or of the displayed
+node-name. Or with other words: The first non-indentation and
+non-guide-line (see <code>ecb-tree-buffer-style</code>) character of a node
+(see <a href="Tree-buffer-styles.html#Tree-buffer%20styles">Tree-buffer styles</a>). 
+</ul>
+
+</body></html>
+

@@ -1,0 +1,78 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Overview">Overview</a>,
+Next:<a rel=next accesskey=n href="Manual-usage.html#Manual%20usage">Manual usage</a>,
+Previous:<a rel=previous accesskey=p href="Install-and-first-steps.html#Install%20and%20first%20steps">Install and first steps</a>,
+Up:<a rel=up accesskey=u href="ecb.html#Top">Top</a>
+<hr><br>
+
+<h2>Overview</h2>
+
+<p>ECB is a global minor-mode which offers a couple of <dfn>ECB-windows</dfn>
+for browsing your sources comfortable with the mouse and the keyboard. 
+These "special" windows are also called <dfn>interactors</dfn> in this
+manual.
+
+<p>ECB offers some basic interactors to browse your sources:
+<ul>
+<li>ECB-Directories for browsing directories
+<li>ECB-Sources for browsing source-files and a file-history
+<li>ECB-Methods for browsing the contents of a source
+</ul>
+
+<p>See <a href="Basic-interactors.html#Basic%20interactors">Basic interactors</a> for a detailled description what these
+basic interactors offer. See <a href="ECB-interactors.html#ECB-interactors">ECB-interactors</a> for a general
+introduction in the interactor-concept of ECB.
+
+<p>In addition to these "special" ECB-windows you have always an
+<dfn>edit-area</dfn> where you can edit your source-files. The edit-area
+can be divided into several <dfn>edit-windows</dfn> - as many as you need
+(see <a href="The-edit-area.html#The%20edit-area">The edit-area</a>). And at the bottom of the ECB-frame a persistent
+<dfn>compilation-window</dfn> (also called <dfn>compile-window</dfn>) can be
+displayed (optional), where all the output of Emacs-compilation
+(compile, grep etc.) is shown (see <a href="Temp--and-compile-buffers.html#Temp-%20and%20compile-buffers">Temp- and compile-buffers</a>).
+
+<p>The following "screenshot" illustrates the typical layout of the
+ECB-frame<a rel=footnote href="#fn-1"><sup>1</sup></a>:
+
+<br><pre>------------------------------------------------------------------
+|              |                                                 |
+|  Directories |                                                 |
+|              |                                                 |
+|--------------|                                                 |
+|              |                                                 |
+|  Sources     |                                                 |
+|              |                                                 |
+|--------------|                   Edit-area                     |
+|              |   (can be splitted in several edit-windows)     |
+|  Methods     |                                                 |
+|              |                                                 |
+|--------------|                                                 |
+|              |                                                 |
+|  History     |                                                 |
+|              |                                                 |
+------------------------------------------------------------------
+|                                                                |
+|            Persistent Compilation-window (optional)            |
+|                                                                |
+------------------------------------------------------------------
+</pre>
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>This is only one example of the layouts ECB offers,
+see <a href="Changing-the-ECB-layout.html#Changing%20the%20ECB-layout">Changing the ECB-layout</a></p>
+
+</ol><hr>
+
+</body></html>
+

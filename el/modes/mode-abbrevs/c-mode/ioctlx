@@ -1,0 +1,1 @@
+ioctl(<field "int FILEDES">, <field "int COMMAND">, <field "...">)<endpoint>

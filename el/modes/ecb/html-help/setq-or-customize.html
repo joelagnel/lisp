@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="setq%20or%20customize">setq or customize</a>,
+Next:<a rel=next accesskey=n href="Site-wide-customizing.html#Site-wide%20customizing">Site-wide customizing</a>,
+Previous:<a rel=previous accesskey=p href="General-aspects.html#General%20aspects">General aspects</a>,
+Up:<a rel=up accesskey=u href="General-aspects.html#General%20aspects">General aspects</a>
+<hr><br>
+
+<h4>Setq or customize - what should i use?</h4>
+
+<p>The best way to customize all the options of ECB is via the
+customize-feature of (X)Emacs, i.e. means calling the commands
+<code>customize-option</code> or <code>customize-group</code> etc. This is also
+the strongly recommended way!
+
+<p>But of course you can also use <code>setq</code> or some Elisp-code to
+change the values of many but not all of the options. The values of
+the following options <strong>MUST NOT</strong> be changed via <code>setq</code> or
+Elisp-code but only with the customize-feature!
+
+<ul>
+<li><code>ecb-advice-window-functions</code>
+<li><code>ecb-bucket-node-display</code>
+<li><code>ecb-compile-window-height</code>
+<li><code>ecb-compile-window-temporally-enlarge</code>
+<li><code>ecb-compile-window-width</code>
+<li><code>ecb-exclude-parents-regexp</code>
+<li><code>ecb-fix-window-size</code>
+<li><code>ecb-font-lock-tags</code>
+<li><code>ecb-highlight-tag-with-point-delay</code>
+<li><code>ecb-key-map</code>
+<li><code>ecb-layout-name</code>
+<li><code>ecb-layout-window-sizes</code>
+<li><code>ecb-mode-line-data</code>
+<li><code>ecb-mode-line-display-window-number</code>
+<li><code>ecb-mode-line-prefixes</code>
+<li><code>ecb-show-node-info-in-minibuffer</code>
+<li><code>ecb-show-tags</code>
+<li><code>ecb-source-path</code>
+<li><code>ecb-toggle-layout-sequence</code>
+<li><code>ecb-tag-display-function</code>
+<li><code>ecb-tree-do-not-leave-window-after-select</code>
+<li><code>ecb-type-tag-display</code>
+<li><code>ecb-type-tag-expansion</code>
+<li><code>ecb-use-speedbar-instead-native-tree-buffer</code>
+<li><code>ecb-window-sync-delay</code>
+<li><code>ecb-windows-height</code>
+<li><code>ecb-windows-width</code>
+</ul>
+
+</body></html>
+

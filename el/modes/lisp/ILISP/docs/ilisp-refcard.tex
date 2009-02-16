@@ -1,0 +1,606 @@
+% Reference Card for the ilisp Interface, as reported in ilisp-5.8.
+% Last edited: Sat Sep 27 20:07:53 1997 by vkyr (Valentino Kyriakides)
+
+%**start of header
+\newcount\columnsperpage
+
+% This file can be printed with 1, 2, or 3 columns per page (see below).
+% Specify how many you want here.  Nothing else needs to be changed.
+
+\columnsperpage=3
+
+% Copyright (c) 1997 by no one.  e.g. distribute it at will, subject to
+% permissions below.
+%
+% Author: (e.g. please send obvious bugs to)
+%  Valentino Kyriakides
+%  Internet: kyriakides@lavielle.com
+%
+% Of course, no one makes any claims on this, nor do I promise to "support" it.
+% Thanks to Stephen Gildea, Paul Rubin, Bob Chassell, Len Tower,
+% and Richard Mlynarik for the excellent GNU Emacs reference card on which
+% this is based.
+%
+% The idea of this was to have a piece of paper that prods your memory if
+% you've forgotten the name of a function, a keybinding, etc.  It assumes
+% pretty serious familiarity with the ilisp manual, but hopefully saves the effort
+% (in conjunction with all the manuals) of lugging out a
+% printed copy in most cases.  It of course reflects my (the author's)
+% biases about what was likely to be interesting or used often.
+%
+% To view, do 'tex ilisp-refcard.tex'. 
+% To print if you use columnsperpage=3, you must use have a dvips-like
+% program that prints in landscape format!
+
+% This file is distributed in the hope that it will be useful, but WITHOUT
+% ANY WARRANTY.  No author or distributor accepts responsibility to anyone
+% for the consequences of using it or for whether it serves any particular
+% purpose or describes any piece of software unless they say so in writing.  
+%
+% Permission is granted to copy, modify and redistribute this source
+% file provided the permission notices are preserved on all copies.
+%
+% Permission is granted to process this file with TeX and print the results.
+
+% This file is intended to be processed by plain TeX (TeX82).
+%
+% The final reference card has six columns, three on each side.
+% This file can be used to produce it in any of three ways:
+% 1 column per page
+%    produces six separate pages, each of which needs to be reduced to 80%.
+%    This gives the best resolution.
+% 2 columns per page
+%    produces three already-reduced pages.
+%    You will still need to cut and paste.
+% 3 columns per page
+%    produces two pages which must be printed sideways to make a
+%    ready-to-use 8.5 x 11 inch reference card.
+%    For this you need a dvi device driver that can print sideways.
+% Which mode to use is controlled by setting \columnsperpage above.
+
+\def\versionnumber{1.0}
+\def\year{1997}
+\def\version{September \year\ v\versionnumber}
+
+\def\shortcopyrightnotice{\vskip 1ex plus 2 fill \centerline{\small September
+  \year by Valentino Kyriakides.  Permissions on back.  v\versionnumber}}
+
+\def\copyrightnotice{
+\vskip 1ex plus 2 fill\begingroup\small
+\centerline{Designed by Valentino Kyriakides (kyriakides@lavielle.com), 9/97.}
+\centerline{Permission is granted to make \& distribute copies}
+\centerline{of this card provided this permission notice is preserved.}
+\endgroup}
+
+% ===================================================================
+% Macros to define this "mode".
+% ===================================================================
+%
+% make \bye not \outer so that the \def\bye in the \else clause below
+% can be scanned without complaint.
+\def\bye{\par\vfill\supereject\end}
+
+\newdimen\intercolumnskip
+\newbox\columna
+\newbox\columnb
+
+\def\ncolumns{\the\columnsperpage}
+
+\message{[\ncolumns\space 
+  column\if 1\ncolumns\else s\fi\space per page]}
+
+\def\scaledmag#1{ scaled \magstep #1}
+
+% This multi-way format was designed by Stephen Gildea October 1986.
+\if 1\ncolumns
+  \hsize 4in
+  \vsize 10in
+  \voffset -.7in
+  \font\titlefont=\fontname\tenbf \scaledmag4
+  \font\secfont=\fontname\tenbf \scaledmag3
+  \font\subsecfont=\fontname\tenbf \scaledmag2
+  \font\smallfont=\fontname\sevenrm
+  \font\smallsy=\fontname\sevensy
+
+  \footline{\hss\folio}
+  \def\makefootline{\baselineskip10pt\hsize6.5in\line{\the\footline}}
+\else
+  \hsize 3.2in
+  \vsize 7.95in
+  \hoffset -.75in
+  \voffset -.745in
+  \font\titlefont=cmbx10 \scaledmag3
+  \font\secfont=cmbx10 \scaledmag2
+  \font\subsecfont=cmbx10 \scaledmag1
+  \font\smallfont=cmr6
+  \font\smallsy=cmsy6
+  \font\eightrm=cmr8
+  \font\eightbf=cmbx8
+  \font\eightit=cmti8
+  \font\eighttt=cmtt8
+  \font\eightsy=cmsy8
+  \textfont0=\eightrm
+  \textfont2=\eightsy
+  \def\rm{\eightrm}
+  \def\bf{\eightbf}
+  \def\it{\eightit}
+  \def\tt{\eighttt}
+  \normalbaselineskip=.8\normalbaselineskip
+  \normallineskip=.8\normallineskip
+  \normallineskiplimit=.8\normallineskiplimit
+  \normalbaselines\rm		%make definitions take effect
+
+  \if 2\ncolumns
+    \let\maxcolumn=b
+    \footline{\hss\rm\folio\hss}
+    \def\makefootline{\vskip 2in \hsize=6.86in\line{\the\footline}}
+  \else \if 3\ncolumns
+    \let\maxcolumn=c
+    \nopagenumbers
+  \else
+    \errhelp{You must set \columnsperpage equal to 1, 2, or 3.}
+    \errmessage{Illegal number of columns per page}
+  \fi\fi
+
+  \intercolumnskip=.46in
+  \def\abc{a}
+  \output={%
+      % This next line is useful when designing the layout.
+      %\immediate\write16{Column \folio\abc\space starts with \firstmark}
+      \if \maxcolumn\abc \multicolumnformat \global\def\abc{a}
+      \else\if a\abc
+	\global\setbox\columna\columnbox \global\def\abc{b}
+        %% in case we never use \columnb (two-column mode)
+        \global\setbox\columnb\hbox to -\intercolumnskip{}
+      \else
+	\global\setbox\columnb\columnbox \global\def\abc{c}\fi\fi}
+  \def\multicolumnformat{\shipout\vbox{\makeheadline
+      \hbox{\box\columna\hskip\intercolumnskip
+        \box\columnb\hskip\intercolumnskip\columnbox}
+      \makefootline}\advancepageno}
+  \def\columnbox{\leftline{\pagebody}}
+
+  \def\bye{\par\vfill\supereject
+    \if a\abc \else\null\vfill\eject\fi
+    \if a\abc \else\null\vfill\eject\fi
+    \end}  
+\fi
+
+% we won't be using math mode much, so redefine some of the characters
+% we might want to talk about
+\catcode`\^=12
+\catcode`\_=12
+
+\chardef\\=`\\
+\chardef\{=`\{
+\chardef\}=`\}
+
+\hyphenation{mini-buf-fer}
+
+\parindent 0pt
+\parskip 1ex plus .5ex minus .5ex
+
+\def\small{\smallfont\textfont2=\smallsy\baselineskip=.8\baselineskip}
+
+\outer\def\newcolumn{\vfill\eject}
+
+%\outer\def\title#1{{\titlefont\centerline{#1}}\vskip 1ex plus .5ex}
+
+%% KOT redefined a bit
+\outer\def\title#1#2{{\titlefont\centerline{#1}}{\titlefont\centerline{#2}}\vskip 1ex plus .5ex}
+
+%\outer\def\section#1{\par\filbreak
+%  \vskip 3ex plus 2ex minus 2ex {\subsecfont #1}\mark{#1}%
+%  \vskip 2ex plus 1ex minus 1.5ex}
+
+%% KOT redefined to cram more on
+\outer\def\section#1{\vfill\par\filbreak
+  \vskip 3.0ex plus 0.95ex minus 1.7ex {\secfont #1}\mark{#1}%
+  \vskip 1.8ex plus 0.9ex minus 1.15ex}
+
+\outer\def\subsection#1{\vfill\par\filbreak
+  \vskip 3.0ex plus 0.95ex minus 1.7ex {\subsecfont #1}\mark{#1}%
+  \vskip 1.8ex plus 0.9ex minus 1.15ex}
+
+\outer\def\shortsubsection#1{\vfill\par\filbreak
+  \vskip 1.0ex plus 0.95ex minus 1.7ex {\subsecfont #1}\mark{#1}%
+  \vskip 0.8ex plus 0.9ex minus 1.15ex}
+
+\newdimen\keyindent
+
+\def\beginindentedkeys{\keyindent=1em}
+\def\endindentedkeys{\keyindent=0em}
+\endindentedkeys
+
+\def\paralign{\vskip\parskip\halign}
+
+\def\<#1>{$\langle${\rm #1}$\rangle$}
+
+\def\kbd#1{{\tt#1}\null}	%\null so not an abbrev even if period follows
+
+\def\beginexample{\par\leavevmode\begingroup
+  \obeylines\obeyspaces\parskip0pt\tt}
+{\obeyspaces\global\let =\ }
+\def\endexample{\endgroup}
+
+\def\key#1#2{\leavevmode\hbox to \hsize{\vtop
+  {\hsize=.79\hsize\rightskip=1em
+  \hskip\keyindent\relax#1}\kbd{#2}\hfil}}
+
+\def\com#1#2{\leavevmode\hbox to \hsize{\vtop
+  {\hsize=.306\hsize\rightskip=1em
+  \hskip\keyindent\relax#1}\kbd{#2}\hfil}}
+
+\def\lcom#1#2{\leavevmode\hbox to \hsize{\vtop
+  {\hsize=.49\hsize\rightskip=1em
+  \hskip\keyindent\relax#1}\kbd{#2}\hfil}}
+
+
+\newbox\metaxbox
+\setbox\metaxbox\hbox{\kbd{M-x }}
+\newdimen\metaxwidth
+\metaxwidth=\wd\metaxbox
+
+\def\metax#1#2{\leavevmode\hbox to \hsize{\hbox to .75\hsize
+  {\hskip\keyindent\relax#1\hfil}%
+  \hskip -\metaxwidth minus 1fil
+  \kbd{#2}\hfil}}
+
+\def\threecol#1#2#3{\hskip\keyindent\relax#1\hfil&\kbd{#2}\quad
+  &\kbd{#3}\quad\cr}
+
+%**end of header
+
+% ===================================================================
+% Real refcard related things start here.
+% ===================================================================
+\title{ilisp/Emacs}{Interface Reference Card}
+
+\centerline{(for Gnu Emacs , XEmacs)}
+
+This reference card is a quick-and-dirty guide to those parts of the
+ilisp manual, which are likely to be used often.
+It includes most of the ilisp Interface to emacs, plus many of the
+extensions defined in the {\it ilisp online help}.  It is {\it not} a
+substitute for the ilisp online manual.
+
+\section{The ilisp/Emacs Interface }
+
+You can use the ilisp interface from either GNU Emacs or XEmacs.  
+Put these lines in your {\tt .emacs} file for clisp and allegro:
+
+\kbd{(setq load-path (cons (expand-file-name }
+
+\hskip 25pt \kbd{"/usr/local/lib/ilisp-5.8/") load-path))}
+	 
+\kbd{(require 'completer)}
+
+\kbd{(autoload 'clisp "ilisp" } 
+
+\hskip 25pt \kbd{"Inferior generic Common LISP." t)}
+
+\kbd{(setq clisp-program "/usr/local/bin/clisp -I")}
+
+\kbd{(autoload 'allegro "ilisp" }
+
+\hskip 25pt \kbd{ "Inferior Allegro Common LISP." t)}
+
+\kbd{(setq allegro-program "/usr/local/bin/cl")}
+
+Then invoke lisp with either \kbd{M-x clisp}, 
+or with \kbd{M-x allegro}.
+
+`C-z' is the prefix-key for most ILISP commands. This can be changed by 
+setting the variable `ilisp-prefix'.
+
+For online help with emacs, use \kbd{C-h f}, \kbd{describe-function}.
+
+\shortsubsection{Interrupts, aborts and errors}
+
+If you want to abort the last command you can use `C-g'.
+
+If you want to abort all commands, you should use the command
+`abort-commands-lisp' (`C-z g').  Commands that are aborted will be put
+in the buffer `*Aborted Commands*' so that you can see what was
+aborted.  If you want to abort the currently running top-level command,
+use `interrupt-subjob-ilisp' (`C-c C-c').  As a last resort, `M-x
+panic-lisp' will reset the ILISP state without affecting the inferior
+LISP so that you can see what is happening.
+
+   `delete-char-or-pop-ilisp' (`C-d') will delete prefix characters
+unless you are at the end of an ILISP buffer in which case it will pop
+one level in the break loop.
+
+   `reset-ilisp', (`C-z z') will reset the current inferior LISP's
+top-level so that it will no longer be in a break loop.
+
+\key{return-ilisp}{RET}
+\key{interrupt-subjob-ilisp}{C-c C-c}
+\key{abort-commands-lisp}{C-z g}
+\key{M-x panic-lisp}{}
+\key{reset-ilisp}{C-z z}
+\key{delete-char-or-pop-ilisp}{C-d}
+
+
+\subsection{Editing Lisp Forms (general)}
+
+Indentation, parenthesis balancing, and comment commands.
+
+\key{indent-line-ilisp}{TAB}
+\key{indent-sexp-ilisp}{M-C-q}
+\key{reindent-lisp}{M-q}
+\key{comment-region-lisp}{C-z ;}
+\key{find-unbalanced-lisp}{C-z )}
+\key{close-all-lisp}{]}
+
+
+\subsection{Eval and compile functions}
+
+Functions for eval/compile in code buffers.  
+
+\key{ilisp-prefix}{C-z} 
+\key{close-and-send-lisp}{C-]}
+\key{newline-and-indent-lisp}{LFD}
+\key{eval-defun-lisp}{C-z e}
+\key{eval-defun-lisp}{M-C-x}
+\key{eval-defun-and-go-lisp}{C-z C-e} 
+\key{eval-region-lisp}{C-z r}
+\key{eval-region-and-go-lisp}{C-z C-r} 
+\key{eval-next-sexp-lisp}{C-z n}
+\key{eval-next-sexp-and-go-lisp}{C-z C-n}
+\key{compile-defun-lisp}{C-z c}
+\key{compile-defun-lisp-and-go}{C-z C-c}
+\key{compile-region-lisp}{C-z w}
+\key{compile-region-and-go-lisp}{C-z C-w}
+
+
+\subsection{Documentation functions}
+
+`describe-lisp', `inspect-lisp', `arglist-lisp', and
+`documentation-lisp' switch whether they prompt for a response or use a
+default when called with a negative prefix. If they are prompting,
+there is completion through the inferior LISP by using `TAB' or
+`M-TAB'. When entering an expression in the minibuffer, all of the
+normal ilisp commands like `arglist-lisp' also work.
+
+   Commands that work on a function will use the nearest previous
+function symbol. This is either a symbol after a `\#'' or the symbol at
+the start of the current list.
+
+\key{arglist-lisp}{C-z a}
+\key{documentation-lisp}{C-z d}
+\key{describe-lisp}{C-z i}
+\key{inspect-lisp}{C-z I}
+
+
+\subsection{The Franz Online Manual}
+
+Invoke with \kbd{M-x fi:clman} or \kbd{C-z D}, these are used to view the 
+Franz online manual if available.  Packages
+nicknames limit search: cltl1, comp, composer, defsys, excl, ff, inspect,
+ipc, lisp, mp, prof, stream, sys, tpl, xcw, xref.  Note the useful about-*
+man pages (e.g. about-top-level).
+
+\key{fi:clman}{C-z D}
+\key{fi:clman-apropos}{C-z A}
+%\key{fi:clman-next-entry}{n}
+%\key{fi:clman-search-forward-see-alsos}{s}
+%\key{fi:clman-package-help}{p}
+%\key{fi:clman-flush-doc}{C-c C-c}
+
+\shortsubsection{Tracing functions}
+
+Function which traces the current defun. When called with a numeric prefix the 
+function will be untraced. When called with negative prefix, prompts for function to be traced.
+
+\key{trace-defun-lisp}{C-z t}
+
+\shortsubsection{Macroexpansion}
+
+ These commands apply to the next sexp.  If called with a positive
+ numeric prefix, the result of the macroexpansion will be inserted
+ into the buffer.  With a negative prefix, prompts for expression
+ to expand.
+
+\key{macroexpand-lisp}{C-z M}
+\key{macroexpand-1-lisp}{C-z m}
+
+
+\shortsubsection{Package Commands}
+
+The first time an inferior LISP mode command is executed in a Lisp
+Mode buffer, the package will be determined by using the regular
+expression `ilisp-package-regexp' to find a package sexp and then
+passing that sexp to the inferior LISP through `ilisp-package-command'.
+For the `clisp' dialect, this will find the first `(in-package
+PACKAGE)' form in the file.  A buffer's package will be displayed in
+the mode line.  If a buffer has no specification, forms will be
+evaluated in the current inferior LISP package.
+
+Buffer package caching can be turned off by setting the variable
+`lisp-dont-cache-package' to `T'. This will force ILISP to search for
+the closest previous `ilisp-package-regexp' in the buffer each time an
+inferior LISP mode command is executed.
+
+\key{package-lisp}{C-z p}
+\key{set-package-lisp}{C-z P}
+\key{M-x set-buffer-package-lisp}{}
+
+
+\shortsubsection{Files and directories}
+
+File commands in lisp-source-mode buffers keep track of the last used
+directory and file. If the point is on a string, that will be the
+default if the file exists. If the buffer is one of 
+`lisp-source-modes', the buffer file will be the default. Otherwise,
+the last file used in a lisp-source-mode will be used.
+
+\key{find-file-lisp}{C-x C-f}
+\key{load-file-lisp}{C-z l}
+\key{compile-file-lisp}{C-z k}
+\key{default-directory-lisp}{C-z !}
+
+
+\shortsubsection{Completion}
+
+Commands to reduce number of keystrokes.
+
+\key{complete-lisp}{M-TAB}
+\key{complete}{M-RET}
+
+%\shortcopyrightnotice
+
+\subsection{Command history}
+
+ILISP mode is built on top of `comint-mode', the general command  
+interpreter buffer mode. As such, it inherits many 
+commands and features from this, including a command history mechanism.
+
+Each ILISP buffer has a command history associated with it. Commands 
+that do not match `ilisp-filter-regexp' and that are longer than 
+`ilisp-filter-length' and that do not match the immediately prior 
+command will be added to this history.
+
+\key{comint-next-input}{M-n}
+\key{comint-previous-input}{M-p}
+\key{comint-previous-similar-input}{M-s}
+\key{comint-psearch-input}{M-N}
+\key{comint-msearch-input}{M-P}
+\key{comint-msearch-input-matching}{C-c R}
+
+
+\subsection{Source Code Commands}
+
+   The following commands all deal with finding things in source code.
+The first time that one of these commands is used, there may be some
+delay while the source module is loaded.  When searching files, the
+first applicable rule is used:
+
+   * try the inferior LISP,
+
+   * try a tags file if defined,
+
+   * try all buffers in one of `lisp-source-modes' or all files defined
+     using `lisp-directory'.
+
+   `M-x lisp-directory' defines a set of files to be searched by the
+source code commands.  It prompts for a directory and sets the source
+files to be those in the directory that match entries in
+`auto-mode-alist' for modes in `lisp-source-modes'.  With a positive
+prefix, the files are appended.  With a negative prefix, all current
+buffers that are in one of `lisp-source-modes' will be searched.  This
+is also what happens by default.  Using this command stops using a tags
+file.
+
+\shortsubsection{}
+
+`edit-definitions-lisp', `who-calls-lisp', and `edit-callers-lisp'
+will switch whether they prompt for a response or use a default when
+called with a negative prefix.  If they are prompting, there is
+completion through the inferior LISP by using `TAB' or `M-TAB'.  When
+entering an expression in the minibuffer, all of the normal ILISP
+commands like `arglist-lisp' also work.
+
+\shortsubsection{}
+
+`edit-definitions-lisp' (`M-.') will find a particular type of
+definition for a symbol.  It tries to use the rules described above.
+The files to be searched are listed in the buffer `*Edit-Definitions*'.
+If `lisp-edit-files' is nil, no search will be done if not found
+through the inferior LISP.  The variable `ilisp-locator' contains a
+function that when given the name and type should be able to find the
+appropriate definition in the file.  There is often a flag to cause
+your LISP to record source files that you will need to set in the
+initialization file for your LISP.  The variable is
+`*record-source-files*' in both allegro and lucid.  Once a definition
+has been found, `next-definition-lisp' (`M-,') will find the next
+definition (or the previous definition with a prefix).
+
+\shortsubsection{}
+
+`edit-callers-lisp' (`C-z ^') will generate a list of all of the
+callers of a function in the current inferior LISP and edit the first
+caller using `edit-definitions-lisp'.  Each successive call to
+`next-caller-lisp' (`M-`') will edit the next caller (or the previous
+caller with a prefix).  The list is stored in the buffer
+`*All-Callers*'.  You can also look at the callers by doing `M-x
+who-calls-lisp'.
+
+\shortsubsection{}
+
+`search-lisp' (`M-?') will search the current tags files,
+`lisp-directory' files or buffers in one of `lisp-source-modes' for a
+string or a regular expression when called with a prefix.
+`next-definition-lisp' (`M-,') will find the next definition (or the
+previous definition with a prefix).
+
+\shortsubsection{}
+
+`replace-lisp' (`M-"') will replace a string (or a regexp with a
+prefix) in the current tags files, `lisp-directory' files or buffers in
+one of `lisp-source-modes'.
+
+
+\key{M-x lisp-directory}{}
+\key{edit-definitions-lisp}{M-.}
+\key{next-definition-lisp}{M-,}
+\key{edit-callers-lisp}{C-z ^}
+\key{next-caller-lisp}{M-`}
+\key{M-x who-calls-lisp}{}
+\key{search-lisp}{M-?}
+\key{replace-lisp}{M-"}
+
+
+\subsection{Batch commands}
+
+The following commands all deal with making a number of changes all 
+at once. The first time one of these commands is used, there may be 
+some delay as the module is loaded. The eval/compile versions of these 
+commands are always executed asynchronously.
+
+ `mark-change-lisp' (`C-z SPC') marks the current defun as being
+changed.  A prefix causes it to be unmarked.  `clear-changes-lisp'
+(`C-z * 0') will clear all of the changes.  `list-changes-lisp' (`C-z *
+l') will show the forms currently marked.
+
+`eval-changes-lisp' (`C-z * e'), or `compile-changes-lisp' (`C-z *
+c') will evaluate or compile these changes as appropriate.  If called
+with a positive prefix, the changes will be kept.  If there is an
+error, the process will stop and show the error and all remaining
+changes will remain in the list.  All of the results will be kept in
+the buffer `*Last-Changes*'.
+
+\key{mark-change-lisp}{C-z SPC}
+\key{eval-changes-lisp}{C-z * e}
+\key{compile-changes-lisp}{C-z * c}
+\key{clear-changes-lisp}{C-z * 0}
+\key{list-changes-lisp}{C-z * l}
+
+\subsection{Switching between interactive and raw keyboard modes}
+
+There are two keyboard modes for interacting with the inferior LISP,
+\"interactive\" and \"raw\".  Normally you are in interactive mode
+where keys are interpreted as commands to EMACS and nothing is sent to
+the inferior LISP unless a specific command does so.  In raw mode, all
+characters are passed directly to the inferior LISP without any
+interpretation as EMACS commands.  Keys will not be echoed unless
+ilisp-raw-echo is T.
+
+Raw mode can be turned on interactively by the command
+`raw-keys-ilisp' (`C-z \#') and will continue until you type C-g. Raw
+mode can also be turned on/off by inferior LISP functions if the
+command `io-bridge-ilisp' (M-x io-bridge-ilisp) has been executed in
+the inferior LISP either interactively or on a hook.  To turn on raw
+mode, a function should print ^[1^] and to turn it off should print
+^[0^].  An example in Common LISP would be:
+
+\kbd{(progn (format t "1") }
+
+\hskip 35pt \kbd{(print (read-char)) (format t "0"))}
+
+\subsection{}
+
+\copyrightnotice
+
+\bye
+

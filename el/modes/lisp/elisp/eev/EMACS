@@ -1,0 +1,475 @@
+This is the `EMACS' file of GNU eev.
+Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+Copying and distribution of this file, with or without modification, are
+permitted provided the copyright notice and this notice are preserved.
+Author and version: Eduardo Ochs, 2004nov16 12:53
+Portions of this file are quotes taken from the transcription of a
+speech by Richard Stallman.
+Latest version: <http://angg.twu.net/eev-current/EMACS>
+      htmlized: <http://angg.twu.net/eev-current/EMACS.html>
+    See also:   <http://angg.twu.net/eev-current/README.html>
+                <http://angg.twu.net/eev-current/>
+
+These are some notes that I've put together for a workshop on Emacs
+and Eev.  They are too messy.  You have been warned.
+
+
+A Quick And Not-So-Gentle Introduction To Emacs
+===============================================
+
+Some people think that Emacs is just a text editor that is too complex
+and has too many features; and the "official" short description of
+Emacs says: "GNU Emacs is the extensible self-documenting text editor".
+
+I think that calling Emacs a text editor is a bit misleading -- that
+doesn't point people to the right direction.  I prefer the following:
+
+    Emacs is a Lisp environment that is sometimes used as an editor.
+
+The purpose of this tutorial is to explain Emacs starting from the
+Lisp side.  This is the way I have explained Emacs to people over the
+years, and, from my experience, it is an approach that works very
+well.
+
+I'll suppose that you have already installed eev.el in your machine --
+see <http://angg.twu.net/eev-current/INSTALL.html> for installation
+instructions.
+
+
+
+
+
+Lisp Expressions and Evaluation
+===============================
+
+Emacs has a key sequence that executes the Lisp expression that comes
+just before the cursor (the cursor is called "point" in Emacs
+terminology): C-x C-e, that is, control-x control-e.
+
+[insert figure here: evaluating (+ 1 2), answer in the echo area].
+
+[explain the term "sexp"]
+
+Eev implements another key sequence for evaluating sexps: M-e. Until
+eev-0.94.0 M-e worked as just a shortcut for C-e C-x C-e, that is, as
+`end-of-line' followed by `eval-last-sexp'. The current function
+associated to M-e, `eek-eval-sexp-eol', accepts a "prefix modifier"
+that changes its behaviour:
+
+      M-e: evaluate and show the result
+  M-0 M-e: just highlight
+  M-1 M-e: show the sexp as a string
+  M-2 M-e: show the sexp as Lisp object (after `read')
+  M-3 M-e: evaluate and do not show the result
+
+M-E (that is, Meta-Shift-e; `eek-eval-last-sexp') is similar to M-e
+but doesn't move the point to the end of the current line before
+operating on the sexp before point. M-e is more useful than M-E, so it
+got a key sequence that is easier to type.
+
+More about evaluation:
+
+
+                      evaluating numbers and strings	 
+		           gives back the same	
+		           numbers and strings	
+3                               ----------->         3
+-220.9                          ----------->         -220.9
+-0220.900                       ----------->         -220.9
+"abc"                           ----------->         "abc"
+"a AA  b c"                     ----------->         "a AA  b c"
+
+                        symbols work as variables:    
+			 evaluating a symbol you  
+			get the value currently   
+			stored in its "value cell"
+buffer-file-name                ----------->         "/tmp/screenshots.e"
+
+                            evaluating lists	    
+			 means applying a function
+			    ("+" in this case)	    
+			    on some arguments        
+(+ 1 2 3)                       ----------->         6
+(+ (+ 1 2) (+ 3 4))             ----------->         10
+   |-----| |-----|
+   the outer "+" receives
+  the results of evaluating
+      these lists             
+                               look at the result:
+                              lists are values too
+(list 1 (+ 2 3) (list 4 5))     ----------->         (1 5 (4 5))
+                              and note that the
+                            first symbol of a list -
+                         the one that gives the name of
+                         the function, like "list" - is 
+			   not evaluated as a variable
+
+
+
+Buffers and windows
+-------------------
+
+[Exercises with split windows]
+
+http://www.emacswiki.org/cgi-bin/wiki/EmacsNewbie
+
+C-x 2	-- split-window-vertically      (find-enode "Split Window")
+C-x o   -- other-window 		(find-enode "Other Window")
+C-x 0   -- delete-window 		(find-enode "Change Window")
+C-x 1   -- delete-other-windows		(find-enode "Change Window")
+
+C-x b   -- switch-to-buffer		(find-enode "Select Buffer")
+C-x k   -- kill-buffer			(find-enode "Kill Buffer")
+C-x C-s -- save-buffer			(find-enode "Saving")
+C-x C-b	-- list-buffers			(find-enode "List Buffers")
+
+C-x C-c -- save-buffers-kill-emacs	(find-enode "Saving")
+C-x C-f -- find-file 			(find-enode "Visiting")
+					(find-enode "Dired")
+
+[RET works differently in text modes, in buffer-menu-mode and in
+ dired-mode. Explain modes.]
+
+C-g     -- keyboard-quit		(find-enode "Quitting")
+M-x     -- execute-extended-command	(find-enode "M-x")
+	    more about the minibuffer:	(find-enode "Minibuffer")
+tab	-- for completion:		(find-enode "Completion")
+	   for indentation:		(find-enode "Indentation")
+	   in programming modes:	(find-enode "Basic Indent")
+
+
+Variables, setq and quote
+-------------------------
+
+(setq a 10)
+(setq a 22)
+a
+(* a a)
+
+(set (quote a) 10)
+(set       'a  10)
+(quote (+ 4 5 (+ 6 7)))
+      '(+ 4 5 (+ 6 7))
+(list (quote +) 4 5 (list (quote +) 6 7))
+(list       '+  4 5 (list       '+  6 7))
+
+
+
+defun
+-----
+
+(defun square (a) (* a a))
+(defun square (a) "I fooled you")
+(square 5)
+
+(* 5 5)
+"I fooled you"
+
+(symbol-function  'square)
+(find-efunctionpp 'square)
+
+ (lambda (a) (* a a))
+((lambda (a) (* a a)) 5)
+              (square 5)
+
+(fset 'square (lambda (a) (* a a)))
+(fset 'square (lambda (a) "I fooled you"))
+(fboundp 'square)
+(fmakunbound 'square)
+(square 5)
+
+(find-efunctiondescr 'lambda)
+(find-efunctiondescr 'function)
+
+
+
+Comparisons
+-----------
+
+(eq    "foo" (concat "f" "oo"))
+(equal "foo" (concat "f" "oo"))
+
+(assoc "a" '(("a" "b") ("c" "d")))
+(find-elnode "Association Lists")
+
+
+
+
+(defun f () (find-file "/etc/fstab"))
+(f)
+
+(eek "f o o b a r <left> <left> <left> !")
+(eek "foobar    3*<left>               !")
+(eesteps '("foobar" "3*<left>" "!"))
+
+
+
+
+(find-efunction   'find-evariable)
+(find-efunctionpp 'find-evariable)
+
+Sexps that create new buffers
+KIlling buffers with M-k
+
+(list 5 6 7
+      8 9
+      (f 10
+	 11 23 45)
+      777)
+
+#
+echo foo
+#
+rm -Rfv  ~/tmp/foo
+mkdir -p ~/tmp/foo/
+cd        ~/tmp/foo/
+touch bla
+ls -l
+
+#
+
+%
+% (eelatex-bounded)
+% (find-efunction 'eelatex)
+% (find-efunction 'eebd-function-is)
+% eebd-function-is
+% ee-once
+% (find-sh "set | grep -a ^EE")
+
+%
+% (eelatex-bounded)
+Hello
+{\sl Hello}
+$$\sqrt{\sqrt{a_\infty}}$$
+
+%
+
+
+
+Links on Lisp:
+
+Early changelogs:
+(find-eetcfile "")
+(find-eetcfile "ONEWS.4")
+
+(find-elnode "Evaluation")
+(find-elnode "Lisp Data Types")
+(find-elnode "Lists as Boxes")
+
+(find-elinode "List Processing")
+<http://www.fsf.org/software/emacs/emacs-lisp-intro/html_node/List-Processing.html>
+
+<http://www.paulgraham.com/rootsoflisp.html>
+<http://www.paulgraham.com/lib/paulgraham/jmc.ps>
+(code-ps "rootsoflisp" "$S/http/www.paulgraham.com/lib/paulgraham/jmc.ps")
+(find-rootsoflisppage 1)
+
+<http://www.paulgraham.com/onlisp.html>
+<http://www.paulgraham.com/lib/paulgraham/onlisp.ps.Z>
+(code-ps "onlisp" "$S/http/www.paulgraham.com/lib/paulgraham/onlisp.ps.Z")
+(find-onlisppage 11)
+
+;; (find-enode "Point")
+
+
+
+Quotes from <http://www.gnu.org/software/emacs/emacs-paper.html>
+================================================================
+
+    Editing Other Things
+    --------------------
+
+    Interactiveness is useful in many activities aside from editing text.
+    For example, reading and replying to mail from other users ought to be
+    interactive.  Many of these activities occasionally involve text
+    editing: for example, editing the text of a reply.  If a special
+    editor is implemented for the purpose, it can easily be much more work
+    to write than all the rest of the system.  It is easier to write the
+    other interactive system within the framework of an extensible editor.
+
+    (...)
+
+    An EMACS system actually implements two different languages, the
+    editing language and the programming language.  The editing language
+    contains the commands users use for changing text.  These commands are
+    implemented by programs written in the programming language.  When we
+    speak of the _interpreter_, we mean the one which implements the
+    programming language.  The editing language is implemented by the
+    _command dispatcher_.
+
+    (...)
+
+    An on-line extensible system must be able to accept and then
+    execute new code while it is running.  This eliminates most
+    popular programming languages except Lisp, APL and Snobol.  At the
+    same time, Lisp's interpreter and its ability to treat functions
+    as data are exactly what we need.
+
+    (...)
+
+    The most basic kind of question that a user might want to ask is,
+    "What does this command do?"  He can inquire about either a
+    function name or a command character.  A library contains a
+    documentation string for each function in it, and this is used to
+    answer the question.  When the question is about a command
+    character, the dispatch table is used to find the function object
+    which is currently the definition of that character.  Then the
+    library system is used to find the name of the function, and then,
+    from that, the documentation string.
+
+    The ability to ask what a certain command does only helps users
+    who know what commands to ask about.  Other users need to ask,
+    "What commands might help me now?"  EMACS attempts to answer this
+    by listing all the functions whose names contain a given
+    substring.  Since the function names tend to summarize what the
+    functions do (such as `Forward Word' or `Indent for Comment') and
+    follow systematic conventions, this is usually enough.  The list
+    also contains the first line of each function's own documentation,
+    and how to invoke the function with one or two characters, if that
+    is possible.
+
+    The documentation for a function is usually just a string of text,
+    but it can also contain programs to be executed to print the
+    documentation, interspersed with text to be printed
+    literally.  This comes in handy when the description of one
+    function refers to another function which is usually accessed as a
+    one or two character command.  It is better to tell the user the
+    short command, which he would actually use, than the name of the
+    function which defines it.  But exactly which command--if any--runs
+    the function in question depends on the user's customization.  What
+    we do is to use a program, in the middle of the documentation
+    string, which searches the dispatch table and prints the command
+    which would invoke the desired function.  Another application of
+    this facility is for functions which simply load a library and
+    call a function in it.  The documentation string for such functions
+    is a program to load the library and print the documentation of
+    the function which would be called.
+
+    To help users remember how to ask these questions, we make it
+    simple and standard.  A special character, called the Help
+    character, is used.  This character is only used for asking for
+    help, and is always available.  Help is normally followed by
+    another character which specifies the type of inquiry.  If the user
+    does not remember these characters, he can type Help again to see
+    a list of them.  To close the remaining loophole of confusion,
+    EMACS prints a message about the Help character each time it
+    starts up.
+
+    Help is also available in the middle of typing a command.  For
+    example, if you start to type the Replace String command and
+    forget what arguments are required, type Help.  The documentation
+    of the Replace String function will be printed to tell you what to
+    do next.  Because questions are answered based on the data
+    structures as they are at the moment, many changes in EMACS
+    require no extra effort to update the documentation.  It is only
+    necessary to update the documentation of each function whose
+    definition is changed.  The format for EMACS library source files
+    encourages this by requiring a documentation string for every
+    function, between the function name and its definition.
+
+    (...)
+
+    Research Through Development of Installed Tools
+    -----------------------------------------------
+
+    The conventional wisdom has it that when a program intended for
+    multiple users is to be written, specifications should be designed
+    in advance.  It this is not done, the result will be inferior.
+    The place to try anything new is in a research project which users
+    will not see.
+    
+    Some people know better than this, but they have been silenced.
+
+    The development of EMACS followed a path that most authorities
+    would say is a direct route to disaster.  It was the continuous
+    deformation of TECO into something which is totally unlike TECO,
+    from the typical user's point of view.   And during the whole
+    process, TECO and programs containing TECO were the only text
+    editors we had on ITS.(8) Indeed, there are ways in which EMACS
+    shows the results of not having been completely thought out in
+    advance: such as, in being based on TECO rather than Lisp.  But it
+    is still reliable enough to be widely used and imitated.  The
+    disaster which would have been forecast has not occurred.
+    Instead, a new and powerful way of constructing editors has been
+    explored and shown to be good.
+    
+    I believe that this is no accident.  EMACS could not have been
+    reached by a process of careful design, because such processes
+    arrive only at goals which are visible at the outset, and whose
+    desirability is established on the bottom line at the
+    outset.  Neither I nor anyone else visualized an extensible editor
+    until I had made one, nor appreciated its value until he had
+    experienced it.  EMACS exists because I felt free to make
+    individually useful small improvements on a path whose end was not
+    in sight.
+    
+    While there was no overall goal, each small change had a specific
+    purpose in terms of improving the text editor in general use, and
+    each step had to be individually well designed and reliable.  This
+    helped to keep things on the right track.  Research projects with
+    no users tend to improve the state of the art of writing research
+    projects, rather than the state of the art of writing usable
+    system tools.
+    
+    The individual commands of EMACS benefited from a stage of
+    unregulated experimentation also.  When the display processor and
+    the capability for extension were created, many users began to
+    write extensions, which developed into the complete editing
+    environments of which EMACS is the most recent.  Each command in
+    EMACS benefits from the experimentation by many different users
+    customizing their editors in different ways since that time.  This
+    experimentation was possible only because a programmable display
+    editor existed.
+    
+    New implementations of EMACS can now be carefully designed,
+    because they have the advantage of hindsight based on the original
+    EMACS.  However, the implementor must carefully restrict his
+    careful design to the parts of the editor that are already well
+    understood.  To go beyond the original EMACS, he must experiment.
+    But why isn't such a program of exploration doomed to be
+    sidetracked by a blind alley, which will be unrecognized until too
+    late? It is the extensibility, and a flexibility of mind, which
+    solves this problem: many alleys will be tried at once, and blind
+    alleys can be backed out of with minimal real loss.
+    
+    (...)
+
+    The programmable editor is an outstanding opportunity to learn to
+    program! A beginner can see the effect of his simple program on
+    the text he is editing; this feedback is fast and in an easily
+    understood form.  Educators have found display programming to be
+    very suited for children experimenting with programming, for just
+    this reason (see LOGO).
+    
+    Programming editor commands has the additional advantage that a
+    program need not be very large to be tangibly useful in editing.  A
+    first project can be very simple.  One can thus slide very smoothly
+    from using the editor to edit into learning to program with it.
+    
+    When large numbers of nontechnical workers are using a
+    programmable editor, they will he tempted constantly to begin
+    programming in the course of their day-to-day lives.  This should
+    contribute greatly to computer literacy, especially because many
+    of the people thus exposed will be secretaries taught by society
+    that they are incapable of doing mathematics, and unable to
+    imagine for a moment that they can learn to program.  But that
+    won't stop them from learning it if they don't know that it is
+    programming that they are learning! According to Bernard
+    Greenberg, this is already happening with Multics EMACS.
+
+
+
+
+
+
+
+
+
+
+;; Local Variables:
+;; mode:                      text
+;; coding:                    raw-text-unix
+;; ee-anchor-format:          "«%s»"
+;; ee-comment-prefix:         ";;"
+;; sentence-end-double-space: t
+;; End:

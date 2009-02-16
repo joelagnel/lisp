@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Compile-window%20on%20demand">Compile-window on demand</a>,
+Next:<a rel=next accesskey=n href="Non-semantic-sources.html#Non-semantic%20sources">Non-semantic sources</a>,
+Previous:<a rel=previous accesskey=p href="Working-with-JDEE.html#Working%20with%20JDEE">Working with JDEE</a>,
+Up:<a rel=up accesskey=u href="Tips-and-tricks.html#Tips%20and%20tricks">Tips and tricks</a>
+<hr><br>
+
+<h3>Displaying the compile-window on demand</h3>
+
+<p>If you like displaying all output of compile/grep/etc. an all
+temp-buffers like *Help*-buffers in an extra compile-window
+(see <a href="Temp--and-compile-buffers.html#Temp-%20and%20compile-buffers">Temp- and compile-buffers</a>) but you dislike wasting the space
+of this compile-window if you are just editing then you can get a
+compile-window "on demand". Just do the following:
+
+<ol type=1 start=1>
+</p><li>Customize <code>ecb-compile-window-height</code> to not nil and save it for
+future sessions. This gives you an extra compile-window at the
+bottom.
+
+<li>Add the following to your .emacs:
+
+<br><pre>(add-hook 'ecb-activate-hook
+          (lambda ()
+            (let ((compwin-buffer (ecb-get-compile-window-buffer)))
+            (if (not (and compwin-buffer
+                          (ecb-compilation-buffer-p compwin-buffer)))
+                (ecb-toggle-compile-window -1)))))
+</pre>
+
+<p>This hides the extra compile-window directly after the start of ECB
+because there is no need for a compile-window at this moment. But the
+hiding will not be done if there is a compile-window and if a
+"compile-buffer" in the sense of <code>ecb-compilation-buffer-p</code> is
+displayed in this compile-window. Without this additional check the
+compile-window would always be hidden after the ECB-start even when
+ECB is reactivated after a deactivation by the window-manager-support
+of ECB (see <a href="Window-managers-and-ECB.html#Window-managers%20and%20ECB">Window-managers and ECB</a>); but in these cases we want
+to preserve the state before deactivation as good as possible (see
+also option <code>ecb-split-edit-window-after-start</code>).
+
+</ol>
+
+<p>This is all you have to do. Now if you run <code>compile</code> (or
+<code>grep</code> or other compile-modes) or display temp-buffers like
+*Help*-buffers then ECB autom. displays the compile-window at the
+bottom and display the output there.
+
+<p>If you have finished with using the compile- or temp-output (e.g. 
+fixing errors) then you can throw away the compile-window just by
+<code>ecb-toggle-compile-window</code> - ECB will reactivate it autom. 
+before next compilation or help-buffer-display.!
+
+</body></html>
+

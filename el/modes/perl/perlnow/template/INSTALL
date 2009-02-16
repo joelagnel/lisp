@@ -1,0 +1,75 @@
+### INSTALL for template.el: Template Package for Emacs
+
+## Copyright 2002 Free Software Foundation, Inc.
+##
+## Author: Christoph Wedler <wedler@users.sourceforge.net>
+## Keywords: Emacs, template, comment decoration, auto-updating, data, tools
+## X-URL: http://emacs-template.sourceforge.net/
+
+
+The installation process with explanations (all files mentioned here are
+relative to top-level directory "template/" in the distribution):
+
+
+ 1. Copy file "lisp/template.el" to your load-path.  That means:
+
+    Use C-h v load-path RET to check the value and the documentation of
+    Emacs' load-path.
+
+    You must copy "lisp/template.el" to one of the directories in the
+    value list.  If no directory in the default value is appropriate, you
+    must add "your own" directory to that list.
+
+    The cases:
+
+      (a) You want to copy the file to DIR, i.e., one of the listed
+          directories: copy "lisp/template.el" to DIR.
+
+      (b) You use Emacs and install Template in your home directory:
+          create directory "~/.emacs.d/lisp/" and copy "lisp/template.el"
+          to it.  Add the following lines at the beginning of your Emacs
+          init file:
+
+             (setq load-path (cons (expand-file-name "~/.emacs.d/lisp")
+                             load-path))
+
+      (c) You use XEmacs-20.3 or higher and install Template in your
+          home directory: create directory
+          "~/.xemacs/xemacs-packages/lisp/".  It will be automatically
+          added to `load-path' if you start XEmacs the next time.
+
+      (d) You install Template system-wide: the target directory is
+          "EMACS/site-lisp/" or "XEMACS/site-packages/lisp/".  But you
+          probably know that if you are responsible for Emacs or XEmacs
+	  on your site.
+
+
+ 2. Byte-compile file "template.el": visit file "template.el" (that is,
+    the copy) and use menu entry
+
+       "Emacs-Lisp"/"Lisp" >> "Byte-compile This File"
+    or
+        M-x byte-compile-file RET template.el RET.
+
+    Note: during compilation, you get warnings about missing functions.
+    You can ignore them, since these functions will not be used in the
+    Emacs/XEmacs branch or version you are using.
+
+
+ 3. Visit your Emacs init file.
+
+     - The Emacs init file is usuall file "~/.emacs".
+     - In XEmacs-21.4 or higher, it is usually "~/.xemacs/init.el".
+     - For a system-wide installation, the init file is "default.el".
+
+    Add the following lines into your init file (it should be inserted
+    after the lines from case 1b):
+
+       (require 'template)
+       (template-initialize)
+
+ 4. You might want to copy the template files "templates/*.tpl" to
+    "~/.templates/" and change them according to your preferences.
+
+
+### INSTALL ends here

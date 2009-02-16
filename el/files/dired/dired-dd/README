@@ -1,0 +1,33 @@
+Refer to INSTALL for brief infomation on installing and loading
+dired-dd, and dired-dd.info for more detailed informations.
+dired-dd can be opened in `info mode' with `I' command in ordinary
+dired buffer.
+
+Currently core part of dired-dd is composed of dired-dd.el and
+dired-dd-b3-menu.el.
+
+To support some drag-and-drop operations into non-dired buffer,
+some small (experimental or sample) programs are included:
+
+  dired-dd-mew.el: for drag-drop MIME attachment file into Mew's draft buffer.
+  dired-dd-insert-file.el: for drag-drop file(s) into non-dired buffer.
+  dired-dd-insert-fname.el: for drag-drop filename(s) into non-dired buffer.
+
+
+
+From version 0.9.1.6, dired-dd is distributed under GPL (version 2)
+
+The older versions might include different copying notice (even if I believe
+they were also `Free Software' as well), but forget all about those obsolete
+versions.
+
+I take GPL because I think it is the best way to distribute my work on elisp
+for `free', and express my respect to all the emacs related works ever
+been achieved.
+
+The files under `spinout' directory may not all have the GPL copying notice
+in order to save storage space, but take them as they were protected
+under GPL.
+
+Thu Jan 29 13:15:39 1998
+s.n.

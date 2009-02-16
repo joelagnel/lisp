@@ -1,0 +1,1099 @@
+This is ecb.info, produced by makeinfo version 4.2 from ecb.texi.
+
+INFO-DIR-SECTION GNU Emacs Lisp
+START-INFO-DIR-ENTRY
+* ECB: (ecb).           Emacs Code Browser
+END-INFO-DIR-ENTRY
+
+
+File: ecb.info,  Node: ecb-layout,  Next: ecb-compilation,  Prev: ecb-analyse,  Up: Customizable options
+
+Group ecb-layout
+----------------
+
+This group contains settings for the screen-layout of the ECB:
+
+ - User Option: activate-before-new-frame-created-hook
+   Normal hook run before the new ECB-frame is created if `ecb-new-ecb-frame'
+   is not nil (otherwise this hook is not evaluated).
+
+ - User Option: advice-window-functions
+   Advice functions to be more intelligent if used with ECB. You can choose
+   the following functions to be adviced by ECB so they behave as if the
+   edit-window(s) of ECB would be the only windows(s) of the ECB-frame:
+
+    * `other-window' For this one see also the option
+      `ecb-other-window-behavior'!
+
+    * `delete-window'
+
+    * `delete-other-windows'
+
+    * `delete-windows-on'
+
+    * `split-window-horizontally'
+
+    * `split-window-vertically'
+
+    * `split-window' If this advice is enabled then `split-window-vertically'
+      and `split-window-horizontally' are autom. enabled too!
+
+    * `switch-to-buffer'
+
+    * `switch-to-buffer-other-window'
+
+    * `display-buffer' Especially if `ecb-compile-window-height' is not nil
+      it is strongly recommended not to disable this advice!
+
+    * `other-window-for-scrolling' If this advice is enabled then the
+      behavior of the following functions depends on
+      `ecb-other-window-behavior':
+       - `scroll-other-window'
+
+       - `scroll-other-window-down'
+
+       - `beginning-of-buffer-other-window'
+
+       - `end-of-buffer-other-window'
+
+    * `balance-windows': Only the edit-windows are balanced
+
+   For working most conveniently with ECB it is the best to advice all these
+   functions, because then all the standard shortcuts of these functions are
+   also usable with ECB without doing anything else. Also other packages can
+   interact best with ECB if these functions are all adviced. If these
+   adviced functions are called in another frame than the ECB-frame they
+   behave all exactly like the not adviced versions!
+
+   But please read also the following:
+
+   Normally all packages should work correct with ECB and it큦 adviced
+   functions but if there occur problems with a package cause of some of
+   these adviced functions ECB offers the following fall-back solution:
+
+   1. Deactivate in `ecb-advice-window-functions' all the adviced-functions
+      which make problems with other packages.
+
+   2. For every of the advice-able functions <adv-func> ECB offers a
+      interactively function named "ecb-<adv-func>" which does exactly the
+      same as the adviced version of <adv-func>. Use "ecb-<adv-func>" instead
+      the original one to get the proper ECB behavior even if the function is
+      not adviced anymore.
+
+   3. You can bind in `ecb-activate-hook' the standard-shortcut of <adv-func>
+      to "ecb-<adv-func>" and rebind it in `ecb-deactivate-hook' to
+      <adv-func>.
+
+   4. Now you have the best of both worlds: The problematic package works and
+      you have the ECB-behavior of <adv-func> as if it would be adviced.
+
+   Here is an example: Suppose you must deactivating the advice for
+   `switch-to-buffer-other-window'. Then you deactivate this function with
+   this option and you can use `ecb-switch-to-buffer-other-window' instead.
+   Bind the shortcut you normally use for `switch-to-buffer-other-window' to
+   `ecb-switch-to-buffer-other-window' (use `ecb-activate-hook' for this) and
+   rebind it to the original function in the `ecb-deactivate-hook'.
+
+ - User Option: advice-window-functions-signal-error
+   Signal an error if an adviced function can not do its job. If not nil then
+   an error is signaled if one of the adviced functions (see
+   `ecb-advice-window-functions') can not do its job. So for example if the
+   user tries to split the compile-window or an ecb-tree-window or if one
+   tries to switch to another buffer in one of the ecb-tree-windows. For
+   details see the documentation of each of the adviced functions to get info
+   when an error is signaled.
+
+   If this option is nil then no error is signaled but the called adviced
+   function does simply nothing.
+
+   Default is nil but it can also be useful to signal errors - so you see
+   when call a function in a situation which is not supported by this
+   function.
+
+ - User Option: fix-window-size
+   Fix size of the ECB-windows/buffers even after frame-resizing. The fix
+   type (valid values are nil, t, width and height) can either be set on a
+   layout-basis (means a different value for each layout) or one value can be
+   set for all layouts.
+
+   For a detailed description of the valid values see description of
+   `window-size-fixed' which is newly introduced in GNU Emacs 21 and is only
+   available there. Therefore this option takes only effect with GNU Emacs 21.
+
+   Note1: Manually resizing the ECB-windows via `enlarge-window',
+   `shrink-window', `mouse-drag-vertical-line' and `mouse-drag-mode-line' is
+   still possible even if the window-sizes are fixed for frame-resizing!
+
+   Note2: The description of `window-size-fixed' in the Elisp-info-manual is
+   more detailed than the description offered by `C-h v'!
+
+   Note3: With current Emacs 21.2.X there seems to be no distinction between
+   `width', `height' and `t'. Therefore this option takes no effect (means
+   all ecb-windows have always unfixed sizes) if `ecb-compile-window-height'
+   is not `nil'.
+
+   Per default no window-size fixing has been done.
+
+ - User Option: hide-ecb-windows-after-hook
+   Hooks run direct after the ECB windows have been hidden. Hiding was done
+   either by `ecb-toggle-ecb-windows' or `ecb-hide-ecb-windows'.
+
+   IMPORTANT: Hiding the ECB-windows is internally done by calling
+   `ecb-redraw-layout' and therefore also the hooks
+   `ecb-redraw-layout-before-hook' and `ecb-redraw-layout-after-hook' are
+   evaluated. The hook-sequence is analogous to that described in
+   `ecb-show-ecb-windows-after-hook'.
+
+ - User Option: hide-ecb-windows-before-hook
+   Hook run direct before the ECB windows will be hidden. Hiding is done
+   either by `ecb-toggle-ecb-windows' or `ecb-hide-ecb-windows'. This means
+   that at runtime of this hook all the ECB-tree-windows of current layout
+   are visible.
+
+   IMPORTANT: Hiding the ECB-windows is internally done by calling
+   `ecb-redraw-layout' and therefore also the hooks
+   `ecb-redraw-layout-before-hook' and `ecb-redraw-layout-after-hook' are
+   evaluated. The hook-sequence is analogous to that described in
+   `ecb-show-ecb-windows-before-hook'.
+
+ - User Option: ignore-display-buffer-function
+   Adviced `display-buffer' ignores `display-buffer-function'.  This means,
+   that the adviced version of `display-buffer' (see
+   `ecb-advice-window-functions') ignores the value of
+   `display-buffer-function' when called for the `ecb-frame'.  If this
+   variable should not be ignored then the function of
+   `display-buffer-function' is completely responsible which window is used
+   for the buffer to display - no smart ECB-logic will help to deal best with
+   the ECB-window-layout! You can define if and when
+   `display-buffer-function' should be ignored:
+
+    - only when persistent compile window is used - i.e. if
+      `ecb-compile-window-height' is not nil
+
+    - always when ECB is active - that means ignore when ECB is active
+      otherwise not - this is the default value
+
+    - never, the adviced version of `display-buffer' always uses the value of
+      `display-buffer-function' if the value is a function.
+
+ - User Option: ignore-special-display
+   Ignore special-display-handling. This means, that all values of
+   `special-display-function', `special-display-buffer-names' and
+   `special-display-regexps' are ignored
+
+    * only when persistent compile window is used - i.e. if
+      `ecb-compile-window-height' is not nil - this is the default value.
+
+    * always when ECB is active - that means no special-display-handling of
+      buffers when ECB is active
+
+    * never, i.e. special-dislay-handling depends on the values of the
+      options `special-display-function', `special-display-buffer-names' and
+      `special-display-regexps'.
+
+
+ - User Option: layout-always-operate-in-edit-window
+   Adviced window functions work always in the edit-window. If we are in an
+   ECB special buffer (methods, directories, etc), and any of the adviced
+   windowing functions is called interactively (see
+   `ecb-advice-window-functions'), we will select first an edit-window
+   according to the value of `ecb-mouse-click-destination'. This is useful if
+   you have any functions that use such functions and you don't want them to
+   fail with an error complaining that the current buffer can not be split, or
+   something similar.
+
+   Because this may not be desirable in all situations and for all adviced
+   functions this can be enabled separately for every advicable function (see
+   also `ecb-advice-window-functions'). If the symbol of an adviced function
+   is contained in the value of this option, then a edit-window is first
+   selected otherwise either an error is reported or some other special
+   reaction (depends on `ecb-advice-window-functions-signal-error'); see the
+   documentation of the adviced functions for this.
+
+   For `other-window', `other-window-for-scrolling' and
+   `switch-to-buffer-other-window' this makes no sense, therefore you can not
+   enable this for them.
+
+   Per default this is enabled for `switch-to-buffer' and `display-buffer'.
+
+ - User Option: layout-debug-mode
+   Write debug-information about layout-operations in the Messages-buffer.
+   Normally there should be no need to set this option to true but if there
+   are problems to display buffers in the compile-window of ECB (e.g. buffers
+   which should be displayed there aren't or the temporally
+   enlarging-mechanism does not do what you think it should do etc...) then
+   please do the following steps:
+
+   1. Set `ecb-layout-debug-mode' to not nil
+
+   2. Reproduce the wrong behavior exactly by repeating all the operations
+      which lead to the problem.
+
+   3. Now send immediately a bug report with `ecb-submit-problem-report'.
+
+   4. Set `ecb-layout-debug-mode' back to nil if you do not want further
+      debugging output in the *Messages* buffer
+
+ - User Option: layout-name
+   Select a window layout of ECB. Value is any arbitrary string. There are
+   four different types of layouts: left, right, top and left-right, which
+   means the location of the ECB-tree-windows in the ECB-frame.  Currently
+   there are 20 predefined layouts; names see below. You can savely try out
+   any of them by changing this value and saving it only for the current
+   session. If you are sure which layout you want you can save it for future
+   sessions. To get a picture of the layout for name <name> call
+   `ecb-show-layout-help'. `ecb-layout-function-9'.
+
+   Currently available layouts:
+
+    * Left layouts: left1 left2 left3 left4 left5 left6 left7 left8 left9
+      left10 left11 left12 left13 left14 left15
+
+    * Right layouts: right1
+
+    * Top layouts: top1 top2
+
+    * Left-right layouts: leftright1 leftright2
+
+   Regardless of the settings you define here: If you have destroyed or
+   changed the ECB-screen-layout by any action you can always go back to this
+   layout with `ecb-redraw-layout'
+
+ - User Option: layout-window-sizes
+   Specifies the sizes of the ECB windows for each layout. The easiest way
+   (and also the strongly recommended way) to change this variable is to
+   change the window sizes by dragging the window borders using the mouse and
+   then store the window sizes by calling the command
+   `ecb-store-window-sizes'. Next time the layout is redrawn the values
+   stored in this option will be used.
+
+   If `ecb-store-window-sizes' is used then the windows sizes are stored per
+   default as fractions of current frame-width and -height of the ecb-frame,
+   so the stored values will "work" for other frame sizes too. But if you
+   call `ecb-store-window-sizes' with a prefix-argument then the fixed values
+   of current width and height are stored!
+
+   If this option is set "by hand" (i.e. not by `ecb-store-window-sizes')
+   then the following is important:
+    - It is recommended to use fractions of frame-width and -height!.
+
+    - The order of the sequence of the inserted window sizes must be the same
+      as `other-window' (the not-adviced version!) would walk!
+
+ - User Option: maximize-ecb-window-after-selection
+   If not nil maximize current tree-window after selection. When selecting
+   another not-tree-window after such an automatic maximizing all
+   tree-windows of current layout are displayed again. But a tree-window is
+   not maximized if either a node has been selected via primary- oder
+   secondarc mouse-button or the popup-menu of that tree-buffer has been
+   opened.
+
+ - User Option: maximize-next-after-maximized-select
+   Maximizes the next logical tree-window after a maximized node-selection.
+   Selecting a node in a maximized tree-window is handled very smart by ECB:
+
+   If a tree-buffer-name is not contained in this option then selecting a
+   node in this maximized tree-buffer automatically "minimizes" that
+   tree-window (i.e. displays all windows of the current layout) so the user
+   can perform the next logical step (e.g. the next logical step after
+   selecting a directory in the directories-buffer is to select a source-file
+   - therefore the sources-buffer of current layout has to be displayed - if
+   the current layout contains one; the next logical step of selecting a
+   source-file is probably to jump to a certain tag via the methods-buffer).
+
+   If a tree-buffer-name is contained in this option then selecting a node in
+   this tree-buffer automatically maximizes the next logical tree-window
+   (e.g. directories -> sources, sources/history -> methods). But if the
+   current maximized tree-buffer is also contained in the option
+   `ecb-tree-do-not-leave-window-after-select' (see also the
+   tree-buffer-command `ecb-toggle-do-not-leave-window-after-select' which is
+   bound to `C-t' in each tree-buffer) then ECB does *not* maximize the next
+   logical tree-window but point stays in the currently maximized tree-buffer
+   so for example the user can select more than one node (e.g. more than one
+   source-file from the sources-buffer.
+
+   The tree-buffer-name can either be defined as plain string or with a
+   symbol which contains the buffer-name as value. The latter one is
+   recommended for the builtin ECB-tree-buffers because then simply the
+   related option-symbol can be used (e.g.  `ecb-directories-buffer-name',
+   `ecb-sources-buffer-name' or `ecb-history-buffer-name').
+
+   In future versions this option will probably also allow to define the next
+   logical tree-buffer for a tree-buffer - currently this is hard-coded as
+   follows:
+    - directories -next-logical-> sources
+
+    - sources     -next-logical-> methods
+
+    - history     -next-logical-> methods.
+
+ - User Option: maximize-next-after-maximized-select
+   Maximizes the next logical tree-window after a maximized node-selection.
+   Selecting a node in a maximized tree-window is handled very smart by ECB:
+
+   If this option is nil then selecting a node in a maximized directories-
+   sources- or history-tree-buffer automatically "minimizes" that tree-window
+   (i.e. displays all windows of the current layout) so the user can perform
+   the next logical step (e.g.  the next logical step after selecting a
+   directory in the directories-buffer is to select a source-file - therefore
+   the sources-buffer of current layout has to be displayed - if the current
+   layout contains one; the next logical step of selecting a source-file is
+   probably to jump to a certain tag via the methods-buffer).
+
+   If this option is not nil then selecting a node in a maximized
+   directories- sources- or history-tree-buffer automatically maximizes the
+   next logical tree-window (directories -> sources, sources/history ->
+   methods). But if the current maximized tree-buffer is contained in the
+   option `ecb-tree-do-not-leave-window-after-select' (see also the
+   tree-buffer-command `ecb-toggle-do-not-leave-window-after-select' which is
+   bound to `C-t' in each tree-buffer) then ECB does *not* maximize the next
+   logical tree-window but point stays in the currently maximized tree-buffer
+   so for example the user can select more than one source-file from the
+   sources-buffer.
+
+ - User Option: new-ecb-frame
+   Create a new frame at activation time of ECB.
+
+ - User Option: other-window-behavior
+   The behavior of ECB concerning getting an "other window". This has an
+   effect if either `other-window' or `other-window-for-scrolling' is adviced
+   by ECB, see `ecb-advice-window-functions'. The following settings are
+   possible:
+
+   `all':
+
+   ECB will cycle through all windows of the ECB-frame or scroll simply the
+   next window in the ECB-frame, means it behaves like the original
+   `other-window' rsp. the original `other-window-for-scrolling'.
+
+   `only-edit':
+
+   ECB will only cycle through the edit-windows of ECB or only scroll another
+   edit-window. If the selected window is not an edit-window then it behaves
+   like with value `all'.
+
+   `edit-and-compile':
+
+   Like `only-edit' plus the compile window if any. If the selected window is
+   neither an edit-window nor the compile-window then it behaves like with
+   value `all'.
+
+   `smart':
+
+   With this setting ECB tries to choose the `other-window'-destination or
+   the "other window" to scroll in a smart and intuitive way: If point is in
+   one of the edit-windows and if the edit-area is splitted then always the
+   "next" edit-window is choosen (whereas the next edit-window of the last
+   edit-window is the first edit-window)- if the edit-area is unsplitted then
+   the compile-window is used if there is one. In the context of an
+   `other-window'-call the ARG of `other-window' will be taken into account.
+
+   If one of the special ecb-windows is selected then always the "next"
+   ecb-window is choosen (whereas the next ecb-window of the last ecb-window
+   is the first ecb-window). In the context of an `other-window'-call the ARG
+   of `other-window' will be taken into account. If there is only one
+   ecb-window then ECB considers also the edit-windows
+
+   If the compile-window is selected then always the last edit-window which
+   had the point will be used unless `other-window' has been called with a
+   prefix-argument unequal 1.
+
+   If there is an active minibuffer:
+
+   Regardless of the allowed values above ECB handles the situation of an
+   active minibuffer during a call to `other-window' or `scroll-other-window'
+   like follows:
+
+   If the minibuffer-window is selected then ECB always chooses the window
+   `minibuffer-scroll-window' points to (when this variable is set, otherwise
+   the compile-window or the last selected edit-window is choosen) when the
+   called command is called to choose the 1. next window (always true for
+   scrolling another window or true when `other-window' called without
+   prefix-arg or with prefix-arg equal 1). Otherwise the window ARG steps
+   away is choosen (in case of `other-window').
+
+   If there is an active minibuffer but the minibuffer-window is not selected
+   then `other-window' and `scroll-other-window' behave like the original
+   version.
+
+   In addition to the allowed values above the value of this option can also
+   be a function:
+
+   A function:
+
+   This function gets seven arguments:
+   1. A canonical list of all currently visible windows of the `ecb-frame'
+
+   2. A canonical list of all currently visible edit-windows
+
+   3. A canonical list of all currently visible ecb-windows
+
+   4. The window-object of the compile-window if there is any.
+
+   5. The minibuffer-window of the ECB-frame if there is an active minibuffer.
+
+   6. The result of the function `ecb-where-is-point' - see the documentation
+      of this function for details.
+
+   7. An integer which indicates how many steps away from the current
+      selected window the "other-window" is. Is nil when this function is
+      called in another context then for `other-window'.
+
+   The function has to return a window-object which is then used as "other
+   window" for the command `other-window' or for scrolling another window
+   (e.g. with `scroll-other-window'). Such a function has to handle properly
+   all situation for itself.  `ecb-get-other-window-smart' is an example for
+   such a function.
+
+ - User Option: redraw-layout-after-hook
+   Hooks run direct before the ECB windows will be shown either by
+   `ecb-toggle-ecb-windows' or `ecb-show-ecb-windows'. This means that at
+   runtime of this hook the ECB-windows are already visible.
+
+ - User Option: redraw-layout-before-hook
+   Hooks run direct before the ECB-layout will be redrawn by either
+   `ecb-redraw-layout'.
+
+ - User Option: redraw-layout-quickly
+   If non-nil, we will attempt to redraw the layout quickly. Please read also
+   carefully the documentation of `ecb-redraw-layout'.
+
+ - User Option: select-edit-window-on-redraw
+   Select the first edit window on `ecb-redraw-layout'.
+
+ - User Option: show-ecb-windows-after-hook
+   Hooks run direct before the ECB windows will be shown either by
+   `ecb-toggle-ecb-windows' or `ecb-show-ecb-windows'. This means that at
+   runtime of this hook the ECB-windows are already visible.
+
+   IMPORTANT: Showing the hidden ECB-windows is internally done by calling
+   `ecb-redraw-layout' and therefore also the hooks
+   `ecb-redraw-layout-before-hook' and `ecb-redraw-layout-after-hook' are
+   evaluated. So there is the following sequence of hooks during the process
+   of showing the hidden ECB-windows:
+   1. `ecb-show-ecb-windows-before-hook'
+
+   2. `ecb-redraw-layout-before-hook'
+
+   3. <redrawing the layout to show the hidden ECB-windows>
+
+   4. `ecb-redraw-layout-after-hook'
+
+   5. `ecb-show-ecb-windows-after-hook'
+      So be aware which code you add to which hook!
+
+ - User Option: show-ecb-windows-before-hook
+   Hooks run direct before the ECB windows will be shown either by
+   `ecb-toggle-ecb-windows' or `ecb-show-ecb-windows'. This means that at
+   runtime of this hook the ECB-windows are still hidden.
+
+   IMPORTANT: Showing the hidden ECB-windows is internally done by calling
+   `ecb-redraw-layout' and therefore also the hooks
+   `ecb-redraw-layout-before-hook' and `ecb-redraw-layout-after-hook' are
+   evaluated. So there is the following sequence of hooks during the process
+   of showing the hidden ECB-windows:
+   1. `ecb-show-ecb-windows-before-hook'
+
+   2. `ecb-redraw-layout-before-hook'
+
+   3. <redrawing the layout to show the hidden ECB-windows>
+
+   4. `ecb-redraw-layout-after-hook'
+
+   5. `ecb-show-ecb-windows-after-hook'
+      So be aware which code you add to which hook!
+
+ - User Option: split-edit-window-after-start
+   Sets if and how the edit window should be splitted after ECB-start.  But
+   be aware: This option determines only if and how the edit-window should be
+   splitted at start-time of ECB. There are five different values allowed for
+   this option:
+
+    - `nil': Do not split the edit-area of ECB after activation, i.e. there
+      will be only one edit-window after starting ECB.
+
+    - `horizontal': Split the edit-area in 2 edit-windows side by side.
+
+    - `vertical': Split the edit-area in 2 edit-windows, one above the other.
+
+    - `before-activation': Split the edit-area as before the ECB-start, i.e.
+      the edit-area will have after start a window-layout as the whole frame
+      had before the start of ECB.
+
+    - `before-deactivation': Split the edit-area into a window-layout ECB had
+      in its edit-area direct before the ECB-deactivation. This value
+      preserves the full state between activations of ECB, i.e. the
+      visibility of the ECB-windows, the visibility of a compile-window and
+      also the full split-state of the edit-area. But this can only be done
+      if important layout-options have not been changed in the meanwhile.
+      These are the options `ecb-layout-name', `ecb-compile-window-height',
+      `ecb-compile-window-width', `ecb-windows-width' and
+      `ecb-windows-height'.
+
+   Default value is `before-deactivation'.
+
+   Some remarks to the value `before-activation': If this value has been set
+   then ECB needs three permanent adivces even when ECB is deactivated:
+   `split-window', `delete-window' and `delete-other-windows'. But these
+   advices do not change any behavior of these functions but only storing in
+   an internal ECB-variable the facts that a window has been splitted or
+   deleted. In addition to this these advices are 100% error-save, means the
+   functionality of the original functions will be performed in every(!)
+   case even if within the advice an error occurs (but normally there can no
+   errors occur in these advices because they are very simple).  Conclusion:
+   If you want really all ECB-advices being disabled after deactivating ECB
+   then you have to set this option to other values then `before-activation'.
+   But setting this variable to this value is really completely save.
+
+ - User Option: toggle-layout-sequence
+   Toggle sequence for layout toggling with `ecb-toggle-layout'.  Every
+   element of this list has to be a valid layout-name i.e. either one of the
+   predefined layouts or one of the user-defined layouts.
+
+   You can add here as many layouts as you want but to use this option most
+   effective you should not add more than 2 or 3 layouts so every layout can
+   be accessed very fast by toggling with `ecb-toggle-layout'. It is also
+   senseful to add layouts which have the same principal outline, i.e. all
+   their tree-buffers are on the same side of the frame and the
+   tree-buffer-"column" (or -"row") has identical size for the layouts.
+
+   Recommended values are for example:
+
+    - ("left10" "left15"), toggles between methods and directories/history
+
+    - ("left10" "left13"), toggles between methods and directories
+
+    - ("left10" "left14"), toggles between methods and history
+
+    - ("left10" "left13" "left14"), toggles between methods, history and
+      directories
+
+   See also option `ecb-show-sources-in-directories-buffer'.
+
+   This option makes only sense if the value is a list with more than 1
+   element!
+
+ - User Option: windows-height
+   The height of the ECB windows in lines for top-layouts. If the number is
+   less than 1.0 the width is a fraction of the frame height.
+
+ - User Option: windows-width
+   The width of the ECB windows in columns for left- and right layouts.  If
+   the number is less than 1.0 the width is a fraction of the frame width.
+
+
+File: ecb.info,  Node: ecb-compilation,  Next: ecb-create-layout,  Prev: ecb-layout,  Up: Customizable options
+
+Group ecb-compilation
+---------------------
+
+This group contains settings for the compile window of ECB:
+
+ - User Option: compilation-buffer-names
+   Additional buffer names that should be displayed in the compile-window.
+   Buffer names can either be defined as strings or as regexps. If the
+   buffer-name of a buffer matches one of the defined string or regexp then
+   it will be displayed in the compile-window of ECB even if
+   `compilation-buffer-p' says nil for this buffer.
+
+   It is not recommended to add the eshell-buffer-names to this list because
+   ECB already handles the eshell-integration as best as possible (*note
+   Using eshell::).
+
+   See also the options `ecb-compilation-major-modes' and
+   `ecb-compilation-predicates'.
+
+ - User Option: compilation-major-modes
+   Additional major-mode that should be displayed in the compile-window.  All
+   buffers of a major-mode contained in this list are displayed in the
+   compile-window even if `compilation-buffer-p' says nil for such a buffer.
+
+   It is not recommended to add `eshell-mode' to this list because ECB
+   already handles the eshell-integration as best as possible (*note Using
+   eshell::).
+
+ - User Option: compilation-predicates
+   Predicates when a buffer should be treated as compilation-buffer.  Every
+   element of this list has to be a function or lambda-expression which gets
+   as argument a buffer-object and which has to return not nil when this
+   buffer should be treated as compilation-buffer (even if
+   `compilation-buffer-p' says nil) and therefore be displayed in the
+   compile-window of ECB (if there is any).
+
+   In combination with the values of `ecb-compilation-buffer-names' and
+   `ecb-compilation-major-modes' ECB decides when a buffer is displayed in
+   the compile-window.
+
+   Default value is the function `comint-check-proc' which returns not nil
+   when the buffer is related to a living process.
+
+ - User Option: compile-window-height
+   Height of the persistent compilation-window of ECB. If you want a
+   compilation window shown at the bottom of the ECB-layout then set here the
+   height of it (Default is a height of 5). If you redraw the current layout
+   with `ecb-redraw-layout' then the compilation window (if any) has the
+   height you set here. If the number is less than 1.0 the height is a
+   fraction of the frame height.
+
+   If you do not set a persistent compilation window then doing a compilation
+   or displaying temp-buffers (e.g. *Help*-buffers) splits temporally the
+   edit window vertically if the edit window is not splitted already or uses
+   another edit window temporally for compilation output if the edit window
+   is already splitted. This is the recommended value for this option because
+   this is the standard-behavior of Emacs.
+
+   Beware: If you set a persistent compilation window then ECB displays all
+   buffers for which `ecb-compilation-buffer-p' returns not nil in that
+   persistent compilation window. If a buffer which should being displayed
+   there is not displayed there then try to modify the options
+   `ecb-compilation-buffer-names', `ecb-compilation-major-modes' or
+   `ecb-compilation-predicates' (in this sequence).
+
+   See also the options `ecb-compile-window-temporally-enlarge' and
+   `ecb-enlarged-compilation-window-max-height' and also the command
+   `ecb-toggle-compile-window-height'!
+
+   ECB offers the functionality of such a persistent compile-window
+   regardless if the special ECB-windows are visible or not (see the command
+   `ecb-toggle-ecb-windows').
+
+   Regardless of the settings you define here: If you have destroyed or
+   changed the ECB-screen-layout by any action you can always go back to this
+   layout with `ecb-redraw-layout'
+
+ - User Option: compile-window-prevent-shrink-below-height
+   Allow the compile-window to be shrunken below its height. A non nil value
+   means ECB prevents the compile-window from being shrunken below the
+   threshold of `ecb-compile-window-height' by displaying temp-buffers (e.g.
+   *Help* etc.) or after running compilations or greps. But interactively it
+   is always allowed to shrink it to every height!
+
+   If nil then ECB does nothing to prevent being shrunken below the value of
+   `ecb-compile-window-height'.
+
+   Default is t.
+
+ - User Option: compile-window-temporally-enlarge
+   Let Emacs temporally enlarge the compile-window of the ECB-layout.  This
+   option has only an effect if `ecb-compile-window-height' is not nil!
+
+   The following values are possible:
+    - `after-display': After displaying a "compilation-buffer" (in the sense
+      of `ecb-compilation-buffer-p'!) in the compile-window of ECB. For the
+      max. height of the enlarged compile-window see the option
+      `ecb-enlarged-compilation-window-max-height'.
+
+    - `after-selection': Selecting the `ecb-compile-window' auto. enlarges it
+      and de-selecting (means leaving `ecb-compile-window') auto. shrinks it.
+      Enlarging and shrinking the `ecb-compile-window' is done with
+      `ecb-toggle-compile-window-height'. See also the documentation of this
+      function!
+
+    - `both': The combination of 'after-display and 'after-selection.
+
+    - `nil': ECB fixes always the height of the `ecb-compile-window' at the
+      value of `ecb-compile-window-height'.
+
+   To restore the ECB-layout after such a buffer-enlarge just call
+   `ecb-toggle-compile-window-height' or `ecb-redraw-layout'.
+
+ - User Option: compile-window-width
+   Width of the compile-window.
+
+   Possible values are `frame' and `edit-window'.  With `frame' the
+   compile-window looks like:
+
+         -------------------------------------------------------
+         |              |                                      |
+         |  Directories |                                      |
+         |              |                                      |
+         |--------------|            edit-window(s)            |
+         |              |                                      |
+         |  Methods     |                                      |
+         |              |                                      |
+         -------------------------------------------------------
+         |                                                     |
+         |                    Compilation                      |
+         |                                                     |
+         -------------------------------------------------------
+
+   With `edit-window' the compile-window looks like:
+
+         -------------------------------------------------------
+         |              |                                      |
+         |  Directories |                                      |
+         |              |                                      |
+         |--------------|            edit-window(s)            |
+         |              |                                      |
+         |  Methods     |                                      |
+         |              |                                      |
+         |              |---------------------------------------
+         |              |                                      |
+         |              |            Compilation               |
+         |              |                                      |
+         -------------------------------------------------------
+
+   This option takes only effect if `ecb-compile-window-height' is not nil!
+
+ - User Option: change-layout-preserves-compwin-state
+   Changing the layout preserves the state of the compile-window. This is for
+   example useful if the user toggles between several layouts (see
+   `ecb-toggle-layout') and wants to preserve the hidden-state of the
+   compile-window.
+
+ - User Option: enlarged-compilation-window-max-height
+   The max height of the compile-window after enlarging it. The max height of
+   the compilation window after enlarged by
+   `ecb-toggle-compile-window-height'. The following values are allowed:
+
+   `best':
+
+   ECB fits the height of the compile-window exactly to the size of its
+   current contents but never shrinks below the value of
+   `ecb-compile-window-height' or enlarges over the half of the frame-height
+   of the ECB-frame. The values of the options `compilation-window-height'
+   and `temp-buffer-max-height' are taken into account dependent of the
+   current `major-mode' of the buffer in the compile-window: If
+   `compilation-mode' then `compilation-window-height' is used otherwise
+   `temp-buffer-max-height'.
+
+   `half':
+
+   1/2 the frame-height of the ECB-frame
+
+   Any number:
+
+   Max height in lines. If the number is less than 1.0 the height is a
+   fraction of the frame height (e.g. 0.33 results in a max-height of 1/3 the
+   frame-height).
+
+ - User Option: scroll-other-window-scrolls-compile-window
+   `scroll-other-window' scrolls always the compile-window. For all details
+   about the scroll-behavior of `scroll-other-window' see the advice
+   documentation of `other-window-for-scrolling'.
+
+
+File: ecb.info,  Node: ecb-create-layout,  Next: ecb-face-options,  Prev: ecb-compilation,  Up: Customizable options
+
+Group ecb-create-layout
+-----------------------
+
+This group contains settings for creating new ECB-layouts:
+
+ - User Option: create-layout-file
+   File where all layouts created by `ecb-create-new-layout' are stored.
+
+ - User Option: ecb-create-layout-frame-height
+   Frame height of the layout creation frame.
+
+ - User Option: ecb-create-layout-frame-width
+   Frame width of the layout creation frame.
+
+
+File: ecb.info,  Node: ecb-face-options,  Next: ecb-faces,  Prev: ecb-create-layout,  Up: Customizable options
+
+Group ecb-face-options
+----------------------
+
+This group contains settings for all faces used in ECB:
+
+ - User Option: directories-general-face
+   Basic face for the ECB directories buffer. This defines the basic face the
+   whole directory buffer should displayed with. If the face
+   `ecb-default-general-face' is used then the display of all
+   ECB-tree-buffers can be changed by modifying only the face
+   `ecb-default-general-face'.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: directory-face
+   Face used for highlighting current directory in the directories buffer. If
+   the face `ecb-default-highlight-face' is used then the display of all
+   ECB-tree-buffers can be changed by modifying only the face
+   `ecb-default-highlight-face'.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: directory-not-accessible-face
+   Face for not accessible dirs in the directories buffer.
+
+ - User Option: history-face
+   Face used for highlighting current history-entry in the history buffer. If
+   the face `ecb-default-highlight-face' is used then the display of all
+   ECB-tree-buffers can be changed by modifying only the face
+   `ecb-default-highlight-face'.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: history-general-face
+   Basic face for the ECB directory buffer. This defines the basic face the
+   whole history buffer should displayed with. If the face
+   `ecb-default-general-face' is used then the display of all
+   ECB-tree-buffers can be changed by modifying only the face
+   `ecb-default-general-face'.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: method-face
+   Face used for highlighting current method, class or variable in the
+   methods buffer. If the face `ecb-default-highlight-face' is used then the
+   display of all ECB-tree-buffers can be changed by modifying only the face
+   `ecb-default-highlight-face'.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: method-non-semantic-face
+   Face used for for displaying tags of sources not supported by semantic.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: methods-general-face
+   Basic face for the ECB methods buffer. This defines the basic face the
+   whole methods buffer should displayed with. If the face
+   `ecb-default-general-face' is used then the display of all
+   ECB-tree-buffers can be changed by modifying only the face
+   `ecb-default-general-face'.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: source-face
+   Face used for highlighting current source in the sources buffer. If the
+   face `ecb-default-highlight-face' is used then the display of all
+   ECB-tree-buffers can be changed by modifying only the face
+   `ecb-default-highlight-face'.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: source-in-directories-buffer-face
+   Face for source files in the directories buffer.
+
+ - User Option: sources-general-face
+   Basic face for the ECB sources buffer. This defines the basic face the
+   whole sources buffer should displayed with. If the face
+   `ecb-default-general-face' is used then the display of all
+   ECB-tree-buffers can be changed by modifying only the face
+   `ecb-default-general-face'.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: source-read-only-face
+   Face for read-only sources.
+
+ - User Option: tag-header-face
+   Face used for highlighting the tag header after jumping to it by clicking
+   onto a node in the methods buffer.
+
+
+File: ecb.info,  Node: ecb-faces,  Next: ecb-download,  Prev: ecb-face-options,  Up: Customizable options
+
+Group ecb-faces
+---------------
+
+This group contains all faces used in ECB:
+
+`ecb-bucket-node-face:'
+   Face which can be used for displaying bucket tags in the methods buffer.
+   See also `ecb-bucket-node-display'.
+
+`ecb-default-general-face:'
+   Basic face for all ECB tree-buffers.  It's recommended to define here the
+   font-family, the font-size, the basic color etc.
+
+   In GNU Emacs 21.X all faces (even the face `ecb-default-highlight-face')
+   used in the ECB tree-buffers inherit from this face. Therefore the default
+   attributes like font etc. of a face used in a tree-buffer can be very
+   easily changed with face `ecb-default-general-face'.
+
+   With XEmacs there is no inheritance-feature but the options
+   `ecb-directories-general-face', `ecb-sources-general-face',
+   `ecb-methods-general-face' and `ecb-history-general-face' offer the choice
+   to use the face `ecb-default-general-face' so also with XEmacs the basic
+   face-settings can be easily changed just by customizing the face
+   `ecb-default-general-face'!
+
+`ecb-default-highlight-face:'
+   Define basic face for highlighting the selected node in an ECB tree-buffer.
+
+   In GNU Emacs 21.X all highlighting faces in the ECB tree-buffers inherit
+   from this face. Therefore the default attributes like font etc. of a face
+   used in a tree-buffer for highlighting the current tag can be very easily
+   changed with face `ecb-default-highlight-face'.
+
+   With XEmacs there is no inheritance-feature but the options
+   `ecb-directory-face', `ecb-source-face', `ecb-method-face' and
+   `ecb-history-face' offer the choice to use the face
+   `ecb-default-highlight-face' so also with XEmacs the basic face-settings
+   can be easily changed just by customizing the face
+   `ecb-default-highlight-face'!
+
+`ecb-directories-general-face:'
+   Basic face for the ECB directories buffer. It큦 recommended to define here
+   the font-family, the font-size, the basic color etc.
+
+`ecb-directory-face:'
+   Define face used for highlighting current directory in the directories
+   buffer.
+
+`ecb-directory-not-accessible-face'
+   Define a face for not accessible dirs in the directories buffer.
+
+`ecb-history-face:'
+   Define face used for highlighting current history-entry in the history
+   buffer.
+
+`ecb-history-general-face:'
+   Basic face for the ECB history buffer. It큦 recommended to define here the
+   font-family, the font-size, the basic color etc.
+
+`ecb-method-face:'
+   Define face used for highlighting current method, class or variable in the
+   methods buffer.
+
+`ecb-methods-general-face:'
+   Basic face for the ECB methods buffer. It큦 recommended to define here the
+   font-family, the font-size, the basic color etc.
+
+`ecb-method-non-semantic-face:'
+   Define face used for displaying tags of sources not supported by semantic.
+
+`ecb-mode-line-data-face'
+   Define face for the data in the mode-line. See `ecb-mode-line-data'.
+
+`ecb-mode-line-prefix-face'
+   Define face for the prefix in the mode-line. See `ecb-mode-line-prefixes'.
+
+`ecb-source-face:'
+   Define face used for highlighting current source in the sources buffer.
+
+`ecb-source-in-directories-buffer-face:'
+   Define a face for displaying sources in the directories buffer.
+
+`ecb-sources-general-face:'
+   Basic face for the ECB sources buffer. It큦 recommended to define here the
+   font-family, the font-size, the basic color etc.
+
+`ecb-source-read-only-face'
+   Define a face for read-only sources
+
+`ecb-tag-header-face:'
+   Define face used for highlighting the tag header after jumping to it by
+   clicking onto a node in the methods buffer.
+
+`ecb-tree-guide-line-face:'
+   Define face for the guide-lines in the tree-buffers. See the option
+   `ecb-tree-buffer-style' for a explanation of guide-lines.
+
+`ecb-type-tag-class-face:'
+   Define face used with option `ecb-type-tag-display'.
+
+`ecb-type-tag-enum-face:'
+   Define face used with option `ecb-type-tag-display'.
+
+`ecb-type-tag-group-face:'
+   Define face used with option `ecb-type-tag-display'.
+
+`ecb-type-tag-interface-face:'
+   Define face used with option `ecb-type-tag-display'.
+
+`ecb-type-tag-struct-face:'
+   Define face used with option `ecb-type-tag-display'.
+
+`ecb-type-tag-typedef-face:'
+   Define face used with option `ecb-type-tag-display'.
+
+`ecb-type-tag-union-face:'
+   Define face used with option `ecb-type-tag-display'.
+
+`ecb-mode-line-win-nr-face'
+   Define face for the window-number in the mode-line. See
+   `ecb-mode-line-display-window-number'.
+
+Just call `customize-face <face-name>' to customize these faces for your
+personal taste. Or customize the related option in the group *Note
+ecb-face-options::.
+
+
+File: ecb.info,  Node: ecb-download,  Next: ecb-help,  Prev: ecb-faces,  Up: Customizable options
+
+Group ecb-download
+------------------
+
+This group contains settings for downloading and installing a new ECB from
+within ECB:
+
+ - User Option: download-delete-archive
+   Should the downloaded archive be deleted after successful installation or
+   after failure during the installation-process.  Possible values are:
+
+    - `only-after-success': Archive is only deleted after successful
+      installation but not if a failure occurs during the installation
+      process.
+
+    - `always': Archive is also deleted if an error occurs.
+
+    - `nil': Archive will never be deleted.
+
+ - User Option: download-install-parent-dir
+   Parent directory where downloaded packages are installed.
+
+   ECB installs a downloaded package in this directory, i.e. the downloaded
+   archive X.tar.gz will be extracted in this directory so afterwards this
+   directory contains a new subdirectory X which contains the downloaded
+   package.
+
+   This directory must be write-able!
+
+ - User Option: download-package-version-type
+   Version type ECB is allowed to download for upgrading.
+
+   If you want to upgrade to a newer ECB-version via `ecb-download-ecb' or if
+   you must upgrade to newer semantic- eieio- and/or speedbar-versions
+   (because ECB requires these newer versions) then this option specifies
+   which version-types are allowed.  ECB checks on the download-sites of
+   ECB/semantic/eieio/speedbar which versions are currently available and
+   then downloads always the latest version matching the specified type:
+
+    - 2: Get the newest version of all stable versions available.
+
+    - 1: Get the newest version of all stable and beta versions available.
+
+    - 0: Get the newest version of all stable, beta and alpha versions
+      available.
+
+    - -1: Ask before downloading in the minibuffer for a version
+      (TAB-completion of all available versions is possible).
+
+   So, 2 means stable, 1 means stable and betas, 0 means stable, betas and
+   alphas and -1 means ask the user for a version.
+
+   Per default stable and beta-versions are allowed (value 1).
+
+   But all versions must match the restrictions of the specified min- and
+   max-versions of the required packages. For this see the file README!
+
+ - User Option: download-url
+   URL where download-able ECB-versions are located. The ECB-archive-file
+   (e.g. ecb-1.70.tar.gz) will be appended to this URL and `ecb-download-ecb'
+   will try to download this archive.
+
+   Note: Normally this URL should never change but who knows...
+
+ - User Option: gzip-setup
+   Configuration for the gzip-utility. For a description about the possible
+   settings see `ecb-wget-setup'.
+
+ - User Option: tar-setup
+   Configuration for the tar-utility. For a description about the possible
+   settings see `ecb-wget-setup'.
+
+ - User Option: wget-setup
+   Configuration for the wget-utility. Value is a cons-cell where:
+
+    * car is the name of the wget-executable - if the executable can not be
+      found in the PATH then it must be a full path.
+
+    * cdr is the path type of the file-arguments of this binary. Possible
+      values are `cygwin', `windows' and `other' whereas the latter one is
+      used for all Unix, Linux, Mac OS etc... If `cygwin' is set then the
+      cygpath-utility must be in the PATH!
+

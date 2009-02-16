@@ -1,0 +1,42 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Adviced%20functions">Adviced functions</a>,
+Next:<a rel=next accesskey=n href="The-layout-engine.html#The%20layout-engine">The layout-engine</a>,
+Previous:<a rel=previous accesskey=p href="tree-buffer.html#tree-buffer">tree-buffer</a>,
+Up:<a rel=up accesskey=u href="Elisp-programming.html#Elisp%20programming">Elisp programming</a>
+<hr><br>
+
+<h3>How to deal with the adviced window-functions</h3>
+
+<p>ECB offers three macros for packages which work during an activated
+ECB. They allow an easy temporally<a rel=footnote href="#fn-1"><sup>1</sup></a> usage of either all
+original-functions, all adviced functions or only some adviced
+functions:
+
+<ul>
+<li><code>ecb-with-original-functions</code>
+<li><code>ecb-with-adviced-functions</code>
+<li><code>ecb-with-some-adviced-functions</code>
+</ul>
+
+<p>For a detailed explanation of each macro read the documentation with
+<code>describe-function</code>!
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>I.e. regardless of the
+settings in <code>ecb-advice-window-functions</code>!</p>
+
+</ol><hr>
+
+</body></html>
+

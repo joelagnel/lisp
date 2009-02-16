@@ -1,0 +1,716 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eev-rctool (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #b0c4de;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .eev-glyph-face-red {
+        /* eev-glyph-face-red */
+        color: #ff0000;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .sh-escaped-newline {
+      }
+      .sh-heredoc {
+        /* sh-heredoc */
+        color: #ffff00;
+        font-weight: bold;
+      }
+      .sh-quoted-exec {
+        /* sh-quoted-exec */
+        color: #fa8072;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">#</span><span class="comment">!/bin/</span><span class="keyword">bash</span><span class="comment">
+</span><span class="keyword">function</span> COPYRIGHT () { cat &lt;&lt;<span class="string">'---'</span><span class="sh-heredoc">
+This is the `eev-rctool' file of GNU eev.
+Copyright (C) 2005, 2006 Free Software Foundation, Inc.
+
+This file is part of GNU eev.
+
+GNU eev is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2, or (at your option) any
+later version.
+
+GNU eev is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+for more details.
+
+You should have received a copy of the GNU General Public License
+along with GNU eev; see the file COPYING. If not, write to the Free
+Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+02110-1301, USA.
+
+Author:     Eduardo Ochs &lt;<a href="mailto:eduardoochs&#64;gmail.com">eduardoochs&#64;gmail.com</a>&gt;
+Maintainer: Eduardo Ochs &lt;<a href="mailto:eduardoochs&#64;gmail.com">eduardoochs&#64;gmail.com</a>&gt;
+Version:    2006nov12
+---
+</span>}
+<span class="comment-delimiter">### </span><span class="comment">Commentary:
+</span>
+<span class="comment-delimiter"># </span><span class="comment">This is the new (mar2005) installer script for eev. Strangely, its
+</span><span class="comment-delimiter"># </span><span class="comment">main function is to modify rcfiles... Let me explain:
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">Eev is able to send blocks of commands to many external interactive
+</span><span class="comment-delimiter"># </span><span class="comment">programs, but it usually only does half of the job: it saves the
+</span><span class="comment-delimiter"># </span><span class="comment">block of commands into a temporary file and only that, and then the
+</span><span class="comment-delimiter"># </span><span class="comment">user needs to tell the external program something like "now read the
+</span><span class="comment-delimiter"># </span><span class="comment">temporary file and execute its contents as commands".
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">The trick is that we can abbreviate "now read the temporary file and
+</span><span class="comment-delimiter"># </span><span class="comment">execute its contents as commands" to just "ee" if we define "ee" in
+</span><span class="comment-delimiter"># </span><span class="comment">the right way for each one of these external programs; for example,
+</span><span class="comment-delimiter"># </span><span class="comment">for Bash one possible definition for "ee" would be:
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment">function ee () { . ~/.eev/ee.sh; }
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">and for GDB it could be:
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment">define ee
+</span><span class="comment-delimiter">#     </span><span class="comment">source ~/.eev/ee.gdb
+</span><span class="comment-delimiter">#   </span><span class="comment">end
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">The best way(*) to make Bash and GDB recognize these "ee" commands
+</span><span class="comment-delimiter"># </span><span class="comment">is to put these definitions in their initialition files, a.k.a.
+</span><span class="comment-delimiter"># </span><span class="comment">"rcfiles": ~/.bashrc for Bash, ~/.gdbinit for GDB, ~/.emacs for
+</span><span class="comment-delimiter"># </span><span class="comment">Emacs, etc.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">Changing rcfiles by hand is boring and error-prone; changing rcfiles
+</span><span class="comment-delimiter"># </span><span class="comment">automatically is extremely rude; and some people would go to great
+</span><span class="comment-delimiter"># </span><span class="comment">lengths to avoid actually changing their rcfiles. So this script has
+</span><span class="comment-delimiter"># </span><span class="comment">to try to be everything for everybody: it allows automatic patching
+</span><span class="comment-delimiter"># </span><span class="comment">of all or some rcfiles, it allows comparing the would-be-rcfiles
+</span><span class="comment-delimiter"># </span><span class="comment">with the current ones, it keeps backups to allow unpatching, and it
+</span><span class="comment-delimiter"># </span><span class="comment">permits executing the things that it does step-by-step.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">(*): "best" because it is technically simpler, easier to understand,
+</span><span class="comment-delimiter"># </span><span class="comment">less likely to break and the idea is easier to adapt to other
+</span><span class="comment-delimiter"># </span><span class="comment">programs; it's not "best" in the sense of "works transparently,
+</span><span class="comment-delimiter"># </span><span class="comment">invisibly and miraculously and requires no extra keystrokes".
+</span>
+<span class="keyword">function</span> help_text () {
+  <span class="builtin">echo</span> <span class="string">'Usage:
+
+  Invocation                   Action
+  ==========                   ======
+  eev-rctool prepare_rc DIR    same as the next one but using EEVDIR:=DIR
+  eev-rctool prepare_rc        create the modified and backup rcfiles and
+                               the do_install.sh and do_uninstall.sh scripts
+                               inside BACKUPDIR, using EEVDIR:=THISDIR
+  eev-rctool diff_rc           show the differences between the modified
+                               and the backup rcfiles
+  eev-rctool install_rc        copy the modified rcfiles from BACKUPDIR to
+                               HOME (actually runs BACKUPDIR/do_install.sh)
+  eev-rctool uninstall_rc      copy the backup rcfiles from BACKUPDIR to
+                               HOME (actually runs BACKUPDIR/do_uninstall.sh)
+
+  eev-rctool prepare_tmpdir    create EEVTMPDIR and a few files in it
+  eev-rctool prepare           run both prepare_tmpdir and prepare_rc
+
+  eev-rctool help                    show instructions
+  eev-rctool new_block_emacs         show the new eev block for .emacs
+  eev-rctool current_block_emacs     show the current eev block for .emacs
+  DIFF="tkdiff" eev-rctool diff_rc   like eev-rctool diff_rc, but using tkdiff
+
+  Variable    Default value    Meaning
+  ========    =============    =======
+  THISDIR     ~/eev-current    (the dir where this script is)
+  EEVDIR      ~/eev-current    (the dir where the elisp files are)
+  EEVTMPDIR   ~/.eev           (where the temporary scripts are stored)
+  BACKUPDIR   ~/.eev/backup    (where the modified and backup rcfiles
+                                and the do_install.sh and do_uninstall.sh
+                                scripts are kept)
+  DIFF        "diff -N -c"     (what to run for diff_rc)
+  RCFILES     ".emacs .bashrc .zshrc .gdbinit .tclshrc"
+                               (which rcfiles to modify or inspect)'</span>
+}
+<span class="keyword">function</span> show_vars () {
+  <span class="builtin">echo</span> <span class="string">"Variable          Current value"</span>
+  <span class="builtin">echo</span> <span class="string">"========          ============="</span>
+  <span class="builtin">echo</span> <span class="string">"HOME            = $HOME"</span>
+  <span class="builtin">echo</span> <span class="string">"THISDIR         = $THISDIR"</span>
+  <span class="builtin">echo</span> <span class="string">"EEVDIR          = $EEVDIR"</span>
+  <span class="builtin">echo</span> <span class="string">"EEVTMPDIR       = $EEVTMPDIR"</span>
+  <span class="builtin">echo</span> <span class="string">"BACKUPDIR       = $BACKUPDIR"</span>
+  <span class="builtin">echo</span> <span class="string">"INSTALLSCRIPT   = $INSTALLSCRIPT"</span>
+  <span class="builtin">echo</span> <span class="string">"UNINSTALLSCRIPT = $UNINSTALLSCRIPT"</span>
+  <span class="builtin">echo</span> <span class="string">"DIFF            = \"$DIFF\""</span>
+  <span class="builtin">echo</span> <span class="string">"RCFILES         = \"$RCFILES\""</span>
+}
+<span class="keyword">function </span><span class="builtin">help</span> () { help_text; <span class="builtin">echo</span>; show_vars; }
+
+
+
+
+<span class="comment-delimiter"># <a href="Makefile.html">(find-eev "Makefile")</a></span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">(find-eevrc "change")
+</span><span class="comment-delimiter"># </span><span class="comment">(find-eevrc "change.awk")
+</span>
+<span class="comment-delimiter"># </span><span class="comment">(find-bashnode "The Set Builtin" "`-e'")
+</span><span class="comment-delimiter"># </span><span class="comment">(find-bashnode "Shell Parameter Expansion" "`${PARAMETER:=WORD}'")
+</span><span class="comment-delimiter"># </span><span class="comment">(find-bashnode "Conditional Constructs" "`case'")
+</span>
+<span class="comment-delimiter"># </span><span class="comment">(find-efunction 'sh-maybe-here-document)
+</span><span class="comment-delimiter"># </span><span class="comment">(remove-from-keymap sh-mode-map ?&lt;)
+</span>
+<span class="builtin">set</span> -e
+
+<span class="keyword">function</span> absolute () { <span class="keyword">case</span> $<a name="1"><span class="variable-name">1</span></a><span class="keyword"> in</span>  /*) <span class="builtin">echo</span> $<a name="1"><span class="variable-name">1</span></a>;;  *) <span class="builtin">echo</span> $<a name="PWD"><span class="variable-name">PWD</span></a>/$<a name="1"><span class="variable-name">1</span></a>;;  <span class="keyword">esac</span>; }
+<span class="keyword">function</span> semiabsolute () { absolute $<a name="1"><span class="variable-name">1</span></a> | sed <span class="string">"s,^$HOME,~,"</span>; }
+<span class="keyword">function</span> noslash () { sed <span class="string">'s_\(.\)/$_\1_'</span>; }      <span class="comment-delimiter"># </span><span class="comment">remove a trailing "/"
+</span><span class="keyword">function</span> stem () { <span class="builtin">echo</span> $<a name="1"><span class="variable-name">1</span></a> | sed <span class="string">'s/\.//'</span>; }      <span class="comment-delimiter"># </span><span class="comment">remove "."s
+</span><span class="keyword">function</span> v () { <span class="builtin">echo</span> $<span class="variable-name">*</span>; $<span class="variable-name">*</span>; }
+<span class="keyword">function</span> vecho () { <span class="builtin">echo</span> <span class="string">'#'</span> $<span class="variable-name">*</span>; }
+
+<span class="comment-delimiter">### </span><span class="comment">Do I need noslash? or sed 's_//_/_g' ?
+</span><span class="comment-delimiter">### </span><span class="comment">h2so4 reported a bug involving a final slash in a Conectiva box
+</span><span class="comment-delimiter"># </span><span class="comment">export HOME=$(</span><span class="sh-quoted-exec">echo</span><span class="comment"> $HOME | no_final_slash)
+</span>
+<a name="THISSCRIPT"><span class="variable-name">THISSCRIPT</span></a>=$(<span class="sh-quoted-exec">absolute</span> $<a name="0"><span class="variable-name">0</span></a>)
+<a name="THISDIR"><span class="variable-name">THISDIR</span></a>=$(<span class="sh-quoted-exec">cd</span> $(<span class="sh-quoted-exec">dirname</span> $<a name="THISSCRIPT"><span class="variable-name">THISSCRIPT</span></a>); <span class="builtin">echo</span> $<a name="PWD"><span class="variable-name">PWD</span></a>)
+<a name="EEVDIR"><span class="variable-name">EEVDIR</span></a>=$<a name="THISDIR"><span class="variable-name">THISDIR</span></a>
+
+: ${<a name="DIFF"><span class="variable-name">DIFF</span></a>:=<span class="string">"diff -N -c"</span>}
+
+: ${<a name="RCFILES"><span class="variable-name">RCFILES</span></a>:=<span class="string">".emacs .bashrc .zshrc .gdbinit .tclshrc"</span>}
+
+: ${<a name="EEVTMPDIR"><span class="variable-name">EEVTMPDIR</span></a>:=$<a name="HOME"><span class="variable-name">HOME</span></a>/.eev}
+: ${<a name="BACKUPDIR"><span class="variable-name">BACKUPDIR</span></a>:=$<a name="EEVTMPDIR"><span class="variable-name">EEVTMPDIR</span></a>/backup}
+: ${<a name="EEVRCDIR"><span class="variable-name">EEVRCDIR</span></a>:=$<a name="EEVDIR"><span class="variable-name">EEVDIR</span></a>/rcfiles}
+
+<a name="INSTALLSCRIPT"><span class="variable-name">INSTALLSCRIPT</span></a>=$<a name="BACKUPDIR"><span class="variable-name">BACKUPDIR</span></a>/do_install.sh
+<a name="UNINSTALLSCRIPT"><span class="variable-name">UNINSTALLSCRIPT</span></a>=$<a name="BACKUPDIR"><span class="variable-name">BACKUPDIR</span></a>/do_uninstall.sh
+
+<a name="_EEVRCDIR"><span class="variable-name">_EEVRCDIR</span></a>=$(<span class="sh-quoted-exec">semiabsolute</span> $<a name="EEVRCDIR"><span class="variable-name">EEVRCDIR</span></a>)
+<a name="_EEVDIR"><span class="variable-name">_EEVDIR</span></a>=$(<span class="sh-quoted-exec">semiabsolute</span> $<a name="EEVDIR"><span class="variable-name">EEVDIR</span></a>)
+<a name="_EEVTMPDIR"><span class="variable-name">_EEVTMPDIR</span></a>=$(<span class="sh-quoted-exec">semiabsolute</span> $<a name="EEVTMPDIR"><span class="variable-name">EEVTMPDIR</span></a>)
+
+<span class="keyword">function</span> substitute_paths () {
+  <span class="comment-delimiter"># </span><span class="comment">this sed used to be just a simple cat (back when I didn't have the
+</span>  <span class="comment-delimiter"># </span><span class="comment">"@...@"s in the eev chunks)
+</span>  sed -e <span class="string">"s,@EEVRCDIR@,$EEVRCDIR,g"</span>   -e <span class="string">"s,@_EEVRCDIR@,$_EEVRCDIR,g"</span>   <span class="sh-escaped-newline">\</span>
+      -e <span class="string">"s,@EEVDIR@,$EEVDIR,g"</span>       -e <span class="string">"s,@_EEVDIR@,$_EEVDIR,g"</span>       <span class="sh-escaped-newline">\</span>
+      -e <span class="string">"s,@EEVTMPDIR@,$EEVTMPDIR,g"</span> -e <span class="string">"s,@_EEVTMPDIR@,$_EEVTMPDIR,g"</span>
+}
+
+<span class="keyword">function</span> wrap_block () {
+  <span class="builtin">echo</span> <span class="string">"$1 Beginning of the eev block:"</span>
+  <span class="builtin">echo</span> <span class="string">"$1 See: (find-eev \"eev-rctool\" \"new_block_$2\")"</span>
+  <span class="builtin">echo</span> <span class="string">"$1"</span>
+  new_block_no_wrappers_$<a name="2"><span class="variable-name">2</span></a> | substitute_paths
+  <span class="builtin">echo</span> <span class="string">"$1"</span>
+  <span class="builtin">echo</span> <span class="string">"$1 End of the eev block."</span>
+}
+
+
+
+<span class="comment-delimiter">#####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">generating the "eev blocks" that will be put in rcfiles
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#####</span><span class="comment">
+</span>
+<span class="keyword">function</span> new_block_bashrc () { wrap_block <span class="string">'#'</span> bashrc; }
+<span class="keyword">function</span> new_block_no_wrappers_bashrc () {
+  new_block_no_wrappers_zshrc; <span class="comment-delimiter"># </span><span class="comment">same as the eev block for .zshrc, below
+</span>}
+
+<span class="keyword">function</span> new_block_zshrc () { wrap_block <span class="string">'#'</span> zshrc; }
+<span class="keyword">function</span> new_block_no_wrappers_zshrc () {
+  cat &lt;&lt;<span class="string">'%%%'</span><span class="sh-heredoc">
+export EEVTMPDIR ;: ${EEVTMPDIR:=@_EEVTMPDIR@}
+export EE        ;: ${EE:=$EEVTMPDIR/ee.sh}
+function ee () { set -v; . $EE$*; set +v; }
+#
+export EEVDIR    ;: ${EEVDIR:=@_EEVDIR@}
+export EEVRCDIR  ;: ${EEVRCDIR:=$EEVDIR/rcfiles}
+export EEG       ;: ${EEG:=$EEVTMPDIR/ee.eeg}
+export EEGDB     ;: ${EEGDB:=$EEVTMPDIR/ee.gdb}
+export EETEX     ;: ${EETEX:=$EEVTMPDIR/ee.tex}
+#
+export EEC       ;: ${EEC:=$EEVTMPDIR/ee.c}
+export EETMPC    ;: ${EETMPC:=$EEVTMPDIR/tmp.c}
+export EEAOUT    ;: ${EEAOUT:=$EEVTMPDIR/ee.aout}
+function eegcc () {
+  cat $EETMPC - &gt; $EEC
+  gcc $* -o $EEAOUT $EEC
+}
+alias eec=$EEAOUT
+#
+# To define $S and psne uncomment the line below (or copy it,
+# uncommented, to outside of the eev block):
+#   if [ -e $EEVTMPDIR/psne.sh ]; then . $EEVTMPDIR/psne.sh; fi
+# (find-eevtmpfile "psne.sh")
+%%%
+</span>}
+
+<span class="keyword">function</span> new_block_tclshrc () { wrap_block <span class="string">'#'</span> tclshrc; }
+<span class="keyword">function</span> new_block_no_wrappers_tclshrc () {
+  cat &lt;&lt;<span class="string">'%%%'</span><span class="sh-heredoc">
+proc ee {} { global env; uplevel #0 source $env(EEVTMPDIR)/ee.tcl }
+%%%
+</span>}
+
+<span class="keyword">function</span> new_block_gdbinit () { wrap_block <span class="string">'#'</span> gdbinit; }
+<span class="keyword">function</span> new_block_no_wrappers_gdbinit () {
+  cat &lt;&lt;<span class="string">'%%%'</span><span class="sh-heredoc">
+define ee
+  source @_EEVTMPDIR@/ee.gdb
+end
+%%%
+</span>}
+
+<span class="keyword">function</span> new_block_emacs () { wrap_block <span class="string">';;'</span> emacs; }
+<span class="keyword">function</span> new_block_no_wrappers_emacs () {
+  cat &lt;&lt;<span class="string">'%%%'</span><span class="sh-heredoc">
+(add-to-list 'load-path "@_EEVDIR@")
+(load-library "eev.el")         ; (find-eev "eev.el")
+(eev-mode 1)                    ; (find-efunctiondescr 'eev-mode)
+(load-library "eev-bounded.el") ; (find-eev "eev-bounded.el")
+(load-library "eev-insert.el")  ; (find-eev "eev-insert.el")
+(load-library "eev-steps.el")   ; (find-eev "eev-steps.el")
+(load-library "eev-glyphs.el")  ; (find-eev "eev-glyphs.el")
+(load-library "eev-compose.el") ; (find-eev "eev-compose.el")
+(load-library "eev-langs.el")   ; (find-eev "eev-langs.el")
+(eev-set-aliases)               ; (find-eev "eev.el")
+(eev-set-default-glyphs)
+%%%
+</span>}
+
+
+
+<span class="comment-delimiter">#####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">the awk script
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#####</span><span class="comment">
+</span>
+<span class="comment-delimiter"># </span><span class="comment">Usage:
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment">run_awk_script PATCHFILE &lt; OLDFILE &gt; NEWFILE
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">What this does: it reads PATCHFILE and OLDFILE and produces NEWFILE,
+</span><span class="comment-delimiter"># </span><span class="comment">which is OLDFILE with its "eev block" replaced by a new "eev block".
+</span><span class="comment-delimiter"># </span><span class="comment">The new "eev block" is given by PATCHFILE. If OLDFILE didn't have an
+</span><span class="comment-delimiter"># </span><span class="comment">"eev block" then we spit out a copy of OLDFILE, then a newline, then
+</span><span class="comment-delimiter"># </span><span class="comment">a copy of PATCHFILE.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">That was too obscure, so now let me explain that in all the details.
+</span><span class="comment-delimiter"># </span><span class="comment">PATCHFILE is typically like this (see `wrap_block', above):
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment">;; Beginning of the eev block:
+</span><span class="comment-delimiter">#   </span><span class="comment">(stuff)
+</span><span class="comment-delimiter">#   </span><span class="comment">;; End of the eev block.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">or:
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment"># Beginning of the eev block:
+</span><span class="comment-delimiter">#   </span><span class="comment">(stuff)
+</span><span class="comment-delimiter">#   </span><span class="comment"># End of the eev block.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">we read PATCHFILE and store its first line and its last line into
+</span><span class="comment-delimiter"># </span><span class="comment">the variables `firstline' and `lastline'. The "eev block" of OLDFILE
+</span><span class="comment-delimiter"># </span><span class="comment">is the part of OLDFILE that is between the first occurrence of
+</span><span class="comment-delimiter"># </span><span class="comment">`firstline' in it and the first ocurrence of `lastline' after that;
+</span><span class="comment-delimiter"># </span><span class="comment">what the awk script does is to replace that "eev block" by a new one
+</span><span class="comment-delimiter"># </span><span class="comment">(or to just append the new block at the end).
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">Now some technical explanations about the code below: after reading
+</span><span class="comment-delimiter"># </span><span class="comment">PATCHFILE we set ARGV[1] to "-" so that awk will try to read from
+</span><span class="comment-delimiter"># </span><span class="comment">stdin afterwards; when we are reading from stdin (i.e., from
+</span><span class="comment-delimiter"># </span><span class="comment">OLDFILE) then state==0 means that we're before the first occurrence
+</span><span class="comment-delimiter"># </span><span class="comment">of "firstline", state==1 means that we're inside its "eev block",
+</span><span class="comment-delimiter"># </span><span class="comment">and state==2 means that we are past the "lastline". When state==0 or
+</span><span class="comment-delimiter"># </span><span class="comment">state==2 we echo the input lines to NEWFILE, when state==1 we skip
+</span><span class="comment-delimiter"># </span><span class="comment">lines, when we transition from state==1 to state==2 we print
+</span><span class="comment-delimiter"># </span><span class="comment">PATCHFILE. Finishing reading stdin in state==0 means that we still
+</span><span class="comment-delimiter"># </span><span class="comment">have to output a copy of PATCHFILE (preceded by a newline),
+</span><span class="comment-delimiter"># </span><span class="comment">finishing in state==1 is an error, and finishing with state==2 is
+</span><span class="comment-delimiter"># </span><span class="comment">ok.
+</span>
+<span class="keyword">function</span> run_awk_script () {
+  awk <span class="string">'
+BEGIN {
+  patchfile = ARGV[1]; n = 0;
+  while ((getline line &lt; patchfile) &gt; 0) patchlines[++n] = line;
+  firstline = patchlines[1]; lastline = patchlines[n];
+  ARGV[1] = "-";
+}
+function printpatchfile (i) { for (i=1; i&lt;=n; ++i) print patchlines[i]; }
+function myerror (str) { print str &gt; "/dev/stderr"; exit 1; }
+#
+state == 0 { if ($0 == firstline) state = 1; else print; }
+state == 1 { if ($0 == lastline) { printpatchfile(); state = 2; next; } }
+state == 2 { print }
+END {
+  if (state == 0) { print ""; printpatchfile(); }
+  if (state == 1) myerror("Input file ends in the middle of the patch block");
+  if (state == 2) { }
+}'</span> $<a name="1"><span class="variable-name">1</span></a>
+}
+
+
+
+<span class="comment-delimiter"># </span><span class="comment">A quick hack: run_awk_script_2 is only used by the
+</span><span class="comment-delimiter"># </span><span class="comment">`current_block_xxxrc' functions below.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="keyword">function</span> run_awk_script_2 () {
+  awk <span class="string">'
+BEGIN {
+  patchfile = ARGV[1]; n = 0;
+  while ((getline line &lt; patchfile) &gt; 0) patchlines[++n] = line;
+  firstline = patchlines[1]; lastline = patchlines[n];
+  ARGV[1] = "-";
+}
+state == 0 { if ($0 == firstline) state = 1 }
+state == 1 { print; if ($0 == lastline) state = 2 }
+state == 2 { }
+'</span> $<a name="1"><span class="variable-name">1</span></a>
+}
+
+<span class="keyword">function</span> current_block         () { run_awk_script_2 &lt;(new_block_$<a name="1"><span class="variable-name">1</span></a>) &lt; $<a name="2"><span class="variable-name">2</span></a>; }
+<span class="keyword">function</span> current_block_bashrc  () { current_block bashrc  ~/.bashrc;  }
+<span class="keyword">function</span> current_block_zshrc   () { current_block zshrc   ~/.zshrc;   }
+<span class="keyword">function</span> current_block_tclshrc () { current_block tclshrc ~/.tclshrc; }
+<span class="keyword">function</span> current_block_gdbinit () { current_block gdbinit ~/.gdbinit; }
+<span class="keyword">function</span> current_block_emacs   () { current_block emacs   ~/.emacs;   }
+
+
+
+
+
+
+
+<span class="comment-delimiter">#####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">more auxiliary words
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#####</span><span class="comment">
+</span>
+<span class="comment-delimiter"># </span><span class="comment">(eev "eev-rctool for_rcfile .emacs prepare_backup")
+</span>
+<span class="keyword">function</span> for_rcfile () { set_vars_for_file $<a name="1"><span class="variable-name">1</span></a>; <span class="builtin">shift</span>; $<span class="variable-name">*</span>; }    <span class="comment-delimiter"># </span><span class="comment">for tests
+</span>
+<span class="keyword">function</span> set_vars_for_file () {
+  <a name="ORIGFILE"><span class="variable-name">ORIGFILE</span></a>=$<a name="HOME"><span class="variable-name">HOME</span></a>/$<a name="1"><span class="variable-name">1</span></a>
+  <a name="BACKUPFILE"><span class="variable-name">BACKUPFILE</span></a>=$<a name="BACKUPDIR"><span class="variable-name">BACKUPDIR</span></a>/$<a name="1"><span class="variable-name">1</span></a>.backup
+  <a name="NEWFILE"><span class="variable-name">NEWFILE</span></a>=$<a name="BACKUPDIR"><span class="variable-name">BACKUPDIR</span></a>/$<a name="1"><span class="variable-name">1</span></a>.new
+  <a name="STEM"><span class="variable-name">STEM</span></a>=$(<span class="sh-quoted-exec">stem</span> $<a name="1"><span class="variable-name">1</span></a>)
+}
+
+<span class="keyword">function</span> prepare_backup () {
+  <span class="keyword">if</span> [ -e $<a name="ORIGFILE"><span class="variable-name">ORIGFILE</span></a> ]; <span class="keyword">then</span>
+    <span class="builtin">echo</span>      <span class="string">"  Backup:  $ORIGFILE  -&gt;  $BACKUPFILE"</span>
+    cp -a                  $<a name="ORIGFILE"><span class="variable-name">ORIGFILE</span></a>      $<a name="BACKUPFILE"><span class="variable-name">BACKUPFILE</span></a>
+    <span class="builtin">echo</span> <span class="string">"echo '  Restore: $ORIGFILE  &lt;-  $BACKUPFILE'"</span> &gt;&gt; $<a name="UNINSTALLSCRIPT"><span class="variable-name">UNINSTALLSCRIPT</span></a>
+    <span class="builtin">echo</span> <span class="string">"cp -a $BACKUPFILE $ORIGFILE"</span>                  &gt;&gt; $<a name="UNINSTALLSCRIPT"><span class="variable-name">UNINSTALLSCRIPT</span></a>
+  <span class="keyword">else</span>
+    <span class="builtin">echo</span> <span class="string">"echo '  Remove:  $ORIGFILE'"</span>                  &gt;&gt; $<a name="UNINSTALLSCRIPT"><span class="variable-name">UNINSTALLSCRIPT</span></a>
+    <span class="builtin">echo</span> <span class="string">"rm               $ORIGFILE"</span>                   &gt;&gt; $<a name="UNINSTALLSCRIPT"><span class="variable-name">UNINSTALLSCRIPT</span></a>
+  <span class="keyword">fi</span>
+}
+
+<span class="keyword">function</span> transform () {
+  <span class="keyword">if</span> [ -e $<a name="ORIGFILE"><span class="variable-name">ORIGFILE</span></a> ]; <span class="keyword">then</span>
+    run_awk_script &lt;(new_block_$<a name="STEM"><span class="variable-name">STEM</span></a>) &lt; $<a name="BACKUPFILE"><span class="variable-name">BACKUPFILE</span></a> &gt; $<a name="NEWFILE"><span class="variable-name">NEWFILE</span></a>
+  <span class="keyword">else</span>
+    new_block_$<a name="STEM"><span class="variable-name">STEM</span></a>
+  <span class="keyword">fi</span>
+}
+
+<span class="keyword">function</span> prepare_new () {
+  transform $<a name="ORIGFILE"><span class="variable-name">ORIGFILE</span></a> &gt; $<a name="NEWFILE"><span class="variable-name">NEWFILE</span></a>
+  <span class="builtin">echo</span> <span class="string">"echo '  Install: $ORIGFILE  &lt;-  $NEWFILE'"</span> &gt;&gt; $<a name="INSTALLSCRIPT"><span class="variable-name">INSTALLSCRIPT</span></a>
+  <span class="builtin">echo</span> <span class="string">"cp $NEWFILE $ORIGFILE"</span>     &gt;&gt; $<a name="INSTALLSCRIPT"><span class="variable-name">INSTALLSCRIPT</span></a>
+}
+ 
+
+
+<span class="comment-delimiter">#####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">creating the eev temp dir (usually ~/.eev) and some files in it
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#####</span><span class="comment">
+</span>
+<span class="keyword">function</span> create_tmpdir_file_maybe () {
+  <span class="keyword">if</span> [ -e $<a name="EEVTMPDIR"><span class="variable-name">EEVTMPDIR</span></a>/$<a name="1"><span class="variable-name">1</span></a> ]; <span class="keyword">then</span>
+    <span class="builtin">echo</span> <span class="string">"  Not changing: $EEVTMPDIR/$1"</span>
+  <span class="keyword">else</span>
+    <span class="builtin">echo</span> <span class="string">"  Creating:     $EEVTMPDIR/$1"</span>
+    cat &gt; $<a name="EEVTMPDIR"><span class="variable-name">EEVTMPDIR</span></a>/$<a name="1"><span class="variable-name">1</span></a>
+  <span class="keyword">fi</span>
+}
+
+<span class="keyword">function</span> create_help () {
+  create_tmpdir_file_maybe HELP &lt;&lt;<span class="string">'---'</span><span class="sh-heredoc">
+  M-?    eev-help-page (</span><span class="eev-glyph-face-red">*</span><span class="sh-heredoc">)         Evaluation:
+  C-_    undo                        C-x C-e   eval-last-sexp
+  C-g    keyboard-quit               M-e       eek-eval-sexp-eol (</span><span class="eev-glyph-face-red">*</span><span class="sh-heredoc">)
+  M-x    execute-extended-command    M-E       eek-eval-last-sexp (</span><span class="eev-glyph-face-red">*</span><span class="sh-heredoc">)
+  TAB    indent/complete             M-0 M-e, M-0 M-E  just highlight (</span><span class="eev-glyph-face-red">*</span><span class="sh-heredoc">)
+                                        (* (+ 1 2) (+ 3 4))
+  C-w    kill-region (cut)
+  M-w    kill-ring-save (copy)     "Return from hyperlinks":
+  C-y    yank (paste)                M-k      kill-this-buffer (</span><span class="eev-glyph-face-red">*</span><span class="sh-heredoc">)
+                                     M-K      bury-buffer (</span><span class="eev-glyph-face-red">*</span><span class="sh-heredoc">)
+  C-x C-s  save-buffer               C-x C-b  buffer-menu
+  C-x C-c  save-buffers-kill-emacs 
+  C-x C-f  find-file               Main docs:                          
+                                     (find-efunctiondescr 'eev-mode)   
+  C-x 0   delete-window              (find-eevfile "article/eev.txt")  
+  C-x 1   delete-other-windows       (find-eevfile "doc/keys.e")       
+  C-x 2   split-window-vertically                                      
+  C-x o   other-window               (find-node "(emacs)Top")          
+  C-x b   switch-to-buffer           (find-node "(emacs)Concept Index")
+  C-x k   kill-buffer                (find-node "(emacs)Command Index")
+                                     (find-node "(emacs)Key Index")    
+                                     (find-node "(elisp)Top")          
+                                     (find-node "(elisp)Index")        
+                                     (find-elinode "Index")            
+
+  [Used in a workshop about Emacs and eev:]
+  (tool-bar-mode)
+  (menu-bar-mode nil)
+  http://www.paulgraham.com/lib/paulgraham/jmc.ps
+  (code-ps "pgroots" "$S/http/www.paulgraham.com/lib/paulgraham/jmc.ps")
+  (find-pgrootspage 8)
+  (find-eev "eev-rctool" "create_help")
+---
+</span>}
+
+<span class="keyword">function</span> create_psnesh () {
+  create_tmpdir_file_maybe psne.sh &lt;&lt;<span class="string">'---'</span><span class="sh-heredoc">
+# -*- mode: sh -*-
+# This is the `rcfiles/psne.sh' file of GNU eev.
+# It was created by: <a href="eev-rctool.html#create_psnesh">(find-eev "eev-rctool" "create_psnesh")</a>
+# Author and version: Eduardo Ochs, 2005jun12. Public Domain.
+
+# To activate the `psne' command (and to define the S variable if it
+# is not already defined), source this file; it works on zsh, and it
+# should also work on bash and on most sh-derivatives -- but note: I
+# don't use non-zsh shell very often, I might have skipped some bugs.
+
+# The installation scripts of eev add a few lines to your .bashrc and
+# .zshrc to make bash and zsh read this file on startup.
+# <a href="eev-rctool.html#new_block_bashrc">(find-eev "eev-rctool" "new_block_bashrc")</a>
+# <a href="eev-rctool.html#new_block_zshrc">(find-eev "eev-rctool" "new_block_zshrc")</a>
+#
+# This is a simple implementation of `psne' for bash and zsh.
+# Example: "psne http://www.foo.bar/mm" will run this:
+#
+#   mkdir -p $S/http/www.foo.bar/ &amp;&amp; \
+#   cd       $S/http/www.foo.bar/ &amp;&amp; \
+#   wget http://www.foo.bar/mm
+#
+# Note that after running that "psne" we are left at the directory
+# "~/snarf/http/www.foo.bar/".
+
+export S;: ${S:=~/snarf}
+
+function psne-sh-sed-snarfize () { sed 's,^\([a-z]*\)://,$S/\1/,'; }
+function psne-sh-urlp () { echo $1 | egrep -q '^(http|ftp)://'; }
+function psne-sh-meta () {(
+  URL=$1
+  SURL=$(</span><span class="sh-quoted-exec">echo</span><span class="sh-heredoc"> $1 | psne-sh-sed-snarfize)
+  DIR=$(</span><span class="sh-quoted-exec">dirname</span><span class="sh-heredoc"> $SURL)
+  echo "mkdir -p $DIR/ &amp;&amp; \\"
+  echo "cd       $DIR/ &amp;&amp; \\"
+  echo "wget $URL"
+);}
+function psne-sh () {
+  if psne-sh-urlp $1; then
+    eval "$(</span><span class="sh-quoted-exec">psne-sh-meta</span><span class="sh-heredoc"> $1)"
+    echo $1 &gt;&gt; ~/.psne.log
+  else
+    echo "Not an url: $1"
+  fi
+}
+alias psne=psne-sh
+
+# (find-sh ". $EEVTMPDIR/psne.sh; psne-sh-meta http://www.foo.bar/mm")
+# (find-node "(bashref)The Set Builtin" "`e'")
+---
+</span>}
+
+<span class="keyword">function</span> create_tmptex () {
+  create_tmpdir_file_maybe tmp.tex &lt;&lt;<span class="string">'---'</span><span class="sh-heredoc">
+% This is the `$EEVTMPDIR/tmp.tex' file of GNU eev.
+% It was created by: (find-eev "eev-rctool" "prepare_tmpdir")
+% Author and version: Eduardo Ochs, 2005mar31. Public domain.
+% If you run `eelatex' in a block in Emacs and then go to a shell and
+% type `ee' you'll notice that this is the file that will be LaTeX'ed
+% (unless you've changed the defaults). This is a wrapper around
+% ee.tex.
+
+\documentclass{book}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\begin{document}
+
+\input ee.tex
+
+\end{document}
+---
+</span>}
+
+<span class="keyword">function</span> prepare_tmpdir () {
+  <span class="builtin">echo</span> <span class="string">"  Creating dir: $EEVTMPDIR/"</span>
+  mkdir -p $<a name="EEVTMPDIR"><span class="variable-name">EEVTMPDIR</span></a>
+  <span class="builtin">echo</span> <span class="string">"  Creating:     $EEVTMPDIR/README"</span>
+  cat &gt; $<a name="EEVTMPDIR"><span class="variable-name">EEVTMPDIR</span></a>/README &lt;&lt;<span class="string">'---'</span><span class="sh-heredoc">
+This is the `$EEVTMPDIR/README' file of GNU eev.
+It was created by: (find-eev "eev-rctool" "prepare_tmpdir")
+This directory is where eev saves most of its temporary scripts.
+If other people have access to your home directory then you should
+consider making this directory accessible only by you.
+
+The files with names starting with "ee" are temporary files created by eev.
+The files with names starting with "tmp" are usually wrappers. See tmp.tex.
+The file psne.sh is something more complicated. Look at its comments.
+The file HELP is used by `M-?'.  See: (find-efunction 'eev-help-page)
+
+  Eduardo Ochs
+  2005aug15
+---
+</span>  create_help      ;<span class="comment-delimiter"># <a href="eev-rctool.html#create_help">(find-eev "eev-rctool" "create_help")</a></span><span class="comment">
+</span>  create_psnesh    ;<span class="comment-delimiter"># <a href="eev-rctool.html#create_psnesh">(find-eev "eev-rctool" "create_psnesh")</a></span><span class="comment">
+</span>  create_tmptex    ;<span class="comment-delimiter"># <a href="eev-rctool.html#create_tmptex">(find-eev "eev-rctool" "create_tmptex")</a></span><span class="comment">
+</span>}
+
+
+
+
+<span class="comment-delimiter">#####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">top-level words
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#####</span><span class="comment">
+</span>
+<span class="keyword">function</span> prepare_rc () {
+  <span class="keyword">if</span> [ <span class="string">"$1"</span> != <span class="string">""</span> ]; <span class="keyword">then</span> <a name="EEVDIR"><span class="variable-name">EEVDIR</span></a>=$<a name="1"><span class="variable-name">1</span></a>; <span class="keyword">fi</span>
+  <span class="builtin">echo</span> <span class="string">"  Creating dir: $BACKUPDIR/"</span>
+  mkdir -p $<a name="BACKUPDIR"><span class="variable-name">BACKUPDIR</span></a>
+  <span class="builtin">echo</span> <span class="string">"  Creating:     $INSTALLSCRIPT"</span>
+  <span class="builtin">echo</span> <span class="string">"# Automatically generated by eev-rctoll"</span> &gt; $<a name="INSTALLSCRIPT"><span class="variable-name">INSTALLSCRIPT</span></a>
+  <span class="builtin">echo</span> <span class="string">"# in $(</span><span class="sh-quoted-exec">date</span><span class="string">)"</span>                           &gt;&gt; $<a name="INSTALLSCRIPT"><span class="variable-name">INSTALLSCRIPT</span></a>
+  <span class="builtin">echo</span> <span class="string">"  Creating:     $UNINSTALLSCRIPT"</span>
+  <span class="builtin">echo</span> <span class="string">"# Automatically generated by eev-rctoll"</span> &gt; $<a name="UNINSTALLSCRIPT"><span class="variable-name">UNINSTALLSCRIPT</span></a>
+  <span class="builtin">echo</span> <span class="string">"# in $(</span><span class="sh-quoted-exec">date</span><span class="string">)"</span>                           &gt;&gt; $<a name="UNINSTALLSCRIPT"><span class="variable-name">UNINSTALLSCRIPT</span></a>
+  <span class="keyword">for</span> i<span class="keyword"> in</span> $<a name="RCFILES"><span class="variable-name">RCFILES</span></a>; <span class="keyword">do</span> 
+    set_vars_for_file $<a name="i"><span class="variable-name">i</span></a>
+    prepare_backup
+  <span class="keyword">done</span>
+  <span class="keyword">for</span> i<span class="keyword"> in</span> $<a name="RCFILES"><span class="variable-name">RCFILES</span></a>; <span class="keyword">do</span> 
+    set_vars_for_file $<a name="i"><span class="variable-name">i</span></a>
+    <span class="builtin">echo</span> <span class="string">"  Creating:     $NEWFILE"</span>
+    prepare_new
+  <span class="keyword">done</span>
+}
+
+<span class="keyword">function</span> diff_rc () {
+  <span class="keyword">for</span> i<span class="keyword"> in</span> $<a name="RCFILES"><span class="variable-name">RCFILES</span></a>; <span class="keyword">do</span> 
+    set_vars_for_file $<a name="i"><span class="variable-name">i</span></a>
+    $<a name="DIFF"><span class="variable-name">DIFF</span></a> $<a name="BACKUPFILE"><span class="variable-name">BACKUPFILE</span></a> $<a name="NEWFILE"><span class="variable-name">NEWFILE</span></a> || true
+  <span class="keyword">done</span>
+}
+
+<span class="keyword">function</span> install_rc () {
+  <span class="builtin">echo</span> <span class="string">"  Running: $INSTALLSCRIPT"</span>
+  <span class="keyword">if</span> [ -e $<a name="INSTALLSCRIPT"><span class="variable-name">INSTALLSCRIPT</span></a> ]; <span class="keyword">then</span>
+    sh $<a name="INSTALLSCRIPT"><span class="variable-name">INSTALLSCRIPT</span></a>
+  <span class="keyword">else</span>
+    <span class="builtin">echo</span> Error: $<a name="INSTALLSCRIPT"><span class="variable-name">INSTALLSCRIPT</span></a> not found!
+  <span class="keyword">fi</span>
+}
+
+<span class="keyword">function</span> uninstall_rc () {
+  <span class="builtin">echo</span> <span class="string">"  Running: $UNINSTALLSCRIPT"</span>
+  <span class="keyword">if</span> [ -e $<a name="UNINSTALLSCRIPT"><span class="variable-name">UNINSTALLSCRIPT</span></a> ]; <span class="keyword">then</span>
+    sh $<a name="UNINSTALLSCRIPT"><span class="variable-name">UNINSTALLSCRIPT</span></a>
+  <span class="keyword">else</span>
+    <span class="builtin">echo</span> Error: $<a name="UNINSTALLSCRIPT"><span class="variable-name">UNINSTALLSCRIPT</span></a> not found!
+  <span class="keyword">fi</span>
+}
+
+<span class="keyword">function</span> prepare () { prepare_tmpdir; prepare_rc $<a name="1"><span class="variable-name">1</span></a>; }
+
+
+
+
+<span class="comment-delimiter">#####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">Process the command-line arguments
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#####</span><span class="comment">
+</span>
+<span class="comment-delimiter"># </span><span class="comment">(find-node "(bash)Conditional Constructs" "dog | cat")
+</span><span class="comment-delimiter"># </span><span class="comment">This used to be just:
+</span><span class="comment-delimiter"># </span><span class="comment">$*
+</span>
+<span class="keyword">function</span> __help () { <span class="builtin">help</span> $<span class="variable-name">*</span>; }
+<span class="keyword">function</span> _h ()     { <span class="builtin">help</span> $<span class="variable-name">*</span>; }
+
+<a name="COMMAND"><span class="variable-name">COMMAND</span></a>=$(<span class="sh-quoted-exec">echo</span> $<a name="1"><span class="variable-name">1</span></a> | tr <span class="string">\\</span>- _)
+: ${<a name="COMMAND"><span class="variable-name">COMMAND</span></a>:=help}
+<span class="builtin">shift</span> || true
+
+$<a name="COMMAND"><span class="variable-name">COMMAND</span></a> $<span class="variable-name">*</span>
+
+
+
+
+
+
+
+
+<span class="comment-delimiter"># </span><span class="comment">(find-node "(gawk)ARGC and ARGV")
+</span><span class="comment-delimiter"># </span><span class="comment">(find-node "(gawk)Auto-set" "`ARGIND #'")
+</span>
+<span class="comment-delimiter"># </span><span class="comment">Local Variables:
+</span><span class="comment-delimiter"># </span><span class="comment">ee-anchor-format: "\nfunction %s ()"
+</span><span class="comment-delimiter"># </span><span class="comment">End:
+</span></pre>
+  </body>
+</html>

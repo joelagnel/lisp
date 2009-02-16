@@ -1,0 +1,34 @@
+This is the CHANGELOG file of GNU eev.
+Author and version: Eduardo Ochs, 2006sep05.
+Public domain.
+Note: this file is not what you want!
+You want the "ChangeLog" file instead.
+This file just explains why "ChangeLog" has holes.
+
+------------------
+
+Hi. Sorry. There is no changelog.
+
+Until eev-0.93 I was being very careful and keeping a changelog with
+all sorts of (irrelevant) details. But I was getting the impression
+that no one was using eev, and that it had several design flaws.
+
+I decided to rewrite eev completely. Now (2004nov08) this rewriting is
+almost done. I decided that only after having stabilized the code,
+having written all the tests and examples, and having tried to teach
+it to friends -- mostly by IRC, sometimes face-to-face -- I would go
+back to writing changelogs.
+
+At the current stage the order of individual changes is not important,
+and there are too many of them. At some point in a near future I'll
+write down a map showing how eev is divided into layers and modules
+and how these layers and modules are connected. A map like that will
+be far more useful than changelogs.
+
+There's an unfinished text about the history of eev in doc/. It shows
+how the basic ideas of eev are essentially all contained in a few
+functions -- ee-goto-position, find-fline, find-node, eev, code-c-d.
+I think I haven't explained code-c-d there yet.
+
+More later.
+  Edrx 2004nov08

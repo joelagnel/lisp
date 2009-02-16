@@ -1,0 +1,138 @@
+2000-04-21  Paolo Amoroso  <amoroso@mclink.it>
+
+        * doc/doc-changes.txt: Restored information lost in the move to
+          SourceForge.
+          WARNING: This file is now obsolete and it will no longer be
+          maintained. It may be removed in future releases. From now on all
+          changes will be logged through CVS. For a list of changes from
+          2000-02-15 to the ILISP 5.10.1 release see the HISTORY file which
+          comes with the 5.10.1 distribution.
+
+2000-02-15  Paolo Amoroso  <amoroso@mclink.it>
+
+	* doc/ilisp.texi: Added @key formatting to some index entries.
+
+2000-02-07  Paolo Amoroso  <amoroso@mclink.it>
+
+	* doc/ilisp.texi (Files of ILISP): added entry for ilisp-sbcl.el.
+
+	* INSTALLATION, doc/ilisp.texi (installation instructions):
+	replaced unnecessary references to explicit version numbers
+	in files (e.g. 5.9.4) with generic ones (i.e. x.y.z).
+
+2000-02-03  Karl Fogel  <kfogel@onshore.com>
+
+        * doc/ilisp.texi (Keybindings): new node, document the
+        FSF-compliant keybinding situation.
+        (Miscellany): removed mention of ] for `close-all-lisp' (see
+        change to `lisp-bindings' in ilisp-key.el, below).
+
+
+Changes to ilisp.texi (from the draft for version 5.9 to 5.9.4)
+---------------------------------------------------------------
+
+(lesson learned from maintaining this file: I should have sorted and
+grouped entries by date - Paolo Amoroso ;-)
+
+-- Updated version information about ILISP and the manual.
+
+-- Merged changes (based on an old version of the document) done by Marco
+   and distributed with 5.9 (let's hope everything is OK ;-)
+
+-- Added the @finalout directive to prevent TeX from marking overfulls.
+
+-- Split the @author directive over two lines to fix a huge overfull.
+
+-- Updated and sorted the list of contributors in section "Acknowledgments"
+   (double check it).
+
+-- Updated the entry about dialect support in the list of ILISP features of
+   section "Introduction".
+
+-- Added info about ILISP-BUG in section "How to get the latest ILISP
+   distribution".
+
+-- Renamed section "FTP and WWW directions" to "FTP and Web directions"
+   (the term WWW is out of fashion: now everybody calls it the Web; okay,
+   it's a marketing trick to make ILISP look modern :)
+
+-- Added an item about ILD to the list of ILISP features in section
+   "Introduction".
+
+-- Updated sections "How to install ILISP" and "Configuration and
+   compilation" (formerly "Makefile configuration").
+
+-- Added to section "How to install ILISP" info about the HyperSpec
+   packages included with ILISP.
+
+-- Renamed section "Makefile configuration" to "Configuration and
+   compilation" (it deals with more than makefile configuration).
+
+-- Removed section "How to define autoload entries". Now section
+   "Configuration and compilation" provides appropriate instructions for
+   using ilisp.emacs.
+
+-- Updated section "Files of ILISP". Now files are sorted alphabetically.
+
+-- Added attribute @code to the dialect names in the bullet list of section
+   "How to run a Lisp process using ILISP". Now dialect names are sorted
+   alphabetically.
+
+-- Rearranged the text of section "How to run a Lisp process using ILISP"
+   so that the dialect tree is not split over two pages.
+
+-- Added XLisp and XLisp-Stat to section "How to run a Lisp process using
+   ILISP".
+
+-- Added some info on Scheme->C support to section "How to run a Lisp
+   process using ILISP".
+
+-- Added in section "Eval and compile functions" info about the
+   initializations performed by the very first inferior Lisp command
+   executed by the user (from a note at the end of the Texinfo source for
+   the 5.9 draft, after the @bye directive; the info about the *ILISP-SEND*
+   buffer was already in the manual).
+
+-- Documented ILISP-ARGLIST-MESSAGE-LISP-SPACE in section "Documentation
+   functions".
+
+-- Added in section "Documentation functions" info about the HyperSpec
+   lookup command, and warned that the fi:clman module is no longer loaded
+   by default.
+
+-- Fixed keybindings for SET-BUFFER-PACKAGE-LISP and SET-PACKAGE-LISP in
+   section "Package Commands". Removed from the same section the
+   description of PACKAGE-LISP, which is no longer included with ILISP.
+
+-- Added info about TRACE-DEFUN-LISP-BREAK in section "Tracing functions"
+   (from the TODO comment in the Texinfo source for the 5.9 draft; the
+   comment mentioned TRACE-DEFUN-BREAK).
+
+-- Added section "Interface to Lisp debuggers" on ILD after "Interrupts,
+   aborts, and errors".
+
+-- Added info about BOL-ILISP in section "Miscellany" (from a note at the
+   end of the Texinfo source for the 5.9 draft, after the @bye directive).
+
+-- Added info about BACKWARD-DELETE-CHAR-UNTABIFY in section "Miscellany"
+   (from a note at the end of the Texinfo source for the 5.9 draft, after
+   the @bye directive).
+
+-- Added XLisp and XLisp-Stat to the hierarchy of section "ILISP
+   customization".
+
+-- The hierarchies of Lisp dialects are now sorted alphabetically wherever
+   possible. They have also been updated with newly supported Scheme
+   dialects.
+
+-- Renamed the top level Common Lisp dialect from clisp to common-lisp.
+
+-- Renamed with a consistent capitalization all occurrences of Emacs,
+   LEmacs, XEmacs, Lisp, etc. (I suspect that when people read the word
+   LISP, they think to McCarthy's LISP 1.5 of the early sixties...).
+
+-- Marked Scheme support as experimental.
+
+-- Added several index entries.
+
+-- Corrected a few typos.

@@ -1,0 +1,1 @@
+getopt(<field "int ARGC">, <field "char **ARGV">, <field "const char *OPTIONS">)<endpoint>

@@ -1,0 +1,4 @@
+void * <field "method_name">(void * arg)
+{
+    <endpoint>
+}

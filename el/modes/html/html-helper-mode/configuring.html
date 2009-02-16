@@ -1,0 +1,120 @@
+<html> <head>
+<title>Configuring html-helper-mode</title>
+</head>
+
+<body>
+<h1>Configuring html-helper-mode</h1>
+
+html-helper-mode has several helpful features that are turned off by
+default, as well as several variables that the user might want to
+change for his or her own use.<p>
+
+You can configure these variables by adding the appropriate
+<tt>setq</tt> forms in your .emacs. You should read your emacs manual
+to learn how to do this - in general, you want to use<br>
+
+<blockquote><tt>(setq &lt;variable name&gt; &lt;value&gt;)</tt><br></blockquote>
+
+where &lt;value&gt; is
+one of <tt>t</tt> or <tt>nil</tt> if it is an on/off value, or a
+number or a quoted string. See the
+<a href="#recommended">recommended configuration</a> for examples.<p>
+
+<hr>
+<h3>Features</h3>
+
+The skeleton and timestamp features are turned off by default because
+they modify the buffer. I recommend you turn them on, though, as they
+are very useful.<p>
+
+<dl>
+  <dt> html-helper-do-write-file-hooks (default nil)
+  <dd> If t, html-helper-mode will try to update a timestamp in the document,
+and warn the user if it can't.
+  <dt> html-helper-build-new-buffer (default nil)
+  <dd> If t, html-helper-mode will insert a skeleton for new documents.
+</dl>
+
+You might also like to have prompting for your
+forms.<p>
+<dl>
+  <dt> tempo-interactive (default nil)
+  <dd> If t, the user will be prompted in the minibuffer for the values of
+       the fields of cookies
+</dl>
+
+<hr>
+<h3>Indentation variables</h3>
+
+There are three variables that control indentation:<p>
+
+<dl>
+  <dt> html-helper-basic-offset (default 2)
+  <dd> basic indentation for list item
+  <dt> html-helper-item-continue-indent (default 5)
+  <dd> text that is part of an item but not in the line with the item token
+       are indented this amount. 5 is the length of "<tt>&lt;li&gt; </tt>"
+  <dt> html-helper-never-indent (default nil)
+  <dd> if t, all the fancy indentation code is turned off
+</dl>
+
+<hr>
+<h3>Hooks</h3>
+Hooks allow your functions to be called at various times within the
+inner workings of html-helper-mode. Use <tt>add-hook</tt> instead of <tt>setq</tt> to modify these variables.<p>
+
+<dl>
+  <dt> html-helper-mode-hook (default nil)
+  <dd> hook run when html-helper-mode is started
+  <dt> html-helper-load-hook (default nil)
+  <dd> hook run when html-helper-mode is loaded
+  <dt> html-helper-timestamp-hook (default html-helper-default-insert-timestamp)
+  <dd> If html-helper-do-write-file-hooks is t, then this hook is called
+       to insert the new timestamp. The default inserts a simple timestamp.
+  <dt> tempo-insert-string-hook (default nil)
+  <dd> If set, this function will be applied to every string before it is
+       inserted. For example, setting it to <tt>'upcase</tt> will cause all
+       strings to be inserted uppercase.
+</dl>
+
+<hr>
+<h3>Strings</h3>
+There are various strings and templates that html-helper-mode inserts
+at appropriate times. Most have useful defaults, but you should set
+html-helper-address-string yourself.<p>
+
+<dl>
+  <dt> html-helper-address-string (default "")
+  <dd> Default author string for each file
+  <dt> html-helper-new-buffer-template (default is hairy)
+  <dd> list of strings and tempo tokens that is inserted when a new buffer
+       is created and html-helper-new-buffer-strings is t
+  <dt> html-helper-timestamp-start (default &lt;!-- hhmts start --&gt;)
+  <dd> comment used to delimit the beginning of a timestamp. Anything
+       between this and html-helper-timestamp-end is deleted every time
+       the file is written if html-helper-do-write-file-hooks is t
+  <dt> html-helper-timestamp-end (default &lt;!-- hhmts end --&gt;)
+  <dd> end of the timestamp
+</dl>
+
+<hr>
+<a name="recommended">
+<h3>Recommended configuration</h3>
+</a>
+
+I suggest you turn on both html-helper-do-write-file-hooks and
+html-helper-build-new-buffer, and set html-helper-address-string to the
+appropriate value for you. I use this configuration:<p>
+<pre>
+(setq html-helper-do-write-file-hooks t)
+(setq html-helper-build-new-buffer t)
+(setq html-helper-address-string 
+  "&lt;a href=\"http://www.santafe.edu/~nelson/\"&gt;Nelson Minar &amp;lt;nelson@santafe.edu&amp;gt;&lt;/a&gt;")
+</pre>
+
+<hr>
+<!-- hhmts start -->
+Last modified: Wed Feb  1 14:16:18 1995
+<!-- hhmts end -->
+<address><a href="http://www.santafe.edu/~nelson/">Nelson Minar &lt;nelson@santafe.edu&gt;</a></address>
+</body> </html>

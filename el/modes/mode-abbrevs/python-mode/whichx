@@ -1,0 +1,12 @@
+def which(filename):
+    import os, string, stat
+    if not os.environ.has_key('PATH') or os.environ['PATH'] == '':
+        p = os.defpath
+    else:
+        p = os.environ['PATH']
+    pathlist = string.split(p, os.pathsep)
+    for path in pathlist:
+        f = os.path.join(path, filename)
+        if os.access(f, os.X_OK) and not stat.S_ISDIR(os.stat(f)[stat.ST_MODE]):
+            return f
+    return None

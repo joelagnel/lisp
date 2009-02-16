@@ -1,0 +1,462 @@
+Version 1.12
+------------
+
+This version was not tested with XEmacs, so some of the new features
+may not work with it.
+
+- OTP R11 is also supported.
+  (Thanks to Ludvig Johansson <ludvig@erlang-consulting.com>).
+
+- Fixed jumping to a header file from an -include line when the
+  include information is already cached for the current file.
+
+- Fixed crash if a file contains both imported and local functions.
+
+- Added support for Distel. Optionally ESense can talk to a running
+  node instead of starting a new interpreter every time. See variable
+  esense-distel-node in file esense-distel.el
+
+- Added option esense-check-syntax-when-idle to enable automatic
+  syntax check of the currently edited buffer. If there is a problem
+  it is indicated in the window header. Requires Distel support.
+
+- Include lines with whitespaces around the quotes are handled
+  properly.
+
+- Added key for showing function headers in an Occur window.
+
+- Fixed skipping of bad functions in HTML.
+
+- Added ESense to Convenience group in Customize
+
+- Added options esense-module-search-directories,
+  esense-include-search-directories,
+  esense-setup-otp-search-directories and
+  esense-setup-otp-html-search-directories to specify search paths
+  where files without indexes are looked for.
+
+- Added support for handling some error reports in trace buffers.
+
+
+Version 1.11
+------------
+
+- Added trace mode for analysing textual Erlang trace files.
+  See esense-trace.el for usage instructions.
+
+- Finding clause matching an invocation works even if a resolved
+  entity (record, macro) refers to an other entity.
+
+
+Version 1.10
+------------
+
+- Increased the default size of cached entries to 50.
+
+- Quoted atoms are handled properly even if they contain characters
+  which are not word or symbol constituents.
+
+- Fixed entity lookup when the same include file was included by
+  several other include files.
+
+- Added option esense-resolve-macros to optionally resolve macros and
+  act on the resolved value.
+
+- Improved XEmacs support. Tested with XEmacs 21.4 patch 10.
+  (See the README file for features not supported on XEmacs.)
+
+- Added a little more detailed usage and installation instructions to
+  the README file.
+
+
+Version 1.9
+-----------
+
+- In order to support the new features the internals of storing and
+  reading index files has been rewritten. If I broke an existing
+  feature let me know.
+
+- Implemented record field completion when creating or updating a
+  record
+
+- Fixed jumping to record definition when standing within a record
+  creation/update clause.
+
+- When editing an include file the entities defined locally in the
+  include file are also offered for completion.
+
+- Functions defined in included header files are also offered as
+  completions.
+
+- Jump to include file works properly even if the include file
+  includes other files.
+
+- Fixed command line processing when option -files-from-stdin given.
+  (contributed by Mats Cronqvist)
+
+- Determining number of function arguments handles anonymous function
+  calls properly.
+
+- Headers included with include_lib are handled properly. (Not tested
+  on Windows.)
+
+- Until now every time a new file was opened a new timer was started
+  if esense-show-number-of-function-arguments was enabled, so the
+  number of running timers just grew...
+
+- Added option to preload index information for the current file when
+  Emacs is idle, so that it is readily available when needed.
+
+- Added handling of function references in name/arity format.
+
+- If a function is invoked without module name and there is a function
+  with this name in the "erlang" module then the local definitions for
+  this function are shadowed by the ones in the "erlang" module. (This
+  behavior mimics the behavior of the Erlang compiler.)
+
+- Fixed looking up function matching a certain invocation pattern when
+  the invocation in the trace buffer contains function objects.
+
+- When operating on functions without module name, only auto-imported
+  functions are shown from the erlang module.
+
+- Functions imported from other modules are handled properly.
+
+
+Version 1.8
+-----------
+
+- This release works with XEmacs. More or less. Tooltips are not
+  supported. Nor completion display method 'frame. Popup help is
+  not shown during completion.
+
+  It was not tested extensively, so there are surely numerous bugs in
+  it. It is meant to be a starting point for those who want to use it
+  with XEmacs.
+
+  Having fixed the most critical bugs which prevented ESense from
+  working on XEmacs I won't devote any more time to improve XEmacs
+  support. It is up to interested users to send patches if they want
+  better support for their editor.
+
+- esense-index-directory can also be a list of directories in which
+  case a given index file is searched for in all the listed
+  directories. On-demand generated index files will be put into the
+  first directory of the list.
+
+  It is useful if one needs to switch frequently between different
+  software versions (e.g. OTP versions) which naturally need different
+  index information. It can be done easily by simply pointing this
+  variable to a different set of index directories and invoking
+  esense-initialize.
+
+- If function help is requested and the arity can be determined from
+  the context then only the relevant function documentation is shown,
+  instead of documentation for all functions with the same name in the
+  module.
+
+- If only module name is given for go to function documentation then
+  no error is signalled and the corresponding module file is opened.
+
+- Fixed jumping to matching function invocation when the clause
+  references entities (macros, records) defined locally in the module.
+
+- Fixed assertion error if empty module name is given to go to
+  function documentation.
+
+- Fixed detection of exactly one completion for functions with the
+  same name, but different arity.
+
+- Fixed jumping to macro definition when there is an other macro which
+  begins with the same word as the name of the macro.
+
+
+Version 1.7
+-----------
+
+- Added option to go to function definition to jump to the actual
+  function clause which matches the invocation pattern, instead of the
+  first function clause with the matching arity.
+
+  This option is useful mainly in trace buffers where the invocation
+  arguments of functions are fully expanded.
+
+- When visiting the definition of a function which is invoked without
+  the module name and the function is defined in the current module
+  and it is also autoexported from the erlang module then the local
+  definition is chosen automatically instead of popping up a
+  completion list.
+
+- When calculating the position of the popup a small offset is added
+  to the x position, so that it's a little to the right from the
+  actual position. Without this offset the tooltip and the mouse
+  cursor sometimes overlap each other and the tooltip is hidden
+  immediately.
+
+- Made the algorithm which determines the arity of functions more
+  robust when dealing with binary arguments.
+
+- Fixed jumping to the first clause with the matching name when go to
+  definition does not find a function with the given arity.
+
+- Jump to function definition signals an error if the function is not
+  found.
+
+
+Version 1.6
+-----------
+
+- Definitions for simple macros (numbers, strings, atoms, etc.) are
+  shown in the tooltip documentation.
+
+- Completion supports quoted atoms.
+
+- Fixed initial completion of additional characters when completion is
+  started if completion display method is set to frame.
+
+- esense-ignore-unknown-includes is enabled by default.
+
+- Non-breaking spaces in the HTML documentation are converted to
+  simple spaces in the tooltip.
+
+- In modules which index files are generated from the HTML
+  documentation the arguments of functions are shown in the correct
+  order in the tooltip instead of in reverse order.
+
+- Predefined macros are also offered for completion.
+
+- Function completion inserts the closing parenthesis too if the arity
+  of the function is zero.
+
+- Fixed go to definition for quoted macro names.
+
+- Single quotes are stripped from the beginning and end of quoted
+  macro names.
+
+
+Version 1.5
+-----------
+
+- Added option to show in the echo area the number of arguments of the
+  function the point is on when Emacs is idle. It is useful for
+  reading function invocations when the function is called with
+  several complex arguments.
+
+  The arity is determined with a simple algorithm, complicated
+  constructs (e.g binaries) can confuse it sometimes. It would work
+  better if forward-sexp in Erlang mode handled binaries properly as
+  balanced expressions.
+
+- Completion is aborted properly if completion method is set to
+  'window and the user deletes the completion window manually.
+
+- If the current file is a module esense-go-to-function-documentation
+  offers it as the default module name.
+
+- Go to definition handles macros with parameters properly.
+
+- esense-ignore-unknown-includes works correctly if a recursively
+  included header file is not found.
+
+- Edoc tags in function comments are processed when generating index
+  files.
+  (contributed by Andrey Grigoriev)
+
+- Added instructions to the README file for eliminating unwanted
+  progress messages from the Erlang shell output which can prevent
+  ESense from working properly.
+  (contributed by Frida Kozari)
+
+- esense.erl can be compiled with OTP R9C again.
+  (contributed by Frida Kozari)
+
+
+Version 1.4
+-----------
+
+- Go to macro definition works properly if the name of a macro is
+  contained by an other macro.
+
+- Electric commands are not triggered within quoted atoms.
+
+- When jumping to the definition of a function an attempt is made to
+  determine the arity of the function from the context. If the arity
+  is determined then that version of the function is visited,
+  otherwise the first function with a matching name is chosen.
+
+  The arity is determined with a simple algorithm, complicated
+  constructs (e.g binaries) can confuse it sometimes. It would work
+  better if forward-sexp in Erlang mode handled binaries properly as
+  balanced expressions.
+
+- Fixed crash when a record field has multiple precomments (separated
+  by blank lines).
+
+- Handling file read errors coming from Yaws.
+
+- Handling crash when a module with a name consisting of multiple
+  components is encountered. These modules are skipped for the time
+  being.
+
+- In the HTML documentation some module names contain soft hyphens
+  (ASCII 173). These are removed before storing the module name.
+  (thanks to Chandrashekhar Mullaparthi)
+
+- Percent characters are removed from beginning of documentation lines
+  extracted from source comments.
+  (thanks to Andrey Grigoriev)
+
+
+Version 1.3
+-----------
+
+- Macros defined as other macros are handled properly.
+
+- Added configuration variable to control what should happen when an
+  unknown include file is encountered (signal an error or ignore the
+  unknown files).
+
+- Header lines are shown with bold characters in tooltips for
+  readability.
+
+- Added -debug option to esense.erl to write file names as they are
+  processed to the standard output. This helps identifying the
+  problematic file if ESense crashes during indexing.
+
+- Added an option to esense.erl to read the input file list from the
+  standard input. This can be used for example to index only HTML
+  files from the OTP source tree:
+
+    find <otp-src-dir> -name "*.html" | esense.sh -files-from-stdin
+
+  If this option is used the cache directory can be specified only if
+  a file name is also given on the command line, because the cache
+  directory is an argument not an option (handling of options with
+  parameters is not implemented yet). If anyone cares about this
+  submit a patch.
+
+  Also, empty list indicators are printed to the standard output by
+  Erlang when reading from the standard input and I don't know how to
+  make them disappear. Everything works fine, but it looks a bit
+  clumsy.
+
+- Added some instructions about running ESense on an OTP version
+  earlier than R10B.
+
+- Added instructions about activating ESense automatically.
+  (thanks to Mats Cronqvist)
+
+- If a module is not found in the index, but there is a corresponding
+  index file on the disk then try to the add the module to the index on
+  the fly. 
+  (contributed by Andrey Grigoriev)
+
+- Electric commands are not triggered if cursor is in a string or
+  comment.
+  (contributed by Andrey Grigoriev)
+
+- Handling file paths containing references to parent directories
+  properly.
+  (contributed by Andrey Grigoriev)
+
+- The first tooltip is not hidden immediately anymore when
+  esense-completion-display-method is set to 'frame.
+  (contributed by Andrey Grigoriev)
+
+- Menu bar is taken into account when calculating popup position.
+  (contributed by Andrey Grigoriev)
+
+  The current solution is still not perfect, so those who have the
+  menubar turned on may still experience problems with popup
+  placement.
+
+- On Windows the height of the title bar is also considered when
+  calculating position of popup windows. Make sure the variable
+  esense-titlebar-height is set to the proper value, otherwise the
+  position of popups will not be calculated properly.
+ (contributed by Andrey Grigoriev)
+
+
+Version 1.2
+-----------
+
+- If the currently edited file is a module then the usual features
+  (function/record/macro completion, documentation lookup, go to
+  definition) are also offered for entities defined locally in the
+  module (as far as the file is parsable). The last saved version of
+  the file is used for creating the index.
+
+- Cached data is refreshed if the source file has been changed since
+  the value was cached.
+
+- When visiting a definition the original position is recorded on the
+  marker ring of etags, so that the user can return to the starting
+  position with M-*.
+
+- Fixed inclusion of file.hrl and removed the Unix-specific include
+  path option from the Makefile. (thanks to Andrey Grigoriev)
+
+- Added customization support to configuration variables. ESense
+  configuration can be changed interactively with M-x customize-group.
+  (thanks to Andrey Grigoriev)
+
+- esense-calculate-popup-position now correctly handles the case where
+  (frame-parameter nil 'top) or (frame-parameter nil 'left) return
+  something like (+ -4). This is the case when e.g. the Emacs window
+  is maximized, at least on Windows XP. The handling code is
+  "shamelessly stolen" from cedet/speedbar/dframe.el. 
+  (contributed by Andrey Grigoriev)
+
+- File name components in index file names are separated with '!'
+  character instead of '|', because Windows didn't like the pipe
+  character. (thanks to Andrey Grigoriev)
+
+  Don't forget to regenerate your existing header index files or
+  rename them appropriately!
+
+- Added esense.bat file for Windows users.
+  (contributed by Andrey Grigoriev)
+  
+- esense.erl doesn't require absolute file names anymore, it converts
+  them to absolute paths if necessary. 
+  (contributed by Andrey Grigoriev)
+
+- esense-get-pixel-position restores the mouse position properly on
+  Windows, instead of setting it to 0;0. Unfortunately, this change
+  didn't work well on Linux with the Enlightenment window manager, so
+  for the time being it is done only on Windows.
+  (thanks to Andrey Grigoriev)
+
+- Header index file names are handled properly on Windows.
+  (contributed by Andrey Grigoriev)
+
+
+Version 1.1
+-----------
+
+- Interactive errors are converted to messages when completion is
+  invoked via an electric character to avoid annoying the user
+  unnecessarily during typing.
+
+- Record field documentation is also processed.
+
+- Macro name and possible arguments are shown in macro tooltip help.
+
+- Don't try to complete a record field at the beginning of buffer.
+
+- Print fewer warning messages when the completion is invoked via an
+  electric character.
+
+- Page up/down can be used to navigate the completion list.
+
+
+
+-------------------------
+                         
+  Local Variables:       
+  mode: text             
+  mode: auto-fill        
+  adaptive-fill-mode: t  
+  End:                   
+                         
+-------------------------

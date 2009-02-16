@@ -1,0 +1,6 @@
+if (!PyArg_ParseTuple(args, "<cursor>")) {
+    std::cerr << "ERROR: parsing tuple"
+              << " at " << __FILE__ << ":" << __LINE__
+              << std::endl << std::flush;
+    exit(1);
+}

@@ -1,0 +1,4 @@
+abort(<field "void">)
+{
+        int i;
+}

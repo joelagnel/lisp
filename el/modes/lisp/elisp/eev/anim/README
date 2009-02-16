@@ -1,0 +1,31 @@
+This is the `anim/README' file of GNU eev.
+All files in this directory were created by Eduardo Ochs
+<edrx@mat.puc-rio.br> and are in the Public Domain.
+
+If you are reading this file locally, after unpacking
+<http://angg.twu.net/eev-current.tar.gz> in your machine, you will
+notice that the HTML files in this directory point to SWF files that
+are only at the upstream version of this directory, which is at
+<http://angg.twu.net/eev-current/anim/>. The SWF files are not being
+included in the eev package just because of their size and because
+they do not change frequently; they were also created by me (Eduardo
+Ochs), and are in the public domain. If you'd like to make your local
+htmls works do this:
+
+  cd ~/eev-current/
+  wget http://angg.twu.net/eev-current/anim/channels.swf
+  wget http://angg.twu.net/eev-current/anim/gdb.swf
+
+
+VERY IMPORTANT NOTE: many people - including me!!! Aaargh!!! - are
+using tools that are "gratis" but not "libre" to display Shockwave
+Flash movies, even though SWF's specs are open... Please check
+<http://gplflash.sourceforge.net/>, and consider helping that project
+if you have the skills! It can already display these animations when
+run in standalone mode (with just a few glitches, like some wrong
+pixels), and it seems that it is possible to use it as a
+not-very-stable plugin for Mozilla/Firefox, but I haven't tried that
+yet... COMING SOON: e-scripts about compiling gplflash and running it
+both as a standalone program and as a plugin!
+
+  Edrx, 2005apr11

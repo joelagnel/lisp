@@ -1,0 +1,39 @@
+;; Object init/
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "init/"
+  :tables (list 
+   (semanticdb-table "de-ecb.el"
+    :major-mode 'emacs-lisp-mode
+    :tags 'nil
+    :file "de-ecb.el"
+    )
+   (semanticdb-table "de-perl.el"
+    :major-mode 'emacs-lisp-mode
+    :tags 'nil
+    :file "de-perl.el"
+    :pointmax 5646
+    )
+   (semanticdb-table "de-emacs.el"
+    :major-mode 'emacs-lisp-mode
+    :tags '(("setq" code nil nil [153 224]) ("load" code nil nil [225 241]) ("setq" code nil nil [243 302]) ("load" code nil nil [362 384]) ("load" code nil nil [385 403]) ("load" code nil nil [404 417]) ("load" code nil nil [418 435]) ("load" code nil nil [436 452]) ("load" code nil nil [492 509]) ("load" code nil nil [510 527]) ("load" code nil nil [528 543]) ("load" code nil nil [564 581]) ("load" code nil nil [602 621]) ("load" code nil nil [622 637]) ("load" code nil nil [638 654]) ("load" code nil nil [655 671]) ("load" code nil nil [672 689]) ("load" code nil nil [690 708]) ("load" code nil nil [709 726]) ("load" code nil nil [727 745]) ("global-set-key" code nil nil [769 806]) ("global-set-key" code nil nil [807 845]) ("global-set-key" code nil nil [846 895]) ("global-set-key" code nil nil [896 941]) ("global-set-key" code nil nil [942 992]) ("global-set-key" code nil nil [1044 1093]) ("global-set-key" code nil nil [1130 1179]) ("global-set-key" code nil nil [1180 1229]) ("global-set-key" code nil nil [1253 1298]) ("global-set-key" code nil nil [1299 1331]) ("global-set-key" code nil nil [1332 1365]) ("global-set-key" code nil nil [1366 1401]) ("global-set-key" code nil nil [1402 1442]) ("global-set-key" code nil nil [1443 1485]) ("global-set-key" code nil nil [1486 1522]) ("browse-url" include nil nil [1524 1545]) ("global-set-key" code nil nil [1546 1594]) ("setq" code nil nil [1607 1722]) ("global-set-key" code nil nil [1724 1770]) ("global-set-key" code nil nil [1771 1818]) ("global-set-key" code nil nil [1819 1869]) ("global-set-key" code nil nil [1870 1910]) ("global-set-key" code nil nil [1911 1956]) ("add-hook" code nil nil [1958 2070]) ("if" code nil nil [2072 2266]) ("setq" code nil nil [2269 2298]) ("setq" code nil nil [2316 2346]) ("animate-n-steps" variable (:constant-flag t :default-value 3) nil [2394 2422]) ("emacs-reloaded" function nil nil [2423 2595]) ("add-hook" code nil nil [2597 2640]) ("message" code nil nil [2642 2668]) ("exit" function nil nil [2670 2822]) ("de-emacs" package nil nil [2824 2843]) ("load-file" code nil nil [3012 3068]) ("load-file" code nil nil [3069 3127]) ("semantic-load-enable-code-helpers" code nil nil [3457 3492]))
+    :file "de-emacs.el"
+    :pointmax 4141
+    :unmatched-syntax 'nil
+    )
+   (semanticdb-table "de-msf.el"
+    :major-mode 'emacs-lisp-mode
+    :tags 'nil
+    :file "de-msf.el"
+    )
+   (semanticdb-table "de-jabber.el"
+    :major-mode 'emacs-lisp-mode
+    :tags '(("load" code nil nil [12 28]) ("setq" code nil nil [29 94]) ("jabber" include nil nil [96 113]) ("jabber-festival" include nil nil [115 141]) ("jabber-alert" include nil nil [142 165]) ("setq" code nil nil [167 197]) ("jabber-ft-server" include nil nil [199 226]) ("jabber-ft-client" include nil nil [227 254]) ("jabber-socks5" include nil nil [255 279]) ("setq" code nil nil [281 459]) ("my-jabber-chat-delete-or-bury" function nil nil [462 763]) ("jabber" function nil nil [870 1826]) ("add-to-list" code nil nil [1829 1956]) ("setq" code nil nil [1962 2777]) ("setq" code nil nil [3596 3631]) ("setq" code nil nil [3632 3667]) ("setq" code nil nil [3668 3697]) ("setq" code nil nil [3698 3739]) ("setq" code nil nil [3740 3786]) ("setq" code nil nil [3787 3819]) ("setq" code nil nil [3821 3854]) ("jabber-xosd-display-message" function (:arguments ("message")) nil [3856 4217]) ("jabber-message-xosd" function (:arguments ("from" "buffer" "text" "propsed-alert")) nil [4220 4358]) ("add-to-list" code nil nil [4361 4436]) ("setq" code nil nil [4470 4738]) ("jabber-stumpwm-activity-modeline-update" function nil nil [5018 5292]) ("add-hook" code nil nil [5293 5373]) ("jabber-mail-stumpwm-mode-line-update" function (:arguments ("iq-data")) nil [5417 5628]) ("add-hook" code nil nil [5629 5708]))
+    :file "de-jabber.el"
+    :pointmax 5756
+    :unmatched-syntax 'nil
+    )
+   )
+  :file "semantic.cache"
+  :semantic-tag-version "2.0pre3"
+  :semanticdb-version "2.0pre3"
+  )

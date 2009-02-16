@@ -1,0 +1,105 @@
+-----------------------------------------------------------------------
+This file contains a brief description of the files in the
+emacs-cl-shell.tar distribution.  The file example.emacs provides
+examples of lines that you can put in your emacs initialization
+(.emacs) file in order to use this code.
+
+The source code is available, subject to the usual Emacs disclaimers,
+as a compressed tar file via anonymous ftp:
+
+    whitechapel.media.mit.edu : pub/emacs-cl-shell.tar.Z
+
+Whitechapel's net address is 18.85.0.125.  Don't forget to put ftp
+into binary mode.  After uncompress-ing the file, you can list its
+contents with "tar tvf emacs-cl-shell.tar" and extract the files with
+"tar xvf emacs-cl-shell.tar".
+
+Send me your E-mail address if you want me to notify you of future
+releases/bug fixes.  Comments and suggestions should be sent via
+E-mail to eero@media-lab.media.mit.edu.
+
+Eero Simoncelli
+Vision Science Group
+MIT Media Laboratory, E15-385
+20 Ames Street
+Cambridge, MA  02139
+
+-----------------------------------------------------------------------
+example.emacs - Examples of lines to put in your .emacs file to take
+  advantage of the code in this distribution.
+
+help.emacs - quick reference sheet for new emacs users, including some
+ of the extensions.
+
+cl-buglist - known bugs and a wishlist for the cl-shell code.
+
+cl-ChangeLog - Emacs-style log of changes made to the cl-shell source.
+
+cl-shell.el - provides a major mode (cl-shell-mode) for running Common
+  Lisp (CL) as an Emacs subprocess.  Features include direct (ie not
+  through a temp file) evaluation and in-package compilation of forms
+  from lisp-mode buffers, type-ahead and a history mechanism for the
+  cl-shell buffer, and pop-up help facilities for the CL functions
+  documentation, macroexpand and describe.  The extensions for Lucid
+  Common Lisp in the file cl-lucid.el provide pop-up arglists and
+  source file editing.  Other extensions are provided in cl-pcl.el and
+  cl-flavors.el which allow editing source files of methods.  The code
+  in cl-shell.el, however, is stand-alone and does not require any of
+  these.  Provides a general mechanism for communication between CL and
+  Emacs which does not rely on extra processes.
+     A more detailed description may be found in the file
+  cl-shell.doc and at the top of the file cl-shell.el.  To use the
+  code, you should either copy cl-shell, shell-history, cl-lucid,
+  cl-pcl, cl-clos and cl-flavors into your emacs/lisp source
+  directory, or add the directory containing these files to the Emacs 
+  variable load-path.  Then put these lines into your .emacs file:
+      (setq *cl-program* <pathname-of-your-lisp-program>)
+      (autoload 'run-cl "cl-shell" "" t)
+  and type the command "M-x run-cl".  You can then get a list of key 
+  bindings using "M-x describe-function cl-shell-mode".  To get proper
+  Common Lisp indentations, you should also put the following line
+  in your .emacs file:
+      (setq lisp-indent-hook 'common-lisp-indent-hook)
+
+cl-lucid.el, cl-clos.el, cl-pcl.el, cl-flavors.el - these provide
+  extensions to the code in cl-shell.el.  They are all loaded
+  automatically when you type "M-x run-cl" if the corresponding
+  features are present in the CL world.  They allow the user to compile
+  methods directly (i.e. not through a temp file) and to find
+  source files of symbols with multiple definitions.
+
+shell-history.el - a general command history mechanism for shell buffers.
+  This is loaded by cl-shell.el.  You can also use it for other shells.
+  Features include yanking previous commands, and yanking previous
+  commands that match what you've typed on the current input line.
+
+source-file-extensions.lisp - This file is an extensions to Lucid CL
+  which records source-files for defvar, defparameter, defconstant,
+  deftype, and the definition constructs in FLAVORS or PCL.  It is
+  independent of the Emacs Lisp code described above, although it
+  enhances its usefulness.
+
+cl-obvius.el - This is an extension for running OBVIUS (Object-Based
+  Vision and Image Understanding System), a Common Lisp system which
+  is also available via anonymous ftp from whitechapel.media.mit.edu
+
+completion.el, always-complete.el, advise.el - completion.el was
+  written at Thinking Machines Corporation, and provides a very useful
+  typing completion system for Emacs.  Advise.el is an advice system
+  for Emacs Lisp, also written at Thinking Machines Corp.
+  Always-complete.el, which requires advise.el and loads completion.el, 
+  is an extension to completion.el written by Alan Ruttenberg at the MIT 
+  Media Lab.  It prints the completions in the minibuffer as you type, 
+  reminding you of their availability.  You can either load completion.el 
+  by itself, or load always-complete.el (which loads completion.el).
+
+misc-extensions.el - A few useful miscellaneous extensions to emacs.  
+  Most useful are a mouse-click function which copies the s-expression
+  at the mouse to the point, and code to fill comments correctly in
+  lisp-mode.  This file does not set any key bindings -- it only defines
+  a set of functions, and gives a list of (commented out) recommended
+  key bindings.  This allows users to choose which of the extensions
+  to use, by putting the appropriate key bindings in their .emacs files.
+
+sun-X-fn-keys.el - Code to bind function keys on a Sun4/SPARC keyboard.
+

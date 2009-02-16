@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="The%20tree-buffer-API">The tree-buffer-API</a>,
+Next:<a rel=next accesskey=n href="Do-not-with-tree-buffer.html#Do%20not%20with%20tree-buffer">Do not with tree-buffer</a>,
+Previous:<a rel=previous accesskey=p href="Tree-buffer-keybindings.html#Tree-buffer%20keybindings">Tree-buffer keybindings</a>,
+Up:<a rel=up accesskey=u href="tree-buffer.html#tree-buffer">tree-buffer</a>
+<hr><br>
+
+<h4>All functions available for tree-buffers and tree-nodes</h4>
+
+<p>This chapter lists the complete AI available for tree-buffers and
+tree-nodes.
+
+<p><strong>IMPORTANT</strong>: These are the only functions and macros of
+tree-buffer.el you are allowed to use for programming with
+tree-buffers and tree-nodes. If you use other - not here listed -
+functions, macros or variables of tree-buffer.el then you run the risk
+of unwanted side-effects or program-behaviors!
+
+<h5>The API for a tree-buffer:</h5>
+
+<p>See the documentation of these functions (e.g. via <kbd>C-h f</kbd>) to get
+the details how to use it.
+
+<ul>
+<li><code>tree-buffer-add-image-icon-maybe</code>
+<li><code>tree-buffer-find-image</code>
+<li><code>tree-buffer-create</code><a rel=footnote href="#fn-1"><sup>1</sup></a>
+<li><code>tree-buffer-defpopup-command</code>
+<li><code>tree-buffer-destroy</code><a rel=footnote href="#fn-2"><sup>2</sup></a>
+<li><code>tree-buffer-empty-p</code>
+<li><code>tree-buffer-expand-node</code>
+<li><code>tree-buffer-get-node-at-point</code>
+<li><code>tree-buffer-node-data-equal-p</code>
+<li><code>tree-buffer-recenter</code>
+<li><code>tree-buffer-highlight-node-data</code>
+<li><code>tree-buffer-remove-highlight</code>
+<li><code>tree-buffer-remove-node</code>
+<li><code>tree-buffer-clear-tree</code>
+<li><code>tree-buffer-displayed-nodes-copy</code>
+<li><code>tree-buffer-search-displayed-node-list</code>
+<li><code>tree-buffer-number-of-displayed-nodes</code>
+<li><code>tree-buffer-get-data-store</code>
+<li><code>tree-buffer-set-data-store</code>
+<li><code>tree-buffer-get-root</code>
+<li><code>tree-buffer-set-root</code>
+<li><code>tree-buffer-update</code>
+<li><code>tree-buffer-update-node</code>
+</ul>
+
+<h5>The API for a tree-node</h5>
+
+<p>See the documentation of these functions (e.g. via <kbd>C-h f</kbd>) to get
+the details how to use it.
+
+<ul>
+<li><code>tree-node-add-children</code>
+<li><code>tree-node-linelength</code>
+<li><code>tree-node-new</code>
+<li><code>tree-node-new-root</code>
+<li><code>tree-node-remove-child</code>
+<li><code>tree-node-remove-child-by-data</code>
+<li><code>tree-node-find-child-by-data</code>
+<li><code>tree-node-find-child-by-name</code>
+<li><code>tree-node-search-subtree-by-data</code>
+<li><code>tree-node-sort-children</code>
+<li><code>tree-node-toggle-expanded</code>
+</ul>
+
+<p>In addition to these functions the tree-node API contains all accessors
+for a tree-node which are described in <a href="A-new-tree-node.html#A%20new%20tree-node">A new tree-node</a>.
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>If the tree-buffer should be
+used by ECB then you must use <code>defecb-tree-buffer-creator</code> - see
+the documentation!</p>
+
+<li><a name="fn-2"></a>
+<p>Not needed when
+<code>defecb-tree-buffer-creator</code> has been used for creation.</p>
+
+</ol><hr>
+
+</body></html>
+

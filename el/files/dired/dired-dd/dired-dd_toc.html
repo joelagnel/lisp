@@ -1,0 +1,91 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from dired-dd.texi on 24 October 2000 -->
+
+<TITLE>dired-dd, aka Dired-DragDrop, Mouse interface for dired / dired-x - Table of Contents</TITLE>
+</HEAD>
+<BODY>
+<H1>dired-dd / aka Dired-DragDrop (0.9.1.15)</H1>
+<H2>A mouse interface minor mode for dired / dired-x</H2>
+<ADDRESS>Seiichi Namba (C) <CODE>1997,1998,1999 S.Namba &#60;<A HREF="mailto:sn@asahi-net.email.ne.jp">sn@asahi-net.email.ne.jp</A>&#62;</CODE></ADDRESS>
+<P>
+<P><HR><P>
+<UL>
+<LI><A NAME="TOC1" HREF="dired-dd.html#SEC1">Overview</A>
+<LI><A NAME="TOC2" HREF="dired-dd.html#SEC2">Installation</A>
+<UL>
+<LI><A NAME="TOC3" HREF="dired-dd.html#SEC3">System Requirement</A>
+<LI><A NAME="TOC4" HREF="dired-dd.html#SEC4">Installing <CODE>dired-dd</CODE></A>
+<UL>
+<LI><A NAME="TOC5" HREF="dired-dd.html#SEC5">Copying files</A>
+<LI><A NAME="TOC6" HREF="dired-dd.html#SEC6">Modifying your <TT>`~/.emacs'</TT></A>
+<LI><A NAME="TOC7" HREF="dired-dd.html#SEC7">Printing Info (optional)</A>
+</UL>
+<LI><A NAME="TOC8" HREF="dired-dd.html#SEC8">COPYING</A>
+</UL>
+<LI><A NAME="TOC9" HREF="dired-dd.html#SEC9">Dired-dd minor mode</A>
+<LI><A NAME="TOC10" HREF="dired-dd.html#SEC10">Mouse Button 1</A>
+<UL>
+<LI><A NAME="TOC11" HREF="dired-dd.html#SEC11">Drag</A>
+<LI><A NAME="TOC12" HREF="dired-dd.html#SEC12">Double click</A>
+</UL>
+<LI><A NAME="TOC13" HREF="dired-dd.html#SEC13">Mouse Button 2</A>
+<UL>
+<LI><A NAME="TOC14" HREF="dired-dd.html#SEC14">Drag</A>
+<UL>
+<LI><A NAME="TOC15" HREF="dired-dd.html#SEC15">Drag-and-drop object and target</A>
+<LI><A NAME="TOC16" HREF="dired-dd.html#SEC16">Non-<CODE>dired</CODE> targets.</A>
+<LI><A NAME="TOC17" HREF="dired-dd.html#SEC17">Quick drag and drop with modifier keys</A>
+<LI><A NAME="TOC18" HREF="dired-dd.html#SEC18">Where is my file ?</A>
+</UL>
+<LI><A NAME="TOC19" HREF="dired-dd.html#SEC19">Click (Single)</A>
+</UL>
+<LI><A NAME="TOC20" HREF="dired-dd.html#SEC20">Mouse Button 3</A>
+<UL>
+<LI><A NAME="TOC21" HREF="dired-dd.html#SEC21">Click (Single)</A>
+</UL>
+<LI><A NAME="TOC22" HREF="dired-dd.html#SEC22">The Popup Menu</A>
+<UL>
+<LI><A NAME="TOC23" HREF="dired-dd.html#SEC23"><TT>`Copy Recursive'</TT> entry</A>
+<LI><A NAME="TOC24" HREF="dired-dd.html#SEC24"><TT>`Exec Related CMD'</TT> entry</A>
+<LI><A NAME="TOC25" HREF="dired-dd.html#SEC25"><TT>`Launch a Terminal'</TT> entry</A>
+</UL>
+<LI><A NAME="TOC26" HREF="dired-dd.html#SEC26">Copying filename by mouse</A>
+<LI><A NAME="TOC27" HREF="dired-dd.html#SEC27">Customizing</A>
+<UL>
+<LI><A NAME="TOC28" HREF="dired-dd.html#SEC28">Variables</A>
+<LI><A NAME="TOC29" HREF="dired-dd.html#SEC29">Turning on / off <CODE>dired-dd-mode</CODE> as default minor mode</A>
+<LI><A NAME="TOC30" HREF="dired-dd.html#SEC30">Find file method</A>
+<UL>
+<LI><A NAME="TOC31" HREF="dired-dd.html#SEC31"><CODE>dired-dd-find-multiple-file</CODE></A>
+<LI><A NAME="TOC32" HREF="dired-dd.html#SEC32"><CODE>dired-dd-find-file-method</CODE></A>
+</UL>
+<LI><A NAME="TOC33" HREF="dired-dd.html#SEC33">File linking method</A>
+<LI><A NAME="TOC34" HREF="dired-dd.html#SEC34">Customizing behavior on dropping into non-dired buffer</A>
+<LI><A NAME="TOC35" HREF="dired-dd.html#SEC35">Sound</A>
+<LI><A NAME="TOC36" HREF="dired-dd.html#SEC36">Pointer animation</A>
+<LI><A NAME="TOC37" HREF="dired-dd.html#SEC37">Insignia</A>
+<LI><A NAME="TOC38" HREF="dired-dd.html#SEC38">Menu raised by Button 2</A>
+<LI><A NAME="TOC39" HREF="dired-dd.html#SEC39">Menu raised by Button 3</A>
+<LI><A NAME="TOC40" HREF="dired-dd.html#SEC40">Load hook</A>
+</UL>
+<LI><A NAME="TOC41" HREF="dired-dd.html#SEC41">Tips</A>
+<UL>
+<LI><A NAME="TOC42" HREF="dired-dd.html#SEC42">Using dired-dd in multiple window / frame environment</A>
+<LI><A NAME="TOC43" HREF="dired-dd.html#SEC43">Other programs going well with dired-dd</A>
+<LI><A NAME="TOC44" HREF="dired-dd.html#SEC44"><TT>`Spinout'</TT> directory</A>
+</UL>
+<LI><A NAME="TOC45" HREF="dired-dd.html#SEC45">Bug, Caveats</A>
+<LI><A NAME="TOC46" HREF="dired-dd.html#SEC46">TODO</A>
+<LI><A NAME="TOC47" HREF="dired-dd.html#SEC47">Index</A>
+<LI><A NAME="TOC48" HREF="dired-dd.html#SEC48">Variable Index</A>
+<LI><A NAME="TOC49" HREF="dired-dd.html#SEC49">Function Index</A>
+<LI><A NAME="TOC50" HREF="dired-dd.html#SEC50">Concept Index</A>
+</UL>
+<P><HR><P>
+This document was generated on 24 October 2000 using the
+<A HREF="http://wwwcn.cern.ch/dci/texi2html/">texi2html</A>
+translator version 1.51.</P>
+</BODY>
+</HTML>

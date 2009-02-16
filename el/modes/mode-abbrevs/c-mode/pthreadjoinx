@@ -1,0 +1,4 @@
+if (pthread_join(<field "pthread_t th">, <field "void **thread_return">) != 0) {
+    fprintf(stderr, "ERROR: calling pthread_join()\n");
+    exit(1);
+}

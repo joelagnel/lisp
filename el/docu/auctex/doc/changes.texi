@@ -1,0 +1,57 @@
+@section News in 12
+
+@itemize @bullet
+@item
+Support for the KOMA-Script classes.
+Contributed by Mark Trettin <Mark.Trettin@@gmx.de>.
+
+@item
+Many more LaTeX and LaTeX2e commands are supported.
+Done by Masayuki Ataka  <ataka@@milk.freemail.ne.jp>
+
+@item
+Support for @file{prosper.sty}, see @url{http://prosper.sourceforge.net/}.
+Contributed by Phillip Lord <p.lord@@russet.org.uk>.
+
+@item
+@code{comment-region} now inserts @t{%%} by default.
+Suggested by "Davide G. M. Salvetti" <salve@@debian.org>.
+
+@item
+You can now switch between using the @file{font-latex} (all emacsen),
+the @file{tex-font} (Emacs 21 only) or no special package for font
+locking.  Customize @code{TeX-install-font-lock} for this.
+
+@item
+Now use @t{-t landscape} by default when landscape option appears.
+Suggested by Erik Frisk <frisk@@isy.liu.se>.
+
+@item
+Use @file{tex-fptex.el} for fpTeX support.
+Contributed by Fabrice Popineau <Fabrice.Popineau@@supelec.fr>.
+
+@item
+New user option @code{LaTeX-top-caption-list} specifies environments
+where the caption should go at top.
+Contributed by ataka@@milk.freemail.ne.jp (Masayuki Ataka).
+
+@item
+Allow explicit dimensions in @file{graphicx.sty}.
+Contributed by ataka@@milk.freemail.ne.jp (Masayuki Ataka).
+
+@item
+Limited support for @file{verbatim.sty}.
+Contributed by ataka@@milk.freemail.ne.jp (Masayuki Ataka).
+
+@item
+Better support for asmmath items.
+Patch by ataka@@milk.freemail.ne.jp (Masayuki Ataka).
+
+@item
+More accurate error parsing.
+Added by David Kastrup <David.Kastrup@@t-online.de>.
+
+@item
+Bug fixes.
+
+@end itemize

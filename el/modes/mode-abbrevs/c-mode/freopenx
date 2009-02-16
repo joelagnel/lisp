@@ -1,0 +1,1 @@
+freopen(<field "const char *restrict filename">, <field "const char *restrict mode">, <field "FILE *stream">)

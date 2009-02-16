@@ -1,0 +1,84 @@
+This is the `doc/NAO_pt' file of GNU eev.
+This file is in the Public Domain.
+
+
+Oi Debian-RJ,
+
+Vou pedir um favor pra vocês: _não_ anunciem o mini-workshop de Emacs
+e Eev -- que vai acontecer na UFF no sábado, 13/novembro/2004 -- no
+Debian-RJ. Motivos:
+
+ * "Anúncios de workshops" exigem "resumos" -- e eu tentei escrever um
+   resumo que eu achasse honesto e não consegui. Eu vi que teria que
+   explicar o que é Emacs, e as explicações mais óbvias, "Emacs é um
+   editor de texto", "Emacs é um sistema operacional", "Emacs é um
+   editor extensível", todas apontam pra direções erradas... Uma
+   alternativa um pouco melhor seria:
+
+     "o Emacs é um ambiente programável cuja linguagem de base
+      é Lisp e que geralmente é usado como editor de texto"
+
+   mas aí surgiriam as perguntas: "o que é um ambiente programável?" e
+   "o que é Lisp"... eu só conheço três ambientes programáveis que
+   estão em uso hoje em dia, que são Emacs, SmallTalk e Forth, e
+   desses o Emacs é de longe o mais popular, então não adiantaria
+   fazer comparações... quanto ao que é Lisp, se eu contar que a
+   primeira implementação de um Lisp é de 1958 (ver
+   http://www.paulgraham.com/rootsoflisp.html e
+   http://www-formal.stanford.edu/jmc/history/lisp/node3.html) todo
+   mundo iria sair correndo... As pessoas tem noções meio erradas do
+   que são linguagens de programação...
+
+ * O laboratório do Thadeu na UFF onde vai acontecer o mini-workshop
+   tem 12 máquinas, e nós já temos 12 inscritos, mesmo com divulgação
+   mínima. Além disso, o material que eu vou apresentar não está bem
+   ordenado, metade eu já testei explicando pra pessoas e metade não;
+   não quero excesso de expectativas, não quero gente dando com a cara
+   na porta, quero poder dar atenção pra todo mundo, e quero que o
+   workshop renda bem e que eu não saia acabado.
+
+ * Eu tenho dois objetivos principais com esse workshop: um é fazer
+   com que pelo menos algumas pessoas mais próximas minhas do
+   Debian-RJ comecem a usar o eev bem, e aí a gente passe a poder
+   usá-lo como ferramenta de comunição; o outro é me ajudar a
+   estruturar a parte da documentação do eev que eu ainda não escrevi.
+   Por exemplo, tou planejando um tutorial de Emacs centrado no eev,
+   com uma ordem de exposição bem diferente dos tutoriais de Emacs
+   usuais -- nele o Lisp vai aparecer já nos 5 primeiros minutos. Por
+   sinal: pessoas que nunca usaram computador costumam aceitar essa
+   abordagem "Lisp-cêntrica" muito bem, e pessoas que só usaram
+   computadores como usuários de Windows muitas vezes empacam. Foi o
+   que aconteceu num curso que eu dei na UERJ.
+
+Pois então: acho que a gente não precisa de divulgação, muito menos de
+um resumo (desses que são listas de tópicos, que aparecem em folders)
+sobre o que vai acontecer no workshop; os objetivos deste workshop são
+bem claros, são incompatíveis com divulgação e resumos, e, lembrem,
+nada nos obriga a nos moldarmos aos formatos que a gente vê por aí.
+
+As idéias do eev soam alienígenas nesse mundo de usuários onde as
+propagandas nos bombardeiam com slogans tipo "você não precisa
+aprender", "você não precisa pensar", "você não _quer_ pensar, pensar
+é ruim e cansa", "pague-nos e você vai poder reduzir a sua vida a
+ganhar dinheiro, consumir e descansar", "tudo que existe é resumível,
+vendável e consumível". O único tipo de resumo do eev que eu considero
+que seria fiel ao espírito dele (máquina aberta, tudo é examinável,
+tudo pode ser automatizado, tudo pode ser escrito e comunicado) seria
+uma série de READMEs totalmente mão-na-massa, com instruções,
+screenshots e conceitos ilustrados com exemplos executáveis e
+diagramas. E o mini-workshop é pra me ajudar a produzir estes READMEs.
+
+  Obrigado,
+  Eduardo Ochs
+    edrx@mat.puc-rio.br
+    http://angg.twu.net/
+    http://angg.twu.net/eev-current/
+    http://angg.twu.net/eev-current/README.html
+
+  2004nov11
+
+
+
+Local Variables:
+coding: raw-text-unix
+End:

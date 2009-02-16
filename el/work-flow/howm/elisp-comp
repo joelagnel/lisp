@@ -1,0 +1,61 @@
+#!/bin/sh
+# Copyright (C) 1995 Free Software Foundation, Inc.
+# Fran,Ag(Bois Pinard <pinard@iro.umontreal.ca>, 1995.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+# This script byte-compiles all `.el' files which are part of its
+# arguments, using GNU Emacs, and put the resulting `.elc' files into
+# the current directory, so disregarding the original directories used
+# in `.el' arguments.
+#
+# This script manages in such a way that all Emacs LISP files to
+# be compiled are made visible between themselves, in the event
+# they require or load-library one another.
+
+# set -x
+
+load_path=""
+while test $# -gt 1 && test $1 = "-L"; do
+   # get absolute path
+   dir=`cd "$2"; pwd`
+   # use "::" as path separator
+   load_path="$dir::$load_path"
+   shift
+   shift
+done
+if test $# = 0; then
+   echo 1>&2 "No files given to $0"
+   exit 1
+else
+   if test -z "$EMACS" || test "$EMACS" = "t"; then
+      # Value of "t" means we are running in a shell under Emacs.
+      # Just assume Emacs is called "emacs".
+      EMACS=emacs
+   fi
+   compile=./compile.$$
+   trap 'rm -f $compile; exit 1' 1 2 13 15
+   rm -f $compile
+   cat >$compile <<EOF
+(let ((extra-load-path (split-string "$load_path" "::")))
+  (if extra-load-path
+      (setq load-path (nconc extra-load-path load-path))))
+(setq load-path (cons nil load-path))
+EOF
+   $EMACS -q -batch -l $compile -f batch-byte-compile $*
+   exit_status=$?
+   rm -f $compile
+   exit $exit_status
+fi

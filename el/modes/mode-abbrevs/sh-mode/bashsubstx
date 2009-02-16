@@ -1,0 +1,8 @@
+# ${parameter%word}
+#         Remove smallest suffix pattern.  The WORD is expanded to produce
+#         a pattern.  It then expands to the value of PARAMETER, with the
+#         smallest portion of the suffix matched by the pattern deleted.
+#
+#         x=file.c
+#         echo ${x%.c}.o
+#         -->file.o

@@ -1,0 +1,14 @@
+static void sig_pipe(int arg, siginfo_t *psi, void *p)
+{
+    printf("sig_pipe(): Handler called...remote closed the connection?\n");
+}
+
+static void sig_pipe_install()
+{
+    struct sigaction s;
+    s.sa_sigaction = sig_pipe;
+    sigemptyset(&s.sa_mask);
+    s.sa_flags = SA_SIGINFO;
+    if (sigaction(SIGPIPE, &s, NULL) != 0)
+        perror("Cannot install SIGPIPE handler");
+}

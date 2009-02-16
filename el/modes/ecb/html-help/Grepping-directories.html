@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Grepping%20directories">Grepping directories</a>,
+Next:<a rel=next accesskey=n href="Working-with-JDEE.html#Working%20with%20JDEE">Working with JDEE</a>,
+Previous:<a rel=previous accesskey=p href="Using-eshell.html#Using%20eshell">Using eshell</a>,
+Up:<a rel=up accesskey=u href="Tips-and-tricks.html#Tips%20and%20tricks">Tips and tricks</a>
+<hr><br>
+
+<h3>Grepping directories with ECB</h3>
+
+<p>ECB offers in the popup-menus in the directories- and
+sources-tree-buffer commands for easy (recursive) grepping the current
+directory under point (directory-buffer) rsp. the current-directory
+(sources-buffer). In every case just the function of the options
+<code>ecb-grep-function</code> rsp. <code>ecb-grep-find-function</code> is called
+and the <code>default-directory</code> is tempor. set to the chosen
+directory so the grep will performed in this directory regardless of
+the <code>default-directory</code> of current buffer in the edit-window.
+
+<p>Other smart things beyond that are not done by ECB, see also
+<code>ecb-grep-function</code>!
+
+<p>So, how to exclude some subdirectories or files from the grep?
+
+<p>Basically this has to be done with the "-prune" option of the
+find-utility: If the standard-grep facility of Emacs is used then this
+is not easy but with the library <code>igrep.el</code> there is a convenient
+way to exclude things like CVS- or RCS-directories from the find-call:
+See the variable <code>igrep-find-prune-clause</code> of the library
+<code>igrep.el</code>.
+
+</body></html>
+

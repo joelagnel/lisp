@@ -1,0 +1,1 @@
+strnlen(<field "const char *S">, <field "size_t MAXLEN">)<endpoint>

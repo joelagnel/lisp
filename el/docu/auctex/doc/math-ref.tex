@@ -1,0 +1,290 @@
+% -*- plain-tex -*- 
+% $Id: math-ref.tex,v 1.9 1998/06/10 09:25:44 abraham Exp $
+% Reference Card for LaTeX Math Minor Mode
+%**start of header
+\newcount\columnsperpage
+
+% This file can be printed with 1, 2, or 3 columns per page (see below).
+% Specify how many you want here.  Nothing else needs to be changed.
+
+\columnsperpage=2
+
+% This file is intended to be processed by plain TeX (TeX82).
+% compile-command: "tex auc-tex-ref.tex"
+
+% Original author of Auc-TeX Reference Card:
+%                                  
+%       Terrence Brannon, PO Box 5027, Bethlehem, PA 18015 , USA
+%  internet: tb06@pl118f.cc.lehigh.edu  (215) 758-1720 (215) 758-2104
+%
+% Kresten Krab Thorup updated the reference card to 6.*
+% Per Abrahamsen updated the reference card to 7.*
+%
+% Thanks to Stephen Gildea
+% Paul Rubin, Bob Chassell, Len Tower, and Richard Mlynarik
+% for creating the GNU Emacs Reference Card from which this was mutated
+
+\def\versionnumber{5.2}
+\def\year{1993}
+\def\version{February \year\ v\versionnumber}
+
+\def\shortcopyrightnotice{\vskip 1ex plus 2 fill
+  \centerline{\small \copyright\ \year\ Free Software Foundation, Inc.
+  Permissions on back.  v\versionnumber}}
+
+\def\copyrightnotice{
+\vskip 1ex plus 2 fill\begingroup\small
+\centerline{Copyright \copyright\ 1987 Free Software Foundation, Inc.}
+\centerline{Copyright \copyright\ 1992 Kresten Krab Thorup}
+\centerline{Copyright \copyright\ \year\ Per Abrahamsen}
+
+Permission is granted to make and distribute copies of
+this card provided the copyright notice and this permission notice
+are preserved on all copies.
+
+\endgroup}
+
+% make \bye not \outer so that the \def\bye in the \else clause below
+% can be scanned without complaint.
+\def\bye{\par\vfill\supereject\end}
+
+\newdimen\intercolumnskip
+\newbox\columna
+\newbox\columnb
+
+\def\ncolumns{\the\columnsperpage}
+
+\message{[\ncolumns\space 
+  column\if 1\ncolumns\else s\fi\space per page]}
+
+\def\scaledmag#1{ scaled \magstep #1}
+
+% This multi-way format was designed by Stephen Gildea
+% October 1986.
+\if 1\ncolumns
+  \hsize 4in
+  \vsize 10in
+  \voffset -.7in
+  \font\titlefont=\fontname\tenbf \scaledmag3
+  \font\headingfont=\fontname\tenbf \scaledmag2
+  \font\smallfont=\fontname\sevenrm
+  \font\smallsy=\fontname\sevensy
+
+  \footline{\hss\folio}
+  \def\makefootline{\baselineskip10pt\hsize6.5in\line{\the\footline}}
+\else
+  \hsize 3.2in
+  \vsize 7.95in
+%  \hoffset -.75in
+%  \voffset -.745in
+  \font\titlefont=cmbx10 \scaledmag2
+  \font\headingfont=cmbx10 \scaledmag1
+  \font\smallfont=cmr6
+  \font\smallsy=cmsy6
+  \font\eightrm=cmr8
+  \font\eightbf=cmbx8
+  \font\eightit=cmti8
+  \font\eighttt=cmtt8
+  \font\eightsy=cmsy8
+  \textfont0=\eightrm
+  \textfont2=\eightsy
+  \def\rm{\eightrm}
+  \def\bf{\eightbf}
+  \def\it{\eightit}
+  \def\tt{\eighttt}
+  \normalbaselineskip=.8\normalbaselineskip
+  \normallineskip=.8\normallineskip
+  \normallineskiplimit=.8\normallineskiplimit
+  \normalbaselines\rm           %make definitions take effect
+
+  \if 2\ncolumns
+    \let\maxcolumn=b
+    \footline{\hss\rm\folio\hss}
+    \def\makefootline{\vskip 2in \hsize=6.86in\line{\the\footline}}
+  \else \if 3\ncolumns
+    \let\maxcolumn=c
+    \nopagenumbers
+  \else
+    \errhelp{You must set \columnsperpage equal to 1, 2, or 3.}
+    \errmessage{Illegal number of columns per page}
+  \fi\fi
+
+  \intercolumnskip=.46in
+  \def\abc{a}
+  \output={%
+      % This next line is useful when designing the layout.
+      %\immediate\write16{Column \folio\abc\space starts with \firstmark}
+      \if \maxcolumn\abc \multicolumnformat \global\def\abc{a}
+      \else\if a\abc
+        \global\setbox\columna\columnbox \global\def\abc{b}
+        %% in case we never use \columnb (two-column mode)
+        \global\setbox\columnb\hbox to -\intercolumnskip{}
+      \else
+        \global\setbox\columnb\columnbox \global\def\abc{c}\fi\fi}
+  \def\multicolumnformat{\shipout\vbox{\makeheadline
+      \hbox{\box\columna\hskip\intercolumnskip
+        \box\columnb\hskip\intercolumnskip\columnbox}
+      \makefootline}\advancepageno}
+  \def\columnbox{\leftline{\pagebody}}
+
+  \def\bye{\par\vfill\supereject
+    \if a\abc \else\null\vfill\eject\fi
+    \if a\abc \else\null\vfill\eject\fi
+    \end}  
+\fi
+
+% we won't be using math mode much, so redefine some of the characters
+% we might want to talk about
+\catcode`\^=12
+\catcode`\_=12
+
+\chardef\\=`\\
+\chardef\{=`\{
+\chardef\}=`\}
+
+\hyphenation{mini-buf-fer}
+
+\parindent 0pt
+\parskip 1ex plus .5ex minus .5ex
+
+\def\small{\smallfont\textfont2=\smallsy\baselineskip=.8\baselineskip}
+
+\outer\def\newcolumn{\vfill\eject}
+
+\outer\def\title#1{{\titlefont\centerline{#1}}\vskip 1ex plus .5ex}
+
+\outer\def\section#1{\par\filbreak
+  \vskip 3ex plus 2ex minus 2ex {\headingfont #1}\mark{#1}%
+  \vskip 2ex plus 1ex minus 1.5ex}
+
+\newdimen\keyindent
+
+\def\beginindentedkeys{\keyindent=1em}
+\def\endindentedkeys{\keyindent=0em}
+\endindentedkeys
+
+\def\paralign{\vskip\parskip\halign}
+
+\def\<#1>{$\langle${\rm #1}$\rangle$}
+
+\def\kbd#1{{\tt#1}\null}        %\null so not an abbrev even if period follows
+
+\def\beginexample{\par\leavevmode\begingroup
+  \obeylines\obeyspaces\parskip0pt\tt}
+{\obeyspaces\global\let =\ }
+\def\endexample{\endgroup}
+
+\def\key#1#2{\leavevmode\hbox to \hsize{\vtop
+  {\hsize=.75\hsize\rightskip=1em
+  \hskip\keyindent\relax#1}\kbd{#2}\hfil}}
+
+\newbox\metaxbox
+\setbox\metaxbox\hbox{\kbd{M-x }}
+\newdimen\metaxwidth
+\metaxwidth=\wd\metaxbox
+
+\def\metax#1#2{\leavevmode\hbox to \hsize{\hbox to .75\hsize
+  {\hskip\keyindent\relax#1\hfil}%
+  \hskip -\metaxwidth minus 1fil
+  \kbd{#2}\hfil}}
+
+\def\threecol#1#2#3{\hskip\keyindent\relax#1\hfil&\kbd{#2}\quad
+  &\kbd{#3}\quad\cr}
+
+%**end of header
+
+
+\title{Math Mode Reference Card}
+
+\section{Variables}
+
+All math mode commands are under the prefix key specified by
+LaTeX-math-abbrev-prefix, default is "`".
+
+You can define your own math mode commands by setting the variable
+LaTeX-math-list before loading LaTeX-math-mode.
+
+\section{Greek Letters}
+
+\def\disp#1{\hbox to 6ex{$#1$\hfill}}
+\key{\disp{\alpha} (alpha)}{a}
+\key{\disp{\beta} (beta)}{b}
+\key{\disp{\delta} (delta)}{d}
+\key{\disp{\epsilon} (epsilon)}{e}
+\key{\disp{\phi} (phi)}{f}
+\key{\disp{\gamma} (gamma)}{g}
+\key{\disp{\eta} (eta)}{h}
+\key{\disp{\kappa} (kappa)}{k}
+\key{\disp{\lambda} (lambda)}{l}
+\key{\disp{\mu} (mu)}{m}
+\key{\disp{\nabla} (nabla)}{N}
+\key{\disp{\nu} (nu)}{n}
+\key{\disp{\omega} (omega)}{o}
+\key{\disp{\pi} (pi)}{p}
+\key{\disp{\theta} (theta)}{q}
+\key{\disp{\rho} (rho)}{r}
+\key{\disp{\sigma} (sigma)}{s}
+\key{\disp{\tau} (tau)}{t}
+\key{\disp{\upsilon} (upsilon)}{u}
+\key{\disp{\chi} (chi)}{x}
+\key{\disp{\psi} (psi)}{y}
+\key{\disp{\zeta} (zeta)}{z}
+\key{\disp{\Delta} (Delta)}{D}
+\key{\disp{\Phi} (Phi)}{F}
+\key{\disp{\Gamma} (Gamma)}{G}
+\key{\disp{\Theta} (Theta)}{Q}
+\key{\disp{\Lambda} (Lambda)}{L}
+\key{\disp{\Psi} (Psi)}{Y}
+\key{\disp{\Pi} (Pi)}{P}
+\key{\disp{\Sigma} (Sigma)}{S}
+\key{\disp{\Upsilon} (Upsilon)}{U}
+\key{\disp{\Omega} (Omega)}{O}
+
+\section{Symbols}
+
+\key{\disp{\rightarrow} (rightarrow)}{C-f}
+\key{\disp{\leftarrow} (leftarrow)}{C-b}
+\key{\disp{\uparrow} (uparrow)}{C-p}
+\key{\disp{\downarrow} (downarrow)}{C-n}
+\key{\disp{\leq} (leq)}{<}
+\key{\disp{\geq} (geq)}{>}
+\key{\disp{\tilde{ }} (tilde)}{$\tilde{ }$}
+\key{\disp{\infty} (infty)}{I}
+\key{\disp{\forall} (forall)}{A}
+\key{\disp{\exists} (exists)}{E}
+\key{\disp{\not } (not)}{/}
+\key{\disp{\in} (in)}{i}
+\key{\disp{\times} (times)}{*}
+\key{\disp{\cdot} (cdot)}{.}
+\key{\disp{\subset} (subset)}{\{}
+\key{\disp{\supset} (supset)}{\}}
+\key{\disp{\subseteq} (subseteq)}{[}
+\key{\disp{\supseteq} (supseteq)}{]}
+\key{\disp{\emptyset} (emptyset)}{0}
+\key{\disp{\setminus} (setminus)}{\\}
+\key{\disp{\cup} (cup)}{+}
+\key{\disp{\cap} (cap)}{-}
+\key{\disp{\langle} (langle)}{(}
+\key{\disp{\rangle} (rangle)}{)}
+\key{\disp{\exp} (exp)}{C-e}
+\key{\disp{\sin} (sin)}{C-s}
+\key{\disp{\cos} (cos)}{C-c}
+\key{\disp{\sup} (sup)}{C-^}
+\key{\disp{\inf} (inf)}{C-_}
+\key{\disp{\det} (det)}{C-d}
+\key{\disp{\lim} (lim)}{C-l}
+\key{\disp{\tan} (tan)}{C-t}
+\key{\disp{\hat{ }} (hat)}{^}
+\key{\disp{\vee} (vee)}{|}
+\key{\disp{\wedge} (wedge)}{\&}
+
+\section{Miscellaneous}
+
+\key{cal letters}{c {\rm LETTER}}
+
+\copyrightnotice
+
+\bye
+
+% End:
+

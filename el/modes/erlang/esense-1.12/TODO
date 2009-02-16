@@ -1,0 +1,187 @@
+esense.el
+---------
+
+- num of param determinations should be done with distel too. See the
+  invocation of resolve_character_entities in esense.erl
+
+- reading module list from remote node too
+
+- use sit-for for automatic completion help
+
+- jumping to the manpage of io:format/3 doesn't work, because arity
+  information is not used during function lookup and the arity parser
+  thinks this header has an arity of two:
+
+         format([IoDevice,] Format, Arguments)
+
+  If it is fixed then the documentation lookup of io:format/2 won't
+  work, because there is no format/2 anchor in the html documentation.
+
+- go to function definition should try to guess the matching function
+  clause even if not all arguments are expanded
+
+- filtering for certain modules in the trace
+
+- axd specific record comment parsing (in esense.erl?)
+
+- trace conversion function should try to guess from which module
+  the function was invoked
+
+- add option to resolve macros when investigating what is under point
+  and proceed with the resolved value (e.g. ?MODULE:function)
+
+  - num of args
+
+- use arity information during function lookup
+
+- a single atom at the beginning of the tuple should be treated as a
+  record
+
+- option to treat apply/rpc:call/gen_server:cast/etc. as direct
+  function calls
+
+- get available data should stop if the requested entity is in the
+  local file
+
+- process edoc documentation for functions in header files
+
+- module index file should contain included file information instead
+  of relying on regexp-search
+
+- move function formatting from esense-get-function-documentation to a
+  separate function: esense-format-function-documentation
+
+- esense-electric-commands is too pushy and it makes the user stop
+  until it loads the index files. Some form of intelligence should be
+  added to it, so that it displays the completions only if the user
+  hesitates.
+
+- if the index file of an include file exists on the disk, but it is
+  not in the index then add it to the index on the fly
+
+- Alt+F1 should also put the original location to the mark stack
+
+- the vertical position of the tooltip changes if the cursor is in the
+  first column
+
+- when jumping to module:function with prompt, the user should also be
+  able to give the function arity, not just the function name
+
+- When the completion is started the completion list is filtered
+  twice: once for completing additional characters and once for
+  updating the initially displayed completion list. This is wasteful
+  and should be done only once.
+
+- handle infix expressions in macro definitions (e.g. 48/little).
+
+- Go to function documentation from parameter list doesn't work if
+  function is in the local file and called with module:function
+  format. The recursive call should return a closure instead of
+  jumping to the function under save-excursion. It works already for
+  functions called with function name only and calling local functions
+  as M:F is not usual, so my laziness wins for the time being.
+
+- tab completion
+
+  Inserting characters into the parent buffer (where the completion
+  was started) does not advance the cursor if completion display
+  method is set to frame. It works with display method 'window. 
+  It needs to be investigated in order to implement tab completion.
+
+- is there a point in handling the arity as an int? do we perform
+  calculations with it?
+
+- precomment handling should be generalized and handled by a common
+  function (-> handling multiple precomments separated by blank lines)
+
+- text wrapping should be moved to esense-format-documentation
+
+- can edoc guess function parameteres if there is no doc?
+  (more info at the description of the @spec tag in edoc documentation)
+
+- breaking too long lines in tooltip at 70th character even if there
+  is no space
+
+- warning if there are more or less parameters given to a function
+  than required
+
+- check FIXMEs
+
+
+esense.erl
+----------
+
+- -compile directive can also have an option list, not just a single
+   option
+
+- print out something nice in case of an i/o error and skip the file
+
+- should state be expressed as different functions instead of a
+  parameter when parsing html documentation? 
+
+- refactor common index generation code (file creation, writing source
+  line, etc.) into a separate function
+
+
+Low priority
+------------
+
+- exports completion
+
+
+Not sure about these
+--------------------
+
+- try to determine matching function clause even if function is
+  invoked without module qualifier
+
+  The pattern matching algorithm assumes that all the arguments of the
+  function are expanded at the place of invocation (that is there are
+  no variable references, etc.). Normally in a program it is not the
+  case. In trace buffers (where the above assumption is usually true)
+  functions are invoked in module:function format, so it seems it is
+  enough to implement pattern matching for this case only.
+
+- process macro comments
+
+  Individual macros are usually not documented, so it may not be worth
+  the effort.
+
+- don't parse source files if minimal index files are generated
+
+  Parsing a source file ensures there is usable information within
+  the file, so this helps avoiding generating index for those files
+  which don't contain anything interesting.
+
+  But then why don't we do the same for header files? Their index file
+  is always generated.
+
+
+- show possible function completions immediately when a module is
+  completed
+
+  it doesn't work well, because the previous completion is still in
+  progress when the new completion is started
+
+  maybe the user wants to complete only a module name
+
+
+Won't be implemented
+--------------------
+
+- Only one instance of the common documentation should be kept in the
+  index file
+
+  It's non-issue for stub index files and those who use full index
+  files probably don't care about disk space usage too much.
+
+
+-------------------------
+                         
+  Local Variables:       
+  mode: text             
+  mode: auto-fill        
+  adaptive-fill-mode: t  
+  End:                   
+                         
+-------------------------

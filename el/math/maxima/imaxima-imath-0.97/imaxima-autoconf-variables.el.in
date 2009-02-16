@@ -1,0 +1,5 @@
+; -*- Emacs-Lisp -*-
+(defconst *imaxima-autoconf-package* "@PACKAGE@")
+(defconst *imaxima-autoconf-version* "@VERSION@")
+
+(provide 'imaxima-autoconf-variables)

@@ -1,0 +1,26 @@
+char * get_time(char * buffer, size_t bufsize)
+{
+    time_t                  the_time;
+    struct tm *             the_time_tm;
+    the_time = time(NULL);
+    the_time_tm = localtime(&the_time);
+    strncpy(buffer, asctime(the_time_tm), bufsize);
+    if (buffer[strlen(buffer)-1] == '\n') {
+        buffer[strlen(buffer)-1] = 0;
+    }
+    return buffer;
+}
+
+std::string get_time()
+{
+    time_t                  the_time;
+    struct tm *             the_time_tm;
+    std::string out;
+    the_time = time(NULL);
+    the_time_tm = localtime(&the_time);
+    out = asctime(the_time_tm);
+    if (out[out.length()-1] == '\n') {
+        out.erase(out.length()-1, 1);
+    }
+    return out;
+}

@@ -1,0 +1,211 @@
+This is the `doc/README-0.93' file of GNU eev.
+Copyright (C) 2002 Free Software Foundation, Inc.
+  Permission is granted to anyone to make or distribute verbatim
+copies of this document, in any medium, provided that the copyright
+notice and permission notice are preserved, and that the distributor
+grants the recipient permission for further redistribution as
+permitted by this notice.
+
+
+--snip--snip--
+
+
+This is the "README" file of eev-0.93.
+
+The installation instructions are in the file INSTALL.
+There are some (other) philosophical texts in the directory "texts/".
+# (find-eev "INSTALL")
+# (find-eev "texts/")
+
+Sorry for the style and for the very weird English, this was written
+in a hurry (in a fit of inspiration).
+
+
+
+Eev.el is a package that implements support for "e-scripts" in Emacs;
+an e-script is a text file -- typically a file where you are keeping
+your notes about how to do something on the computer -- where some
+parts of the text can be executed in different ways, thanks to Emacs
+tricks; some blocks can be sequences of shell commands, and they can
+be saved in a certain way and be sent to be executed by a shell; and
+some lines can be "hyperlinks" -- they are in fact tiny programs in
+Emacs Lisp that you can run with the key sequences C-x C-e
+("eval-last-sexp") or M-e, and whose effect is to open some file, or
+some manpage, or some document in "info" format, whatever, and
+optionally to jump to the first occurrence of a certain string in it.
+
+I believe that one can become much more efficient if he keeps his
+notes in e-scripts: among other things, it becomes very easy to edit
+steps in complex sequences of shell commands (and entering commands by
+hand in a shell is usually error-prone), and to "recycle" old
+sequences of commands and to adapt them to a new task, and it also
+becomes trivial to keep "links" to anything interesting that you find
+that is online, in your computer or on the net -- and almost any file
+format can be supported.
+
+I usually refer as this package as "my project to save the world";
+there's a bit of humour in this, of course, but there's a serious side
+too -- let me explain that briefly. It is very easy to share these
+e-script files: if you take a bit of care not to put passwords or
+other sensitive information in your e-scripts, then you can put them
+on the net if you have a home page (I do that with my notes), or you
+can hand them to friends that are interested, or, if you are in some
+kind of on-line discussion (by e-mail, IRC, whatever) and someone has
+a doubt and you realize that you already did something similar to what
+the person is trying to do, you can select a chunk of your notes,
+maybe add some comments to the text, and send the piece to him; of
+course e-scripts without comments will look like pure gibberish to a
+newbie, but often they can be very useful to someone that knows a bit
+about the subject -- sometimes even more useful than the kind of
+things that we find in computer books or textual documents, because an
+e-script shows the real syntax, and its executable blocks are things
+that worked on the machine of the person that produced them...
+
+There are some other ideas below eev, that I discovered -- or got in
+touch with -- as I was using it, over the years. Eev grew in a very
+organic way, starting as a tiny hack (just the functions `find-fline'
+and `eev', then `find-node', then the rest) and I always had the
+impression that Emacs was made to be used exactly in that way, and
+even that Emacs used in that way was THE embodiment of the Free
+Software idea... I was really shocked when I discovered that maybe I
+was the only person using Emacs like that (RMS even said to me once
+that "users should never be forced to see Lisp", which made me have a
+fit!). Anyway, so eev comes with some subliminal ideas as a bonus, and
+I think that they are extremely positive, have good vibrations, etc.
+Here is a quick description of them.
+
+  1) I feel that we live in a kind of a "culture of the finished
+     product", and we usually learn not to share anything that is not
+     specifically produced for being shown in public; for example, if
+     we had to help another person to do something we would tend to
+     write instructions in "book form", like "do this, do that",
+     instead of handing her, even casually, exactly the commands that
+     we used. However, working out the missing information to
+     understand a block of commands that someone else wrote isn't very
+     different from trying to understand a program that we wrote years
+     ago, and whose details we forgot; we don't need necessarily to
+     translate an idea to a "standard language" in order to convey its
+     meaning; sometimes we can just express it as we think of it, as
+     we would have liked to hear it when we were trying to learn it,
+     and -- surprise! -- the other person will grasp it. We are not so
+     different from one another. The other person is not "a user"
+     ("let P1, P2, P3 be three little pigs, W be a big bad wolf...")
+     -- the other person is us.
+
+  2) We can learn more about our environment - in this case, the
+     computer, its programs, and the ideas that their creators had
+     about how these programs could or should be used. A GNU system is
+     made to be explored; and if as we explore it we keep our own
+     "maps" of it, in the form of e-scripts with hyperlinks, then it
+     becomes easier to travel again to the same points, to continue an
+     exploration starting from some point that we've been before, to
+     remember vaguely that we've been to some place connected to
+     something that we are seeing now, and to rediscover our old links
+     about that by searching our old e-scripts for some key words,
+     then go there and maybe now understand something that wasn't
+     clear before... and not only we have this "travelling journals"
+     for ourselves, and we can even use them to rememeber what we knew
+     about something a long time ago, but we can also give them to
+     others, or we can read other people's "maps" -- and then we will
+     see which paths these people have decided to follow. So, there
+     isn't an unbridgeable abyss between the programmers who made the
+     software and we, mere users, and each of us users are isolated
+     from one another -- no, each path taken, each sequence of links
+     that we create, marks in a subtle way one road as being more
+     travelled than the others, for us and for the other people with
+     whom we share our maps.
+
+  3) We are part of our environment. There isn't a clear division
+     between "user" and "programmer" in a *NIX system; every sequence
+     of commands is like a program, in that its execution can be
+     automated - we can mark any block of commands that appears in an
+     e-script, then go to a shell, type "ee", and the commands of the
+     block are executed one after the other by the shell. Giving an
+     e-script with block of commands to other person isn't so
+     different from giving a program - it's just that the person has
+     to mark the blocks she wants to execute, instead of invoking each
+     block by a specific name. And saving as named scripts some blocks
+     from an e-script that turn out to be especially useful isn't so
+     unnatural either... so, where's the difference between
+     programmers and users? Maybe the programmers are the ones that
+     write BIG sequences of commands in named scripts; but if we have
+     some specific routine task that require many steps, we will end
+     up writing that in an e-script with many lines, possibly with
+     "if"s and loops... almost a "real" script, and it can become a
+     real script. And if the "programmer" is the one who packs the
+     work he does and makes it available, well, in the process of
+     using the computer for our own tasks we may decide that we have
+     to create a home page ourselves, for computer-related or not
+     computer-related reasons, and we may take e-script notes of how
+     to create an account, how to edit and test a page and how to
+     upload files, whatever... and maybe we are going to allow some
+     other people to see our notes, and because of that for them it
+     will be easier to create their own pages, and so making
+     information available (and packaging programs...) can become
+     easier and easier, because for more people it will become
+     something more natural, as they'll be finding working examples
+     everywhere to learn from, and "everybody" will be doing it...
+
+This may look like a kind of an idea towards a "*NIX ecology", and
+that can sound very sick, very nerdish... "Where is the nature, the
+plants, the birds?" "Where is the real world?" "What about the
+children dying of hunger in Africa?" "But not everybody has access to
+computers" "You can't pretend to solve all the problems of the world
+using just technology" -- true, true, and I'm not planning to save the
+world by doing e-scripts for every human activity, but we *are* going
+to use computers for a part of our days, and we do want to use them to
+share information, and we would like that to be easier; what I see is
+that we don't need to spend that part of our days interacting
+passively with a "product", isolated; interacting with a *NIX system,
+especially a free (i.e., GNU) one, is interacting with something that
+came from a community, and that carries the marks of the many
+thousands of people who have been there, in many thousands of
+different moods; and some of them even understood how the hardware was
+made, and some were the ones who designed parts of the hardware, or
+who were in charge of the money, or of the jobs, or of the firms
+behind all that; using *NIX/GNU systems we are part of an environment
+and of a community, and the distinction between its active and passive
+members is very blurry and very fluid; the widespread impression that
+in modern societies we are powerless little machines in a big
+mechanical society is an illusion, and this illusion is especially
+unconvincing when we come to think about the Free Software
+environments and OSs; there we are part of an environment that changes
+slowly and continuosly, together with us, exactly as it is also
+happening with ourselves in the rest of the human society, and with us
+in the natural environment in the planet, and with any animal species
+(of which we are only one) or any living species in any environment.
+And I feel that we can't pretend to save the world by sending N
+dollars (even, say, for a big value of N :) to a child in Africa, when
+she for us is little more than a number; I feel that it is important
+to have this very concrete feeling that there is no clear frontier
+between what is "us" and what is "them", what is "human" and what is
+"animal" or "nature", etc; for me developing this sense of being part
+of a whole, and struggling continuously to feel it each time more
+sharply, has been a very important process -- I used to feel terribly
+bored, and to have no hope that something interesting would ever
+happen with me; but, as I manage to feel more present and more
+attached to what is going on, life is starting to seem almost
+interesting, even tolerable sometimes.
+
+Get out of the closet, kid. Do something interesting instead of just
+playing your videogame and grumbling that there's nothing to do,
+nothing to feel, nothing to think, except for some silly distractions,
+and that everything is ridiculous. The world is getting full of people
+like me, that have little to lose -- we would like to jump on your
+throath, lift you up from the sofa, slap your face, and wake you up,
+but our time is short, you should consider doing that to yourself on
+your own instead of just waiting. And we are dreaming too of someone
+else coming and waking up the parts of us that are still sleeping, so
+sometimes it is too frustrating to be just waking others.
+
+That's it for now.
+
+If you want to know my personal influences, read some articles and
+essays from which I may be copying a bit of the style and tone, etc,
+go to my home page.
+
+  Eduardo Ochs,
+  McGill University, Montreal, Quebec, Canada, 2002may11, 9:18am,
+  (with some small revisions afterwards),
+  <http://angg.twu.net/>,
+  <edrx@mat.puc-rio.br>.

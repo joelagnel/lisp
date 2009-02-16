@@ -1,0 +1,36 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Activation%20and%20Deactivation">Activation and Deactivation</a>,
+Next:<a rel=next accesskey=n href="Usage-of-ECB.html#Usage%20of%20ECB">Usage of ECB</a>,
+Previous:<a rel=previous accesskey=p href="ECB-interactors.html#ECB-interactors">ECB-interactors</a>,
+Up:<a rel=up accesskey=u href="ecb.html#Top">Top</a>
+<hr><br>
+
+<h2>Activation and Deactivation</h2>
+
+<p>This chapter describes all aspects of activating and deactivating ECB.
+
+<ul>
+<li><a accesskey=1 href="Standard-activation.html#Standard%20activation">Standard activation</a>:          How to manually (de)activate ECB
+<li><a accesskey=2 href="Automatic-activation.html#Automatic%20activation">Automatic activation</a>:         Automatically (de)activating ECB
+</ul>
+
+<p><strong>IMPORTANT</strong>: Regardless of the activation-type (standard or
+automatic) the activation-process of ECB is always completely
+failure-save. This means any error during any step of the
+activation-process forces a complete cleanup (e.g. removing hooks,
+disabling advices etc.) of all settings ECB did (e.g. adding hooks,
+activating advices etc.) until the failure. Therefore if
+ECB-activation stops cause of a failure then you can be sure that your
+Emacs has the same state as before the ECB-activation-start!
+
+</body></html>
+

@@ -1,0 +1,21 @@
+EMACS   = @EMACS@
+prefix  = @prefix@
+LISPDIR = @LISPDIR@
+ADDITIONAL_LOAD_PATH = @ADDITIONAL_LOAD_PATH@
+
+EMACS_COMP = LISPDIR=${LISPDIR} ADDITIONAL_LOAD_PATH=${ADDITIONAL_LOAD_PATH} ${EMACS} -batch -q -no-site-file -l canlock-comp.el -f
+
+all:
+	${EMACS_COMP} canlock-compile
+
+install:
+	${EMACS_COMP} canlock-install
+
+install-anyway:
+	${EMACS_COMP} canlock-install-anyway
+
+clean:
+	rm -f *.orig *.rej *.elc *~
+
+distclean: clean
+	rm -f config.log config.status config.cache Makefile

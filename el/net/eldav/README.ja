@@ -1,0 +1,85 @@
+Eldav: Yet another WebDAV interface for Emacsen
+
+Eldav は Emacs から WebDAV サーバにアクセスするためのインターフェースを提供し
+ます．
+
+
+特徴
+
+ ・ WebDAV ファイルを通常のファイルと同様に扱える．
+ ・ Emacs/w3 ではなく外部プログラムを用いている．
+
+
+必要なもの
+
+ ・ Emacs or XEmacs
+ ・ WebDAV サーバ
+ ・ nd (WebDAV 用コマンドラインインタフェース: http://www.gohome.org/nd/)
+
+
+インストール
+
+まず APEL がインストールされている必要があります。
+APEL は、ftp://ftp.m17n.org/pub/mule/apel/ から入手できる
+最新版をご利用ください。
+
+Eldav 自体のインストールは、eldav.el, vc-eldav.el を
+(お好みでバイトコンパイルして) load-path 上のどこかに置くだけです。
+
+
+使い方
+
+.emacs 等に
+
+(require 'eldav)
+
+と設定します．プロキシサーバを利用する場合は、
+
+(setq eldav-proxy "http://your.proxy.server:8080")
+
+のように指定します．
+あとは、以下のようにファイル名を指定すれば WebDAV のファイルにアクセス
+できます．
+
+:http://your.webdav.server/path/to/file/name
+
+(WebDAV URL の先頭に ':' を加えたファイル名．) サーバが WebDAV に対応し
+ていない場合でも、読み出し専用で find-file できます．
+
+
+VC (Version Control)
+
+Eldav は VC のバックエンドを実装しています(実験的)．
+
+(setq eldav-use-vc t)
+
+とすると、Eldav の VC 機能が有効になります．
+Eldav の VC 機能が有効になっていると，ファイルがチェックアウトされている間
+ロックされ，他の人が編集できなくなります (WebDAV の LOCK 機能)．
+
+Eldav の VC 機能が有効になっている場合，新規ファイルを開くと，
+
+File was lost; check out from version control? (yes or no)
+
+のように聞かれますので，'yes' と入力してチェックアウトしてください．
+
+既に存在するファイルを開くと，読み出し専用になります．
+ファイルを開いた状態で 'C-x v v' を押すと，ファイルがチェックアウトされ，
+編集可能状態になります．
+
+チェックアウトされた状態では，ファイルはロック状態になり，他の人が編集
+できなくなります．
+
+ファイルを編集し，保存したあと，'C-x v v' を押して，チェックインしてください．
+チェックインすると，ファイルのロックが解除されます．このとき，
+*VC-Log* バッファが現れますので，C-c C-c を押してください
+(*VC-Log* バッファに何かを入力しても無視されます)．
+
+
+既知の問題点
+
+ ・ アクセスの仕方によってはPROPFIND を飛ばしまくってしまう．
+ ・ SSL に対応してない (nd が対応してないため)．
+
+--
+Yuuichi Teranishi<teranisi@gohome.org>

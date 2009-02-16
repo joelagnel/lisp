@@ -1,0 +1,139 @@
+			    S/MIME support
+			    Kazu Yamamoto
+			     Nov 19, 2004
+
+Mew's S/MIME support is based on "gpgsm" which is included in GnuPG
+version 2 (currently 1.9.x).
+
+In my environment (ie NetBSD current), "gpgsm" can
+	sign a message,
+	verify a signature,
+	encrypt a signature.
+
+However, "gpgsm" cannot
+	generate a public/private key pair (gpgsm-gencert.sh),
+	decrypt a cipher.
+
+<<<Installation>>>
+
+To use "gpgsm", install GnuPG 2.0. 
+
+Also install "pinentry-gtk" or "pinentry-qt". These are front-ends to
+ask a user to input passphrase. Note that Mew cannot ask passphrase
+through "pinentry-curses".
+
+"pinentry-*" is called by "gpg-agent". You may need to configure
+"~/.gnupg/gpg-agent.conf" to tell "gpg-agent" the path.
+
+	---
+	pinentry-program /usr/local/bin/pinentry-gtk
+	---
+
+<<<Importing your private key into your private keyring>>>
+
+First of all, extract your private key and certificates, for example,
+from your browser. This should be a PKCS 12 format file, say
+"keycert.p12".
+
+First you should convert "keycert.p12" to PEM, say "keycert.pem".
+
+	% openssl pkcs12 -in keycert.p12 -out keycert.pem -nodes
+
+	and type the passphrase which protects "keycert.p12".
+
+Then extract your private key. 
+
+	% openssl pkcs12 -in keycert.pem -export -out key.p12 -nocerts -nodes
+
+	and type a new temporary passphrase to protect "key.p12".
+
+And import your private key into your private keyring.
+
+	% gpgsm --call-protect-tool --p12-import --store key.p12
+
+	type the new temporary passpharse.
+	and type a new passphrase to protect your private key in the
+	private keyring.
+
+<<<Importing your public key into your public keyring>>>
+
+Extract certificates from "keycert.p12".
+
+	% openssl pkcs12 -in keycert.p12 -out certs.pem -nokeys
+
+Then import the certificates into your public keyring.
+
+	% gpgsm --import certs
+
+<<<Trusting your root CA>>>
+
+Put the fingerprint of your root CA to "~/.gnupg/trustlist.txt".
+You can tell the value as follows:
+
+	% gpgsm -kv
+
+<<<gpg-agent and dirmngr>>>
+
+"gpg-agent" is a passphrase agent like "ssh-agent". If your passphrase
+is not cached, "gpg-agent" executes "pinentry-*" to ask your
+passphrase.
+
+"dirmngr" is a cache server to store CRL (certificate revocation
+list).
+
+	gpgsm --> gpg-agent --> pinentry-* --> a user
+          |
+	  +-----> dirmngr   --> CRL servers
+
+To ensure that both programs work well, create a detach signature as
+follows:
+
+	% gpgsm --detach-sign -a file > sig
+
+You may see the following warning.
+
+	----
+	dirmngr[nnnn]: no CRL available for issuer id NNNNN....
+	----
+
+This is because the CRL server is not running or CRL files are not
+available on the CRL server.
+
+You should ask the operator of the CRL server to configure it well.
+
+Alternatively you can disable CRL checks by putting the following to
+"~/.gnupg/gpgsm.conf".
+
+Again type
+
+	% gpgsm --detach-sign -a file > sig
+
+If "gpg-agent" asks your passphrase and a detached signature is
+created, congratulation!
+
+To verify the signature, type
+
+	% gpgsm --verify sig file
+
+If you execute "emacs" as a child process of "gpg-agent", 
+"gpgsm" executed by Mew can use cached passphrase.
+
+	% gpg-agent --daemon --keep-display emacs
+
+<<<Using S/MIME with Mew>>>
+
+Due to unstability of "gpgsm", Mew currently supports S/MIME signature
+only (excluding cipher).
+
+Putting the "SS" mark (S/MIME signature) onto a part in the attachments
+region, type 'M-s'.
+
+If you want to sing message by 'C-cC-s', configure as follows:
+
+	(setq mew-draft-privacy-method 'smime)
+
+If you want to sign messages always when typing 'C-cC-c' or 'C-cC-m',
+configure as follows:
+
+	(setq mew-protect-privacy-always t)
+	(setq mew-protect-privacy-always-type 'smime-signature)

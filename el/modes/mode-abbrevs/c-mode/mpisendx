@@ -1,0 +1,2 @@
+MPI_Send(<field "void *buf">, <field "int count">, MPI_CHAR, <field "int dest">,
+         <field "int tag">, MPI_COMM_WORLD);

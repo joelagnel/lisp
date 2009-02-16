@@ -1,0 +1,288 @@
+[Canlock 取り扱い説明書]
+
+Canlock とは?
+=============
+
+  Canlock は GNU Emacs でニュース記事をポストするときに Cancel-Lock ま
+  たは Cancel-Key フィールドを生成して付加するための機能を提供するライ
+  ブラリです。
+  Cancel-Lock はニュース記事を第三者によって不当にキャンセルされること
+  を防止するためにメッセージヘッダに付加するフィールドで、秘密の文字列
+  を元に生成したり元のニュース記事を投稿した人だけがキャンセルできる方
+  法などが internet standard として提案されています。
+
+	draft-ietf-usefor-cancel-lock-01.txt	(*1)
+
+  このライブラリを使うと次のことができます。
+
+	* ポストするニュース記事のヘッダに Cancel-Lock フィールドを付
+	  ける。
+	* キャンセルのためのコントロールメッセージのヘッダに Cancel-Key
+	  フィールドを付ける。
+	* Supersedes で差し換え記事をポストするときに Cancel-Key と
+	  Cancel-Lock フィールドを付ける。
+	* Cancel-Lock または Cancel-Key フィールドの内容が正しいかどう
+	  かを検証する。
+
+  (*1) ftp://ftp.eos.hokudai.ac.jp/pub/network/internet-drafts/ などか
+       ら入手可能です。
+
+
+Gnus
+====
+
+  最も新しい Gnus と T-gnus にはすでに Canlock が盛り込まれています。
+  これらを使う場合、別途 Canlock をインストールする必要はありませんし、
+  特別な個人環境の設定も要りません。Cancel-Lock や Cancel-Key フィール
+  ドが、送信するニュース記事にデフォルトで付加されるようになっています。
+
+
+必要な環境
+==========
+
+  Canlock は XEmacs 20.2 以降、Emacs 20.1 以降および Emacs 19.34 をベー
+  スにした Mule 2.3 をサポートします。
+
+  XEmacs 21.2.37 未満または Emacs 20.4 未満では base64 のエンコーダが
+  組み込み関数ではないので、base64-encode-string という関数が利用でき
+  るように base64.el か FLIM などを使う必要があります。Mule 2.3 に限っ
+  て外部コマンド mmencode を使うこともできます。
+
+  Canlock は SHA1 message digest を作成するための Emacs Lisp の関数と
+  して、sha1-el.el の機能を利用します。これは FLIM 1.14 と同じものが
+  Canlock の配布版に含まれています。これとは別に OpenSSL を使うことも
+  可能です。
+
+  Mule 2.3 を使う場合は CUSTOM 1.9962 (*) を必要とします。
+
+  (*) Mule 2.3 用に少し改造する必要があります。詳細は APEL の配布など
+      を参照して下さい。なお Canlock は APEL を必要としません。
+
+
+インストール
+============
+
+  以下は最も簡単な例です。
+
+	% ./configure
+
+  ここで Emacs に何を使うか、インストール先がどこになるかが表示される
+  ので、そのままで良ければ
+
+	% make
+	% make install
+
+  とタイプして下さい (`make install' だけでも構いません)。
+  configure にはいくつかのオプションがあり、
+
+	% ./configure --help
+
+  で知ることができます (有意なオプションは最後の方に現れます)。
+
+  指定したインストール先以外の場所にすでに canlock.elc などが存在して
+  いた場合、それらを新たにインストールすることはありません。インストー
+  ルを強制したい場合は
+
+	% make install-anyway
+
+  とタイプして下さい。
+
+  canlock-cmds.el に含まれているコマンド mew-summary-canlock-verify は、
+  環境に存在している Mew のバージョンが 1.94b20 以上かそれ未満かで、コ
+  ンパイルされた canlock-cmds.elc の内容が若干変化します (どちらが生成
+  されても使えるはずですが)。
+
+  特に Mule 2.3 で subdirs.el が整備されていない環境では CUSTOM、それ
+  に上述のインストール済みの canlock.elc や Mew の検出がうまくいかない
+  ことがあります。そのような場合は、標準では load-path に含まれないディ
+  レクトリを configure オプションの --with-addpath= を使って追加して下
+  さい。以下は例です。
+
+	% ./configure --with-emacs=mule --with-addpath=PATH1:PATH2:PATH3...
+
+  実際には
+
+	PATH1 = /usr/local/share/mule/site-lisp/custom/
+	PATH2 = /usr/local/share/mule/site-lisp/flim/
+	PATH3 = /usr/local/share/mule/site-lisp/mew/
+
+  のようなものが使われるでしょう。
+
+
+初期化
+======
+
+  以下のものを .emacs に入れて下さい。
+  Mule 2.3 で使う場合は "canlock" の代わりに "canlock-om" として下さい。
+
+  (autoload 'canlock-insert-header "canlock")
+  (autoload 'canlock-verify "canlock" nil t)
+  (autoload 'wl-summary-canlock-verify "canlock-cmds" nil t)
+  (autoload 'mew-summary-canlock-verify "canlock-cmds" nil t)
+  (autoload 'mh-summary-canlock-verify "canlock-cmds" nil t)
+  (autoload 'vm-summary-canlock-verify "canlock-cmds" nil t)
+  (autoload 'cmail-summary-canlock-verify "canlock-cmds" nil t)
+  (autoload 'rmail-summary-canlock-verify "canlock-cmds" nil t)
+
+  もし Canlock の常駐を許すならば、
+
+  (require 'canlock-cmds)
+
+  の一行だけで済みます。
+
+
+カスタマイズ
+============
+
+  ユーザに開放している変数の値は、M-x customize-group で canlock の
+  group を指定して操作するか、.emacs などで setq すれば変更することが
+  できます。
+
+  canlock-base64-encode-function
+	Mule 2.3 でだけ有効な変数で、文字列を base64 で encode するた
+	めの関数の指定です。デフォルトは base64-encode-string ですが、
+	外部コマンド mmencode を使うための関数
+	canlock-base64-encode-string-with-mmencode が用意されています。
+	FLIM を使う場合は以下のようにすれば良いでしょう。
+
+	(setq canlock-base64-encode-function
+	      (mel-find-function 'mime-encode-string "base64"))
+
+  canlock-sha1-function
+	SHA1 message digest を作成するための関数の指定です。
+	デフォルトは sha1-el.el に含まれている関数 sha1-binary ですが、
+	外部コマンド openssl を使うための関数
+	canlock-sha1-with-openssl が用意されています。
+
+  Cancel-Lock または Cancel-Key フィールドを生成するための関数は
+  canlock-insert-header です。この関数を送信する直前のニュース記事があ
+  るバッファで実行させることによって、記事の Message-ID とユーザが指定
+  した秘密の文字列を元にフィールドを生成して記事に挿入します。この関数
+  は送信する直前に評価される hook に設定して使うことを想定しています。
+  Canlock が盛り込まれていない Gnus や Semi-gnus などでは .gnus ファイ
+  ルに次のように記述すれば良いでしょう。
+
+	(add-hook 'message-header-hook 'canlock-insert-header t)
+
+  また、最も新しい Gnus と T-gnus、または 1999年1月13日以降の
+  Semi-gnus 6.10 か T-gnus を使う場合は、新設された
+  nntp-prepare-post-hook を使うことをお勧めします。
+
+	(add-hook 'nntp-prepare-post-hook 'canlock-insert-header t)
+
+  その他の MUA では以下のような hook を利用できると思います。
+
+	wl-news-send-pre-hook		Wanderlust (*)
+	gnus-inews-article-hook		Gnus 5.1 以下と GNUS
+	mew-real-send-hook		Mew
+	mail-send-hook			VM や cmail など
+
+  (*) wl-1.1.1 以前の Wanderlust では wl-news-send-pre-hook がありません。
+      wl-mail-send-pre-hook を使うようにしてください。
+
+  自分がポストしたニュース記事に付けた Cancel-Lock や Cancel-Key フィー
+  ルドの内容が正しいかどうかを調べるには、その記事が存在するバッファで
+
+	M-x canlock-verify
+
+  とタイプして下さい。Wanderlust, Mew, mh-e, VM, cmail または RMAIL を
+  使って記事を読んでいるときに、それぞれの summary バッファから操作す
+  るためのコマンドも併せて利用して下さい。
+
+	M-x    wl-summary-canlock-verify
+	M-x   mew-summary-canlock-verify
+	M-x    mh-summary-canlock-verify
+	M-x    vm-summary-canlock-verify
+	M-x cmail-summary-canlock-verify
+	M-x rmail-summary-canlock-verify
+
+  最も新しい Gnus と T-gnus では以下のコマンドが使えます。
+
+	M-x gnus-article-verify-cancel-lock
+
+
+さらにカスタマイズ
+==================
+
+  canlock-mmencode-program
+	Mule 2.3 でだけ有効な変数で、canlock-base64-encode-function に
+	canlock-base64-encode-string-with-mmencode を設定した場合に使
+	う外部コマンドの path 名です。デフォルトは "mmencode" ですが、
+	exec-path のディレクトリ以外の場所にある場合は full path 名を
+	設定して下さい。
+
+  canlock-mmencode-args-for-encoding
+	Mule 2.3 でだけ有効な変数で、canlock-base64-encode-function に
+	canlock-base64-encode-string-with-mmencode を設定した場合に、
+	canlock-mmencode-program に設定されている外部コマンドを base64
+	の encoder として機能させるための引数を list で指定します。
+	デフォルトは nil です。
+
+  canlock-sha1-function-for-verify
+	M-x canlock-verify や M-x *-summary-canlock-verify を行なうと
+	きに使う SHA1 message digest を作成するための関数の指定です。
+	デフォルトは canlock-sha1-function と同じです。
+
+  canlock-openssl-program
+	canlock-sha1-function または canlock-sha1-function-for-verify
+	に canlock-sha1-with-openssl を設定した場合に使う外部コマンドの
+	path 名です。デフォルトは "openssl" ですが、exec-path のディレ
+	クトリ以外の場所にある場合は full path 名を設定して下さい。
+
+  canlock-openssl-args
+	canlock-sha1-function または canlock-sha1-function-for-verify
+	に canlock-sha1-with-openssl を設定した場合に、
+	canlock-openssl-program に設定されている外部コマンドに SHA1
+	message digest を作成させるための引数を list で指定します。
+	デフォルトは ("sha1") です。
+
+  canlock-ignore-errors
+	この変数を nil 以外にしておくと一切の error signal を発しませ
+	ん。デフォルトは nil です。
+
+  canlock-password
+	この変数に秘密の文字列を設定しておくと毎回入力する必要がなくな
+	ります。.emacs などに書く場合は覗かれないようにして下さい。
+	デフォルトは nil です。
+	最も新しい Gnus と T-gnus では、値が設定されていない場合に自動
+	でランダムな文字列が作られ、以後はそれが使われます。
+
+  canlock-password-for-verify
+	M-x canlock-verify や M-x *-summary-canlock-verify を行なうと
+	きに参照する秘密の文字列で、デフォルトは canlock-password と同
+	じです。
+
+  canlock-force-insert-header
+	関数 canlock-insert-header はヘッダに Newsgroups フィールドが
+	無いメッセージに通常 Cancel-Lock または Cancel-Key フィールド
+	を付加しませんが、この変数を nil 以外にしておくと無条件で付加
+	するようになります。デフォルトは nil です。
+
+  canlock-read-passwd
+	秘密の文字列を入力するときに使う関数の指定です。デフォルトでは
+	read-passwd か ange-ftp-read-passwd が使われますが、
+	comint-read-noecho や read-string などを指定することもできます。
+
+
+貢献者
+======
+
+  鈴木圭一さんは sha1.el という偉大なプログラムを作ってくれました。現
+  在は最も新しい Gnus ともども小林修平さんによる sha1-el.el に置き代わっ
+  てしまいましたが、最初にこれが無かったら Canlock を多くの人に使って
+  もらう上での大きな障害になったことでしょう。海よりも深く感謝。
+
+  寺西裕一さん (Wanderlust の作者) は wl-summary-canlock-verify を作っ
+  てくれました。
+  白井秀行さんは mew-summary-canlock-verify を作ってくれました。
+  中村秀和さんは mh-summary-canlock-verify を作ってくれました。mh-e で
+  も IM を経由してニュース記事を送信できるなんて驚きました。
+  岡田健一さんは canlock-ignore-errors を導入するパッチを送ってくれま
+  した。
+  みなさんどうもありがとう。
+
+  それから beta test に協力してくれた Elips メーリングリストのみなさん
+  にもどうもありがとう。
+
+-- 
+山岡克美 <yamaoka@jpl.org>

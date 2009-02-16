@@ -1,0 +1,152 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="A%20new%20tree-node">A new tree-node</a>,
+Next:<a rel=next accesskey=n href="Updating-a-tree-buffer.html#Updating%20a%20tree-buffer">Updating a tree-buffer</a>,
+Previous:<a rel=previous accesskey=p href="A-new-tree-buffer.html#A%20new%20tree-buffer">A new tree-buffer</a>,
+Up:<a rel=up accesskey=u href="tree-buffer.html#tree-buffer">tree-buffer</a>
+<hr><br>
+
+<h4>How to create a new tree-node</h4>
+
+<p>When a new tree-buffer has been created, then the most senseful
+programming-task is adding some tree-nodes to it.
+
+<h5>Content of a tree-node</h5>
+
+<p>A tree-node is an object which stores in special <dfn>slots</dfn> several
+data necessary to link the node with other nodes, to display the node
+and to hold some associated node-data (e.g. a tag created by the
+semantic-library).
+
+<p>A tree-node can have the following slots:
+
+<dl>
+<dt><code><var>NAME</var></code>
+<dd>The name of the node. Regardless how the node is displayed; see
+<var>SHRINK-NAME</var> and <var>DISPLAYED-NAME</var>.
+
+<br><dt><code><var>TYPE</var></code>
+<dd>The type of the node; must currently be an interger! The type is used
+to classify the nodes, so for example all nodes of a certain type can
+display the same popup-menu - see <code>tree-buffer-create</code> or <a href="A-new-tree-buffer.html#A%20new%20tree-buffer">A new tree-buffer</a> which parts of a tree-buffer are distinguished by
+node-types.
+
+<br><dt><code><var>DATA</var></code>
+<dd>The data of the node; This can be any arbitrary emacs-lisp-object. 
+This slots holds that data asscociated with the node and represented
+by the node in the tree-buffer. Example: Assume a tree-buffer
+displaying a directory-tree where each node just displays as its name
+the name of (sub)directories, but not the full path. The full path is
+stored in the <var>DATA</var>-slot of a node so when clicking onto this
+node the asscociated directory can be open for example in a
+dired-buffer.
+
+<br><dt><code><var>EXPANDABLE</var></code>
+<dd>If not nil then the node is expandable means it has children.
+
+<br><dt><code><var>EXPANDED</var></code>
+<dd>If not nil then the node is currently expanded, means its
+children are visible in the tree-buffers as subnodes of the node.
+
+<br><dt><code><var>PARENT</var></code>
+<dd>The parent tree-node. This is the link to the father (rsp. mother ;-)
+of the node. It must be a object of type tree-node!
+
+<br><dt><code><var>CHILDREN</var></code>
+<dd>List of children tree-nodes. They must be all objects of type
+tree-node!
+
+<br><dt><code><var>SHRINK-NAME</var></code>
+<dd>Decides if the <var>NAME</var> can be shortened when displayed in a narrow
+tree buffer window. The following values are valid:
+
+<ul>
+<li><code>beginning</code>:
+The <var>NAME</var> is truncated at the beginning so the end is always
+visible.
+
+<li><code>end</code>:
+The <var>NAME</var> is truncated at the end. If the tree-node is EXPANDABLE
+the name is truncated so that the expand symbol is visible.
+
+<li><code>nil</code>:
+The <var>NAME</var> is never truncated. In this case <var>DISPLAYED-NAME</var>
+is equal to <var>NAME</var>. 
+</ul>
+
+<br><dt><code><var>INDENTSTR</var></code>
+<dd>Containes the full indentation-string for the node. So a single node
+can easily be redrawn.
+
+<br><dt><code><var>DISPLAYED-NAME</var></code>
+<dd>Contains the current displayed name of the node. The
+displayed name can be different from the <var>NAME</var> according to the value of
+<var>SHRINK-NAME</var>.
+
+</dl>
+
+<h5>Creating a new tree-node and adding it to the tree</h5>
+
+<p>A new tree-node has to be created with the function
+<code>tree-node-new</code>. This "constructor" accepts the following
+parameter: <var>NAME</var>, <var>TYPE</var>, <var>DATA</var>, <var>NOT-EXPANDABLE</var>,
+<var>PARENT</var> and <var>SHRINK-NAME</var>.
+
+<p>For all parameters except <var>NOT-EXPANDABLE</var> the description is
+available in the slot-description in the section above. If
+<var>NOT-EXPANDABLE</var> is set to not nil then the slot <var>EXPANDABLE</var>
+will be set to <code>nil</code>; otherwise to <code>t</code>.
+
+<p><code>tree-node-new</code> returns a new tree-node.
+
+<p>The new node can either being added implicitely to the tree via the
+optional <var>PARENT</var>-parameter when calling <code>tree-buffer-new</code> or
+explicitely by first creating the new node without setting the
+parent-node but later setting the parent-node via the according
+accessor (see next section below). Children should only being added
+with <code>tree-node-add-children</code> - see next section.
+
+<h5>Accessing the slots of a tree-node</h5>
+
+<p>The section above shows which slots a tree-node have.
+
+<p>A slot with name XXX is getable with the following piece of code:
+
+<br><pre>(tree-node-&gt;xxx &lt;a tree node&gt;)
+</pre>
+
+<p>Here is an example how to get the value of the slot <var>DATA</var>:
+
+<br><pre>(tree-node-&gt;data &lt;a tree node&gt;)
+</pre>
+
+<p>A slot with name XXX is setable with the following piece of code:
+
+<br><pre>(setf (tree-node-&gt;xxx &lt;a tree node&gt;) &lt;new value&gt;)
+</pre>
+
+<p>Again an example with slot <var>DATA</var> which sets this slot to the
+string "~/a_subdir_of_HOME":
+
+<br><pre>(setf (tree-node-&gt;data &lt;a tree node&gt;) "~/a_subdir_of_HOME")
+</pre>
+
+<p><strong>IMPORTANT</strong>: Adding new children to a node should always being
+done with the function <code>tree-node-add-children</code> because this
+functions encapsulates all the necessary stuff needed to add children
+to a node (mainly adding the children itself and setting the node itself as
+parent for every children).
+
+<p>See <a href="The-tree-buffer-API.html#The%20tree-buffer-API">The tree-buffer-API</a> for the rest of the API available for
+tree-nodes.
+
+</body></html>
+

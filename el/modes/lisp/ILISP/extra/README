@@ -1,0 +1,21 @@
+ILISP Extra
+===========
+
+ILISP is a powerful GNU Emacs interface to many dialects of Lisp.
+
+This is the 'contrib' directory: software that is useful in
+conjunction with ILISP.
+
+HyperSpec
+---------
+Note that some software in this directory (HyperSpec packages in
+particular) is 'non free', according to the definition accepted by the FSF
+(see <http://www.gnu.org> for the definition).  However, the HyperSpec (as
+appearing on Xanalys site--formerly Harlequin Ltd.) and these interfaces to
+that reference are very valuable to Common Lisp programmers and therefore
+they are provided with ILISP, although in a separate directory.
+
+
+Enjoy
+
+The ILISP Maintainers

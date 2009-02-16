@@ -1,0 +1,65 @@
+#! /usr/pkg/bin/perl
+# EDIT THE ABOVE PATH!
+
+# If you have used Mew 4 (4.0.53 or earlier) and start using Mew
+# 4.0.54, you need to terminate Mew and execute this command once.
+
+# Usage:
+#	% cd ~/Mail
+#	% fix-sum
+# This fixes all .mew-summary files under ~/Mail.
+
+# The information part of .mew-summary consists of
+# "\r folder-name message-number <my-id> <parent-id> uid size"
+#
+# The old format:
+#     folder-name must exist.
+#     <my-id> should be <> if not exist.
+#     <parent-id> should be <> if not exist.
+#
+# The new format:
+#     folder-name must not exist. folder-name exists only in Vritual mode.
+#     <my-id> should be "" if not exist.
+#     <parent-id> should be "" if not exist.
+#
+# Also, due to a bug of Mew 4.0.53, <> in the old format would 
+# be stored as <nil>.
+#
+
+use File::Find;
+
+chomp($prefix = `pwd`);
+$prefixlen = length($prefix) + 1;
+
+find(\&fixit, ".");
+
+sub fixit {
+	if (/^.mew-summary$/) {
+		$OLD = $_;
+		$NEW = ".mew-summary.new";
+		chomp($dir = `pwd`);
+		if ($prefix eq $dir) {
+			$dir = ".";
+		} else {
+			$dir = substr($dir, $prefixlen);
+		}
+		print "fixing $dir/$OLD ... ";
+		open(OLD, "<$OLD") || print "failed\n", return;
+		open(NEW, ">$NEW") || print "failed\n", return;
+		while (defined($line = <OLD>)) {
+			chomp $line;
+			($sum, $info) = split('\r', $line);
+			# Removing <nil>
+			$info =~ s/<nil>//g;
+			# Removing <>
+			$info =~ s/<>//g;
+			# Removing folder-name
+			$info =~ s/^ [^ ]+/ /g;
+			print NEW "$sum\r$info\n";
+		}
+		close OLD;
+		close NEW;
+		rename($NEW, $OLD);
+		print "done\n";
+	}
+}

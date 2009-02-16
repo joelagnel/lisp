@@ -1,0 +1,2 @@
+MPI_Bcast(void *buffer, int count, MPI_CHAR, int root,
+          MPI_COMM_WORLD);

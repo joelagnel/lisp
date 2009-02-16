@@ -1,0 +1,80 @@
+Eldav: Yet another WebDAV interface for Emacsen
+
+Eldav provides an interface to the WebDAV servers for Emacs.
+
+
+Features
+
+ ・ WebDAV files can be treated just like a normal file.
+ ・ Emacs/w3 is not required. External program is used for WebDAV access.
+
+
+Requirements
+
+ ・ Emacs
+ ・ WebDAV server
+ ・ nd (An WebDAV command line interface)
+
+
+Install
+
+APEL is required.
+Use the latest APEL which is available at following URI.
+ftp://ftp.m17n.org/pub/mule/apel/
+
+Then, just put `eldav.el' and 'vc-eldav.el' (after byte-compiling, if you want)
+on your load-path of Emacs.
+
+
+Usage
+
+Add following line to your .emacs.
+
+(require 'eldav)
+
+If you want to use proxy server, following setting is also needed.
+
+(setq eldav-proxy "http://your.proxy.server:8080")
+
+Then you can access WebDAV files by specifying magic file name like:
+
+:http://your.webdav.server/path/to/file/name
+
+(Add preceding ':' to the WebDAV URL.)
+
+
+VC (Version Control)
+
+Eldav implements VC backend (Note that it is experimental).
+
+Eldav VC feature is enabled if you put following line in your setting.
+
+(setq eldav-use-vc t)
+
+If Eldav VC fearure is enabled, the file is locked and access from another
+person is rejected (WebDAV LOCK feature).
+
+If you open new WebDAV file, you'll be asked like following.
+
+File was lost; check out from version control? (yes or no)
+
+Answer 'yes' here and check-out the file.
+
+If you open an existing WebDAV file, it appears on read-only buffer. Type 'C-x
+v v' on this buffer, then file is checked-out and becomes editable.
+
+If the file is checked-out, the file cannot be accessed from another person by
+locking mechanism.
+
+After editing and saving, you have to type 'C-x v v' to check-in to unlock the
+file. At this time, '*VC-Log*' buffer appers. Just type 'C-c C-c' to continue
+(all texts in the *VC-Log* buffer is ignored).
+
+
+Known Problems
+
+ ・ File completion causes many PROPFIND requests.
+ ・ SSL is not supported (because `nd' does not handle it).
+
+--
+Yuuichi Teranishi<teranisi@gohome.org>

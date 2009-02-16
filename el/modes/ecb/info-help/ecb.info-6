@@ -1,0 +1,673 @@
+This is ecb.info, produced by makeinfo version 4.2 from ecb.texi.
+
+INFO-DIR-SECTION GNU Emacs Lisp
+START-INFO-DIR-ENTRY
+* ECB: (ecb).           Emacs Code Browser
+END-INFO-DIR-ENTRY
+
+
+File: ecb.info,  Node: Customizable options,  Prev: Most important options,  Up: Customizing
+
+All customizable options of ECB
+===============================
+
+All customization of ECB is divided into the following "customize groups".
+You can highly customize all the ECB behavior/layout so just go to these
+groups and you will see all well documented ECB-options.
+
+*Please note*: All options in the following subsections are listed without
+the prefix "ecb-" (e.g. the option `ecb-layout-name' is listed with name
+"layout-name"). This has been done for a better readable option index. *Note
+Option Index::.
+
+* Menu:
+
+* ecb-general::                 General customizing ECB
+* ecb-tree-buffer::             Customizing the general tree layout
+* ecb-directories::             Customizing the ECB-directories-tree
+* ecb-sources::                 Customizing the ECB-sources-tree
+* ecb-methods::                 Customizing the ECB-methods-tree
+* ecb-history::                 Customizing the ECB-history-tree
+* ecb-analyse::                 Customizing the ECB-analyse-interactor
+* ecb-layout::                  Customizing the ECB-layout
+* ecb-compilation::             Customizing the compile-window
+* ecb-create-layout::           Customizing options for creating layouts
+* ecb-face-options::            Customizing options for faces
+* ecb-faces::                   Customizing the faces
+* ecb-download::                Customizing how to download ECB
+* ecb-help::                    Customizing the online help of ECB
+* ecb-eshell::                  Customizing the eshell-integration
+* ecb-speedbar::                Customizing the speedbar-integration
+* ecb-non-semantic::            Customizing parsing non-semantic sources
+* ecb-winman::                  Customizing window-manager support
+* ecb-mode-line::               Customizing the tree-buffer-modelines
+* ecb-version-control::         Customizing the version-control-support
+
+
+File: ecb.info,  Node: ecb-general,  Next: ecb-tree-buffer,  Prev: Customizable options,  Up: Customizable options
+
+Group ecb-general
+-----------------
+
+This group contains general settings for the Emacs code browser:
+
+ - User Option: activate-before-layout-draw-hook
+   Normal hook run at the end of activating the ecb-package by running
+   `ecb-activate'. This hooks are run after all the internal setup process
+   but directly before(!) drawing the layout specified in `ecb-layout' (means
+   before dividing the frame into several windows).
+
+   A senseful using of this hook can be maximizing the Emacs-frame for
+   example, because this should be done before the layout is drawn because
+   ECB computes the size of the ECB-windows with the current frame size! If
+   you need a hook-option for the real end of the activating process (i.e.
+   after the layout-drawing) look at `ecb-activate-hook'.
+
+   IMPORTANT: The difference between this hook and
+   `ecb-redraw-layout-before-hook' is that the latter one is evaluated always
+   before the layout is redrawn (for example after calling
+   `ecb-redraw-layout') whereas the former one (this hook) is only evaluated
+   exactly once during the activation-process of ECB.  So during the
+   activation process there is the following sequence of hooks:
+   1. `ecb-activate-before-layout-draw-hook' \(this one)
+
+   2. `ecb-redraw-layout-before-hook'
+
+   3. <Drawing the layout>
+
+   4. `ecb-redraw-layout-after-hook'
+
+   5. `ecb-activate-hook'
+
+ - User Option: activate-hook
+   Hook run at the end of activating ECB by `ecb-activate'. This hooks are
+   run at the real end of the activating process, means after the layout has
+   been drawn!. If you need hooks which are run direct before the
+   layout-drawing look at `ecb-activate-before-layout-draw-hook'.
+
+ - User Option: activation-selects-ecb-frame-if-already-active
+   Trying to activate an already activated ECB selects the ECB-frame. If t
+   then the ECB-frame is selected, if nil then it is not. If 'ask then ECB
+   asks if the ECB-frame should be selected if the current-frame is not the
+   `ecb-frame'.
+
+ - User Option: auto-activate
+   Automatically startup ECB when Emacs starts up. This should only be true
+   if you always want to run `ecb-activate'.
+
+ - User Option: auto-compatibility-check
+   Check at ECB-startup if all ECB-options have correct values. If not nil
+   then all ECB-options are checked if their current value have the correct
+   type. It the type is incorrect the option is either auto.  upgraded to the
+   new type or reset to the default-value of current ECB if no upgrade is
+   possible. This feature can also upgrade options which are renamed in
+   current ECB and try to transform the old-value to the new named option.
+   After startup all upgraded or reset options are displayed with their old
+   (before upgrade/reset) and new values. See also the commands
+   `ecb-upgrade-options' and `ecb-display-upgraded-options'. If this option
+   is off then the user can perform the check and reset manually with
+   `ecb-upgrade-options'.  *Note Auto. option-upgrading::.
+
+ - User Option: before-activate-hook
+   Normal hook run at the beginning of activating the ecb-package by running
+   `ecb-activate'. These hooks run before any other tasks of the activating
+   process are performed. If any of these hooks returns nil then ECB will not
+   be activated!
+
+   This can be used to check some conditions and then only start ECB if all
+   conditions are true. For example a function could be added which returns
+   only nil if Gnus is running. Then calling `ecb-activate' or
+   `ecb-minor-mode' will only start ECB if Gnus is not already running.
+
+ - User Option: before-deactivate-hook
+   Normal hook run at the beginning of deactivating ECB by running
+   `ecb-deactivate'. These hooks run before any other tasks of the
+   deactivating process are performed. If any of these hooks returns nil then
+   ECB will not be deactivated! See also `ecb-before-activate-hook'.
+
+ - User Option: bucket-node-display
+   How ECB displays bucket-nodes in a ECB tree-buffer. Bucket-nodes have only
+   one job: Nodes with similar properties will be dropped into one bucket for
+   such a common property and all these nodes will be added as children to
+   the bucket-node. Besides being expandable and collapsable a bucket-node
+   has no senseful action assigned. Examples for bucket-nodes are "[+]
+   Variables, "[+] Dependencies" etc. in the Methods-buffer or buckets which
+   combine filenames with same extension under a bucket-node with name this
+   extension.
+
+   This option defines how bucket-node should be displayed. The name of the
+   bucket-node is computed by ECB but you can define a prefix, a suffix and a
+   special face for the bucket-node
+
+   The default are empty prefix/suffix-strings and `ecb-bucket-node-face'.
+   But an alternative can be for example '("[" "]" nil) which means no
+   special face and a display like "[+] [<bucket-name>]".
+
+ - User Option: clear-caches-before-activate
+   Clear all ECB internal caches before startup. If t then ECB clears all its
+   internal caches before starting up. Caches are used for files- and subdirs
+   (see `ecb-cache-directory-contents' and
+   `ecb-cache-directory-contents-not') for semantic-tags and for the
+   history-filter.
+
+   This caches are completely clean at load-time of the ECB-library!
+
+   Default is nil, because is makes sense not to clear these caches at
+   start-time because ECB is often deacticated temporally especially in
+   combination with window-managers like escreen.el. In these situations the
+   internal state of ECB should be preserved for next activation.
+
+ - User Option: current-buffer-sync-hook
+   Normal hook run at the end of `ecb-current-buffer-sync'.
+
+   See documentation of `ecb-current-buffer-sync' for conditions when
+   synchronization takes place and so in turn these hooks are evaluated.
+
+   Precondition for such a hook: Current buffer is the buffer of the current
+   selected edit-window.
+
+   Postcondition for such a hook: Point must stay in the same edit-window as
+   before evaluating the hook.
+
+   Important note: If `ecb-window-sync' is not nil `ecb-current-buffer-sync'
+   is running either every time Emacs is idle or even after every command
+   (see `ecb-window-sync-delay').  So these hooks can be really called very
+   often! Therefore each function of this hook should/must check in an
+   efficient way at beginning if its task have to be really performed and
+   then do them only if really necessary! Otherwise performance of Emacs
+   could slow down dramatically!
+
+   It is strongly recommended that each function added to this hook uses the
+   macro `ecb-do-if-buffer-visible-in-ecb-frame' at beginning!  See
+   `ecb-speedbar-current-buffer-sync' and `ecb-eshell-current-buffer-sync'
+   for examples how to use this macro!
+
+ - User Option: deactivate-hook
+   Normal hook run at the end of deactivating (but before the ecb-layout is
+   cleared!) ECB by running `ecb-deactivate'.
+
+ - User Option: debug-mode
+   If not nil ECB displays debug-information in the Messages-buffer. This is
+   done for some critical situations concerning semantic-tags and their
+   overlays (or extends for XEmacs). Normally you should not need this
+   switched on! But if you get errors like "destroyed extend" for XEmacs or
+   "wrong-argument-type" concerning overlays for GNU Emacs then you should
+   switch on this option and submitting a bug-report to the ecb-mailing-list
+   (`ecb-submit-problem-report') after getting the error again!
+
+ - User Option: grep-function
+   Function used for performing a grep. The popup-menu of the tree-buffers
+   "Directories", "Sources" and "History" offer to grep the "current"
+   directory:
+    - Directory-buffer: The grep is performed in the current popup-directory
+      after clicking the right mouse-button onto a node.
+
+    - Sources-buffer: The grep is performed in the current selected directory.
+
+    - History-buffer: The grep is performed in the directory of the current
+      popup-source after clicking the right mouse-button onto a node.
+
+ - User Option: grep-find-function
+   Function used for performing a recursive grep. For more Details see option
+   `ecb-grep-function' and replace "grep" with "recursive grep".
+
+ - User Option: key-map
+   Specifies all keybindings for the ECB minor-mode key-map. The value is a
+   cons-cell where the car is a common-prefix key for all the keybindings.
+   The cdr is a list of keybindings each of them a list again. A key-binding
+   has the following form:
+
+      '(<common-prefix-flag> <keysequence> <function>) where
+
+  `<common-prefix-flag>'
+      If t then the common-prefix-key defined as car of the value (see above)
+      is used.
+
+  `<keysequence>'
+      If the common prefix-key is used then the final key-binding is the
+      concatenation of the common-prefix-key (see above) and this keysequence.
+
+  `<function>:'
+      The function to bind to the key. This can also be a lambda-expression .
+
+   It is highly recommended to use one of the standard keys C-c or C-x as
+   first key of your common-prefix-key!
+
+   You MUST change this option via customize to take effect!
+
+   All keysequences must be inserted as a string and must follow the syntax
+   needed by `read-kbd-macro' or `kbd'. This means you can insert the key in
+   the same manner `C-h k' displays keysequences.  Here is the summary of the
+   syntax:
+
+   Text is divided into "words" separated by whitespace. Except for the words
+   described below, the characters of each word go directly as characters of
+   the keysequence. The whitespace that separates words is ignored.
+   Whitespace in the macro must be written explicitly, as in `C-c SPC'.
+
+    * The special words RET, SPC, TAB, DEL, LFD, ESC, and NUL represent
+      special control characters. The words must be written in uppercase.
+
+    * A word in angle brackets, e.g., <return>, <down>, <left> or <f1>,
+      represents a function key. (Note that in the standard configuration,
+      the function key <return> and the control key RET are synonymous.).
+      You can use angle brackets on the words RET, SPC, etc., but they are
+      not required there.
+
+    * Keys can be written by their ASCII code, using a backslash followed by
+      up to six octal digits. This is the only way to represent keys with
+      codes above ÿ.
+
+    * One or more prefixes M- (meta), C- (control), S- (shift), A- (alt), H-
+      (hyper), and s- (super) may precede a character or key notation. For
+      function keys, the prefixes may go inside or outside of the brackets:
+      C-<down> = <C-down>. The prefixes may be written in any order: M-C-x =
+      C-M-x. Prefixes are not allowed on multi-key words, e.g., C-abc, except
+      that the Meta prefix is allowed on a sequence of digits and optional
+      minus sign: M-123 = M- M-1 M-2 M-3.
+
+    * The `^' notation for control characters also works: ^M = C-m.
+
+ - User Option: major-modes-show-or-hide
+   List of major-modes which show or hide the ecb-windows. The value is a
+   cons-cell where the car contains all major-mode-symbols which should show
+   the special ecb-windows and the cdr contains all major-mode-symbols which
+   should hide the special ecb-windows. If the symbol of a major-mode is
+   neither contained in the car-"show-list" nor in the cdr-"hide-list" then
+   the visibility-state of the ecb-windows does not change.
+
+ - User Option: minor-mode-text
+   String to display in the mode line when ECB minor mode is active.  (When
+   the string is not empty, make sure that it has a leading space.)
+
+   Because for ECB it is quite obvious if it is active or not when the
+   ECB-windows are visible this text is only display in the modeline if the
+   ECB-windows are hidden.
+
+ - User Option: mouse-click-destination
+   Destination of a mouse-button click. Defines in which edit-window (if
+   splitted) ECB does the "right" action (opening a source, jumping to a
+   method/variable etc.) after clicking with the primary mouse-button (see
+   `ecb-primary-secondary-mouse-buttons') onto a node. There are two possible
+   choices:
+
+    - `left-top': Does the "right" action always in the left/topmost
+      edit-window.
+
+    - `last-point': Does the "right" action always in that edit-window which
+      had the point before.
+   This is if the user has clicked either with the primary mouse-button or
+   has activated a popup-menu in the tree-buffer.
+
+   If the edit-area is not splitted this setting doesn't matter.
+
+   A click with the secondary mouse-button (see again
+   `ecb-primary-secondary-mouse-buttons' does the "right" action always in
+   another edit-window related to the setting in this option: If there are
+   two edit-windows then the "other" edit-window is used and for more than 2
+   edit-windows the "next" edit-window is used (whereas the next edit-window
+   of the last edit-window is the first edit-window).
+
+   Note: If the tree-buffers are used with the keyboard instead with the
+   mouse then this option takes effect too because `RET' is interpreted as
+   primary mouse-button and `C-RET' as secondary mouse-button!
+
+ - User Option: run-ediff-in-ecb-frame
+   Run ediff-sessions in the same frame as ECB is running.  If not nil then
+   ECB ensures that ediff runs in the same frame as ECB and ECB restores
+   exactly the "before-ediff"-window-layout after quiting ediff. If nil then
+   ediff decides in which frame it will run - depending on the current
+   window-layout (e.g. if the ecb-windows are currently hidden) this can be
+   the ecb-frame but this can also be a newly created frame or any other
+   frame.
+
+ - User Option: stealthy-tasks-delay
+   Time Emacs must be idle before ECB runs its stealthy tasks. Currently ECB
+   performes the following stealthy tasks:
+
+  Prescann directories for emptyness
+      Prescann directories and display them as empty or not-empty in the
+      directories-buffer. See the documentation of the option
+      `ecb-prescan-directories-for-emptyness' for a description.
+
+  File is read only
+      Check if sourcefile-items of the directories- or sources-buffer are
+      read-only or not. See documentation of the option
+      `ecb-sources-perform-read-only-check'.
+
+  Version-control-state
+      Checks the version-control-state of files in directories which are
+      managed by a VC-backend. See the option `ecb-vc-enable-support'.
+
+   Here the interval is defined ECB has to be idle before starting with these
+   stealthy tasks. It can be a floating-point value in seconds. The value can
+   also be changed during running ECB.
+
+ - User Option: tip-of-the-day
+   Show tip of the day at start time of ECB.
+
+ - User Option: tip-of-the-day-file
+   File where tip-of-the-day cursor is stored.
+
+ - User Option: use-recursive-edit
+   Tell ECB to use a recursive edit. If set then it can easily be deactivated
+   by (keyboard-escape-quit).
+
+ - User Option: version-check
+   Checks at start-time if the requirements are fulfilled.  It checks if the
+   required versions of the libraries semantic, eieio and speedbar are
+   installed and loaded into Emacs.
+
+   It is strongly recommended to set this option to not `nil'!
+
+ - User Option: window-sync
+   Synchronize the ECB-windows automatically with current edit window. If
+   `always' then the synchronization takes place always a buffer changes in
+   the edit window, if `nil' then never. If a list of major-modes then only
+   if the `major-mode' of the new buffer belongs NOT to this list.
+
+   But in every case the synchronization only takes place if the
+   current-buffer in the current active edit-window has a relation to files
+   or directories. Examples for the former one are all
+   programming-language-modes, `Info-mode' too, an example for the latter one
+   is `dired-mode'. For all major-modes related to non-file/directory-buffers
+   like `help-mode', `customize-mode' and others never an autom.
+   synchronization will be done!
+
+   It's recommended to exclude at least `Info-mode' because it makes no sense
+   to synchronize the ECB-windows after calling the Info help.  Per default
+   also `dired-mode' is excluded but it can also making sense to synchronize
+   the ECB-directories/sources windows with the current directory in the
+   dired-buffer.
+
+   IMPORTANT NOTE: Every time the synchronization is done the hook
+   `ecb-current-buffer-sync-hook' is evaluated.
+
+ - User Option: window-sync-delay
+   Time Emacs must be idle before the ECB-windows are synchronized with
+   current edit window. If nil then there is no delay, means synchronization
+   takes place immediately. A small value of about 0.25 seconds saves CPU
+   resources and you get even though almost the same effect as if you set no
+   delay.
+
+
+File: ecb.info,  Node: ecb-tree-buffer,  Next: ecb-directories,  Prev: ecb-general,  Up: Customizable options
+
+Group ecb-tree-buffer
+---------------------
+
+This group contains general settings related to the tree-buffers of ECB:
+
+ - User Option: common-tree-buffer-after-create-hook
+   Local hook running at the end of each tree-buffer creation. Every function
+   of this hook is called once without arguments direct after creating a
+   tree-buffer of ECB and it's local key-map. So for example a function could
+   be added which performs calls of `local-set-key' to define new keybindings
+   for EVERY tree-buffer.
+
+   The following keys must not be rebind in all tree-buffers:
+    - `RET' and all combinations with `Shift' and `Ctrl'
+
+    - `TAB'
+
+    - `C-t'
+
+ - User Option: primary-secondary-mouse-buttons
+   Primary- and secondary mouse button for using the ECB-buffers. A click
+   with the primary button causes the main effect in each ECB-buffer:
+
+    * ECB Directories: Expanding/collapsing nodes and displaying files in the
+      ECB Sources buffer.
+
+    * ECB sources/history: Opening the file in that edit-window specified by
+      the option `ecb-mouse-click-destination'.
+
+    * ECB Methods: Jumping to the method in that edit-window specified by the
+      option `ecb-mouse-click-destination'.
+
+   A click with the primary mouse-button while the SHIFT-key is pressed called
+   the POWER-click and does the following (depending on the ECB-buffer where
+   the POWER-click occurs):
+
+    * ECB Directories: Refreshing the directory-contents-cache (see
+      `ecb-cache-directory-contents').
+
+    * ECB sources/history: Only displaying the source-contents in the
+      method-buffer but not displaying the source-file in the edit-window.
+
+    * ECB Methods: Narrowing to the clicked method/variable/ect... (see
+      `ecb-tag-visit-post-actions'). This works only for semantic supported
+      sources but not for imenu- or etags-supported ones!
+
+   In addition always the whole node-name is displayed in the minibuffer
+   after a POWER-click \(for this see also
+   `ecb-show-node-info-in-minibuffer').
+
+   The secondary mouse-button is for opening (jumping to) the file in another
+   edit-window (see the documentation `ecb-mouse-click-destination').
+
+   The following combinations are possible:
+
+    - primary: mouse-2, secondary: C-mouse-2 (means mouse-2 while CTRL-key is
+      pressed). This is the default setting.
+
+    - primary: mouse-1, secondary: C-mouse-1
+
+    - primary: mouse-1, secondary: mouse-2
+
+   Please note: If the tree-buffers are used with the keyboard instead with
+   the mouse then `RET' is interpreted as primary mouse-button and `C-RET' as
+   secondary mouse-button!
+
+   If you change this during ECB is activated you must deactivate and
+   activate ECB again to take effect
+
+ - User Option: tree-buffer-style
+   The style of the tree-buffers.  There are three different styles available:
+
+   Image-style (value `image'): Very nice and modern - just try it.  For this
+   style the options `ecb-tree-indent' and `ecb-tree-expand-symbol-before'
+   have no effect! Note: GNU Emacs <= 21.3.X for Windows does not support
+   image-display so ECB uses always 'ascii-guides even when here 'image is
+   set!
+
+   Ascii-style with guide-lines (value `ascii-guides'):
+      [-] ECB
+       |  [+] code-save
+       `- [-] ecb-images
+           |  [-] directories
+           |   |  [-] height-15
+           |   |   |  * close.xpm
+           |   |   |  * empty.xpm
+           |   |   |  * leaf.xpm
+           |   |   `- * open.xpm
+           |   |  [+] height-17
+           |   |  [+] height-19
+           |   `- [+] height-21
+           |  [x] history
+           |  [x] methods
+           `- [x] sources
+
+   Ascii-style without guide-lines (value `ascii-no-guides') - this is the
+   style used by ECB <= 1.96:
+      [-] ECB
+          [+] code-save
+          [-] ecb-images
+              [-] directories
+                  [-] height-15
+                      * close.xpm
+                      * empty.xpm
+                      * leaf.xpm
+                      * open.xpm
+                  [+] height-17
+                  [+] height-19
+                  [+] height-21
+              [x] history
+              [x] methods
+              [x] sources
+
+   With both ascii-styles the tree-layout can be affected with the options
+   `ecb-tree-indent' and `ecb-tree-expand-symbol-before'.
+
+ - User Option: tree-do-not-leave-window-after-select
+   Tree-buffers which stay selected after a key- or mouse-selection. If a
+   buffer (either its name or the variable-symbol which holds the name) is
+   contained in this list then selecting a tree-node either by RET or by a
+   mouse-click doesn't leave that tree-buffer after the node-selection but
+   performes only the appropriate action (opening a new source, selecting a
+   method etc.) but point stays in the tree-buffer. In tree-buffers not
+   contained in this option normaly a node-selection selects as "last" action
+   the right edit-window or maximizes the next senseful tree-buffer in case
+   of a currently maximized tree-buffer (see
+   `ecb-maximize-next-after-maximized-select').
+
+   The buffer-name can either be defined as plain string or with a symbol
+   which contains the buffer-name as value. The latter one is recommended for
+   the builtin ECB-tree-buffers because then simply the related option-symbol
+   can be used.
+
+   A special remark for the `ecb-directories-buffer-name': Of course here the
+   value of this option is only relevant if the name of the current layout is
+   contained in `ecb-show-sources-in-directories-buffer' or if the value of
+   `ecb-show-sources-in-directories-buffer' is 'always and the clicked ot
+   hitted node represents a sourcefile (otherwise this would not make any
+   sense)!
+
+   The setting in this option is only the default for each tree-buffer.  With
+   the command `ecb-toggle-do-not-leave-window-after-select' the behavior of
+   a node-selection can be changed fast and easy in a tree-buffer without
+   customizing this option, but of course not for future Emacs sessions!
+
+ - User Option: tree-easy-hor-scroll
+   Scroll step for easy hor. scrolling via mouse-click in tree-buffers.
+   XEmacs has horizontal scroll-bars so invisible parts beyond the right
+   window-border of a tree-buffer can always made visible very easy.
+
+   GNU Emacs does not have hor. scroll-bars so especially with the mouse it
+   is quite impossible to scroll smoothly right and left. The functions
+   `scroll-left' and `scroll-right' can be annoying and are also not bound to
+   mouse-buttons.
+
+   If this option is a positive integer S then in all ECB-tree-buffers the
+   keys `M-mouse-1' and `M-mouse-3' are bound to scrolling left rsp. right
+   with scroll-step S - clicking with `mouse-1' or `mouse-2' onto the edge of
+   the modeline has the same effect, i.e.  if you click with mouse-1 onto the
+   left (rsp right) edge of the modeline you will scroll left (rsp. right).
+
+   Additionally `C-M-mouse-1' and `C-M-mouse-3' are bound to scrolling left
+   rsp. right with scroll-step `window-width' - 2.
+
+   Default is a scroll-step of 5. If the value is `nil' then no keys for
+   horizontal scrolling are bound.
+
+ - User Option: tree-expand-symbol-before
+   Show the expand symbol before the items in a tree. When the expand-symbol
+   is located before the items then the tree looks like:
+
+      [-] ECB
+          [+] code-save
+          [-] ecb-images
+              [-] directories
+
+   When located after then the tree looks like:
+
+      ECB [-]
+        code-save [+]
+        ecb-images [-]
+          directories [-]
+
+   The after-example above use a value of 2 for `ecb-tree-indent' whereas the
+   before-example uses a value of 4.
+
+   It is recommended to display the expand-symbol before because otherwise it
+   could be that with a deep nested item-structure with and/or with long
+   item-names (e.g. a deep directory-structure with some long
+   subdirectory-names) the expand-symbol is not visible in the tree-buffer
+   and the tree-buffer has to be horizontal scrolled to expand an item.
+
+ - User Option: tree-image-icons-directories
+   Directories where the images for the tree-buffer can be found. This is a
+   cons cell where:
+
+   car: Default directory where the default images for the tree-buffer can be
+   found. It should contain an image for every name of
+   `tree-buffer-tree-image-names'. The name of an image-file must be:
+   "ecb-<NAME of TREE-BUFFER-TREE-IMAGE-NAMES>.<ALLOWED EXTENSIONS>".
+
+   cdr: This is a list where each element is a cons again with: car is the
+   buffer name of the tree-buffer for which a special image-path should be
+   used. The buffer-name can either be defined as plain string or with a
+   symbol which contains the buffer-name as value. The latter one is
+   recommended for the builtin ECB-tree-buffers because then simply the
+   related option-symbol can be used (e.g. the symbol
+   `ecb-directories-buffer-name'). The cdr is the the full-path of an
+   additional image-directorie which is searched first for images needed for
+   the related tree-buffer. If the image can not be found in this directory
+   then the default-directory (see above) is searched. If the image can't
+   even be found there the related ascii-symbol is used - which is defined in
+   `tree-buffer-tree-image-names'. If a tree-buffer is not contained in this
+   list then there is no additional special image-directory for it.
+
+   ECB comes with predefined images in several different heights - so for the
+   most senseful font-heights of a tree-buffer a fitting image-size should be
+   available. The images reside either in the subdirectory "ecb-images" of
+   the ECB-installation or - if ECB is installed as regular XEmacs-package -
+   in the ECB-etc data-directory (the directory returned by
+   (locate-data-directory "ecb").
+
+ - User Option: tree-incremental-search
+   Enable incremental search in the ECB-tree-buffers. For a detailed
+   explanation see the online help section "Working with the keyboard in the
+   ECB buffers". If you change this during ECB is activated you must
+   deactivate and activate ECB again to take effect.
+
+ - User Option: tree-indent
+   Indent size for tree buffer. If you change this during ECB is activated
+   you must deactivate and activate ECB again to take effect.
+
+ - User Option: tree-mouse-action-trigger
+   When the tree-buffer mouse-action should be triggered. This option
+   determines the moment a mouse-action in a tree-buffer is triggered.  This
+   can be either direct after pressing a mouse-button (value `button-press')
+   or not until releasing the mouse-button (value: `button-release').
+
+   If you change this during ECB is activated you must deactivate and
+   activate ECB again to take effect!
+
+ - User Option: tree-navigation-by-arrow
+   Enable smart navigation in the tree-windows by horiz. arrow-keys. If not
+   nil then the left- and right-arrow keys work in the ECB tree-window in the
+   following smart way if onto an expandable node:
+
+    * Left-arrow: If node is expanded then it will be collapsed otherwise
+      point jumps to the next "higher" node in the hierarchical tree (higher
+      means the next higher tree-level or - if no higher level available -
+      the next higher node on the same level).
+
+    * Right-arrow: If node is not expanded then it will be expanded. Onto a
+      not expandable node the horizontal arrow-keys go one character in the
+      senseful correct direction.
+
+   If this option is changed the new value takes first effect after
+   deactivating ECB and then activating it again!
+
+ - User Option: tree-truncate-lines
+   Truncate lines in ECB buffers. If a buffer (either its name or the
+   variable-symbol which holds the name) is contained in this list then
+   line-truncation is switched on for this buffer otherwise it is off.
+
+   The buffer-name can either be defined as plain string or with a symbol
+   which contains the buffer-name as value. The latter one is recommended to
+   switch on line-truncation for one of the builtin ECB-tree-buffers because
+   then simply the related option-symbol can be used. To truncate lines in
+   the builtin directories tree-buffer just add the symbol
+   `ecb-directories-buffer-name' to this option.
+
+   If you change this during ECB is activated you must deactivate and
+   activate ECB again to take effect.
+
+ - User Option: truncate-long-names
+   Truncate long names that don't fit in the width of the ECB windows. If you
+   change this during ECB is activated you must deactivate and activate ECB
+   again to take effect.
+

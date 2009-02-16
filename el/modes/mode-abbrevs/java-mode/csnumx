@@ -1,0 +1,29 @@
+public static long csnum(String num)
+{
+    String num_part = num.toString();
+    int lastIdx = num.length() - 1;
+    char lastChar = num.charAt(lastIdx);
+    long multiplier = 1;
+    long kb_1 = (long)1024;
+    if ((lastChar == 'k') || (lastChar == 'K')) {
+        multiplier = kb_1;
+    }
+    else if ((lastChar == 'm') || (lastChar == 'M')) {
+        multiplier = kb_1*kb_1;
+    }
+    else if ((lastChar == 'g') || (lastChar == 'G')) {
+        multiplier = kb_1*kb_1*kb_1;
+    }
+    else if ((lastChar == 't') || (lastChar == 'T')) {
+        multiplier = kb_1*kb_1*kb_1*kb_1;
+    }
+    else if ((lastChar == 'p') || (lastChar == 'P')) {
+        multiplier = kb_1*kb_1*kb_1*kb_1*kb_1;
+    }
+
+    if (multiplier != 1) {
+        num_part = num_part.substring(0, num_part.length()-1);
+    }
+    long n = Long.parseLong(num_part);
+    return n * multiplier;
+}

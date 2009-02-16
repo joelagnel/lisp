@@ -1,0 +1,72 @@
+--------------------------------------------------------------------------
+The following is an enhanced version of the documentation string for
+cl-shell-mode (view by typing "C-hf cl-shell-mode").  To start up a
+Common Lisp process in emacs, load the file cl-shell.el, and then
+execute "M-x run-cl".  See the file example.emacs for examples of how
+to set this up in your .emacs file.
+--------------------------------------------------------------------------
+
+cl-shell-mode:
+Major mode for interacting with a Common Lisp process.  This mode
+should be entered using the command run-cl, which runs a Lisp 
+interpreter as a subprocess of Emacs, with Lisp I/O through a buffer
+named *lisp*.  Run-cl takes an optional argument which defaults to the
+value of the variable *cl-program*.  
+Variable *cl-pop-up* determines whether the *lisp* buffer pops up on
+output from the CL process.  The value can be t, 'output, 'error, or nil.
+Variable *cl-echo-commands* determines whether commands being sent to
+Common Lisp are echoed in the *lisp* buffer. 
+Variable *cl-confirm-input* determines whether carriage returns in middle
+of *lisp* buffer send the preceding S-expression directly to CL or
+require a second carriage-return.
+Variable *cl-replacement-prompt* determines whether the CL prompts
+should be replaced. 
+Variables *cl-prompt* and *cl-error-prompt* should be customized for
+the specific implementation of Common Lisp.  The defaults are correct
+for Lucid.
+
+Commands:
+The following commands are provided from within the *lisp* buffer.
+In general, the C-c C-<char> commands do not change the state of the 
+CL environment, and the C-c <char> do.
+
+RET             cl-shell-send-input	(send expression to CL if complete)
+C-M-a		cl-beginning-of-defun 	(respects prompt)
+C-a 		cl-beginning-of-line	(respects prompt)
+
+M-n		shell-yank-matching-history-forward
+M-p		shell-yank-matching-history
+C-M-y		shell-yank-history
+C-M-z		shell-yank-history-forward
+
+C-c C-c         cl-interrupt-process
+C-c a           cl-abort
+C-c b           cl-backtrace
+C-c <num>       cl-send-digit (useful for debugging)
+
+C-c .           cl-edit-definition      (lucid lisp only)
+C-c ,           cl-edit-next-definition (done in buffer package)
+C-c C-a         cl-arglist		(lucid only - done in buffer package)
+C-c C-d         cl-documentation	(done in buffer package)
+C-c C-h		cl-apropos		(done in buffer package)
+C-c C-i         cl-describe		(done in buffer package)
+C-c C-m         cl-macroexpand-1	(done in buffer package)
+C-c C-q         cl-bury-help
+
+C-c C-l		obvius-load-image	(OBVIUS only)
+C-c C-s		obvius-load-image	(OBVIUS only)
+
+Most of the C-c commands are also provided in lisp-mode buffers.  In
+addition, the following bindings are added to lisp-mode buffers:
+
+C-c C-p         cl-set-buffer-package
+C-c e           cl-eval-form
+C-c r           cl-eval-region
+C-c c           cl-compile-form  (done in buffer package)
+C-c l           cl-load-file
+C-c x           cl-compile-file
+
+Entry to cl-shell-mode calls the functions shell-mode-hook, lisp-mode-hook
+and cl-shell-mode-hook with no arguments, if any of these are non-nil.
+
+--------------------------------------------------------------------------

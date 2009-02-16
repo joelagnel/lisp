@@ -1,0 +1,2491 @@
+			     <Change Log>
+
+1.94 (99/09/05) mew-release release
+
+1.94pre4 (99/09/03) mew-dist release
+
+* To: and Cc: are preserved if fromme.
+* A patch for contrib/mew-virtual-thread.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* mew-cache-prefetch-remote.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+
+1.94pre3 (99/09/01) mew-dist release
+
+* A patch for xcite.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* A patch to contrib/mew-gnus.el.
+	Makoto Fujiwara <makoto@ki.nu>
+* IMAP caching.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+
+1.94pre2 (99/08/31) mew-dist release
+
+* Enhancing imget error check.
+* Set mew-config-list to mew-config-default if there is no case.
+* Making Mew limit-safe.
+* Killing mew-buffer-hello in mew-init.
+* mew-auto-get can be set by the hooks.
+	Xin-Zhi Zheng <zhengxz@dis.titech.ac.jp>
+* New contrib/mew-sol.el.
+	sen_ml@eccosys.com
+* A message fix.
+	Han Yeongsu <yons@zuken.co.jp>
+* A patch for contrib/mew-guess.el.
+	OBATA Noboru <obata@nippon-control-system.co.jp>
+* Highlight References when cite.
+	OBATA Noboru <obata@nippon-control-system.co.jp>
+
+1.94pre1 (99/08/30) mew-release release
+
+* Checking quoted-string in comment.
+* A patch for contrib/mew-cite-color.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+
+1.94b56 (99/08/27) mew-dist release
+
+* A patch for contrib/mew-virtual-thread.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* A bug fix for reedit.
+* Brushing up header encoding.
+* Insert "\n" if the header separator doesn't locate in the begging
+  of line.
+	Koga Youichirou <y-koga@ccs.mt.nec.co.jp>
+* Defined mew-env-hook.
+* make install-etc.
+	Ninomiya Hideyuki <nin@shikoku.ne.jp>
+* A bug fix for PGP verification.
+
+1.94b55 (99/08/26) mew-dist release
+
+* A bug fix for "r" and "E".
+* New contrib/mew-sol.el.
+	sen_ml@eccosys.com
+* Checking whether or not mew-mail-domain-list is nil at boot time.
+* Making Virtual mode more generic.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* A fix for mew-passwd-reset.
+	"Takashi P.KATOH" <p-katoh@shiratori.riec.tohoku.ac.jp>
+* A patch for contrib/mew-nmz.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+
+1.94b54 (99/08/25) mew-dist release
+
+* A bug fix for the save cache.
+* A bug fix for mew-summary-decode-pgp.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Patches to make Mew IMAP-friendly.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Making save safer.
+* A bug fix for mew-field-delete-common.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* A bug fix for mew-field-delete-for-reediting.
+	SAKAI Kiyotaka <ksakai@kso.netwk.ntt-at.co.jp>	   
+* Fixes for Makefile.
+	Ninomiya Hideyuki <nin@shikoku.ne.jp>
+
+1.94b53 (99/08/24) mew-dist release
+
+* A bug fix for C-cC-p.
+* A fix for auto-fill vs mew-draft-mode-hook.
+	SAKAI Kiyotaka <ksakai@kso.netwk.ntt-at.co.jp>
+* Defined mew-passwd-reset-timer.
+* Making "s" and "B" safer.
+* Defined mew-insert-address-list.
+* Fold header hack.
+* info/Makefile.
+* Defined mew-field-delete-common.
+* mew-field-delete -> mew-field-delete-for-reediting.
+* mew-field-delete-for-resend -> mew-field-delete-for-resending.
+* Fixes for cs and point of mew-summary-im-start.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Remote folder check in dsts.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Error message of removing quote for mew-addrbook-register.
+	Han Yeongsu <yons@zuken.co.jp>
+
+1.94b52 (99/08/19) mew-dist release
+
+* Type "." if the "Too long header" error occurs.
+* Make info hack.
+	Shun-ichi TAHARA <jado@osk4.3web.ne.jp>
+* mew-field-delete-for-saving.
+	Xin-Zhi Zheng <zhengxz@dis.titech.ac.jp>
+* Removing virtual mode when "Q".
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+
+1.94b51 (99/08/18) mew-dist release
+
+* Several IMAP-friendly stuffs. (e.g.mew-summary-imap-cache,
+   mew-summary-imap-nocache-folders)
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Defined mew-draft-mode-newdraft-hook and mew-draft-mode-reedit-hook.
+* contrib/mew-sol.el.
+	sen_ml@eccosys.com
+* Finding From: address from PGP verification messages.
+* mew-summary-im-filter{1,2}.
+* Set the current buffer for mew-summary-start-im.
+* dup1 -> dup-msgid, dup2 -> dup-subj-msgid.
+* Draft menu update.
+	"Takashi P.KATOH" <p-katoh@shiratori.riec.tohoku.ac.jp>
+* A patch for contrib/mew-guess.el.
+	OBATA Noboru <obata@nippon-control-system.co.jp>
+
+1.94b50 (99/08/16) mew-dist release 
+
+* "?" supports imgrep's dupchecktarget.
+	dup1 -> --dupchecktarget=message-id
+	dup2 -> --dupchecktarget=message-id+subject
+* contrib/mew-guess.el.
+	Shun-ichi GOTO <gotoh@taiyo.co.jp>
+	OBATA Noboru <obata@nippon-control-system.co.jp>
+* A fix for a bad macro.
+	SAKAI Kiyotaka <ksakai@kso.netwk.ntt-at.co.jp>
+
+1.94b49 (99/08/16) mew-dist release
+
+* C-cC-pC-d in Draft can set privacy services of C-cC-m.
+* Support for imget's assoc. (Set mew-use-imget-assoc to t)
+
+1.94b48 (99/08/13) mew-dist release
+
+* The PGP cache mechanism is generalized. You can cache passwords for
+  imget. Set mew-use-cached-passwd to t. Good-bye, impwagent.
+* Deleted mew-addrbook-downcase-address. Defined 
+  mew-assoc-member-case-equal instead.
+* Fixed the byte-compile vs XEmacs problem.
+* Always set mew-decode-syntax for reply.
+* A patch for mew-field-spec vs visible.
+	Shuichi KITAGUCHI <kit@Mew.org>
+
+1.94b47 (99/07/31) mew-dist release
+
+* Code for <> mew-header-encode-addr.
+* Document fixes for Draft mode.
+
+1.94b46 (99/07/30) mew-dist release
+
+* New contrib/{mew-mailto,rfc2368}.el
+	sen_ml@eccosys.com
+* A patch for contrib/mew-browse.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Makefile fix.
+* Removing mew.jis.info-* from Makefile.
+* A tiny fix for mew-draft.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Fix mew-cs-pick in mew-win32.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+
+1.94b45 (99/07/30) mew-dist release
+
+* Existence check for PGP.
+* Info were updated.
+* Function explanations were updated.
+
+1.94b44 (99/07/26) mew-dist release
+
+* Bug avoidance for XEmacs's read-only property.
+* A bug fix for mew-ask-subject vs. C-g.
+	TAKAHASHI Masafumi <mta@kt.rim.or.jp>
+* Defined mew-addrbook-switch.
+* A bug fix for undo in Draft.
+* C-cC-v -> mew-pgp-select.
+* Enabling timer on Meadow.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+
+1.94b43 (99/07/23) mew-dist release
+
+* Toggling mew-protect-privacy-*. (C-cC-p{C-a,C-e} in Draft)
+* Key assignments for FIB were changed.
+* PGP selection mechanism.
+* Ignoring the protocol/micalg parameter.
+* The passphrase prompt tells PGP version.
+* A patch for contrib/mew-gnus.el.
+	Koji Arai <JCA02266@nifty.ne.jp>
+* Resolved duplicated folders in .folders.
+* Used "function" for mapcar.
+* Now attachments includes the preceding \n.
+* X-Mew: -> chocolate. Bag PGP sign -> red.
+* Defined mew-use-timer.
+* A patch for contrib/mew-nmz.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Added mew-make-message-hook.
+* C-cC-p checks the PGP boundaries in a message file unless they exist
+  in Message mode.
+* A patch for mew-summary-goto-folder-subr.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* mew-refile-auto-refile-confirm is default to nil.
+* Property code was revised.
+* Putting read-only after attachments.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Bug fixes for C-cC-r in Draft 
+	KOIE Hidetaka <koie@suri.co.jp>
+
+1.94b42 (99/07/15) mew-dist release
+
+* mew-input-passwd ignores control characters.
+* mew-pgp-cached-passphrase is clear when PGP fails.
+* A bug fix for wrong passphrase of PGP 5.
+* "." decrypts undecrypted messages.
+* Brushed up prefetch function calls
+* Adding cancel-timer to mew-pgp-clean-up.
+
+1.94b41 (99/07/15) mew-dist release
+
+* C-cC-p in Summary to verify/decrypt old-fashioned PGP messages.
+* C-cC-r in Draft to mew-pgp-encrypt-sign-letter.
+* A new contrib/mew-virtual-thread.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* A new contrib/mew-nmz.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* (auto-save-mode nil) in Draft mode so that the ".save-*" files 
+  don't remain.
+* Insert (sit-for 0 1) into mew-pgp-passphrase to fix a timing
+  problem.
+* PGP-clean-up when quitting.
+* Made mew-header-decode-regex more specific.
+* Removed mew-toolbar-clean-up. Used redraw-frame instead.
+* Put save-buffer into mew-draft-kill.
+
+1.94b40 (99/07/14) mew-dist release
+
+* A timeout mechanism of PGP passphrase.
+* A caching mechanism of PGP passphrase.
+
+1.94b39 (99/07/13) mew-dist release
+
+* Automatic PGP is supported. 
+  See mew-protect-privacy-{always,encrypted}{,-type}.
+* Fixing the nconc vs. mew-folder-list problem.
+* s/-geom/-geometry/g
+	MUKOUCHI Takafumi <muko@cslab.kecl.ntt.co.jp>
+* A bug fix for prefetch.
+* A bug fix for refile vs Japanese.
+* mew-cache is now in the (new ... old) order to make the code
+  simpler.
+
+1.94b38 (99/07/13) mew-dist release
+
+* (set-buffer-modified-p nil) for mew-summary-search-mark.
+* Defined mew-addrbook-override-by-newone.
+* Bug fixes for mew-addrbook-setup.
+* Defined mew-buffer-draft-clean-up. Removing Mew's buffers very carefully
+  when quit.
+* Brushing up setcdr and nconc.
+* An appropriate attachdir is removed when entering Draft mode.
+* mew-mime-compose-folder-delete was removed.
+* A bug fix for mew-window-configure, where the height of Summary mode 
+  is not odd... (Why does this bug still exist? sigh.)
+* A bug fix for mew-summary-refile-report.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* Added get-buffer-create to mew-pop-to-buffer.
+* A patch of mew-summary-setup-mode-line for Virtual mode.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* contrib/mew-toolbar-frame.el.
+	Shun-ichi TAHARA <jado@osk4.3web.ne.jp>
+* A patch for the problem of mew-draft-mode-hook vs 
+  mew-summary-reply-with-citation.
+	Ninomiya Hideyuki <nin@shikoku.ne.jp>
+* A new contrib/mew-refile-view.el.
+	"Takashi P.KATOH" <p-katoh@shiratori.riec.tohoku.ac.jp>
+* A patch for cases and password.
+	Shuichi KITAGUCHI <kit@Mew.org>
+
+1.94b37 (99/06/28) mew-dist release
+
+* Learning short name in Draft only when 
+  mew-addrbook-append-domain-p is t.
+* A bug fix for Content-* for Multipart/Encrypted.
+* Removing the mew-buffer-whom garbage.
+* Adding 1999 to copyrights.
+* Moved the definition of mew-coding-system-p to mew-mule*.el for
+  XEmacs without the Mule feature.
+* Use read-passwd if bound.
+
+1.94b36 (99/06/25) mew-dist release
+
+* mew-split can handle quote open and quote close independently.
+* Shortname expanding hack.
+	See mew-addrbook-unexpand-regex and mew-addrbook-append-domain-p.
+* A bug fix for "mr".
+* s/set-keymap-parent/mew-set-keymap-parent/g.
+
+1.94b35 (99/06/24) mew-dist release
+
+* Visual Addrbook registration.
+* save-buffer after make-message.
+* Support install-info.
+	(KOSEKI Yoshinori) <kose@wizard.tamra.co.jp>
+* If ctext-unix is bounded, use ctext-unix for mew-cs-virtual 
+  instead of ctext.
+* Decoding header even if mew-decode-DECODE is nil. Only when
+  over the limit, decoding is suppressed. This fix the bug of
+  mew-summary-save for a message whose header is not well ordered.
+* Since the current mew-summary-save can store part 1 of the
+  message, text/plain with CDP: for part 1 is displayed with its
+  header. This resolves the bug of a message whose header has
+  CDP:.
+* contrib/mew-virtual-thread.el
+	"Hideyuki SHIRAI" <shirai@rdmg.mgcs.mei.co.jp>
+* A patch for mew-win32.el.
+	Shuichi Kitaguchi <kit@Mew.org>
+* A bug fix for "E".
+* A patch for mew-refile-guess-by-alist2.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+
+1.94b34 (99/06/22) mew-dist release
+
+* A bug fix for the C-cC-l vs C-y (in Draft) problem.
+* A bug fix for "r".
+* Ad-hoc fix for broken Solaris /bin/mail.
+* Removing append. Use setcdr, instead.
+* C-cC-a -> adding aliases. C-uC-cC-a -> adding personal info.
+* mew-addrstr-canonicalize-address does not append mew-mail-domain
+  if addresses end with ";".
+* mew-header-arrange hack for the case of no visible fields.
+* mew-draft-cite hack for xcite.
+
+1.94b33 (99/06/09) mew-dist release
+
+* Use identity instead of (lambda (x) x).
+* Standardized the usage of replace-math.
+* C-cC-a for mew-summary-alias-add.
+* Unified mew-input-address{,2}.
+* Removing mew-header-insert-ascii-{text,addr}. Defined
+  mew-header-fold-region, instead.
+* Patches for RFC 2047 decoding.
+	Shun-ichi GOTO <gotoh@taiyo.co.jp>
+* Bug fixes for mew-header-arrange.
+* Removed C-cC-w in Draft mode. Aliases are now expanded before sending.
+* Sophisticated mew-draft-{make-message,send-letter}.
+* A patch for mew-refile.el.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* A bug fix for buffer-read-only in Summary mode.
+* Defined mew-addrstr-canonicalize-address. All function concerned with
+  addresses should use this.
+* A bug fix for ",".
+
+1.94b32 (99/06/04) mew-dist release
+
+* A bug fix for mew-header-set.
+* One patch for contrib/mew-cite-color.el.
+* A bug fix for mew-mode-input-file-name.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Removed erase-buffer. Used mew-erase-buffer instead.
+* Defined mew-elet. Removed buffer-read-only and inhibit-read-only.
+* A bug fix 
+* mew-refile-auto-refile-confirm.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* Brushing up resend.
+
+1.94b31 (99/06/03) mew-dist release
+
+* Info updates.
+* A bug fix for wrong Subject: on forwarding.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* A bug fix for Aliases vs NULL.
+* The markers for header and attachments region were removed.
+  Resolved the insert-before-markers dilemmas.
+* Functions for file attributes are well-organized.
+* Cashing for save.
+* mew-refile.el. See info.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* A bug fix for mew-summary-folder-name.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+
+1.94b30 (99/05/28) mew-dist release
+
+* mew-summary-burst is completely re-written.
+* mew-summary-save is completely re-written.
+* Resend is now like reedit.
+* "D" in Summary removes all messages in +trash.
+* The default range of +trash became "update".
+* mew-addrstr-extract-user removes Notes domain parts.
+* mew-refile-guess-by-default now makes use of e-mail domain.
+
+1.94b29 (99/05/20) mew-dist release
+
+* mew-cs-{dummy,binary,text-for-read,text-for-write}
+* Diff for contrib/mew-browse.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* mew-toolbar-clean-up.
+
+1.94b28 (99/05/20) mew-dist release
+
+* contrib/mew-browse.el
+	Shuichi Kitaguchi <kit@Mew.org>
+* Info updates:
+* A bug fix for mew-draft-header.
+
+1.94b27 (99/05/19) mew-dist release
+
+* A bug fix for C-u a vs insert-before-markers.
+* Charset is displayed not only for text/plain but also for text/*.
+* Added "nil t" to re-search-*.
+* "range" is asked only when "s" is called interactively.
+
+1.94b26 (99/05/17) mew-dist release
+
+* SPC is allowed after "," in Addrbook
+* Anonymous recipients and PGP.
+* Info updates.
+* Defined mew-use-nickname instead of mew-use-petname.
+* Putting readonly on "\n" after "----".
+* Some hacks for the RFC 2047 encoding.
+* mew-end-of-{message,part}-string is implemented by overlay.
+  So, this feature is now available on XEmacs.
+* Address selection of mew-summary-reply for To: and Cc: was brushed up.
+* Defined mew-draft-header-insert-address and
+  mew-header-parse-address-list2.
+* mew-column was buggy. Used current-column instead.
+* Demonstration is skipped if Emacs is executed without X.
+* Removed mew-{alias,addrbook}-comment-string.
+  Defined mew-{alias,addrbook}-comment-regex, instead.
+  "#" is comment. ";" is comment only if it locates on the beginning of
+  lines.
+* Check no-dir before mew-buffers-init.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* An alternative implementation for mew-end-of-message-string.
+* Use 'backspace for define-key on XEmacs.
+* Moved (make-local-variable 'mail-header-separator) to mew-draft-mode().
+* Some contrib/{bbdb-*,*mail*}.
+	sen_ml@eccosys.com
+* New contrib/mew-nmz.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+
+1.94b25 (99/04/26) mew-dist release
+
+* New contrib/00readme-namazu.jis.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Defined mew-use-config-imget-for-draft.
+* Clearing the undo list in Draft mode.
+* mew-namazu.el -> mew-nmz.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Defined mew-user-agent-compose.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Defined mew-unhighlight-header-region.
+* Require highlight-headers instead of autoload. Added mew-which-el.
+
+1.94b24 (99/04/22) mew-dist release
+
+* Deleting unnecessary null lines in a header when composed.
+* One bug fix for mew-summary-display-asis.
+	OBATA Noboru <obata@nippon-control-system.co.jp>.
+* Defined mew-use-text/enriched. On Emacs 19/Mule 2.3, this is nil by
+  default.
+* Made mode-line better.
+* mew-mule-version -> mew-mule-ver.
+* Unset the enriched submode.
+* A bug fix for "f".
+* Fixed the refile vs next-encrypted message problem.
+* Use message instead of error when decoding is quitted.
+	kyota@po.ntts.co.jp (Kyotaro HORIGUCHI)
+
+1.94b23 (99/04/18) mew-dist release
+
+* It appeared that changing mew-cs-draft to ctext is a bad idea. So,
+  got it back to ss2 and resolved the Latin-1 problem with ad-hoc manner.
+
+1.94b22 (99/04/16) mew-dist release
+
+* Fixed the property problems in Draft mode.
+* Support text/enriched. Read only.
+* 7bit-ss2 -> ctext. (to fix the Latin-1 problem on Emacs 20.3)
+* clean and rm refer to mew-use-immv.
+* A used entry comes to the top of mew-alias-auto-alist anyway.
+* Yet another bug fix for mew-summary-save.
+* Fixed the mc-flag vs. APEL problem.
+* A patch for mew-cite-color.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Three patches for mew-namazu.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* The scan sentinel vs save-excursion patch.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* mew-summary-show-direction is 'next by default.
+* mew-use-folders-file-p is t by default.
+
+1.94b21 (99/04/05) mew-dist release
+
+* ctext-unix -> ctext.
+* A bug fix for refile on part.
+* A bug fix for X-Face:.
+* Several patches for contrib/*.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* Mark bug fix.
+* One more bug fix for References: creation.
+* A bug fix for mew-summary-display-after.
+
+1.94b20 (99/04/02) mew-dist release
+
+* mew-summary-display families are drastically simplified.
+* A bug fix for References creation. mew-gnus.el is also fixed.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Cache prefetch is quitted if the message contains Multipart/Encrypted.
+* mew-summary-display-asis is assigned to ",".
+* Throw away M-a mechanism. Thanks to the cache prefetch, non-MIME
+  analysis becomes meaningless. Use "," if you want to see the raw
+  message.
+* A bug fix for mew-addrbook-alias-get1.
+* A bug fix for mew-chop.
+* mew-addrbook-clean-up before mew-config-clean-up.
+	Murata Takashi <Takashi.Murata@nsgnet.co.jp>
+* Changed face "t" to "'default" for XEmacs.
+* Defined mew-prog-text/html-arg-hack.
+  Enjoy: (setq mew-prog-text/html-arg-hack 'mew-prog-text/html-netscape-remote)
+
+1.94b19 (99/04/01) mew-dist release
+
+* Used intern-soft to prevent warnings.
+* Generic mechanism to check existence of multiple Addrbook files.
+* Deleted file-name-coding-system mew-cs-noconv from 
+  mew-summary-scan-body.
+* A bug fix for mew-mime-message/rfc822 to set end-of-header correctly.
+* X-Face: entry to mew-field-database.
+* A bug fix for mew-summary-auto-refile.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* A bug fix for mew-summary-cache-prefetch in the case that
+  messages don't exist.
+
+1.94b18 (99/03/31) mew-dist release
+
+* Visuality of Content-* is configurable by mew-field-spec.
+* Bug fixes for cache prefetch vs too large.
+* Simplified code for IMAP and NetNews.
+* Defined mew-use-immv.
+* Set mode hack.
+	Takuro Horikawa <takuroho@tky3.3web.ne.jp>
+* A bug fix for mew-refile.el.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* mew-{summary,draft}-preserve-dir.
+* Quoting hack for Addrbook.
+	Atsushi Nemoto <nemoto@toshiba-tops.co.jp>
+* New mew-namazu.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+
+1.94b17 (99/03/30)
+
+* Re-defining CS mechanism for pick and virtual mode.
+* Defined mew-char-width for pure XEmacs.
+* A bug fix for X-face.
+* Yet another bug fix for mew-summary-save.
+* Removing append from mew-refile.el.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* contrib/mew-namazu.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+	Takeshi ITOH <titou@bits.co.jp>
+* contrib/mew-cite-color.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+
+1.94b16 (99/03/29)
+
+* Cache prefetch!!!
+* Set mew-cs-virtual to ctext.
+* mew-draft-keyswitch for M-C-I.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* One more bug fix for mew-summary-save.
+* A bug fix for mew-field-delete-for-forwarding.
+	Xin-Zhi Zheng <zhengxz@dis.titech.ac.jp>
+* Defined mew-addrbook-downcase-address.
+
+1.94b15 (99/03/23) mew-dist release
+
+* C-i and M-C-i in header.
+	ka[C-i] -> kazu
+	kazu[C-i] -> kazu@mew.org
+	kazu@[C-i] -> kazu@mew.org
+	kazu@mew.org[C-i] -> kazu@iijlab.net
+	kazu@iijlab.net[M-C-i] -> Kazu Yamamoto <kazu@iijlab.net>
+* Separating refiling and aliases. Created mew-addrbook.el. Now, 
+  addresses on To: and/or Cc: in Draft mode is automatically learned.
+* Refile for NetNews. (Need to hack immv)
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Defined mew-field-delete-for-forwarding.
+* A bug fix for "E" in the case of +draft.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+1.94b14 (99/03/19) mew-dist release
+
+* Bug fix for E in the case of multipart.
+* mew-use-symbolic-link-for-forwarding is defined.
+* Brush up my addresses stuff.
+* mew-summary-save certainly stores the original message if
+  the target is message/rfc822.
+* mew-complete displays how to expand explicitly.
+* browse-url-or-mew update.
+	Shuichi Kitaguchi <kit@Mew.org>
+* Supporting GNU Emacs on Windows NT and Windows 95/98.
+	Shuichi Kitaguchi <kit@Mew.org>
+
+1.94b13 (99/03/10) mew-dist release
+
+* PDF support.
+	KOIE Hidetaka <koie@suri.co.jp>
+* CaseConfigInbox patch.
+	Kazuteru Okahashi <okahashi@nets.ne.jp>
+* Mew.png is read as binary on XEmacs. (against dired's side effect.)
+* Suspend vs buffer patch.
+	Ken-ichi Yamamoto <yamamoto@konami.co.jp>
+* euc-korea -> euc-kr.
+	Shun-ichi TAHARA <jado@fsinet.or.jp>
+* More Chinese support: Big5, GB2312, HZ.
+* Synchronizing mew-gnu.el to Mew's references creation.
+	Makoto MATSUSHITA <matusita@ics.es.osaka-u.ac.jp>
+* Bug fixes for mew-pgp-verify-check.
+* Eliminating bin/configure.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* New mew-fib.el.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+
+1.94b12 (99/03/02) mew-dist release
+
+* Defined mew-attach-link-message and assigned to "y".
+* Ensuring the first argument of nthcdr() is non-negative.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* A patch for mew-inbox-folder().
+	Makoto MATSUSHITA <matusita@ics.es.osaka-u.ac.jp>
+* A patch for mew-caesar.el.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+* A typo fix for mew-join.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+1.94b11 (99/03/01) mew-dist release
+
+* Adding PGP key is now conformant to C-cC-e convention.
+* Some function concerned with string were re-written for memory
+  efficiency.
+
+1.94b10 (99/02/27) mew-dist release
+
+* If a message size is larger than mew-file-max-size, Mew insert only 
+  mew-file-max-size byte of the file into Message buffer.
+* A patch to prevent infinite loop when typing "m r RET".
+	KOIE Hidetaka <hide@koie.org>
+* A patch for mew-fib.el so that contrib/mew-ff.el works.
+	OBATA Noboru <obata@nippon-control-system.co.jp>
+* Introducing mew-sort-default-key-alist.
+	Toru YANO <ytoru@s-fine.co.jp>
+* One patch for mew-gnus.el.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* "i" selects inbox name according to config cases. The mew-inbox-folder
+  and mew-inbox-folders function are defined.
+
+1.94b9 (99/02/25 Happy Birthday!) mew-dist release
+
+* mew-overlay-p for XEmacs sees if the overlay is alive or not.
+* Replaced th-tis620 to tis620 to get along with both Emacs 20.3 and
+  XEmacs 21.0. XEmacs 20.4 provides an empty thai.el so tis620 is not
+  available on that XEmacs.
+* Set an appropriate error message for GNUPG.
+* Bug fix for mew-pgp-encrypt-check. (A very careless mistake, sorry.)
+* Re-wrote References: creation when reply. And defined
+  mew-references-max-count.
+* mew-refile patch.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* mew-alias-comment-characters.
+* contrib/mew-ff.el.
+	OBATA Noboru <obata@nippon-control-system.co.jp>
+
+1.94b8 (99/02/23) mew-dist release
+
+* Now you can pick on XEmacs.
+* Sanity hack for MIME parameter.
+	Shun-ichi GOTO <gotoh@taiyo.co.jp>
+* Invalid public key handle for PGP 5.x.
+* C-u a now replys to From: only.
+	Shun-ichi GOTO <gotoh@taiyo.co.jp>
+* Coding system hack for undo in Draft mode.
+	Shun-ichi GOTO <gotoh@taiyo.co.jp>
+* Deleting overlays in Message mode and in Draft mode.
+* Divided mew-version.
+	Ken-ichi Yamamoto <yamamoto@konami.co.jp>
+
+1.94b7 (99/02/17) mew-dist release
+
+* A bug fix for the +draft vs. "E" problem.
+* Defined mew-set-keymap-parent for mew-draft-body-map.
+	Shun-ichi GOTO <gotoh@taiyo.co.jp>
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+	Kennichi Yamamoto <yamamoto@konami.co.jp>
+* A fix for mew-pgp-set-version.
+	Hideyuki SHIRAI <shirai@rdmg.mgcs.mei.co.jp>
+	Shun-ichi GOTO <gotoh@taiyo.co.jp>
+* Fixes for mew-prog-pgpk-ext-arg.
+	Chifumi Hayashi <chifumi@mscom.or.jp>
+	MIYAJIMA Mitsuharu <miya@osk.3web.ne.jp>
+* Set mew-highlight-url-max-size to 10000.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Even if the number of field lines is 1 and its length is over max,
+  no folding for 'unstruct field in ASCII only.
+* Deleted "\t" from mew-draft-body-map.
+	Shun-ichi GOTO <gotoh@taiyo.co.jp>
+
+1.94b6 (99/02/15) mew-dist release
+
+* If an error occurs in PGP/MIME creation, Mew automatically does undo.
+* RFC 2231, MIME parameter extensions.
+* Parameter insertion is sophisticated. i.e. folding and quoting
+* More error handling on RFC 2047 header encoding.
+
+1.94b5 (99/02/13) mew-dist release
+
+* inhibit-read-only for the entire mew-draft-make-header.
+* Check the string "Pretty Good Privacy(tm) 2" for PGP 2.3.
+* Auto flush after scan.
+  Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+* mew-header-insert-ascii-addr makes use of the last white space.
+* Explicitly causes an error if non-ASCII characters are contained in
+  quoted-string in the header.
+
+1.94b4 (99/02/12) mew-dist release
+
+* MIME-Version: is inserted when C-c C-m.
+* BIG5 support (not tested).
+* GNUPG support.
+* Several bugs of RFC 2047 are fixed.
+
+1.94b3 (99/02/08) mew-dist release
+
+* Multiple burst. (M-b)
+* Deleting (mew-current-set 'message nil) from mew-window-configure.
+* If mew-highlight-mark-folder-list is t, marked lines in all folders 
+  are highlight.
+* Defined mew-syntax-format-hook.
+* A bug fix for message/delivery-status.
+* A bug fix for mimedecodequoted.
+	Murata Takashi <Takashi.Murata@nsgnet.co.jp>
+* Several type definitions.
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+* A new entry "x-ml-count" for mew-sort-key-alist.
+	nakaji@zeisei.dpri.kyoto-u.ac.jp
+* mew-config-insert-when-composed for PGP encoding.
+	Akihiro Motoki <motoki@ptl.abk.nec.co.jp>
+
+1.94b2 (98/11/24) mew-dist release
+
+* rear-nonsticky for attachments.
+	Mikio Nakajima <minakaji@osaka.email.ne.jp>
+* Specifying the --mimedecodequoted option to imget and imscan 
+  according to mew-decode-quoted.
+* MIME decodings checks CTE: values for composite CT:s.
+* Prevent applying X-GIP64 to message/* and multipart/*.
+* mew-prog-tiff for mew-win32.el
+	Hideyuki SHIRAI <Shirai@rdmg.mgcs.mei.co.jp>
+* mew-folder-list hack for msdos file system.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* "=" hack for mew-gnus.el.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-require-final-newline.
+	"YAMAGUCHI, Shuhei" <yamagus@kw.netlaputa.ne.jp>
+* mew-decode-quoted.
+	SASAKI Takeshi <sasaki@sysrap.cs.fujitsu.co.jp>
+* mew-refile-view.el.
+	"Takashi P.KATOH" <p-katoh@shiratori.riec.tohoku.ac.jp>
+* A patch to mew-gnus.el.
+	SAITO Tetsuya <tetuya-s@is.aist-nara.ac.jp>
+
+1.94b1 (98/10/21) mew-dist release
+
+* mew-uniq-variables.
+* EUC KR patch.
+	Han Yeong Su <yons@zuken.co.jp>
+* Define mew-summary-mark-direction.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* The text demo for xemacs -nw.
+	Naoki Wakamatsu <s1031159@u-aizu.ac.jp>
+* Introducing mew-summary-prepare-draft to mew-gnus.el.
+	Mito <mit@nines.nec.co.jp>
+* And mew-gnus.el fix related to the References hack.
+	Han Yeongsu <yons@zuken.co.jp>
+* References hack.
+	Mito <mit@nines.nec.co.jp>
+* mew-sort.el fixes.
+	"Takashi P.KATOH" <p-katoh@shiratori.riec.tohoku.ac.jp>
+* Use mew-save-dir instead of default-directory in mew-ext.el.
+	Hideyuki SHIRAI <Shirai@rdmg.mgcs.mei.co.jp>
+* Two patches for mew-gnus.el.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Modeline of Summary mode tells that subprocess is running.
+	Yoshiaki Kasahara <kasahara@nc.kyushu-u.ac.jp>
+
+
+1.93 (98/09/05) mew-release release
+
+1.93pre4 (98/09/03)
+
+* Due to my typo, Latin-1 in header was treated as unknown in Emacs 19. 
+  Sorry!
+
+1.93pre3 (98/09/01)
+
+* Load refile nits only at boot time.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* nconc fix.
+* Temp dir fix.
+
+1.93pre2 (98/08/31)
+
+* Message handling for imget.
+	Murata Takashi <Takashi.Murata@nsgnet.co.jp>
+* Fix for mew-summary-sort-subr.
+	Akihiro Motoki <mokkun@bigfoot.com>
+* Kill whom buffer when sent.
+	Akihiro Motoki <mokkun@bigfoot.com>
+* A patch for goto-folder.
+	wkenji@flab.fujitsu.co.jp
+* mew-alias-setup checks mew-alias-file.
+
+1.93pre1 (98/08/24)
+
+* Version strings are updated.
+* The item 3 of copyright is deleted.
+* Bug fix for mew-message-narrow-to-page when ^Ls are continued.
+
+1.93b56 (98/08/22)
+
+* Header highlight problem for reedit with Config: is fixed.
+* mew-expand-folder allows absolute path.
+* Defined mew-string-as-multibyte to get along with Emacs 20.3.
+* Fix for an unnecessary null line when a draft is prepared.
+* mew-get-header-value extract only one From: field to get along with
+  new x-face-mule.el.
+* Deleted contrib/mew-xface-mule.el.
+* Defined mew-uniq-list. Obsoleted mew-refile-list-uniq.
+
+1.93b55 (98/08/19)
+
+* Bug fix of header encoding for comment.
+* Delete append from mew-refile as much as possible.
+* Deleted mew-member. Use member instead.
+* Multiple alias files are allowed.
+* Run mew-message-hook in mew-summary-insert.
+	Makoto MATSUSHITA <matusita@ics.es.osaka-u.ac.jp>
+* Yet another alias patch for continuous line.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Message analysis for messages in +draft is controlled by mew-debug.
+* PNG patches for OS/2.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Alias patch.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+1.93b54 (98/08/15)
+
+* Defined mew-draft-before-composition-only.
+* Yet another header encoding.
+* Alias setup by Elisp.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Bug fix for status update.
+	kyota@po.ntts.co.jp (Kyotaro HORIGUCHI)
+* Remove exception of mew-summary-display. Messages in the draft folder
+  are analyzed then displayed.
+* When reedit, decode header if CT: is text/plain.
+* Got rid of mew-virtual-mode-map from mew-caesar.el.
+	Hideyuki SHIRAI <Shirai@rdmg.mgcs.mei.co.jp>
+* mew-ask-subject fix.
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>
+
+1.93b53 (98/08/11)
+
+* Use char-equal instead of equal, sigh. On XEmacs " " has not been
+ encoded as "_" with quoted-printable but "=20"....
+* Define values for primitive field-names.
+* Update documentations.
+* Fix for mew-highlight-url-max-size.
+	Atsushi Nemoto <nemoto@sord.co.jp>
+* Deleted mew-virtual-mode-map thanks to mew-summary-only.
+* The default value of mew-use-cursor-mark is nil.
+* Displaying CTE: for application/octet-stream.
+	Atsushi Nemoto <nemoto@sord.co.jp>
+
+1.93b52 (98/08/04)
+
+* Bug fix for mew-summary-convert-local-cs.
+* mew-mark-clean-up before mew-buffers-clean-up.
+* Bug fix for mew-summary-scroll-{up,down}
+* Small patch to mew-env.el.
+	Mito <mit@nines.nec.co.jp>
+* Patch to mew-os2.el to get along with Mule 3.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Clean up mew-header.el.
+* Bug fix for mew-string<.
+* mew-config-clean-up was added to mew-summary-quit.
+	Satoshi Yatagawa <yatagawa@mitaka.ntt-at.co.jp>
+
+1.93b51 (98/08/01)
+
+* CDP: is used for the temporary file to pass an external program.
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+* Ensuring overlay-arrow-{string,position} is buffer-local.
+* mew-local-variable-p again.
+* Defined mew-use-cursor-mark.
+	Mito <mit@nines.nec.co.jp>
+* Deleted mew-folder-alist-reverse. Sort mew-folder-alist with
+  mew-string< instead.
+* Define mew-lc-kana for non-Mule.
+* Tiny fix for mew-refile-guess-by-newsgroups.
+	NAGAO Tadaaki <nagao@iij.ad.jp>
+
+1.93b50 (98/07/30)
+
+* mew-prog-audio2 for Win.
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+* Even unless MIME analysis, RFC 2047 header decoding is applied.
+* Cleaning up setup, clean-up, clear, and init functions.
+* Let "ma" not to mark multipart.
+* One more bug fix for toolbar.
+* One more bug fix for mew-attach-audio.
+* Bug fix for join.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+
+1.93b49 (98/07/26)
+
+* Get along with XEmacs compiled with --without-toolbars.
+	Naoki Wakamatsu <s1031159@u-aizu.ac.jp>
+* If attachments are not valid, make single.
+* Yet another bug fix for mew-draft-header-keymap.
+* mew-summary-ls preserves preview marks if range is "all".
+  Is this desired?
+* mew-summary-folder-cache-save deletes mew-decode-syntax if printed.
+* Clear decode-syntax markers if nothing is printed.
+* Bug fix for attach-audio.
+* Fix for message search for pick.
+* The scroll-up problem of forward is fixed.
+* The cursor position problem of forward is fixed.
+* The boundary problem of overlay is fixed.
+
+1.93b48 (98/07/18)
+
+* widen for mew-summary-folder-cache-save.
+	"Takashi P.KATOH" <p-katoh@shiratori.riec.tohoku.ac.jp>
+* Set inhibit-read-only to t in draft-undo.
+* Bug fix for CD: encoding.
+* Specify cs-draft for make-backup and undo.
+* Typo fix for mew-addrstr-parse-address.
+	TSUMURA Tomoaki <tsumura@kuis.kyoto-u.ac.jp>
+* rear-nonsticky for header separator.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>	
+* Bug fix for read-only header separator when undo.
+* Only parameter value can be quoted.
+* Define mew-header-sanity-check.
+* Header encoding now gets along with Emacs 20.2.
+* Add mew-mule.el to Makefile.
+
+1.93b47 (98/07/16)
+
+* Define mew-aref and mew-charlen to support all Mule versions.
+* s/redist/resend/g.
+* mew-addrstr-parse-syntax-list checks mew-header-max-depth.
+* Tiny fix for mew-summary-redist.
+	Takeshi Itoh <titou@bits.co.jp>
+* Make attachments read-only.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-summary-save sets file to nil if the charset of filename 
+  is unknown.
+* mew-charset-sanity-check is defined.
+* New RFC 2047 header encoding.
+* Make mew-gnus.el synchronized with mew-header.el.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+1.93b46 (98/07/11)
+
+* Fixes of draft toolbar.
+* mew-syntax-number bug fix for XEmacs.
+* mew-draft-mode-map inherits mew-draft-body-map if 
+  mew-use-overlay-keymap is t.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Corporate with Emacs which returns mule-version of 4.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-attach-undo clears decrypters.
+* Defined mew-summary-clear-end-of.
+* Bug fix of mew-end-of-* for mew-summary-insert.
+	Hideyuki SHIRAI <Shirai@rdmg.mgcs.mei.co.jp>
+* mew-header.el is drastically modified.
+* Integrated mew-split, mew-header-split, mew-split-number.
+* s/equal/mew-case-equal/g if necessary.
+* s/string-equal/string=/g.
+* Added missing options for search-forward.
+	Hideyuki SHIRAI <Shirai@rdmg.mgcs.mei.co.jp>
+* Make (setq mew-use-overlay-keymap nil) work on Emacs 19.34.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Mark patch for mew-gnus.el.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+1.93b45 (98/07/05)
+
+* Two bug fixes for mew-ext.el.
+	Kenichiro MATOBA <Kenichiro.Matoba@Sun.COM>
+* mew-draft-keyswitch is back.
+* mew-draft-show-attach deletes only glyph extents.
+* mew-pgp-verify-check checks if the signature is supported or not.
+* mew-pgp-verify-check bug fix.
+	Masachika ISHIZUKA <ishizuka@ish.org>
+* Don't assign mew-attach-dummy for C-u. 
+	Mito <mit@nines.nec.co.jp>
+* Keymap of attachments also uses overlay.
+* Bug fix for mew-highlight-body.
+
+1.93b44 (98/07/02)
+
+* Obsolete mew-header-insert-value. Use mew-complete-insert instead to
+  use right colors.
+* mew-message-set-end-of now sees if extents exist.
+* Separated mew-summary-display-part to mew-mime-part so that
+  mew-end-of-* are displayed correctly.
+* Obsoleted mew-message-citation. Use marker instead.
+* Changed convention of marker naming.
+* s/jepg/jpeg/g.
+	k-morito@sdl.hitachi.co.jp
+* Replaced defun with defmacro in mew-mule*.el.
+* Make mew-cs-post-conv safer.
+
+1.93b43 (98/07/01)
+
+* Mew now takes care of composite character set like tis620!!
+* Define mew-header-insert-value.
+* mew-refile-guess-by-folder is now customizable by 
+  mew-refile-guess-key-list.
+* Check if mew-buffer-hello exists when kills it.
+	Akihiro Motoki <mokkun@bigfoot.com>
+* widen when replys.
+* widen when inserts end-of-*.
+
+1.93b42 (98/06/30)
+
+* Bug fix for local-map of draft header.
+* Bug fix for end-of-*.
+* Define mew-frame-id to make unique string independent on 
+  frame-title-format.
+	Masahiro MURATA <muse@ba2.so-net.ne.jp>
+* Add an optional argment to mew-draft-{yank,cite} to cooperate with 
+  xcite.el.
+* Syntax fixes for mew-mule0.el.
+	Mark Burton <markb@ordern.com>
+* A patch for mew-summary-virtual.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+
+1.93b41 (98/06/26)
+
+* Use overlay-arrow-string for mew-end-of-message-string and 
+  mew-end-of-part-string.
+* mew-draft-keyswitch is now obsoleted. Use the 'local-key property instead.
+* Use set-window-start to the header and attachments visible.
+* Bug fixes for the header separator.
+* Marker bug fixes.
+* Bug fix for header separator of reedit.
+* Deleting the variables to prevent warning due to many side effects, sigh.
+
+1.93b40 (98/06/24)
+
+* Use PNG for opening instead of XPM.
+* Use valid-image-instantiator-format-p instead of featurep.
+* Defined mew-summary-reply-position and
+  mew-summary-reply-with-citation-position.
+* Marker stuff was brushed up.
+* mew-summary-reply-with-citation sets disp-msg on anyway.
+* mew-draft-cite and mew-summary-reply select a buffer from where
+  header info is retrieved in the following order:
+	(1) Message buffer if header exists
+	(2) Cache buffer if exists.
+  Typing "a" on a part (not on a message) means replying to the
+  part(e.g. message/rfc822). So, prefix argument of mew-summary-reply
+  was removed.
+* mew-current-{get,set} is now frame-local.
+* Bug fix for insert.
+	TAKAHASHI Masafumi <takahasi@soft.nid.co.jp>
+* mew-summary-goto-folder takes care of virtual folders.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+	Masahiro MURATA <muse@ba2.so-net.ne.jp>
+* TIS(Thai) 620 support.
+* mew-summary-join was back.
+
+1.93b39 (98/06/11)
+
+* Commands for Summary and Virtual mode were drastically re-written with
+  new macros.
+
+1.93b38 (98/06/08)
+
+* Obsoleted mew-use-pgp5. PGP version is automatically detected.
+* mew-summary-save use the filename parameter of CDP: even if "inline".
+* Defined mew-end-of-message-string and mew-end-of-part-string. Obsoleted
+  mew-eof-string.
+* Key assignment of mew-summary-exchange-point was changed from "C-xC-x"
+  to "C-cC-b".
+* New mew-win32.el.
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+* Bug fix of "n" when the cursor locates in the middle of a line.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+
+1.93b37 (98/05/31)
+
+* Defined mew-pick-canonicalize-pattern.
+* Refine unfolding of mew-header-decode-region.
+* Bug fix of mew-update-range.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Patches for X-Face: and mew-os2.el.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* C-uC-cC-l asks coding-system.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Old replace-match doesn't support string, sigh.
+	Shun-ichi GOTO <gotoh@taiyo.co.jp>
+* A patch to mew-xface-mule.el
+	Makoto MATSUSHITA <matusita@ics.es.osaka-u.ac.jp>
+* mew-header-decode-region unfolds folded lines.
+
+1.93b36 (98/05/27)
+
+* Remove all illegal characters in decoded string if exist.
+* PGP key server is changed from ICAT to JPNIC.
+	Hideyuki SHIRAI <Shirai@rdmg.mgcs.mei.co.jp>
+* Bug fix for other fields.
+	Mito <mit@nines.nec.co.jp>
+* Default value of mew-folder-list-skip-pattern is changed.
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+
+1.93b35 (98/05/26)
+
+* An error message is displayed unless mew-prog decode exists.
+* Regexs in mew-field-spec were fixed.
+* mew-highlight-header-region bug fix.
+* When the file which Mew believe doesn't exit unfortunately exists
+  (probably because of NFS bugs), Mew asks you to input a message number
+  instead of causing an error.
+* Some of mew-input-* calls mew-decode-syntax-delete after its retern
+  value is fixed.
+* mew-summary-display-message deletes extents as 
+  mew-summary-display-part does.
+* mew-prog-xxx is dynamically evaluated to get along with window-system
+  which has different value for each frame.
+* mew-header-decode-address and mew-header-decode-text were integrated 
+  into mew-header-decode-region.
+* A patch for mew-input-sort-key.
+	SUGIMORI <sugimori@uxd.fc.nec.co.jp>
+
+1.93b34 (98/05/23)
+
+* Removed mew-rfc822-field. See mew-address-fields.
+* visible/invisible and header-highlight is integrated. See mew-field-spec.
+  This makes mew-header-arrange much faster.
+* mew-ask-subject works when C-cC-m is typed.
+* Required faces.el only if window-system. This pacifies
+  the "void: frame-face-alist" error.
+* Fixed "mo".
+* Use mew-make-directory instead of make-directory to prevent an error
+  if Mail doesn't exist.
+* Deleted mew-folder-list-use-file-attributes. If 
+  mew-folder-list-skip-pattern is nil. use link count. The default 
+  value mew-folder-list-skip-pattern is nil. For Win95, "^[0-9]+" is
+  set.
+* Made messages in Massage more safer.
+* Header arrange.
+* Deleted mew-member-del.
+* Input functions were integrated. Completion functions were also 
+  integrated:: pick pattern, folder, folders, address, address2,
+               rfile, sort.
+* Specify Content-ID: instead of Message-ID: for external-body.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Ignore quoted-strings during MIME header decoding.
+	Mito <mit@nines.nec.co.jp>
+* The value of mew-keyval was changed to prevent mismatching errors.
+
+1.93b33 (98/05/13)
+
+* C-cC-f tries fetching a public key with the From: field unless the X-Mew:
+  field exists.
+	Mito <mit@nines.nec.co.jp>
+* Logic change for CD: and CDP:
+	The default value is decided as follows:
+	(1) If its value exists, use it.
+	(2) If not exist, use its file name.
+	(3) If its file name does not exist, use "".
+	Mito <mit@nines.nec.co.jp>
+* Some fixes for mew-draft-prepare-attachments.
+* Specified "=" in addition to "+" for folder completion.
+* Updated menubars and mode descriptions.
+* Brushed up PGP key fetch.
+	Hideyuki SHIRAI <Shirai@rdmg.mgcs.mei.co.jp>
+* Fixed range of sort-region.
+	Masahiro MURATA <muse@ba2.so-net.ne.jp>
+* Brush up the message when attachments were deleted.
+	Hideaki MORINAKA <morinaka@acdpe0.anritsu.co.jp>
+* The window of completion candidates scrolls up when TAB is typed
+  repeatedly.
+* Small fixes for Makefile.
+
+1.93b32 (98/05/11)
+
+* mew-draft-make-mime -> mew-draft-make-message.
+* The old IM Config variables were cleaned up. The new variables are:
+	mew-config-guess-alist
+	mew-config-insert-when-prepared
+	mew-config-insert-when-composed
+  If you want the old feature of mew-config, set
+	(setq mew-config-guess-alist '((nil . value))).
+* Set mark the original position when Config: is inserted.
+	Takeshi Itoh <titou@bits.co.jp>
+* C-uC-cC-c preserves a multi-part draft and doesn't remove the files
+  under +draft/mime for undo.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Added "install-info" to Makefile
+* Ah-hoc Emacs 20.2.9x support.
+
+1.93b31 (98/05/08)
+
+* Refine Makefile.
+* Delete files when error occurs in Multipart/Encrypted and 
+  Multipart/Signed.
+* More ad-hoc support for PGP 5.
+	Minoru Matsumura <matsu@diaconsult.co.jp>
+* file-writable-p returns t even if the file doesn't exist. Ugh!
+  Added file-exists-p.
+* mew-summary-scan-filter bug fix.
+* Defined mew-ask-pack.
+* mew-auto-add-content-type -> mew-ack-send (negated)
+
+1.93b30 (98/05/06)
+
+* mew-message-goto-summary displays the "No Summary mode" message
+  if the corresponding Summary mode doesn't exist.
+* All functions for circular completion now have the prefix
+  mew-circular-complete.
+* If mew-summary-buffer-disp-msg is nil, "A" displays the "Type v first" 
+  message.
+* If MIME decoding is quitted by C-g, its cache is removed.
+* Made mew-summary-scroll-{up,down} symmetric.
+* New mew-ext-url.
+	Mito <mit@nines.nec.co.jp>
+* Defined mew-pick-default-field.
+	Gorochan ^o^ <kunito@hal.t.u-tokyo.ac.jp>
+* Got rid of insert-before-markers from the scan filter so that 
+  the side-effect to mew-summary-buffer-end is resolved. Now
+  mew-decode-syntax-delete is safe even if the final message is
+  multipart.
+* Defined error messages in mew-vars.el.
+* Mew now incorporates with XEmacs without the --with-mule option.
+* PNG support.
+	Yoshikazu Ooe <yoshi@god.imasy.or.jp>
+* bug fix for PGP error report.
+* CDP: patch for "F" in attachments.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+
+1.93b29 (98/04/30)
+
+* Made mew-complete-window-config buffer-local to make completion
+  safer against multiple draft buffer.
+* Explicitly notify unknown PGP micalg.
+* Made mew-summary-prog-exec safer for OS/2.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* mew-save-dir for uudecode and unshar.
+	Masahiro MURATA <muse@ba2.so-net.ne.jp>
+* Clear jam-zcat-filename-list and jka-compr-compression-info-list
+  in mew-flet and mew-frwlet.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* CDP: is displayed as it is. Filename is displayed with "*" appended.
+* mew-encode-syntax-single fix.
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>
+* Avoid inserting CDP: for signature.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Bug fix for missing subject when forwarding a forwarded message.
+	Shigemi Mikayama <mikayama@bd2.hnes.com1.fc.nec.co.jp>
+* Bug fix for "A" in attachment.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* mew-summary-toggle-analysis stays on the current message always.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Ignore charsets other than US-ASCII and ISO-8859-1 on bilingual Emacs.
+* Use substring if mew-substring is not bound.
+
+1.93b28 (98/04/20)
+
+* When compsing, CDP: is automatically set unless it matches
+ mew-mime-content-type-ignore-cdp. Type just RET for 'N' to clear
+ CDP:.
+* Set inhibit-quit to t in functions to enter Draft mode.
+* Pack now preserves the * mark.
+* Defined mew-pop-to-buffer to fix all bugs on XEmacs.
+* Integrated config valuables and functions.
+* Use copy instead link for signature attachment to protect the original
+ signature file anyway.
+	Hideyuki SHIRAI <Shirai@rdmg.mgcs.mei.co.jp>
+* gzip hack for OS/2.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* mew-summary-toggle-disp-msg stays on the current message always.
+* Defined mew-string-width because string-width is not available on some
+ Emacses.
+* save-excursion for mew-summary-mark-refile.
+	Shun-ichi GOTO <gotoh@taiyo.co.jp>
+* PGP fetch patch.
+	Hideyuki SHIRAI <Shirai@rdmg.mgcs.mei.co.jp>
+* Info on sort.
+	"Takashi P.KATOH" <p-katoh@shiratori.riec.tohoku.ac.jp>
+* XPM support.
+	 Mark Burton <markb@ordern.com>
+* Eliminated the "no messages" message when scan.
+* Made mew-input-{folder,folders} symmetric.
+* Made mew-summary-{next,prev}-page symmetric.
+* Call mew-highlight-{url,body} only in text/plain.
+* Set modes of Mail and News to mew-folder-mode when init.
+* Defined mew-folder-mode and mew-file-mode for privacy reasons.
+* Made folder operations safer.
+* mew-config-imget is displayed when incing if not default.
+	Makoto MATSUSHITA <matusita@ics.es.osaka-u.ac.jp>
+
+1.93b27 (98/04/08)
+
+* mew-summary-config-imget. ("C" in Summary mode, anyway.)
+* Set mark the point in inbox before get so that we can get back to
+  that position with C-xC-x.
+* mew-save-dir.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Set mew-use-highlight-x-face when refiling.
+	TSUMURA Tomoaki <tsumura@kuis.kyoto-u.ac.jp>
+* imget.sh and imls.sh.
+	KITAUCHI Akira <akira-k@is.aist-nara.ac.jp>
+* imput.sh.
+	Murata Takashi <Takashi.Murata@nsgnet.co.jp>
+* IMAP regex fix.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+* New mew-caesar.el
+	Hideyuki SHIRAI <Shirai@rdmg.mgcs.mei.co.jp>
+
+1.93b26 (98/03/24)
+
+* MIME decoder and decode-syntax displayer was elegantly re-written.
+* "guess" -> "us-ascii" when decoding.
+* Openp, again.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Defined mew-folder-list-function.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+
+1.93b25 (98/03/13)
+
+* Displaying filename when executing a program.
+	Shun-ichi GOTO <gotoh@taiyo.co.jp>
+* Bug fix for cursor position when "x".
+* An ad-hoc hack for left click on Draft mode.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+* A patch to support Mew.img and to make it safer.
+	yamagus@alpha.co.jp
+	(KOSEKI Yoshinori) <kose@wizard.tamra.co.jp>
+* Several patches for elisp impath.
+	yamagus@alpha.co.jp
+
+1.93b24 (98/03/10)
+
+* Elisp version of impath to list up folders.
+	yamagus@alpha.co.jp
+* Bug fix for mew-attach-duplicate.
+	Yuji Yamano <u90156@uis-inf.co.jp>
+* Several patches including x-face, mew-os2.el, etc.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* The first part is displayed with its header in Summary mode if it is
+  text/plain.
+* A tiny patch for imjoin.
+	koie@suri.co.jp
+
+1.93b23 (98/03/02)
+
+* IMAP is back.
+	wkenji@flab.fujitsu.co.jp
+* set-buffer in addition to select-window.
+
+1.93b22 (98/02/28)
+
+* mew-{symbolic-,}link checks if the target file is a regular file.
+* Another terrible multipart bug of "f" was fixed.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Multiple frame problem on XEmacs was fixed.
+* Stupid completion bug fix.
+* Fixed icon problems in Draft mode on XEmacs.
+
+1.93b21 (98/02/26)
+
+* Cleans up variables on the last stage of mew-summary-quit.
+* Define mew-before-cite-hook for mew-summary-reply-with-citation.
+	Gorochan ^o^ <kunito@hal.t.u-tokyo.ac.jp>
+* mew-demo-picture is t only when XEmacs.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* "o" marks are removed when Summary cache is loaded. (Just in case...)
+
+1.93b20 (98/02/25)
+
+* Bitmap demo patch.
+	(KOSEKI Yoshinori) <kose@wizard.tamra.co.jp>
+* Config: patch.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Fix in mew-highlight-header-region.
+* Typo fix in mew-env.el.
+	SAITO Tetsuya <saito@Mew.org>
+* Beautify mew-attach.el.
+* mew-im-call-process{,-no-output} checks the return value of 
+ call-process.
+* mew-draft-make-mime moves the cursor onto the end of the header.
+	Hideaki MORINAKA <morinaka@acdpe0.anritsu.co.jp>
+* Add the "-q" option when calls gzip.
+	Mikio Nakajima <minakaji@osaka.email.ne.jp>
+	yamagus@alpha.co.jp
+* Use mew-folder-member instead of mew-member in highlight stuff.
+	Yuji Yamano <u90156@uis-inf.co.jp>
+
+1.93b19 (98/02/24)
+
+* Bug fix for mew-syntax-format.
+* Defined mew-summary-goto-message.
+* Defined mew-string-to-list.
+
+1.93b18 (98/02/23)
+
+* One more fix for mew-header-decode-address.
+	Mito <mit@nines.nec.co.jp>
+* X-Mew: result reports are now perfect.
+* attachment syntax and multipart syntax were integrated.
+
+1.93b17 (98/02/20)
+
+* Unfold fix for mew-header-decode-address.
+* highlight on tty if XEmacs. And if tty, never do inline display.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+* Bug fix for mew-folder-check. mew-folder-check now certainly appends
+  a new folder to ".folders".
+* Touch-folder fix.
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+* New mew-refile.el.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* Define mew-link for OS/2 and Win32.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+
+1.93b16 (98/02/19)
+
+* Fix for "y".
+* Defined mew-link.
+* Variable index for info.
+	Koichi Sekido <sekido@mbox.kyoto-inet.or.jp>
+* "x" became much much faster.
+
+1.93b15 (98/02/19)
+
+* Prepare mew-summary-imap-{process, string} for neat exclusive operations.
+* mew-folder-new-message becomes independent on "impath". This makes
+  preparation of draft buffer much faster!!!
+* Ad-hoc Content-Disposition: support.
+* You can specify citation-prefix if mew-ask-cite-prefix is t.
+	Akihiro Motoki <motoki@hal.t.u-tokyo.ac.jp>
+* Update only necessary part if sorted regionally.
+	Akihiro Motoki <motoki@hal.t.u-tokyo.ac.jp>
+* Regional picking.
+	Akihiro Motoki <motoki@hal.t.u-tokyo.ac.jp>
+* Bug fix for mew-summary-exec-region. Information outside the region
+  is preserved.
+	Akihiro Motoki <motoki@hal.t.u-tokyo.ac.jp>
+* syntax-table bug fix.
+
+1.93b14 (98/02/17)
+
+* Header encoding modification. But still imperfect.
+* PGP5 verification patch.
+	Hiroshi Ogata <hiroshi@nereid.rim.or.jp>
+* Coding system patch for mew-summary-display-part.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* New goto folder.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+1.93b13 (98/02/10)
+
+* Ad-hoc PGP 5 support.
+	MURATA Nobuhiro <nob@makioka.y-min.or.jp>
+	Hiroshi Ogata <hiroshi@nereid.rim.or.jp>
+* Bug fix of "g" for NetNews.
+	TSUMURA Tomoaki <tsumura@kuis.kyoto-u.ac.jp>
+* Yet another config implementation.
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>
+* message/partial support.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* HTML and URL stuff for Win32.
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+* More information for binary content-type.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Two patches to improve the text/html interface.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* text/html for Win32.
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+
+1.93b12 (98/01/30)
+
+* Message flush when quit.
+* Mode line fix for "x".
+	Akihiro Motoki <motoki@hal.t.u-tokyo.ac.jp>
+* Bug fix for Hankaku kana stuff.
+* Audio bug fix.
+* Several feedback concerted with OS/2.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Mode line fix for reedit.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Safty patch for mew-summary-goto-folder.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* New mew-summary-display-{top,bottom}.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+1.93b11 (98/01/29)
+
+* Config bug fix.
+	Akihiro Motoki <motoki@hal.t.u-tokyo.ac.jp>
+* At composing, hankaku kana is converted into zenkaku kana if exists.
+	Mito <mit@nines.nec.co.jp>
+* A safty patch for mew-input-range.
+	TSUMURA Tomoaki <tsumura@kuis.kyoto-u.ac.jp>
+
+1.93b10 (98/01/28)
+
+* A patch for mew-draft-cite.
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>
+* Ad-hoc support for text/html.
+* Some fixes for mew-win32.el.
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+* mew-summary-get flush queue if messages exist. This is very convenient
+  on PPP environment.
+	Hisakazu Hada <hisaka-h@is.aist-nara.ac.jp>
+* mew-ext-prog-url-args.
+	TSUMURA Tomoaki <tsumura@kuis.kyoto-u.ac.jp>
+* mew-draft-insert-config.
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>
+* File mode change for attachments.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* --preserve=on for imput when "C-uC-cC-c".
+
+1.93b9 (98/01/25)
+
+* Process bug fix for "x".
+* Drive letter support in mew-input-file-name.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* The mew-summary-scan-width option.
+	Toshihiko SHIMOKAWA <toshi@csce.kyushu-u.ac.jp>
+* C-ug always goes to the last line when visits the folder.
+	Akihiro Motoki <motoki@hal.t.u-tokyo.ac.jp>
+* filter patch for Win32.
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+
+1.93b8 (98/01/23)
+
+* IMAP support.
+	wkenji@flab.fujitsu.co.jp
+* mew-summary-mark-all fix.
+	TAKAHASHI Masafumi <takahasi@soft.nid.co.jp>
+
+1.93b7 (97/12/15)
+
+* mew-prog-im-arg but imperfect...
+* Make mew-attach-{copy,link} safer.
+* Make mew-summary-mark-all region-oriented.
+	TAKAHASHI Masafumi <takahasi@soft.nid.co.jp>
+* Make mew-attach-delete safer.
+	Mito <mit@nines.nec.co.jp>
+* Check default-toolbar-visible-p.
+	TSUMURA Tomoaki <tsumura@kuis.kyoto-u.ac.jp>
+* require 'easy-menu.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+* New mew-os2.el.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Moved mew-status-update after running mew-init-hook.
+* Deleted mew-draft-delete-content-type. Use mew-draft-undo instead.
+* <all> -> <body> on privacy results. This distinguishes <2> and 
+  <2 body>.
+* A patch to mew-win32.el.
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+
+1.93b6
+
+* mew-{unix,os2,win32}.el.
+
+1.93b5 (97/12/04)
+
+* Case-fold for {in,}visible.
+* Defined mew-{reply,forward}-{string,regex}.
+
+1.93b4
+
+* mew-attach-type sets an appropriate mark by default.
+* mew-real-send-hook
+
+1.93b3 (97/12/02)
+
+* mew-opt-highlight-* -> mew-use-highlight-*.
+* mew-folders-default-folder bug fix.
+	Mito <mit@nines.nec.co.jp>
+* Anonymous FTP bug fix.
+* iso-2022-int-1.
+* mew-gnus-save-preserve-dot.
+	TSUMURA Tomoaki <tsumura@kuis.kyoto-u.ac.jp>
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-summary-flush-queue.
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+* face-foreground bug fix.
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>
+* A bug fix: refile cancel and specify again.
+	Mito <mit@nines.nec.co.jp>
+
+1.93b2 (97/12/01)
+
+* mew-y-or-n-p was removed.
+* mew-vars.el was created.
+* Support of "no *new* message" for imget.
+	SAITO Tetsuya <saito@Mew.org>
+* Inline display of xbm.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+* Removed the "Removing folder" message.
+	Akihiro Motoki <motoki@hal.t.u-tokyo.ac.jp>
+* A bug fix of ordering of visible fields.
+	TSUMURA Tomoaki <tsumura@kuis.kyoto-u.ac.jp>
+* C-l to mew-draft-rehighlight in Draft mode.
+
+1.93b1
+
+* Strict path check to avoid Petname dilemma.
+* Typo fixes for mode-line.
+	Akihiro Motoki <motoki@hal.t.u-tokyo.ac.jp>
+* A bug fix for mew-decode-syntax-print.
+* Support of imclean.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-header-decode-qp bug fix.
+	Yoshikatsu Kawabe <kawabe@sra.co.jp>
+* highlight for body in Draft mode.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* New contrib/mew-mule-xface.el.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+	KORIYAMA Naohiro <kory@ba2.so-net.or.jp>
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>	
+* mew-configs -> mew-config-list.
+* Brushed up mew-status-update.
+* mew-highlight-url patch.
+	Masahiro MURATA <muse@ba2.so-net.or.jp>
+* mew-highlight-body patch.
+	Masahiro MURATA <muse@ba2.so-net.or.jp>
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* C-cC-i is now a generic circular completion. mew-complete-from for From:.
+  Set mew-from-list.
+* You can get back to single part only in Draft mode. Type "d" on a
+  top directory in attachments.
+* PGP sign takes the "-u" options. If From: exists, use it. Otherwise, 
+  mew-mail-address is used.
+* Interface to execute external programs such as xv is improved.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* A patch to mew-gnus.el.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Add Newsgroups: for highlight.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* new mew-xface-mule.el and patch
+	KORIYAMA Naohiro <kory@ba2.so-net.or.jp>
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* A bug fix for mew-encode-syntax-format.
+        Harald Hanche-Olsen <hanche@math.ntnu.no>
+* highlight for mew-summary-exchange-mark.
+        "Takashi P.KATOH" <p-katoh@shiratori.riec.tohoku.ac.jp>
+* Overlay instead of property.
+        SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-opt-highlight-header check in mew-highlight-header-region.
+
+
+1.92 (97/10/25) mew-release release
+
+* put-text-property 'default for multipart decoded syntax in Summary mode.
+  Just for XEmacs, sigh.
+* Added mew-folder-newsp for mew-summary-display-message.
+	TSUMURA Tomoaki <tsumura@kuis.kyoto-u.ac.jp>
+* (require 'faces) for Text Emacs.
+* highligh-url fix.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+* A bug fix for header arrange.
+* "File does not exist" check moved to mew-summary-display-message.
+* local zmacs-region is set nil on Summary mode.
+* (buffer-read-only t) for highlight functions.
+* font-lock is now obsoleted.
+* new mew-refile.el.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* A bug fix of mew-draft-insert-signature.
+* A bug fix of header encoding when signs/encrypts a single body.
+* mew-folder-check checks whether or not the argument is a string.
+* mew-decode-syntax works even when charset is nil.
+* mew-folder-check checks whether or not the folder is a directory.
+* A bug fix of mew-window-configure.
+* font-lock is now used only in +inbox.
+* zmacs-regions hack.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+* name changes: overlay -> property.
+* Underline and bold when no window.
+	Mito <mit@nines.nec.co.jp>
+* Charset is displayed when multipart on Summary mode.
+* Check window-system for no window.
+* Styles and colors are now customizable.
+* Face color hack.
+* Use 'binary instead of 'no-conversion.
+* find-file-hooks is set to nil to prevent font-lock-mode.
+* mew-opt-highlight-headers -> mew-opt-highlight-header.
+* Mark names were integrated.
+* Range completion.
+* Highlight of mouse line on Mule 2.3 and Emacs 20 was obsoleted.
+* Throw away hilight19. Use font-lock instead.
+* mew-opt-highlight-headers -> mew-opt-highlight-header.
+* Removing a drive letter for mew-ext-ftp.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* A bug fix for mew-folder-make-list.
+	Masahiro MURATA <mmurata@pic.melco.co.jp>
+* Popup menu on Summary mode.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+* (make-local-variable 'tab-width) in Summary mode.
+* A tiny patch to mew-summary-send.
+	naoki-e@is.aist-nara.ac.jp
+* (featurep 'hilit19).
+	Mito <mit@nines.nec.co.jp>
+* mew-make-folder-list ignores garbages.
+* Highlight functions were integrated. See mew-opt-highlight-cursor-line,
+  mew-opt-highlight-mouse-line, mew-opt-highlight-headers, 
+  mew-opt-highlight-url and mew.dot.emacs.
+* Unknown cte is treated as app/oct.
+* koi8-r.
+* One more patch to mew-gnus.el.
+	OKI Yukihiro <yoki@beams.nagaokakyo.kyoto.jp>
+* PGP/MIME bug fix.
+* Added "From$" to mew-field-invisible.
+	Masahiro MURATA <muse@ba2.so-net.or.jp>
+* imstore for mew-gnus.el.
+	OKI Yukihiro <yoki@beams.nagaokakyo.kyoto.jp>
+* More utime hack.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Key binding patch for Summary and Virtual mode.
+	Tetsu NISHIMOTO <nishimoto@math.okayama-u.ac.jp>
+* display correctly when header is too long.
+	Hirotaka Yokokawa - Nihon Sun IR <Hirotaka.Yokokawa@Japan.Sun.COM>
+* cn-gb patch.
+	huangyan@rd.fujitec.co.jp (Yan HUANG)
+* mew-summary-save patch.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* error -> mew-decode-error in mew-decode.el.
+* OS2/Makefile patch.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* New mew-os2.el and utime.cmd.in.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* New mew-win32.el
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+* Some mew-assoc-match were replaced eith mew-assoc-case-equal.
+* mew-set-file-coding-system is obsolted.
+* utime hack.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* MIME decode routines uses eoh2 instead of eoh for messages in +draft.
+* Pretty good multi-lingual support.
+* A bug fix for C-u n.
+* If mew-summary-exec-region catches C-g, it set
+  mew-summary-buffer-process nil.
+* C-cC-k set mew-summary-buffer-process nil anyway, always.
+* Defined mew-cs-charset.
+* mew-msg-rm-policy hack.
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>
+* A bug fix for mew-summary-get's cache.
+	Akihiro Motoki <motoki@hal.t.u-tokyo.ac.jp>
+* charset safe mechanism for mew-summary-burst.
+* mew-refile-{add,purge}-alias.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* mew-summary-save takes the object *binary* if unknown.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* mew-sort.el patch.
+	"Takashi P.KATOH" <p-katoh@shiratori.riec.tohoku.ac.jp>
+* Startup errors is now user friendly.
+* 'no-msg for write-region.
+* mew-refile.el use To: if From: is myself.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* mew-summary-auto-refile can be used in Summary buffer only.
+	Daisuke Sato <densuke@ga2.so-net.or.jp>
+
+1.91 (97/09/18) mew-release release
+
+* Confirmations to a user were removed completely in mew-ext.el.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Set mew-message-citation 'header for non-MIME analysis mode.
+	Hirotaka Yokokawa <Hirotaka.Yokokawa@Japan.Sun.COM>
+* Patches for mew.dot.emacs.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+	Shuichi Kitaguchi <shuuic-k@is.aist-nara.ac.jp>
+* OS2/configure.cmd patch.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* inhibit-input-event-recording for mew-read-passwd.
+* Synchronized mew.texi, mode descriptions, and description for each
+  functions.
+* You can put the '*' mark and the '@' mark even when on parts.
+  Now, to skip parts, call "n" or "p" with C-u.
+* C-cC-u(undo) works even for a single-part message.
+* No white space is allowed for Aliases.
+* Omitting a question for ext url.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* New mew-sort.el.
+	"Takashi P.KATOH" <p-katoh@shiratori.riec.tohoku.ac.jp>
+* Newsgroup -> Newsgroups in mew-pick.el.
+	Akihiro Motoki <motoki@hal.t.u-tokyo.ac.jp>.
+* TMP for mew-temp-file-initial.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Be silent when write control files.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* redraw-display was removed to fix the emphasis problem.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* The default value of mew-refile-guess-control was modified.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* N and P move the cursor only onto the review mark.
+* New mew-os2.el and mew-mime.cmd.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* mew-summary-inc-sentinel-hook came back.
+* Many explanations were added and revised for interactive functions.
+* "--link=no" for immv when +trash.
+	"Chikara 'Power of Allow' Yano" <yankee@pi.ntts.co.jp>
+* mew-folder-new-message works well even if Perl5 warns.
+* A bug when ISO-2022-JP is encoded with B was fixed.
+* Use install in bin/Makefile.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* A bug for forward by icon was fixed.
+* X-Mailer tiny hack.
+	Daisuke Yabuki <Daisuke.Yabuki@Japan.Sun.COM>
+* mew-summary-reply-with-citation fix again.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+
+1.90 (97/08/26) mew-release release
+	
+* The -f option for cp in bin/Makefile.
+	Motonori Nakamura <motonori@econ.kyoto-u.ac.jp>
+* Use copy-file for mew-attach-copy.
+* Integrated mew-field-resent to mew-field-delete.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+	Motonori Nakamura <motonori@econ.kyoto-u.ac.jp>
+* mew-summary-reply-with-citation fix.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* mew-header-encode-text was compromised so that 'text' and 
+  'encoded-word' may not be separated by 'linear-white-space'.
+* New mew-refile.el.
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* mew-summary-mode-line bug fix.
+* "v" and "o" combination made Summary mode mixed up. This is certainly
+  fixed.
+* Defined mew-summary-trace-directory.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Timing to ask range was changed in mew-summary-ls.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Cache manage fix and MIME decode for News articles.
+* Use (cd dir) for unshar and uumerge.
+* Bug fix for the case that null name is specified when ext.
+* Fixes for display.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Defined mew-home.
+* Used file-name-as-directory instead of mew-path-separator as much as
+  possible.
+
+
+1.89 (97/08/20) mew-dist beta release
+
+* RFC 2047 encoding. This introduced drastic changes.
+* Added "Lines:" and "X-Dispatcher:" for mew-field-delete.
+* Random stuff goes to mew-func.el.
+* A patch for uumerge.cmd.in
+        OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Unfold In-Reply-To:.
+* X-Mailer hack.
+* mew-config-guess-alist
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* automatic-conversion -> mew-cs-autoconv
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Completely deleted X-Graph.
+* read-file-name argment fix.
+	Takaaki MORIYAMA <taka@airlab.cs.ritsumei.ac.jp>
+	"Takashi P.KATOH" <p-katoh@shiratori.riec.tohoku.ac.jp>
+
+1.88 (97/08/06) mew-dist beta release
+
+* mew-draft-keyswitch patch
+	Takaaki MORIYAMA <taka@airlab.cs.ritsumei.ac.jp>
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-watch-sentinel check "imput: ERROR:" instead of "imput:".
+* X-Mew: hack.
+* Defined mew-configs.
+* Too large mesage bug fix.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-summary-insert displays the message without analysis on non-part.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-decode-error hack.
+* New Makefile.os2, configure.cmd and uumerge.cmd.in.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* mewencode binary patch for OS/2.
+* insert-file-contents-internal for mew-attach-copy on Xemacs.
+* Displaying GIF/JPEG internally on Xemacs.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+
+1.87 (97/07/28) mew-dist beta release
+
+* Replaced insert-string, beginning-of-buffer, end-of-buffer,
+  replace-regexp with primitives.
+* C-u a and C-u A.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Contains Message-ID: in In-Reply-To:.
+	Takeshi Chiba <chiba@d3.bs1.fc.nec.co.jp>
+* Make undo possible for mew-summary-reply-with-citation.
+	NISHIDA Keisuke <knishida@osk.threewebnet.or.jp>
+* mew-sort.el.
+	Hironori Ikura <hikura@tcc.co.jp>
+* Catched up to Emacs 20.0.91.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* pick macro
+	UMEMURA Akihiro <akihiro@theory.brl.ntt.co.jp>
+* mew-cite-strings-with-petname
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+	Ryuichi MATSUMOTO <ryuichi@ksp.nis.nec.co.jp>
+* Preliminary News support.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Virtual mode for XEmacs.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+* mew-draft-keyswitch bug fix.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* PGP/MIME re-enter bug fix.
+
+1.86 (97/07/21) mew-dist beta release
+
+* Defined mew-use-petname.
+* imsort support.
+* A bug for "Subject: as CD:" was fixed. That is, RFC822 messages were
+  also supported.
+* "-" is assigned to mew-summary-scroll-down in Summary and Virtual mode.
+* mew-summary-burst can be executed on part.
+* mew-summary-save askes y-or-n only when the file exists.
+* push-mark if rmm or refile treats one message. 
+  If you fail to put a mark you want, type C-x C-x to get back.
+* C-cC-y and C-cC-t in Draft mode is now symmetric.
+* Set modeline-buffer-identification for each mode.
+	NISHIDA Keisuke <knishida@osk.threewebnet.or.jp>
+* mew-virtual-mode-hook
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+
+1.85 (97/07/01) mew-dist beta release
+
+* Support of "=".
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* Deleted mew-cs-spool.
+* "mo" bug fix.
+* Keybindin changes for Draft mode.
+	C-cM  -> C-cC-a
+	C-cu  -> C-cC-l
+	C-cy  -> C-cC-t
+* Bug fix of button2 on Xemacs.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+* mew-gnus.el patch
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* (sit-for 0.1) to flush the gap for imget.
+* Too large mail is not analyzed and display 'To analyze, type "."'.
+  If analyzed with ".", it is cached and used when displayed another time.
+
+1.84 (97/06/27) mew-alpha release
+
+* mewencode.c patch
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* mewencode.c hack.
+* mew-refile.el was changed drastically.
+* mew-use-folders-file-p. If t, read the file when bootup. And save the 
+  file when C-u Z.
+* MailDir -> MailPath.
+* mew-scan patch for imget error
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp>
+* non-analysis when too large mail
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+1.83 (97/06/24) mew-alpha release
+
+* mew-cs-autoconv for mewencode...
+* "Password is wrong" message for imget.
+* add #if defined(OS2) || defined(WINNT) || defined(_WIN32) to
+  mewencode.c.
+* cd to the +folder when moved to it.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Install *.el before *.elc
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+1.82 (97/06/23) mew-alpha release
+
+* mew-cs-noconv-eol.
+* Makefile was changed to install all *.el.
+* Significant PGP/MIME hack.
+* mew-folder-alist fix to make it easy to input multi-level folder
+	(("+work/mew" "mew") ("+work" "work")) ->
+	(("+work/mew" "mew") ("+work/" "work"))
+* mew-file-ask-p
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+1.81 (97/06/18) mew-alpha release
+
+* Integrated body functions for inc, scan, and vscan.
+* mew-set-file-coding-system to fix Noconv bug of XEmacs.
+* Refile bug for multipart was fixed.
+* Refile action was strictly specified.
+	If message mode exists, let it be. Otherwise, display the header.
+	If any mark exists, stay the position. Otherwise, display the next.
+* Subject is displayed as CD: for Message/Rfc822 if CD: doesn't exist.
+
+
+1.80 (97/06/15) mew-alpha release
+
+* "n" for new folder at refile made a refile mark. This bug was fixed.
+* Style of Xemacs's emacs-version changed. So, changed regex for
+  mew-x-mailer.
+
+1.79 (97/06/08) img release
+
+* mew-assoc-case-equal for mew-summary-refile.
+* Defined mew-characterp.
+* PGP/MIME hack for the case where his public key doesn't exist.
+* Added In-Reply-To: to mew-rfc822-fields.
+* Defined mew-erase-buffer and mew-set-buffer-tmp.
+* Next message bug fix for mew-summary-refile.
+* mew-save-application/octet-stream-p was obsolete.
+* Interface of mew-save-application/octet-stream was improved.
+	Mito <mit@nines.nec.co.jp>
+* Added +trash to mew-range-alist.
+
+
+1.78 (97/06/02) img release
+
+* mew-summary-pick fix.
+* mew-summary-refile mark fix.
+
+
+1.77 (97/06/01) img release
+
+* Deleted mew-file-chase-links which was defined to maintain backward
+  compatibility to Emacs 18. Mew don't support Emacs 18 anymore, so
+  use file-chase-links instead.
+* mew-symbolic-link was defined to rescue OS/2.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Set scrollbar-height 0 only for Summary mode.
+	Yuuichi Teranishi <teranisi@isl.ntt.co.jp> 
+* mew-input-range causes an error unless range starts with "0-9a-zA-Z".
+* expand-file-name for mew-mail-path in mew-refile.el.
+* New re-sent uses imput.
+* Hard cordings of UNIX path separator "/" were eliminated. Defined
+  mew-path-separator.
+* "poster" check.
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>
+* mew-expand-file-name was obsolete. Use mew-expand-folder instead.
+* All completion mechanisms were uniformed in mew-complete.el.
+* mew-keyval was modified to allow field-keys which are not terminated
+  by ":".
+* mew-draft-get-new -> mew-folder-new-message.
+* mew-summary-burst hack.
+* Defined mew-folder-check.
+* mew-refile hack.
+* mew-assoc-{equal,match,match2} hack.
+* mew-pgp.el hack to support sign-AND-encrypt service of PGP/MIME.
+* mew-random-string for more safe boundary.
+
+
+1.76 (97/05/27) img release
+
+* Some MH dependencies were removed.
+* Info typos were fixed.
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* "w3.el" support for access-type=url.
+	Toshihiko SHIMOKAWA <toshi@tea.forus.or.jp>
+
+1.75 (97/05/15) img release
+
+* inc/scan remembers neat cursor movements.
+* "--src" option for mew-summary-pack.
+
+1.74 (97/05/07) img release
+
+* mew-{scan,summary}.el update.
+
+1.73 (97/05/02) img release
+
+* mew-prog-scan-range-alist -> mew-range-alist.
+* mew-scan.el was modified for imget.
+
+1.72 (97/04/29) img release
+
+* immv is supported for deletion and refile.
+* imput is ok if mew-fcc is nil.
+* impick is ok if while spaces are provided.
+* imget:: format is deferent from imls.
+* imls is ok.
+* mew-plet:: 'binary for XEmacs, 'no-conversion for Emacs.
+
+1.71 (97/04/26) img release
+
+* Start walking with im series.
+* make-local-variable coding-system-for-{read,write}.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>.
+* Defined mew-which-el.
+
+
+1.70 (97/04/21) mew-dist release
+
+* Retrieve the body of Message/External-Body only if typing C-cC-e.
+* Many syntaxes are uniformed.
+* Pretty good regular expressions.
+* Summary mode now reports the reason when an error occurs.
+* Yet another bug fix for mew-attach-undo.
+* Catch up to XEmacs 20.1 b15.
+* Defined mew-subsequence.
+* mew-draft-keyswitch bug fix.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>.
+
+1.69 (97/04/02) mew-release release
+
+* Add many explanations to variables and functions.
+* mew-mark-process-all-folders is set to kill-emacs-hook by default.
+  REMOVE THIS CONFIGURATION FROM YOUR .EMACS.
+* Yet another mew-draft-keyswitch bug fix from
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>.
+  But his patch couldn't handle vector sequence. So I modified.
+* mew-attach-line bug fix.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* A fix for mew-attach-undo fatal bug. It calls mew-syntax-clear-marks now.
+* "'" -> "function".
+
+
+1.68 (97/03/30) mew-release release
+
+* Infos are provided.
+* mew-draft-refresh.
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>
+* Put mew-cache-flush in mew-summary-toggle-analysis.
+	Murata Shuuichirou <mrt@mickey.ai.kyutech.ac.jp>
+* Changed regular expressions for buffer. Use "$" instead of "\n"
+ since there are, at least, three end of lines in the world. Add "^"
+ to "[ \t]".
+* Define mew-prog-shell{,-arg} for cmd.exe.
+* Add "Resent-*:" to mew-rfc822-fields.
+
+
+1.67 (97/03/26) mew-release beta release
+
+* bin/* upgrade
+	- chmod 555 for vscan, uumerge, mew-refile
+	- find a path for pick, etc.
+* Support for Gnumule 19.34.94 epsilon
+* Output of pick is line-based. So use mew-piolet instead of mew-plet
+  in mew-summary-pick.
+	IMAI Kenichi <kimai@av.crl.sony.co.jp>
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* PGP result duplicate bug fix(only for XEmacs).
+* Forward/Multi-Forward attachment/toolbar bug fix(only for XEmacs).
+* Reply with citation display bug fix(only for XEmacs).
+* mew-decode-syntax-print moves the cursor a wrong place. This is fixed.
+* mew-draft-show-attach is now generic enough so that it can execute
+  any external commands including "xv", "ghostview", etc.
+  Click left bottun on icons of Draft mode!
+* mew-mime-{start,call}-process now becomes generic.
+* On XEmacs, I decide to call any external commands immediately without
+  y-or-n to hide Summary toolbar bug, sigh.
+
+
+1.66 (97/03/24) the first beta release of Mew next generation 
+		to mew-release
+* XEmacs 20.1 full support.
+* Menu refine for Summary, Virtual, and Draft mode.
+* Toolbar for Summary and Draft mode.
+* Icons are ready.
+* Making code of Summary mode and that of Draft mode as symmetric as 
+  possible.
+* Many bug fixes found in 1.55.
+
+1.55 (97/03/04) mew-dist release
+
+* "Message interface to Emacs Window" -> "Messaging in the Emacs World"
+* s/mew/Mew/g.
+* (message "") to cancel some messages.
+* Set ange-ftp-tmp-name-template to ensure that ange-ftp creates temporary
+files on /tmp/mewxxx.
+* Asynchronous FTP for access-type=anon-ftp.
+* Makefile bug fix.
+	SAITO Tetsuya <tetuya-s@is.aist-nara.ac.jp>
+* Set process-connection-type nil for all start-process funcs.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Use make-symbolic-link instead of "ln".
+* Use make-directory instead of "mkdir".
+* Use copy-file instead of "cp".
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Define mew-delete-directory-recursively instead of "rm -rf".
+* Delete mew-os2-p.
+* Delete mew-mule18-p
+* Define mew-window-home-buffer.
+* Define a content-type entry for ".tgz" and ".pgp".
+* "M-p" and "M-n" for mew-folder-map.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* run-hooks mew-message-hook in mew-message-next-page.
+* Delete hilit19 from mew-draft. It is called via mew-draft-mode-hook.
+* unread-command-char -> unread-command-events in mew-temp-minibuffer-message.
+* Bug fix for undo in Draft mode.
+* Define new mew-header-syntax.
+* C-g on E in attachments set unintentional privacy. This is fixed.
+* "E" on attachments prepares a default decryptor.
+* A bug fix for "D" on attachments.
+* Implement mew-summary-burst.
+* Keyswitch bug fix.
+	Koji Imada - je4owb/2 <koji@bimota.imada.math.human.nagoya-u.ac.jp>
+* Add pre-command-hook for keyswitch.
+	Drago Goricanec <drago@king.otsd.ts.fujitsu.co.jp>
+* Signature insertion bug fix.
+	Kazuyan / OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+* Draft mode "----" search bug fix.
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>
+* Define mew-field-other-visible.
+	"A. SAGATA" <sagata@nttvdt.hil.ntt.co.jp>
+* Special thanks to 
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+
+1.54 (11/25/96) mew-release release
+
+* Insert "\n" after mew-draft-attach-boundary-end.
+	Shuhei KOBAYASHI <shuhei-k@jaist.ac.jp>
+* Refine Makefiles
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>
+* "F" in attachments set charset us-ascii. Now it sets "guess".
+* "^$" -> "^-*$" in mew-cache-message-new.
+	Havard.Eidnes@runit.sintef.no
+* mew-save-transfer-form's end problem was fixed. PGP encoding on Emacs 
+is now stable.
+	Havard.Eidnes@runit.sintef.no
+* mew-header-decode-regex was defined to pacify those how don't use
+MH 6.8.3.JPx.
+* Check non-erase in mew-summary-display-part.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+
+1.53 (11/23/96) mew-release release
+
+* Makefile was modified again, sign.
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>	
+* mew-draft-keyswitch was generalized.
+* mew-header-canform now just adds mew-mail-domain. This fix for an
+environment where the domain contains the string of the first domain
+(e.g. jpcert.or.jp).
+* mew-attach-multipart fix.
+	Shunichi GOTO <gotoh@taiyo.co.jp>
+* The same fix for mew-attach-external-body and mew-attach-pgp-public-key. 
+* Writable check for mew-summary-folder-cache-save.
+	Shuhei KOBAYASHI <shuhei-k@jaist.ac.jp>
+* Newline hack for mew-draft-syntax-file.
+	Shuhei KOBAYASHI <shuhei-k@jaist.ac.jp>
+* mew-mime-application/octet-stream uses the obsolete name parameter 
+as the default file name. 
+
+1.52 (11/21/96) mew-release release
+
+* Makefile was modified.
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>	
+* Insert "\n\n" when a truncated message doesn't have a header delimiter.
+* Some undo fixes.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Disabled C-y on attachments region.
+* mew-mule-p for mew-encode-text-magic.
+	Jarle.Greipsland@runit.sintef.no
+* Path expansion fix for mew-ext-anon-ftp.
+* mew-header-expand-alias-list: mew.el -> mew-header.el
+* mew-header-decrypters-collect fix.
+* PGP ".asc" suffix fix in mew-pgp.el.
+* mew-mime-pgp-keys now checks mew-prog-pgp.
+* auto-mode-alist fix.
+	Shuhei KOBAYASHI <shuhei-k@jaist.ac.jp>
+* Add message/delivery-status for mew-mime-content-type.
+* Check mew-temp-dir in mew-clean-up.
+	Yoshitsugu Mito <mit@d1.nines.nec.co.jp>
+
+1.51 (11/18/96) mew-release release
+
+* Re-write version of Mew
+
+1.50 
+
+* Re-write version of Mew for alpha testers.
+
+1.06 (06/07/96) mew-release release
+
+* mew-draft-insert-signature hack. See mew-signature-insert-last and 
+mew-signature-as-lastpart.
+	David C Worenklein <dcw@gcm.com>
+* mew-ask-range
+	David C Worenklein <dcw@gcm.com>
+* mew-trash-folder
+	Maybe TABOO <y-koga@ccs.mt.nec.co.jp>
+* Make mew-draft-keyswitch more generic.
+	KITAJIMA Akira <kitajima@quintet.ics.es.osaka-u.ac.jp>
+	Koji Imada <koji@bimota.imada.math.human.nagoya-u.ac.jp>
+* Set split-window-keep-point t for split-window-vertically.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-message-highlight-url
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Provide mew-minibuffer-folders-word and mew-temp-minibuffer-message
+so that we can enjoy SPC and TAB on refile completion.
+* C-u y requires read-coding-system if on Mule.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* highlight-headers support for Xemacs
+	Ulrich Drepper <drepper@myware.rz.uni-karlsruhe.de>
+* mew-summary-send speed up
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Don't force display to reply a scrambled message.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-summary-quit bug fix
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* inc now support password input for -norpop.
+* mail-citation-hook is deleted.
+* vscan patch including foiler alias bug fix and space-separated
+pattern for -subject.
+	Shigeya Suzuki <shigeya@foretune.co.jp>
+* OS/2 support
+	Fujikazu OKUNISHI <fuji0924@mbox.kyoto-inet.or.jp>
+* mew-summary-highlight-lines-region bug fix
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+
+
+1.05 (03/28/96) mew-release release
+
+* mew-os2-p
+	if t, use "cp" instead of "ln -s".
+* mew-summary-exec-current for "X"
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-file-chase-links
+	Yoshiaki KASAHARA <kasahara@csce.kyushu-u.ac.jp>
+* mew-draft-cite does support super cite.
+	Shuhei KOBAYASHI <shuhei@cmpt01.phys.tohoku.ac.jp>
+* message retains in Summary mode if refiled as link.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* recursive VM refile
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* multi refile
+	Yoshinari NOMURA <nom@csce.kyushu-u.ac.jp>
+* mew-status-update updates only aliases by default. It does for 
+both aliases and folders if it is called with prefix(C-u).
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-ask-subject
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* A bug of mew-mime-external-send-mail due to the change of
+mew-draft-header is fixed.
+* mew-draft-header doesn't insert "Cc:" if cc is nil. 
+* English is brushed up.
+	Mikitomo Ushijima <mikitomo@crew.sfc.keio.ac.jp>
+* Bug fixes for Xemacs. overlay. enlarge-window.
+	Ulrich Drepper <drepper@myware.rz.uni-karlsruhe.de>
+	"Carl D. Roth" <roth@cse.ucsc.edu>
+	Wilfried Philips <philips@ibmmbv2.elis.rug.ac.be>
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-base64-encode-string bug fix
+* pick macro
+	UMEMURA Akihiro <akihiro@theory.brl.ntt.jp>
+* mew-draft-{yank,cite} save-restriction bug fix.
+* mew-draft-header typo fix.
+	koba@flab.fujitsu.co.jp (Kobayashi Shinji)
+* mew-draft-on-key-p bug fix.
+	koba@flab.fujitsu.co.jp (Kobayashi Shinji)
+
+1.04 (02/29/96) mew-dist release
+
+* Functions of header completion staff in Draft buffer are enhanced.
+* mew-assoc-match bug fix
+* all "reverse" are changed to "reverse" to save cells!
+* mew-summary-{next,prev}-msg are redefined.
+* mew-buffer-substring is defined.
+* Make mew-base64-char64 one-liner...
+
+1.03 (02/14/96) mew-dist release
+
+* "N" and "P" just moves cursor if mew-summary-buffer-disp-msg is nil.
+* Keep summary height(excluding mode line) ODD! (Why hasn't this code
+been included yet? I certainly implemented before...)
+* "n" display D-marked message even if all below messages are marked
+as D. Comment out (forward-line -1) on mew-summary-down to prevent
+this.
+* Typing "u" on a part whose message is marked causes an error. This is
+fixed.
+* (set-buffer-modified-p nil) for mark functions.
+* use buffer-substring-no-properties in lieu of buffer-substring in
+mew-match.
+	Anders Lindgren <andersl@csd.uu.se>
+* mew-summary-rmm has potentially a big bug, which marks "D" on
+another message if and only if the user types "D" on a part which is
+already marked as "D". This bug is fixed with mew-summary-rmm-one.
+* The same bug fix for mew-summary-refile
+	Hirotaka Yokokawa <Hirotaka.Yokokawa@sun.co.jp>
+* Underline and pick seedup patch
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+	UMEMURA Akihiro <akihiro@theory.brl.ntt.jp>
+* mew-mime-application/octet-strem in lieu of mew-mime-default-function.
+
+1.02 (12/21/95) mew-dist release
+
+* mew-summary-search bug fix.
+* Assign C-xC-o to mew-summary-jump-to-draft-buffer.
+* Don't recenter at refile.
+        NAKAMURA Motonori <motonori@cs.ritsumei.ac.jp>
+* Move (mew-summary-highlight-lines) after sentinel.
+        SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Don't delete mew-watch buffer when quite.
+* Inc calls scan-body to fill the gap.
+* Synchronize the scan termination in inc.
+	Tomoaki Tada <niggle@fct.kgc.co.jp>
+* mew-mail-address patch to fix PGP key selection bug
+	Makoto 'MAR_kun' MATSUSHITA <matusita@ics.es.osaka-u.ac.jp>
+* mew-summary-inc bug fix. folder -> mew-inbox
+	Hirotaka Yokokawa <Hirotaka.Yokokawa@sun.co.jp>
+* mew-prog-scan-default-range
+	Akihisa Konno <minnie@fluidlab.naoe.t.u-tokyo.ac.jp>
+* Use file-truename to expand symbolic directory name in
+mew-summary-folder-dir-newp when Emacs19. This bug remains for Emacs18...
+	Yoshiaki KASAHARA <kasahara@csce.kyushu-u.ac.jp>
+* Define mew-summary-exec-hook.
+* Mark @ and * enhancement 
+	Akihisa Konno <minnie@fluidlab.naoe.t.u-tokyo.ac.jp>
+* -not support for pick.
+	Akihisa Konno <minnie@fluidlab.naoe.t.u-tokyo.ac.jp>
+* Strong marks and weak marks.
+* vscan enhancement.
+	Shigeya Suzuki <shigeya@foretune.co.jp>
+
+
+1.01 (11/28/95) mew-dist release
+
+* Delete X-Mailer: field when reedit.
+* Don't set mew-reply-to by default.
+* Define
+	mew-noreplyto-to-list
+	mew-noreplyto-cc-list
+	mew-replyto-to-list
+	mew-replyto-cc-list
+This is a quite temporary solution. 
+* passphrase failure bug fix.
+	MOTOKADO Yoshihiro <moto@kado.iijnet.or.jp>
+* (forward-char 1) in mew-message-prev-page for compatibility with
+emacs-19.28 and emacs-19.29
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* undo don't delete message buffer.
+* Never ask update if a directory is older than its cashe file.
+* underline patch 
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mhc.el version up
+* "message/external-body" patch
+	Yoshinari NOMURA <nomsun@csce.kyushu-u.ac.jp>
+* Window pop patch
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* Do update if .mew-cache doesn't exist.
+* Change the regex for keep-lines not to delete multipart.
+* "^" mew-mail-address "$".
+* overlay-put instead of put-text-property.
+	SAKAI Kiyotaka <ksakai@netwk.ntt-at.co.jp>
+* mew-input-filename bug fix.
+	Suggested by Richard Levitte <levitte@adm.pi.se>
+
+
+1.00 (10/18/95) mew-release release
+
+* Define buffer-substring-no-properties on Emacs19 if not defined.
+* Never use text properties on Xemacs.
+* Warn if old style of mew-cite-format is used.
+* mew-temp-minibuffer-message bug fix.
+* Support Gnus v5.
+* mew-draft-header more neatly deletes Cc:.
+* redist never prepares Resent-Cc:.
+* All commands are sensitive end of buffer. Boundary problems are solved.
+* mew-summary-prev-page bug fixes.
+* mew-summary-exec displays "No marks".
+* You can execute mew-summary-forward on part.
+
+--End of file

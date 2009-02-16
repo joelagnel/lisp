@@ -1,0 +1,55 @@
+ILISP 5.12.0
+============
+
+ILISP is a powerful GNU Emacs interface to many dialects of Lisp, including
+Lucid, Allegro, Xanalys/Harlequin LispWorks, GCL, KCL, AKCL, ECL, IBCL, and
+CMUCL.  Also some Scheme implementations are supported as well as a
+preliminary version of Xlisp/XlispStat.
+
+Written by Chris McConnell <ccm+@cs.cmu.edu> and now maintained by a group
+of programmers led by Marco Antoniotti <marcoxa@cons.org>.
+
+Please refer to the following files in this directory:
+
+  HISTORY       : A detailed summary of changes over the course of ILISP's
+                  existence.
+  GETTING-ILISP : Directions for obtaining this collection using
+                  anonymous FTP.
+  INSTALLATION  : Directions about how to install ILISP and specific
+                  dialect needs.
+
+General information on ILISP is available at:
+
+  http://ilisp.cons.org
+
+The project site, which provides access to the CVS source tree, bug
+database, mailing lists and other resources, is hosted at SourceForge:
+
+  http://sourceforge.net/projects/ilisp/
+
+The following mailing lists are available:
+
+  ilisp-announce : Subscribe to this list if you want to receive public
+                   announcements regarding ILISP.
+  ilisp-devel    : This is the list for people who want to be actively
+                   involved in the development of ILISP.
+  ilisp-help     : This is the list for asking usage questions regarding
+                   ILISP.
+  ilisp-cvs      : Subscribe to this list *only* if you want to monitor the
+                   CVS repository activity.
+
+You can subscribe to the lists and access the archives via the general
+information pages:
+
+  http://lists.sourceforge.net/mailman/listinfo/ilisp-announce
+  http://lists.sourceforge.net/mailman/listinfo/ilisp-devel
+  http://lists.sourceforge.net/mailman/listinfo/ilisp-help
+  http://lists.sourceforge.net/mailman/listinfo/ilisp-cvs
+
+You may send bug reports, questions, suggestions, etc. to ilisp-help or
+ilisp-devel.
+
+Enjoy,
+
+
+The ILISP Maintainers

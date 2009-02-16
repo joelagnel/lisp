@@ -1,0 +1,1332 @@
+This is auctex, produced by makeinfo version 4.2 from auc-tex.texi.
+
+START-INFO-DIR-ENTRY
+* AUCTeX: (auctex).      A much enhanced LaTeX mode for GNU Emacs.
+END-INFO-DIR-ENTRY
+
+
+File: auctex,  Node: Parsing Files,  Next: I18n,  Prev: Multifile,  Up: Top
+
+Automatic Parsing of TeX files.
+*******************************
+
+   AUC TeX depends heavily on being able to extract information from the
+buffers by parsing them.  Since parsing the buffer can be somewhat slow,
+the parsing is initially disabled.  You are encouraged to enable them by
+adding the following lines to your `.emacs' file.
+
+     (setq TeX-parse-self t) ; Enable parse on load.
+     (setq TeX-auto-save t) ; Enable parse on save.
+
+   The later command will make AUC TeX store the parsed information in
+an `auto' subdirectory in the directory each time the TeX files are
+stored, *note Automatic Local::.  If AUC TeX finds the pre-parsed
+information when loading a file, it will not need to reparse the buffer.
+The information in the `auto' directory is also useful for multifile
+documents *note Multifile::, since it allows each file to access the
+parsed information from all the other files in the document.  This is
+done by first reading the information from the master file, and then
+recursively the information from each file stored in the master file.
+
+   The variables can also be done on a per file basis, by changing the
+file local variables.
+
+     % Local Variables:
+     % TeX-parse-self: t
+     % TeX-auto-save: t
+     % End:
+
+   Even when you have disabled the automatic parsing, you can force the
+generation of style information by pressing `C-c C-n'.  This is often
+the best choice, as you will be able to decide when it is necessary to
+reparse the file.
+
+ - User Option: TeX-parse-self
+     Parse file after loading it if no style hook is found for it.
+
+ - User Option: TeX-auto-save
+     Automatically save style information when saving the buffer.
+
+ - Command: TeX-normal-mode ARG
+     (`C-c C-n') Remove all information about this buffer, and apply the
+     style hooks again.  Save buffer first including style information.
+     With optional argument, also reload the style hooks.
+
+   When AUC TeX saves your buffer, it will by default convert all tabs
+in your buffer into spaces.  To disable this behaviour, insert the
+following in your `.emacs' file.
+
+     (setq TeX-auto-untabify nil)
+
+ - User Option: TeX-auto-untabify
+     Automatically remove all tabs from a file before saving it.
+
+   Instead of disabling the parsing entirely, you can also speed it
+significantly up by limiting the information it will search for (and
+store) when parsing the buffer.  You can do this by setting the default
+values for the buffer local variables `TeX-auto-regexp-list' and
+`TeX-auto-parse-length' in your `.emacs' file.
+
+     ;; Only parse \documentstyle information.
+     (setq-default TeX-auto-regexp-list 'LaTeX-auto-minimal-regexp-list)
+     ;; The documentstyle command is usually near the beginning.
+     (setq-default TeX-auto-parse-length 2000)
+
+   This example will speed the parsing up significantly, but AUC TeX
+will no longer be able to provide completion for labels, macros,
+environments, or bibitems specified in the document, nor will it know
+what files belong to the document.
+
+   These variables can also be specified on a per file basis, by
+changing the file local variables.
+
+     % Local Variables:
+     % TeX-auto-regexp-list: TeX-auto-full-regexp-list
+     % TeX-auto-parse-length: 999999
+     % End:
+
+ - User Option: TeX-auto-regexp-list
+     List of regular expressions used for parsing the current file.
+
+ - User Option: TeX-auto-parse-length
+     Maximal length of TeX file that will be parsed.
+
+   The pre-specified lists of regexps are defined below.  You can use
+these before loading AUC TeX by quoting them, as in the example above.
+
+ - Constant: TeX-auto-empty-regexp-list
+     Parse nothing
+
+ - Constant: LaTeX-auto-minimal-regexp-list
+     Only parse documentstyle.
+
+ - Constant: LaTeX-auto-label-regexp-list
+     Only parse LaTeX labels.
+
+ - Constant: LaTeX-auto-regexp-list
+     Parse common LaTeX commands.
+
+ - Constant: plain-TeX-auto-regexp-list
+     Parse common plain TeX commands.
+
+ - Constant: TeX-auto-full-regexp-list
+     Parse all TeX and LaTeX commands that AUC TeX can use.
+
+
+File: auctex,  Node: I18n,  Next: Automatic,  Prev: Parsing Files,  Up: Top
+
+Internationalization
+********************
+
+   There are several problems associated with editing non-English TeX
+with GNU Emacs.  Modern versions of GNU Emacs and TeX are usable for
+European (Latin, Cyrillic, Greek) based languages, but special versions
+of TeX and Emacs are needed for Korean, Japanese, and Chinese.
+
+* Menu:
+
+* European::                    Using AUC TeX for European languages.
+* Japanese::                    Japanese TeX
+
+
+File: auctex,  Node: European,  Next: Japanese,  Prev: I18n,  Up: I18n
+
+Using AUC TeX for European languages.
+=====================================
+
+   First you will need a way to write non-ASCII characters.  You can
+either use macros, or teach TeX about the ISO character sets.  I prefer
+the latter, it has the advantage that the usual standard emacs word
+movement and case change commands will work.
+
+   With LaTeX2e, just add `\usepackage[latin1]{inputenc}'.  Other
+languages than Western European ones will probably have other encoding
+needs.
+
+   To be able to display non-ASCII characters you will need an
+appropriate font and a version of GNU Emacs capable of displaying 8-bit
+characters.  The manner in which this is supported differs between
+Emacsen, so you need to take a look at your respective documentation.
+
+   A compromise is to use use an European character set when editing the
+file, and convert to TeX macros when reading and writing the files.
+
+`iso-cvt.el'
+     Much like `iso-tex.el' but is bundled with Emacs 19.23 and later.
+
+`x-compose.el'
+     Similar package bundled with new versions of XEmacs.
+
+`X-Symbol'
+     a much more complete package for both Emacs and XEmacs that can
+     also handle a lot of mathematical characters and input methods.
+
+   AUC TeX supports style files for several languages.  Each style file
+may modify some AUC TeX to better support the language, and will run a
+language specific hook that will allow you to for example change ispell
+dictionary, or run code to change the keyboard remapping.  The
+following will for example choose a Danish dictionary for documents
+including the `dk.sty' file.  This requires parsing to be enabled,
+*note Parsing Files::.
+
+     (add-hook 'TeX-language-dk-hook
+               (function (lambda () (ispell-change-dictionary "danish"))))
+
+   The following style files are recognized.
+`dk'
+     Runs style hook `TeX-language-dk-hook'.
+
+`dutch'
+     Runs style hook `TeX-language-nl-hook'.
+
+`german'
+     Runs style hook `TeX-language-de-hook'.  Gives  `"' word syntax
+     and makes the <"> key insert a literal `"'.
+
+`plfonts'
+`plhb'
+     Runs style hook `TeX-language-pl-hook'.  Gives  `"' word syntax
+     and makes the <"> key insert a literal `"'.  Pressing <"> twice
+     will insert `"<' or `">' depending on context.
+
+
+File: auctex,  Node: Japanese,  Prev: European,  Up: I18n
+
+Japanese TeX
+============
+
+   To write Japanese text with AUC TeX you need to have versions of TeX
+and Emacs that support Japanese.  There exist at least two variants of
+TeX for Japanese text (jTeX and pTeX), and AUC TeX can be used with
+MULE supported Emacsens.
+
+   To install Japanese support for AUC TeX, copy `tex-jp.el' to AUC TeX
+installed directory.  Next two commands will automatically install
+contributed files.
+
+     make contrib
+     make install-contrib
+
+   See `INSTALLATION' and `Makefile' for more information.
+
+   To use the Japanese TeX variants, simply enter `japanese-tex-mode',
+`japanese-latex-mode', or `japanese-slitex-mode', and everything should
+work.  If not, send mail to Shinji Kobayashi
+`<koba@flab.fujitsu.co.jp>', who kindly donated the code for supporting
+Japanese in AUC TeX.  None of the primary AUC TeX maintainers
+understand Japanese, so they can not help you.
+
+   If you usually use AUC TeX in Japanese, setting following variables
+is useful.
+
+ - User Option: TeX-default-mode
+     Mode to enter for a new file when it can't be determined whether
+     the file is plain TeX or LaTeX or what.
+
+     To use Japanese TeX always, set japanese command for example:
+          (setq TeX-default-mode 'japanese-latex-mode)
+
+ - User Option: japanese-TeX-command-default
+     The default command for TeX-command in japanese TeX mode.
+
+     The default value is `jTeX'.
+
+ - User Option: japanese-LaTeX-command-default
+     The default command for TeX-command in japanese LaTeX mode.
+
+     The default value is `jLaTeX'.
+
+ - User Option: japanese-LaTeX-default-style
+     The default style/class when creating new japanese LaTeX document.
+
+     The default value is `j-article'.
+
+   See `tex-jp.el' for more information.
+
+
+File: auctex,  Node: Automatic,  Next: Style Files,  Prev: I18n,  Up: Top
+
+Automatic Customization
+***********************
+
+   Since AUC TeX is so highly customizable, it makes sense that it is
+able to customize itself.  The automatic customization consists of
+scanning TeX files and extracting symbols, environments, and things
+like that.
+
+   The automatic customization is done on three different levels.  The
+global level is the level shared by all users at your site, and consists
+of scanning the standard TeX style files, and any extra styles added
+locally for all users on the site.  The private level deals with those
+style files you have written for your own use, and use in different
+documents.  You may have a `~/lib/TeX/' directory where you store
+useful style files for your own use.  The local level is for a specific
+directory, and deals with writing customization for the files for your
+normal TeX documents.
+
+   If compared with the environment variable `TEXINPUTS', the global
+level corresponds to the directories built into TeX.  The private level
+corresponds to the directories you add yourself, except for `.', which
+is the local level.
+
+* Menu:
+
+* Automatic Global::            Automatic Customization for the Site
+* Automatic Private::           Automatic Customization for a User
+* Automatic Local::             Automatic Customization for a Directory
+
+   By default AUC TeX will search for customization files in all the
+global, private, and local style directories, but you can also set the
+path directly.  This is useful if you for example want to add another
+person's style hooks to your path.  Please note that all matching files
+found in `TeX-style-path' are loaded, and all hooks defined in the
+files will be executed.
+
+ - User Option: TeX-style-path
+     List of directories to search for AUC TeX style files.  Each must
+     end with a slash.
+
+   By default, when AUC TeX searches a directory for files, it will
+recursively search through subdirectories.
+
+ - User Option: TeX-file-recurse
+     Whether to search TeX directories recursively: nil means do not
+     recurse, a positive integer means go that far deep in the directory
+     hierarchy, t means recurse indefinitely.
+
+   By default, AUC TeX will ignore files name `.', `..', `SCCS', `RCS',
+and `CVS'.
+
+ - User Option: TeX-ignore-file
+     Regular expression matching file names to ignore.
+
+     These files or directories will not be considered when searching
+     for TeX files in a directory.
+
+
+File: auctex,  Node: Automatic Global,  Next: Automatic Private,  Prev: Automatic,  Up: Automatic
+
+Automatic Customization for the Site
+====================================
+
+   Assuming that the automatic customization at the global level was
+done when AUC TeX was installed, your choice is now: will you use it?
+If you use it, you will benefit by having access to all the symbols and
+environments available for completion purposes.  The drawback is slower
+load time when you edit a new file and perhaps too many confusing
+symbols when you try to do a completion.
+
+   You can disable the automatic generated global style hooks by setting
+the variable `TeX-auto-global' to nil.
+
+ - User Option: TeX-macro-global
+     Directories containing the site's TeX style files.
+
+ - User Option: TeX-style-global
+     Directory containing hand generated TeX information.  Must end
+     with a slash.
+
+     These correspond to TeX macros shared by all users of a site.
+
+ - User Option: TeX-auto-global
+     Directory containing automatically generated information.
+
+     For storing automatic extracted information about the TeX macros
+     shared by all users of a site.
+
+
+File: auctex,  Node: Automatic Private,  Next: Automatic Local,  Prev: Automatic Global,  Up: Automatic
+
+Automatic Customization for a User
+==================================
+
+   You should specify where you store your private TeX macros, so AUC
+TeX can extract their information.  The extracted information will go
+to the directories listed in `TeX-auto-private'
+
+   Use `M-x TeX-auto-generate' to extract the information.
+
+ - User Option: TeX-macro-private
+     Directories where you store your personal TeX macros.  Each must
+     end with a slash.
+
+     This defaults to the directories listed in the `TEXINPUTS' and
+     `BIBINPUTS' environment variables.
+
+ - User Option: TeX-auto-private
+     List of directories containing automatically generated information.
+     Must end with a slash.
+
+     These correspond to the personal TeX macros.
+
+ - Command: TeX-auto-generate TEX AUTO
+     (`M-x TeX-auto-generate') Generate style hook for TEX and store it
+     in AUTO.  If TEX is a directory, generate style hooks for all
+     files in the directory.
+
+ - User Option: TeX-style-private
+     List of directories containing hand generated information.  Must
+     end with a slash.
+
+     These correspond to the personal TeX macros.
+
+
+File: auctex,  Node: Automatic Local,  Prev: Automatic Private,  Up: Automatic
+
+Automatic Customization for a Directory
+=======================================
+
+   AUC TeX can update the style information about a file each time you
+save it, and it will do this if the directory `TeX-auto-local' exist.
+`TeX-auto-local' is by default set to `"auto/"', so simply creating an
+`auto' directory will enable automatic saving of style information.
+
+   The advantage of doing this is that macros, labels, etc. defined in
+any file in a multifile document will be known in all the files in the
+document.  The disadvantage is that saving will be slower.  To disable,
+set `TeX-auto-local' to nil.
+
+ - User Option: TeX-style-local
+     Directory containing hand generated TeX information.  Must end
+     with a slash.
+
+     These correspond to TeX macros found in the current directory.
+
+ - User Option: TeX-auto-local
+     Directory containing automatically generated TeX information.
+     Must end with a slash.
+
+     These correspond to TeX macros found in the current directory.
+
+
+File: auctex,  Node: Style Files,  Next: Installation,  Prev: Automatic,  Up: Top
+
+Writing Your own Style Support
+******************************
+
+   *Note Automatic::, for a discussion about automatically generated
+global, private, and local style files.  The hand generated style files
+are equivalent, except that they by default are found in `style'
+directories instead of `auto' directories.
+
+* Menu:
+
+* Simple Style::                A Simple Style File
+* Adding Macros::               Adding Support for Macros
+* Adding Environments::         Adding Support for Environments
+* Adding Other::                Adding Other Information
+* Hacking the Parser::          Automatic Extraction of New Things
+
+   If you write some useful support for a public TeX style file, please
+send it to us.
+
+
+File: auctex,  Node: Simple Style,  Next: Adding Macros,  Prev: Style Files,  Up: Style Files
+
+A Simple Style File
+===================
+
+   Here is a simple example of a style file.
+
+     ;;; book.el - Special code for book style.
+     
+     (TeX-add-style-hook "book"
+      (function (lambda () (setq LaTeX-largest-level
+                                 (LaTeX-section-level ("chapter"))))))
+
+   This file specifies that the largest kind of section in a LaTeX
+document using the book document style is chapter.  The interesting
+thing to notice is that the style file defines an (anonymous) function,
+and adds it to the list of loaded style hooks by calling
+`TeX-add-style-hook'.
+
+   The first time the user indirectly tries to access some style
+specific information, such as the largest sectioning command available,
+the style hooks for all files directly or indirectly read by the
+current document is executed.  The actual files will only be evaluated
+once, but the hooks will be called for each buffer using the style file.
+
+ - Function: TeX-add-style-hook STYLE HOOK
+     Add HOOK to the list of functions to run when we use the TeX file
+     STYLE.
+
+
+File: auctex,  Node: Adding Macros,  Next: Adding Environments,  Prev: Simple Style,  Up: Style Files
+
+Adding Support for Macros
+=========================
+
+   The most common thing to define in a style hook is new symbols (TeX
+macros).  Most likely along with a description of the arguments to the
+function, since the symbol itself can be defined automatically.
+
+   Here are a few examples from `latex.el'.
+
+     (TeX-add-style-hook "latex"
+      (function
+       (lambda ()
+          (TeX-add-symbols
+          '("arabic" TeX-arg-counter)
+          '("label" TeX-arg-define-label)
+          '("ref" TeX-arg-label)
+          '("newcommand" TeX-arg-define-macro [ "Number of arguments" ] t)
+          '("newtheorem" TeX-arg-define-environment
+            [ TeX-arg-environment "Numbered like" ]
+            t [ TeX-arg-counter "Within counter" ])))))
+
+ - Function: TeX-add-symbols SYMBOL ...
+     Add each SYMBOL to the list of known symbols.
+
+   Each argument to `TeX-add-symbols' is a list describing one symbol.
+The head of the list is the name of the symbol, the remaining elements
+describe each argument.
+
+   If there are no additional elements, the symbol will be inserted with
+point inside braces.  Otherwise, each argument of this function should
+match an argument of the TeX macro.  What is done depends on the
+argument type.
+
+   If a macro is defined multiple times, AUC TeX will chose the one with
+the longest definition (i.e. the one with the most arguments).
+
+   Thus, to overwrite
+             '("tref" 1) ; one argument
+   you can specify
+             '("tref" TeX-arg-label ignore) ; two arguments
+
+   `ignore' is a function that does not do anything, so when you insert
+a `tref' you will be prompted for a label and no more.
+
+`string'
+     Use the string as a prompt to prompt for the argument.
+
+`number'
+     Insert that many braces, leave point inside the first.
+
+`nil'
+     Insert empty braces.
+
+`t'
+     Insert empty braces, leave point between the braces.
+
+`other symbols'
+     Call the symbol as a function.  You can define your own hook, or
+     use one of the predefined argument hooks.
+
+`list'
+     If the car is a string, insert it as a prompt and the next element
+     as initial input.  Otherwise, call the car of the list with the
+     remaining elements as arguments.
+
+`vector'
+     Optional argument.  If it has more than one element, parse it as a
+     list, otherwise parse the only element as above.  Use square
+     brackets instead of curly braces, and is not inserted on empty user
+     input.
+
+   A lot of argument hooks have already been defined.  The first
+argument to all hooks is a flag indicating if it is an optional
+argument.  It is up to the hook to determine what to do with the
+remaining arguments, if any.  Typically the next argument is used to
+overwrite the default prompt.
+
+`TeX-arg-conditional'
+     Implements if EXPR THEN ELSE.  If EXPR evaluates to true, parse
+     THEN as an argument list, else parse ELSE as an argument list.
+
+`TeX-arg-literal'
+     Insert its arguments into the buffer.  Used for specifying extra
+     syntax for a macro.
+
+`TeX-arg-free'
+     Parse its arguments but use no braces when they are inserted.
+
+`TeX-arg-eval'
+     Evaluate arguments and insert the result in the buffer.
+
+`TeX-arg-file'
+     Prompt for a tex or sty filename, and use it without the
+     extension. Run the file hooks defined for it.
+
+`TeX-arg-label'
+     Prompt for a label completing with known labels.
+
+`TeX-arg-macro'
+     Prompt for a TeX macro with completion.
+
+`TeX-arg-environment'
+     Prompt for a LaTeX environment with completion.
+
+`TeX-arg-cite'
+     Prompt for a BibTeX citation.
+
+`TeX-arg-counter'
+     Prompt for a LaTeX counter.
+
+`TeX-arg-savebox'
+     Prompt for a LaTeX savebox.
+
+`TeX-arg-file'
+     Prompt for a filename in the current directory, and use it without
+     the extension.
+
+`TeX-arg-input-file'
+     Prompt for a filename in the current directory, and use it without
+     the extension.  Run the style hooks for the file.
+
+`TeX-arg-define-label'
+     Prompt for a label completing with known labels.  Add label to
+     list of defined labels.
+
+`TeX-arg-define-macro'
+     Prompt for a TeX macro with completion.  Add macro to list of
+     defined macros.
+
+`TeX-arg-define-environment'
+     Prompt for a LaTeX environment with completion.  Add environment to
+     list of defined environments.
+
+`TeX-arg-define-cite'
+     Prompt for a BibTeX citation.
+
+`TeX-arg-define-counter'
+     Prompt for a LaTeX counter.
+
+`TeX-arg-define-savebox'
+     Prompt for a LaTeX savebox.
+
+`TeX-arg-corner'
+     Prompt for a LaTeX side or corner position with completion.
+
+`TeX-arg-lr'
+     Prompt for a LaTeX side with completion.
+
+`TeX-arg-tb'
+     Prompt for a LaTeX side with completion.
+
+`TeX-arg-pagestyle'
+     Prompt for a LaTeX pagestyle with completion.
+
+`TeX-arg-verb'
+     Prompt for delimiter and text.
+
+`TeX-arg-pair'
+     Insert a pair of numbers, use arguments for prompt. The numbers are
+     surrounded by parentheses and separated with a comma.
+
+`TeX-arg-size'
+     Insert width and height as a pair.  No arguments.
+
+`TeX-arg-coordinate'
+     Insert x and y coordinates as a pair.  No arguments.
+
+   If you add new hooks, you can assume that point is placed directly
+after the previous argument, or after the macro name if this is the
+first argument.  Please leave point located after the argument you are
+inserting.  If you want point to be located somewhere else after all
+hooks have been processed, set the value of `exit-mark'.  It will point
+nowhere, until the argument hook sets it.
+
+
+File: auctex,  Node: Adding Environments,  Next: Adding Other,  Prev: Adding Macros,  Up: Style Files
+
+Adding Support for Environments
+===============================
+
+   Adding support for environments is very much like adding support for
+TeX macros, except that each environment normally only takes one
+argument, an environment hook.  The example is again a short version of
+`latex.el'.
+
+     (TeX-add-style-hook "latex"
+      (function
+       (lambda ()
+         (LaTeX-add-environments
+          '("document" LaTeX-env-document)
+          '("enumerate" LaTeX-env-item)
+          '("itemize" LaTeX-env-item)
+          '("list" LaTeX-env-list)))))
+
+   The only hook that is generally useful is `LaTeX-env-item', which is
+used for environments that contain items.  It is completely up to the
+environment hook to insert the environment, but the function
+`LaTeX-insert-environment' may be of some help.  The hook will be
+called with the name of the environment as its first argument, and extra
+arguments can be provided by adding them to a list after the hook.
+
+   For simple environments with arguments, for example defined with
+`\newenvironment', you can make AUC TeX prompt for the arguments by
+giving the prompt strings in the call to `LaTeX-add-environments'.  For
+example, if you have defined a `loop' environment with the three
+arguments FROM, TO, and STEP, you can add support for them in a style
+file.
+
+     %% loop.sty
+     
+     \newenvironment{loop}[3]{...}{...}
+
+     ;; loop.el
+     
+     (TeX-add-style-hook "loop"
+      (function
+       (lambda ()
+         (LaTeX-add-environments
+          '("loop" "From" "To" "Step")))))
+
+   If an environment is defined multiple times, AUC TeX will chose the
+one with the longest definition.  Thus, if you have an enumerate style
+file, and want it to replace the standard LaTeX enumerate hook above,
+you could define an `enumerate.el' file as follows, and place it in the
+appropriate style directory.
+
+     (TeX-add-style-hook "latex"
+      (function
+       (lambda ()
+         (LaTeX-add-environments
+          '("enumerate" LaTeX-env-enumerate foo)))))
+     
+     (defun LaTeX-env-enumerate (environment &optional ignore) ...)
+
+   The symbol `foo' will be passed to `LaTeX-env-enumerate' as the
+second argument, but since we only added it to overwrite the definition
+in `latex.el' it is just ignored.
+
+ - Function: LaTeX-add-environments ENV ...
+     Add each ENV to list of loaded environments.
+
+ - Function: LaTeX-insert-environment ENV [ EXTRA ]
+     Insert environment of type ENV, with optional argument EXTRA.
+
+
+File: auctex,  Node: Adding Other,  Next: Hacking the Parser,  Prev: Adding Environments,  Up: Style Files
+
+Adding Other Information
+========================
+
+   You can also specify bibliographical databases and labels in the
+style file.  This is probably of little use, since this information will
+usually be automatically generated from the TeX file anyway.
+
+ - Function: LaTeX-add-bibliographies BIBLIOGRAPHY ...
+     Add each BIBLIOGRAPHY to list of loaded bibliographies.
+
+ - Function: LaTeX-add-labels LABEL ...
+     Add each LABEL to the list of known labels.
+
+
+File: auctex,  Node: Hacking the Parser,  Prev: Adding Other,  Up: Style Files
+
+Automatic Extraction of New Things
+==================================
+
+   The automatic TeX information extractor works by searching for
+regular expressions in the TeX files, and storing the matched
+information.  You can add support for new constructs to the parser,
+something that is needed when you add new commands to define symbols.
+
+   For example, in the file `macro.tex' I define the following macro.
+
+     \newcommand{\newmacro}[5]{%
+     \def#1{#3\index{#4@#5~cite{#4}}\nocite{#4}}%
+     \def#2{#5\index{#4@#5~cite{#4}}\nocite{#4}}%
+     }
+
+   AUC TeX will automatically figure out that `newmacro' is a macro
+that takes five arguments.  However, it is not smart enough to
+automatically see that each time we use the macro, two new macros are
+defined.  We can specify this information in a style hook file.
+
+     ;;; macro.el - Special code for my own macro file.
+     
+     ;;; Code:
+     
+     (defvar TeX-newmacro-regexp
+       '("\\\\newmacro{\\\\\\([a-zA-Z]+\\)}{\\\\\\([a-zA-Z]+\\)}"
+         (1 2) TeX-auto-multi)
+       "Matches \newmacro definitions.")
+     
+     (defvar TeX-auto-multi nil
+       "Temporary for parsing \\newmacro definitions.")
+     
+     (defun TeX-macro-cleanup ()
+       ;; Move symbols from `TeX-auto-multi' to `TeX-auto-symbol'.
+       (mapcar (function (lambda (list)
+                 (mapcar (function (lambda (symbol)
+                           (setq TeX-auto-symbol
+                                 (cons symbol TeX-auto-symbol))))
+                         list)))
+               TeX-auto-multi))
+     
+     (defun TeX-macro-prepare ()
+       ;; Clear `Tex-auto-multi' before use.
+       (setq TeX-auto-multi nil))
+     
+     (add-hook 'TeX-auto-prepare-hook 'TeX-macro-prepare)
+     (add-hook 'TeX-auto-cleanup-hook 'TeX-macro-cleanup)
+     
+     (TeX-add-style-hook "macro"
+      (function
+       (lambda ()
+         (TeX-auto-add-regexp TeX-newmacro-regexp)
+         (TeX-add-symbols '("newmacro"
+                            TeX-arg-macro
+                            (TeX-arg-macro "Capitalized macro: \\")
+                            t
+                            "BibTeX entry: "
+                            nil)))))
+     
+     ;;; macro.el ends here
+
+   When this file is first loaded, it adds a new entry to
+`TeX-newmacro-regexp', and defines a function to be called before the
+parsing starts, and one to be called after the parsing is done.  It
+also declares a variable to contain the data collected during parsing.
+Finally, it adds a style hook which describes the `newmacro' macro, as
+we have seen it before.
+
+   So the general strategy is: Add a new entry to `TeX-newmacro-regexp'.
+Declare a variable to contain intermediate data during parsing.  Add
+hook to be called before and after parsing.  In this case, the hook
+before parsing just initializes the variable, and the hook after parsing
+collects the data from the variable, and adds them to the list of
+symbols found.
+
+ - Variable: TeX-auto-regexp-list
+     List of regular expressions matching TeX macro definitions.
+
+     The list has the following format ((REGEXP MATCH TABLE) ...), that
+     is, each entry is a list with three elements.
+
+     REGEXP.  Regular expression matching the macro we want to parse.
+
+     MATCH.  A number or list of numbers, each representing one
+     parenthesized subexpression matched by REGEXP.
+
+     TABLE.  The symbol table to store the data.  This can be a
+     function, in which case the function is called with the argument
+     MATCH.  Use `TeX-match-buffer' to get match data.  If it is not a
+     function, it is presumed to be the name of a variable containing a
+     list of match data.  The matched data (a string if MATCH is a
+     number, a list of strings if MATCH is a list of numbers) is put in
+     front of the table.
+
+ - Variable: TeX-auto-prepare-hook nil
+     List of functions to be called before parsing a TeX file.
+
+ - Variable: TeX-auto-cleanup-hook nil
+     List of functions to be called after parsing a TeX file.
+
+
+File: auctex,  Node: Installation,  Next: History,  Prev: Style Files,  Up: Top
+
+Installation of AUC TeX
+***********************
+
+Compiling
+=========
+
+   The following describes how to install AUC TeX under Unix.  You may
+also be able to do use these instructions under some other operating
+systems, if you have already installed the proper GNU tools, such as
+`make'.
+
+   To install AUC TeX for an entire site (which may just be your own
+personal Linux box), issue the following two commands as root:
+
+     make
+     make lispdir=/usr/local/share/emacs/site-lisp install
+
+   except that instead of /usr/local/... you should use the location of
+your sites emacs installation.  AUC TeX will then be installed in a
+subdirectory named `auctex' of the `site-lisp' directory, and the file
+`tex-site.el' will be stored directly in the `site-lisp'.  You can now
+tell your users to enable AUC TeX by adding
+
+     (require 'tex-site)
+
+   to their `.emacs' file.
+
+   If you use xemacs instead, or if your emacs binary is named something
+else than `emacs', specify this by using the commands
+
+     make EMACS=xemacs
+     make lispdir=/usr/local/share/emacs/site-lisp install
+
+   to install.
+
+   If you want to install AUC TeX in your personal account, you should
+chose a directory for all your emacs add-ons, for example an `elisp'
+subdirectory in your home directory.  You can then install AUC TeX with
+the commands
+
+     make
+     make lispdir=$HOME/elisp install
+
+   You will then need to add the following lines to your `.emacs' file:
+
+     (setq load-path (cons "~/elisp" load-path))
+     (require 'tex-site)
+
+Customizing
+===========
+
+   Next, you should edit the file `tex-site.el' to fit your local site.
+You do this by looking at the customization section in the beginning
+of `tex.el' and copy the definitions that are wrong for your site to
+`tex-site.el'.  Do _not_ edit `tex.el' directly, or you will have to do
+all the work over again when you upgrade AUC TeX.  AUC TeX will not
+overwrite your old `tex-site.el' file next time you install, so you
+will be able to keep all your customizations.
+
+   There are two variables with a special significance.
+
+ - User Option: TeX-lisp-directory
+     The directory where you want to install the AUC TeX lisp files.
+
+   This variable is set automatically by the `make install' command.
+If you don't issue a `make install', for example if you don't want to
+install AUC TeX in a different place, you will have to set this
+variable manually to the location of the compiled files.
+
+ - User Option: TeX-macro-global
+     Directories containing the site's TeX style files.
+
+   Normally, AUC TeX will only allow you to complete a short list of
+built-in macros and environments and on the macros you define yourself.
+If you issue the `M-x TeX-auto-generate-global' command after loading
+AUC TeX, you will be able to complete on all macros available in the
+standard style files used by your document.  To do this, you must set
+this variable to a list of directories where the standard style files
+are located.  The directories will be searched recursively, so there is
+no reason to list subsirectories explicitly.
+
+   You probably also need to change `TeX-command-list' to make sure
+that the commands used for starting TeX, printing, etc. work on your
+system.  Copy the definition from `tex.el' to `tex-site.el' and edit
+the command names appropriately.
+
+   Finally, copy and edit `TeX-printer-list' to contain the printers
+available at your site.
+
+   To extract information from your sites TeX macros, type `M-x
+TeX-auto-generate-global' in your emacs.  This will only work if you
+have set `TeX-macro-global' correctly in `tex-site.el'.
+
+Contributed files
+=================
+
+   There are several files that are not part of AUC TeX proper, but
+included in the distribution in case they are useful.
+
+`hilit-LaTeX.el'
+     Better highlighting for the obsolete `hilit19' package.
+
+`bib-cite.el'
+     Better support for bibliographies and much more.
+
+`tex-jp.el'
+     Support for Japanese.
+
+   Read the comments in the start of each file for more information
+about how to install, what they do, and who wrote and maintains them.
+
+
+File: auctex,  Node: History,  Next: Projects,  Prev: Installation,  Up: Top
+
+The History of AUC TeX
+**********************
+
+   See the file `history.texi' for older changes.
+
+News in 12
+==========
+
+   * Support for the KOMA-Script classes.  Contributed by Mark Trettin
+     <Mark.Trettin@gmx.de>.
+
+   * Many more LaTeX and LaTeX2e commands are supported.  Done by
+     Masayuki Ataka  <ataka@milk.freemail.ne.jp>
+
+   * Support for `prosper.sty', see <http://prosper.sourceforge.net/>.
+     Contributed by Phillip Lord <p.lord@russet.org.uk>.
+
+   * `comment-region' now inserts %% by default.  Suggested by "Davide
+     G. M. Salvetti" <salve@debian.org>.
+
+   * You can now switch between using the `font-latex' (all emacsen),
+     the `tex-font' (Emacs 21 only) or no special package for font
+     locking.  Customize `TeX-install-font-lock' for this.
+
+   * Now use -t landscape by default when landscape option appears.
+     Suggested by Erik Frisk <frisk@isy.liu.se>.
+
+   * Use `tex-fptex.el' for fpTeX support.  Contributed by Fabrice
+     Popineau <Fabrice.Popineau@supelec.fr>.
+
+   * New user option `LaTeX-top-caption-list' specifies environments
+     where the caption should go at top.  Contributed by
+     ataka@milk.freemail.ne.jp (Masayuki Ataka).
+
+   * Allow explicit dimensions in `graphicx.sty'.  Contributed by
+     ataka@milk.freemail.ne.jp (Masayuki Ataka).
+
+   * Limited support for `verbatim.sty'.  Contributed by
+     ataka@milk.freemail.ne.jp (Masayuki Ataka).
+
+   * Better support for asmmath items.  Patch by
+     ataka@milk.freemail.ne.jp (Masayuki Ataka).
+
+   * More accurate error parsing.  Added by David Kastrup
+     <David.Kastrup@t-online.de>.
+
+   * Bug fixes.
+
+
+
+File: auctex,  Node: Projects,  Next: Credit,  Prev: History,  Up: Top
+
+Wishlist
+********
+
+   This is a list of projects for AUC TeX.  Bug reports and requests we
+can not fix or honor right away will be added to this list.  If you have
+some time for emacs lisp hacking, you are encouraged to try to provide a
+solution to one of the following problems.  It might be a good idea to
+mail me first, though.
+
+   * Page count when compiling should (optionally) go to modeline of the
+     window where the compilation command was invoked, instead of the
+     output window.  Suggested by Karsten Tinnefeld
+     <tinnefeld@irb.informatik.uni-dortmund.de>.
+
+   * Command to insert a macrodefinition in the preamble, without moving
+     point from the current location.  Suggested by "Jeffrey C. Ely"
+     <ely@nwu.edu>.
+
+   * Filling messes up comments, but only at the end of the file.
+     Reported by Juergen Reiss <psy3022@rzbox.uni-wuerzburg.de>.
+
+   * `C-c C-q C-e' doesn't work properly on nested itemize environments.
+     Reported by  "Robert B. Love"  <rlove@raptor.rmNUG.ORG>.
+
+   * One suggestion for AUC-TeX: I think that the font command C-c C-f
+     C-r, which produces \textrm{} in a LaTeX file, should instead
+     produce either \textrm{} or \mathrm{}, depending on whether one is
+     in math mode or not. -- John Palmieri <palmieri@math.mit.edu>
+
+   * A way to add and overwrite math mode entries in style files, and to
+     decide where they should be.  Suggested by Remo Badii
+     <Remo.Badii@psi.ch>.
+
+   * Create template for (first) line of tabular environment.
+
+   * I think prompting for the master is the intended behaviour.  It
+     corresponds to a `shared' value for TeX-master.
+
+     There should probably be a `none' value which wouldn't query for
+     the master, but instead disable all features that relies on
+     TeX-master.
+
+     This default value for TeX-master could then be controled with
+     mapping based on the extension.
+
+   * `C-c '' should alway stay in the current window, also when it find
+     a new file.
+
+   * `LaTeX-fill-environment' does not indent the closing `\end'.
+
+   * Rewrite `ltx-help.el' and put it in `latex.el'.  Fix also:
+          From: Denby Wong <DnB@slip224.qlink.QueensU.CA>
+          
+           1) change documentation regarding where to get the
+              latest version (at CTAN at pip.shsu.edu for me)
+              under info/latex2e-help-texinfo/
+          
+           2) change or provide choice over which version to
+              use.  There are three references to the info
+              node "(latex)" in the file which should be
+              "(latex2e)"  for the new file.
+          
+          From: Piet van Oostrum <piet@cs.ruu.nl>
+          
+          One of the annoying things of latex-help is that if you ask for \LARGE, you
+          get \large if you have case-fold-search=t. This is really info's problem as
+          it doesn't reset it for a search of the node, but it would be easy to stick
+          a (let (case-fold-search) in latex-help.
+
+   * It should be possible to insert a default preamble containing e.g.
+     `usepackage' declarations, perhaps depending on the document class.
+
+   * Multiple argument completion for `\bibliography'.  In general, I
+     ought to make `,' special for these kind of completions.
+
+   * Do not overwrite emacs warnings about existing auto-save files when
+     loading a new file.
+
+   * Suggest `makindex' when appropriate.
+
+   * Maybe the regexp for matching a TeX symbol during parsing should be
+     `"\\\\\\([a-zA-Z]+\\|.\\)"' --
+     `<thiemann@informatik.uni-tuebingen.de>' Peter Thiemann.
+
+   * AUC TeX should be able to parse LaTeX2e `.cls' files.  Here are
+     the regexps by `<thiemann@informatik.uni-tuebingen.de>' Peter
+     Thiemann.
+
+               ("\\\\DeclareRobustCommand{?\\\\\\([a-zA-Z]+\\)}?\\[\\([0-9]+\\)\\]\
+          \\[\\([^\]\\\\\n\r]+\\)\\]"
+                (1 2 3) LaTeX-auto-optional)
+               ("\\\\DeclareRobustCommand{?\\\\\\([a-zA-Z]+\\)}?\\[\\([0-9]+\\)\\]"
+                (1 2) LaTeX-auto-arguments)
+               ("\\\\DeclareRobustCommand{?\\\\\\([a-zA-Z]+\\)}?" 1 TeX-auto-symbol)
+               ("\\\\DeclareFixedFont{?\\\\\\([a-zA-Z]+\\)}?"
+                1 TeX-auto-symbol)
+               ("\\\\Declare\\(Text\\|Old\\)FontCommand{?\\\\\\([a-zA-Z]+\\)}?"
+                2 TeX-auto-symbol)
+               ("\\\\DeclareMath\\(Symbol\\|Delimiter\\|Accent\\|Radical\\){?\\\\\\([a-zA-Z]+\\)}?"
+                2 TeX-auto-symbol)
+               ;;; it is also valid to declare just a single symbol, e.g. <,
+               ;;; with \DeclareMathSymbol but it is not necessary to register that here
+               ("\\\\DeclareText\\(Command\\|Symbol\\|Accent\\|Composite\\){?\\\\\\([a-zA-Z]+\\)}?"
+                2 TeX-auto-symbol)
+
+   * Use index files (when available) to speed up `C-c C-m include
+     <RET>'.
+
+   * Option not to calculate very slow completions like for `C-c C-m
+     include <RET>'.
+
+   * AUC TeX should not parse verbatim environments.
+
+   * Font menu should be created from `TeX-font-list'.
+
+   * Installation procedure written purely in emacs lisp.
+
+   * Format LaTeX comment blocks.
+
+   * Included PostScript files should also be counted as part of the
+     document.
+
+   * The argument to `\verb' may be broken when filling if it contains a
+     space.  This should be fixed or documented.  Suggested by several
+     people.
+
+   * The parser should catch warnings about undefined crossreferences.
+     Suggested by Richard Hirsch `i3080501@ws.rz.tu-bs.de'.
+
+   * A nice hierarchical by-topic organization of all officially
+     documented LaTeX macros, available from the menu bar.
+
+   * Make ``' check for math context in `LaTeX-math-mode'. and simply
+     self insert if not in a math context.
+
+   * Make `TeX-insert-dollar' more robust.  Currently it can be fooled
+     by `\mbox''es and escaped double dollar for example.
+
+   * LaTeX formatting should skip `verbatim' environments.
+
+   * `TeX-command-default' should be set from the master file, if not
+     set locally.  Suggested by Peter Whaite `<peta@cim.mcgill.ca>'.
+
+   * Make AUC TeX work with `crypt++'.  Suggested by Chris Moore
+     `<Chris.Moore@src.bae.co.uk>'.
+
+   * Fix bug with `TeX-show-environment' from hidden document
+     environment.
+
+   * Function to check if you are in math mode (between two dollar
+     signs).  Suggested by Jan Erik Odegard `<odegard@dsp.rice.edu>'
+
+   * The `Spell' command should apply to all files in a document.  Maybe
+     it could try to restrict to files that have been modified since
+     last spell check?  Suggested by Ravinder Bhumbla
+     `<rbhumbla@ucsd.edu>'.
+
+   * Make <.> check for abbreviations and sentences ending with capital
+     letters.
+
+   * Use Emacs 19 minibuffer history to choose between previewers, and
+     other stuff.  Suggested by John Interrante
+     `<interran@uluru.Stanford.EDU>'.
+
+   * Make features.
+
+     A new command `TeX-update' (`C-c C-u') could be used to create an
+     up-to-date dvi file by repeatedly running BibTeX, MakeIndex and
+     (La)TeX, until an error occurs or we are done.
+
+     An alternative is to have an `Update' command that ensures the
+     `dvi' file is up to date.  This could be called before printing and
+     previewing.
+
+   * Documentation of variables that can be set in a style hook.
+
+     We need a list of what can safely be done in an ordinary style
+     hook.  You can not set a variable that AUC TeX depends on, unless
+     AUC TeX knows that it has to run the style hooks first.
+
+     Here is the start of such a list.
+    `LaTeX-add-environments'
+
+    `TeX-add-symbols'
+
+    `LaTeX-add-labels'
+
+    `LaTeX-add-bibliographies'
+
+    `LaTeX-largest-level'
+   * Correct indentation for tabular, tabbing, table, math, and array
+     environments.
+
+   * Optional special indentation after an `\item'.
+
+          \begin{itemize}
+          \item blabalaskdfjlas lajf adf
+                lkfjl  af jasl lkf jlsdf jlf
+          \item f lk jldjf lajflkas flf af
+          \end{itemize}
+
+   * Completion for counters and sboxes.
+
+   * Outline should be (better) supported in TeX mode.
+
+     At least, support headers, trailers, as well as TeX-outline-extra.
+
+   * `TeX-header-start' and `TeX-trailer-end'.
+
+     We might want these, just for fun (and outlines)
+
+   * Plain TeX and LaTeX specific header and trailer expressions.
+
+     We should have a way to globally specify the default value of the
+     header and trailer regexps.
+
+   * Add support for original `TeX-mode' keybindings.
+
+     A third initialization file (`tex-mode.el') containing an emulator
+     of the standard `TeX-mode' would help convince some people to
+     change to AUC TeX.
+
+   * Make `TeX-next-error' parse ahead and store the results in a list,
+     using markers to remember buffer positions in order to be more
+     robust with regard to line numbers and changed files.  This is what
+     `next-error' does. (Or did, until Emacs 19).
+
+   * When `LaTeX-environment' is given an argument, change the current
+     environment.  Be smart about `\item[]' versus `\item ' and labels
+     like `fig:' versus `tab:'.
+
+   * Check out if lightning completion from Ultra TeX is anything for
+     us.
+
+   * Finish the TeXinfo mode.  For one thing, many TeXinfo mode
+     commands do not accept braces around their arguments.
+
+   * BibTeX mode.
+
+   * Support for AMSLaTeX style files.
+
+   * Hook up the letter environment with `bbdb.el'.
+
+   * Make the letter environment hook produce `documentstyle' too.
+
+
+
+File: auctex,  Node: Credit,  Next: Key Index,  Prev: Projects,  Up: Top
+
+Credit
+******
+
+   A big smile and thanks should go to all the folks who cheered me up,
+during the long hours of programming... sorry folks, but I can't help
+including the list below, of comments I've got...
+
+   Kresten Krab Thorup
+
+`<monheit@psych.stanford.edu>'
+     I'd like to say that I'm very much enjoying using auc-tex.  Thanks
+     for the great package!
+
+`<georgiou@rex.cs.tulane.edu>'
+     I really enjoy working with auc-tex.
+
+`<toy@soho.crd.ge.com>'
+     Thanks for your great package.  It's indispensable now!  Thanks!
+
+`<ascott@gara.une.oz.au>'
+     Thanks for your time and for what appears to be a great and useful
+     package.  Thanks again
+
+`<hal@alfred.econ.lsa.umich.edu>'
+     Thanks for providing auc-tex.
+
+`<simons@ibiza.karlsruhe.gmd.de>'
+     I really enjoy using the new emacs TeX-mode you wrote.  I think
+     you did a great job.
+
+`<clipper@csd.uwo.ca>'
+     I am having fun with auc-tex already.
+
+`<ibekhaus@athena.mit.edu>'
+     Thanks for your work on auc-tex, especially the math-minor mode.
+
+`<burt@dfki.uni-kl.de>'
+     I like your auc-tex elisp package for writing LaTeX files - I am
+     especially impressed by the help with error correction.
+
+`<goncal@cnmvax.uab.es>'
+     Thanks so much!
+
+`<bond@sce.carleton.ca>'
+     I >really< like the macro, particularly the hooks for previewing
+     and the error parsing!
+
+`<ascott@gara.une.oz.au>'
+     All in all I am pleased with your package.  Thanks a lot.
+
+
+File: auctex,  Node: Key Index,  Next: Function Index,  Prev: Credit,  Up: Top
+
+Key Index
+*********
+
+* Menu:
+
+* ":                                     Quotes.
+* $:                                     Quotes.
+* <LFD>:                                 Marking and formatting.
+* <TAB>:                                 Marking and formatting.
+* C-c %:                                 Commenting.
+* C-c ;:                                 Commenting.
+* C-c <LFD>:                             Itemize-like.
+* C-c ]:                                 Environments.
+* C-c ^:                                 Control.
+* C-c `:                                 Debugging.
+* C-c C-c:                               Commands.
+* C-c C-d:                               Multifile.
+* C-c C-e:                               Environments.
+* C-c C-f:                               Font Specifiers.
+* C-c C-f C-b:                           Font Specifiers.
+* C-c C-f C-c:                           Font Specifiers.
+* C-c C-f C-e:                           Font Specifiers.
+* C-c C-f C-i:                           Font Specifiers.
+* C-c C-f C-r:                           Font Specifiers.
+* C-c C-f C-s:                           Font Specifiers.
+* C-c C-f C-t:                           Font Specifiers.
+* C-c C-k:                               Control.
+* C-c C-l:                               Control.
+* C-c C-m:                               Completion.
+* C-c C-n:                               Parsing Files.
+* C-c C-q C-e:                           Marking and formatting.
+* C-c C-q C-p:                           Marking and formatting.
+* C-c C-q C-r:                           Marking and formatting.
+* C-c C-q C-s:                           Marking and formatting.
+* C-c C-r:                               Commands.
+* C-c C-s:                               Sectioning.
+* C-c C-w:                               Debugging.
+* C-c {:                                 Quotes.
+* C-c ~:                                 Mathematics.
+* M-<TAB>:                               Completion.
+* M-g:                                   Marking and formatting.
+* M-q:                                   Marking and formatting.
+

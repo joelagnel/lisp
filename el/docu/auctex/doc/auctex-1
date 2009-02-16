@@ -1,0 +1,1269 @@
+This is auctex, produced by makeinfo version 4.2 from auc-tex.texi.
+
+START-INFO-DIR-ENTRY
+* AUCTeX: (auctex).      A much enhanced LaTeX mode for GNU Emacs.
+END-INFO-DIR-ENTRY
+
+
+File: auctex,  Node: Top,  Next: Copying,  Prev: (dir),  Up: (dir)
+
+AUC TeX
+*******
+
+   AUC TeX is an integrated environment for editing LaTeX and TeX files.
+
+   This file almost documents AUC TeX version 12.
+
+   Although AUC TeX contains a large number of features, there are no
+reasons to despair.  You can continue to write TeX and LaTeX documents
+the way you are used to, and only start using the multiple features in
+small steps.  AUC TeX is not monolithic, each feature described in this
+manual is useful by itself, but together they provide an environment
+where you will make very few LaTeX errors, and makes it easy to find
+the errors that may slip through anyway.
+
+   If you want to make AUC TeX aware of style files and multi-file
+documents right away, insert the following in your `.emacs' file.
+     (setq TeX-auto-save t)
+     (setq TeX-parse-self t)
+     (setq-default TeX-master nil)
+
+   NOTE: This documentation is preliminary.  It should however cover
+most important points.  Corrections or perhaps rewrites of sections are
+VERY WELCOME.
+
+   Kresten Krab Thorup (6.0)
+Per Abrahamsen (updates to 11) David Kastrup (updates from almost 12)
+
+   There is a mailing list for discussion about AUC TeX and announcement
+of alpha releases, write to `auc-tex-request@sunsite.dk' to join it.
+Send contributions to `auc-tex@sunsite.dk'.
+
+   Bug reports, suggestions for new features, and pleas for help should
+go to either `auc-tex_mgr@sunsite.dk' (the AUC TeX managers), or to
+`auc-tex@sunsite.dk' (the mailing list) if they might have general
+interest.  Please use the command `M-x TeX-submit-bug-report' to report
+bugs if possible.
+
+* Menu:
+
+* Copying::                     Copying
+* Introduction::                Why AUC TeX is good for you.
+* Frequently Used Commands::    Inserting Frequently Used Commands
+* Advanced Features::           Advanced Editing Features
+* Formatting::                  Formatting and Printing
+* Multifile::                   Multifile Documents
+* Parsing Files::               Automatic Parsing of TeX files.
+* I18n::                        Internationalization
+* Automatic::                   Automatic Customization
+* Style Files::                 Writing Your own Style Support
+* Installation::                How to install AUC TeX
+* History::                     The History of AUC TeX
+* Projects::                    Wishlist
+* Credit::                      Credit
+* Key Index::                   Key Index
+* Function Index::              Function Index
+* Variable Index::              Variable Index
+* Concept Index::               Concept Index
+
+
+File: auctex,  Node: Copying,  Next: Introduction,  Prev: Top,  Up: Top
+
+Copying
+*******
+
+   (This text stolen from the TeXinfo 2.16 distribution).
+
+   The programs currently being distributed that relate to AUC TeX
+include lisp files for GNU Emacs.  These programs are "free"; this
+means that everyone is free to use them and free to redistribute them on
+a free basis.  The AUC TeX related programs are not in the public
+domain; they are copyrighted and there are restrictions on their
+distribution, but these restrictions are designed to permit everything
+that a good cooperating citizen would want to do.  What is not allowed
+is to try to prevent others from further sharing any version of these
+programs that they might get from you.
+
+   Specifically, we want to make sure that you have the right to give
+away copies of the programs that relate to AUC TeX, that you receive
+source code or else can get it if you want it, that you can change these
+programs or use pieces of them in new free programs, and that you know
+you can do these things.
+
+   To make sure that everyone has such rights, we have to forbid you to
+deprive anyone else of these rights.  For example, if you distribute
+copies of the AUC TeX related programs, you must give the recipients all
+the rights that you have.  You must make sure that they, too, receive or
+can get the source code.  And you must tell them their rights.
+
+   Also, for our own protection, we must make certain that everyone
+finds out that there is no warranty for the programs that relate to AUC
+TeX.  If these programs are modified by someone else and passed on, we
+want their recipients to know that what they have is not what we
+distributed, so that any problems introduced by others will not reflect
+on our reputation.
+
+   The precise conditions of the licenses for the programs currently
+being distributed that relate to AUC TeX are found in the General
+Public Licenses that accompany them.
+
+
+File: auctex,  Node: Introduction,  Next: Frequently Used Commands,  Prev: Copying,  Up: Top
+
+Introduction to AUC TeX
+***********************
+
+   This section of the AUC TeX manual gives a brief overview of what AUC
+TeX is, and the section is also available as a `README' file.  It is
+*not* an attempt to document AUC TeX.  Real documentation for AUC TeX
+is available in the rest of the manual, which you can find in the `doc'
+directory.
+
+   Read the `INSTALLATION' file for information about how to install
+AUC TeX.  It is identical to the Installation chapter in the AUC TeX
+manual.
+
+   If you are upgrading from the previous version of AUC TeX, the
+latest changes can be found in the `CHANGES' file.  If you are
+upgrading from an older version, read the History chapter in the AUC
+TeX manual.
+
+   AUC TeX is a comprehensive customizable integrated environment for
+writing input files for LaTeX using GNU Emacs.
+
+   AUC TeX lets you run TeX/LaTeX and other LaTeX-related tools, such
+as a output filters or post processor from inside Emacs.  Especially
+`running LaTeX' is interesting, as AUC TeX lets you browse through the
+errors TeX reported, while it moves the cursor directly to the reported
+error, and displays some documentation for that particular error.  This
+will even work when the document is spread over several files.
+
+   AUC TeX automatically indents your `LaTeX-source', not only as you
+write it -- you can also let it indent and format an entire document.
+It has a special outline feature, which can greatly help you `getting an
+overview' of a document.
+
+   Apart from these special features, AUC TeX provides a large range of
+handy Emacs macros, which in several different ways can help you write
+your LaTeX documents fast and painlessly.
+
+   All features of AUC TeX are documented using the GNU Emacs online
+documentation system.  That is, documentation for any command is just a
+key click away!
+
+   AUC TeX is written entirely in Emacs-Lisp, and hence you can easily
+add new features for your own needs.  It was not made as part of any
+particular employment or project (apart from the AUC TeX project
+itself).  AUC TeX is distributed under the `GNU Emacs General Public
+License' and may therefore almost freely be copied and redistributed.
+
+   The next sections are a short introduction to some `actual' features.
+For further information, refer to the built-in online documentation of
+AUC TeX.
+
+Indentation and formatting
+==========================
+
+   AUC TeX may automatically indent your document as you write it. By
+pressing <lfd> instead of <ret> at the end of a line, the current line
+is indented by two spaces according to the current environment level,
+and the cursor is moved down one line.  By pressing <tab>, the current
+line is indented, and the cursor stays where it is.  The well-known
+Emacs feature `format-paragraph' (`M-q') is reimplemented especially
+for AUC TeX to follow the indentation.  A special command
+`LaTeX-fill-buffer' lets you indent an entire document like the
+well-known C utility indent (this time, only according to the LaTeX
+structure :-).
+
+Completion
+==========
+
+   By studying your `\documentclass' command (in the top of your
+document), and consulting a precompiled list of (La)TeX symbols from a
+large number of TeX and LaTeX files, AUC TeX is aware of the LaTeX
+commands you should be able to use in this particular document.  This
+`knowledge' of AUC TeX is used for two purposes.
+
+  1. To make you able to `complete' partly written LaTeX commands. You
+     may e.g. write `\renew' and press `M-<tab>'
+     (`TeX-complete-symbol'), and then AUC TeX will complete the word
+     `\renewcommand' for you. In case of ambiguity it will display a
+     list of possible completions.
+
+  2. To aid you inserting environments, that is \begin - \end pairs.
+     This is done by pressing C-c C-e (LaTeX-environment), and you will
+     be prompted for which `environment' to insert.
+
+Editing your document
+=====================
+
+   A number of more or less intelligent keyboard macros have been
+defined to aid you editing your document.  The most important are
+listed below.
+
+`LaTeX-environment'
+     (`C-c C-e') Insert a `\begin{}' -- `\end{}' pair as described
+     above.
+
+`LaTeX-section'
+     (`C-c C-s') Insert one of `\chapter', `\section', etc.
+
+`TeX-font'
+     (`C-c C-f C-r', `C-c C-f C-i', `C-c C-f C-b') Insert one of
+     `\textrm{ }'), `\textit{ \/}' `\textbf{ }' etc.
+
+   A number of additional functions are available.  But it would be far
+too much to write about here.  Refer to the rest of the AUC TeX
+documentation for further information.
+
+Running LaTeX
+=============
+
+   When invoking one of the commands `TeX-command-master' (`C-c C-c')
+or `TeX-command-region' (`C-c C-r') LaTeX is run on either the entire
+current document or a given region of it.  The Emacs view is split in
+two, and the output of TeX is printed in the second half of the screen,
+as you may simultaneously continue editing your document.  In case TeX
+find any errors when processing your input you can call the function
+`TeX-next-error' (`C-c `') which will move the cursor to the first
+given error, and display a short explanatory text along with the
+message TeX gave.  This procedure may be repeated until all errors have
+been displayed.  By pressing `C-c C-w' (`TeX-toggle-debug-boxes') you
+can toggle whether the browser also should notify over-full/under-full
+boxes or not.
+
+   Once you've successfully formatted your document, you may preview or
+print it by invoking `TeX-command-master' again.
+
+Outlines
+========
+
+   Along with AUC TeX comes support for outline mode for Emacs, which
+lets you browse the sectioning structure of your document, while you
+will still be able to use the full power of the rest of the AUC TeX
+functionality.
+
+Availability
+============
+
+   The most recent version is always available at
+
+               <http://savannah.nongnu.org/download/auctex/stable.pkg/>
+
+   WWW users may want to check out the AUC TeX page at
+
+                                        <http://www.nongnu.org/auctex/>
+
+Contacts
+========
+
+   There has been established a mailing list for help, bug reports,
+feature requests and general discussion about AUC TeX.  You're very
+welcome to join.  Traffic average at an article by day, but they come
+in bursts.  If you are only interested in information on updates, you
+could refer to the newsgroups `comp.text.tex' and `gnu.emacs.sources'.
+
+   If you want to contact the AUC TeX mailing list, send mail to
+<mailto:auc-tex-subscribe@sunsite.dk> in order to join.  Articles
+should be sent to <mailto:auc-tex@sunsite.dk>.
+
+   To contact the current maintainers of AUC TeX directly, email
+<mailto:auc-tex_mgr@sunsite.dk>.
+
+
+File: auctex,  Node: Frequently Used Commands,  Next: Advanced Features,  Prev: Introduction,  Up: Top
+
+Inserting Frequently Used Commands
+**********************************
+
+   The most commonly used commands/macros of AUC TeX are those which
+simply insert templates for often used TeX and/or LaTeX constructs,
+like font changes, handling of environments, etc.  These features are
+very simple, and easy to learn, and help you avoid stupid mistakes like
+mismatched braces, or `\begin{}'-`\end{}' pairs.
+
+* Menu:
+
+* Quotes::                      Inserting double quotes
+* Font Specifiers::             Inserting Font Specifiers
+* Sectioning::                  Inserting chapters, sections, etc.
+* Environments::                Inserting Environment Templates
+
+
+File: auctex,  Node: Quotes,  Next: Font Specifiers,  Prev: Frequently Used Commands,  Up: Frequently Used Commands
+
+Insertion of Quotes, Dollars, and Braces
+========================================
+
+   In TeX, literal double quotes `"like this"' are seldom used, instead
+two single quotes are used ```like this'''.  To help you insert these
+efficiently, AUC TeX allows you to continue to press `"' to insert two
+single quotes.  To get a literal double quote, press `"' twice.
+
+ - Command: TeX-insert-quote COUNT
+     (`"') Insert the appropriate quote marks for TeX.
+
+     Inserts the value of `TeX-open-quote' (normally ```') or
+     `TeX-close-quote' (normally `''') depending on the context.  With
+     prefix argument, always inserts `"' characters.
+
+ - User Option: TeX-open-quote
+     String inserted by typing `"' to open a quotation.
+
+ - User Option: TeX-close-quote
+     String inserted by typing `"' to close a quotation.
+
+   If you include the style file `german' `TeX-open-quote' and
+`TeX-close-quote' will both be set to `"'.
+
+   In AUC TeX, dollar signs should match like they do in TeX.  This has
+been partially implemented, we assume dollar signs always match within
+a paragraph.  The first `$' you insert in a paragraph will do nothing
+special.  The second `$' will match the first.  This will be indicated
+by moving the cursor temporarily over the first dollar sign.  If you
+enter a dollar sign that matches a double dollar sign `$$' AUC TeX will
+automatically insert two dollar signs.  If you enter a second dollar
+sign that matches a single dollar sign, the single dollar sign will
+automatically be converted to a double dollar sign.
+
+ - Command: TeX-insert-dollar ARG
+     (`$') Insert dollar sign.
+
+     Show matching dollar sign if this dollar sign end the TeX math
+     mode.  Ensure double dollar signs match up correctly by inserting
+     extra dollar signs when needed.
+
+     With optional ARG, insert that many dollar signs.
+
+   To avoid unbalanced braces, it is useful to insert them pairwise.
+You can do this by typing `C-c {'.
+
+ - Command: TeX-insert-braces
+     (`C-c {') Make a pair of braces and position the cursor to type
+     inside of them.
+
+
+File: auctex,  Node: Font Specifiers,  Next: Sectioning,  Prev: Quotes,  Up: Frequently Used Commands
+
+Inserting Font Specifiers
+=========================
+
+   Perhaps the most used keyboard commands of AUC TeX are the short-cuts
+available for easy insertion of font changing macros.  They all put the
+font change inside a TeX group, a practice that help preventing subtle
+errors.  The most significant advantage of using these command instead
+of typing it in yourself, is that the braces will always match
+correctly.
+
+   If you give an argument (that is, type `C-u') to the font command,
+the innermost font will be replaced, i.e. the font in the TeX group
+around point will be changed.  The following table shows the available
+commands, with `-!-' indicating the position where the text will be
+inserted.
+
+`C-c C-f C-r'
+     Insert roman \textrm{-!-} text.
+
+`C-c C-f C-b'
+     Insert bold face `\textbf{-!-}' text.
+
+`C-c C-f C-i'
+     Insert italics `\textit{-!-}' text.
+
+`C-c C-f C-e'
+     Insert emphasized `\emph{-!-}' text.
+
+`C-c C-f C-s'
+     Insert slanted `\textsl{-!-}' text.
+
+`C-c C-f C-t'
+     Insert typewriter `\texttt{-!-}' text.
+
+`C-c C-f C-c'
+     Insert SMALL CAPS `\textsc{-!-}' text.
+
+`C-c C-f C-d'
+     Delete the innermost font specification containing point.
+
+ - Command: TeX-font ARG
+     (`C-c C-f') Insert template for font change command.
+
+     If REPLACE is not nil, replace current font.  WHAT determines the
+     font to use, as specified by `TeX-font-list'.
+
+ - User Option: TeX-font-list
+     List of fonts used by TeX-font.
+
+     Each entry is a list with three elements.  The first element is the
+     key to activate the font.  The second element is the string to
+     insert before point, and the third element is the string to insert
+     after point.  An optional fourth element means always replace if
+     not nil.
+
+
+File: auctex,  Node: Sectioning,  Next: Environments,  Prev: Font Specifiers,  Up: Frequently Used Commands
+
+Inserting chapters, sections, etc.
+==================================
+
+   Insertion of sectioning macros, that is `\chapter', `\section',
+`\subsection', etc. and accompanying `\label''s may be eased by using
+`C-c C-s'.  This command is highly customizable, the following
+describes the default behavior.
+
+   When invoking you will be asked for a section macro to insert.  An
+appropriate default is automatically selected by AUC TeX, that is
+either: at the top of the document; the top level sectioning for that
+document style, and any other place: The same as the last occurring
+sectioning command.
+
+   Next, you will be asked for the actual name of that section, and
+last you will be asked for a label to be associated with that section.
+The label will be prefixed by the value specified in
+`LaTeX-section-hook'.
+
+ - Command: LaTeX-section ARG
+     (`C-c C-s') Insert a sectioning command.
+
+     Determine the type of section to be inserted, by the argument ARG.
+
+        * If ARG is nil or missing, use the current level.
+
+        * If ARG is a list (selected by C-u), go downward one level.
+
+        * If ARG is negative, go up that many levels.
+
+        * If ARG is positive or zero, use absolute level:
+             + 0 : part
+
+             + 1 : chapter
+
+             + 2 : section
+
+             + 3 : subsection
+
+             + 4 : subsubsection
+
+             + 5 : paragraph
+
+             + 6 : subparagraph
+
+     The following variables can be set to customize the function.
+
+    `LaTeX-section-hook'
+          Hooks to be run when inserting a section.
+
+    `LaTeX-section-label'
+          Prefix to all section references.
+
+
+   The precise behavior of `LaTeX-section' is defined by the contents
+of `LaTeX-section-hook'.
+
+ - User Option: LaTeX-section-hook
+     List of hooks to run when a new section is inserted.
+
+     The following variables are set before the hooks are run
+
+    LEVEL
+          Numeric section level, default set by prefix arg to
+          `LaTeX-section'.
+
+    NAME
+          Name of the sectioning command, derived from LEVEL.
+
+    TITLE
+          The title of the section, default to an empty string.
+
+    TOC
+          Entry for the table of contents list, default nil.
+
+    DONE-MARK
+          Position of point afterwards, default nil meaning after the
+          inserted text.
+
+     A number of hooks are already defined.  Most likely, you will be
+     able to get the desired functionality by choosing from these hooks.
+
+    `LaTeX-section-heading'
+          Query the user about the name of the sectioning command.
+          Modifies LEVEL and NAME.
+
+    `LaTeX-section-title'
+          Query the user about the title of the section. Modifies TITLE.
+
+    `LaTeX-section-toc'
+          Query the user for the toc entry.  Modifies TOC.
+
+    `LaTeX-section-section'
+          Insert LaTeX section command according to NAME, TITLE, and
+          TOC.  If TOC is nil, no toc entry is inserted.  If TOC or
+          TITLE are empty strings, DONE-MARK will be placed at the
+          point they should be inserted.
+
+    `LaTeX-section-label'
+          Insert a label after the section command.  Controlled by the
+          variable `LaTeX-section-label'.
+
+     To get a full featured `LaTeX-section' command, insert
+
+          (setq LaTeX-section-hook
+                '(LaTeX-section-heading
+                  LaTeX-section-title
+                  LaTeX-section-toc
+                  LaTeX-section-section
+                  LaTeX-section-label))
+
+     in your `.emacs' file.
+
+   The behavior of `LaTeX-section-label' is determined by the variable
+`LaTeX-section-label'.
+
+ - User Option: LaTeX-section-label
+     Default prefix when asking for a label.
+
+     If it is a string, it is used unchanged for all kinds of sections.
+     If it is nil, no label is inserted.  If it is a list, the list is
+     searched for a member whose car is equal to the name of the
+     sectioning command being inserted.  The cdr is then used as the
+     prefix.  If the name is not found, or if the cdr is nil, no label
+     is inserted.
+
+     By default, chapters have a prefix of `cha:' while sections and
+     subsections have a prefix of `sec:'.  Labels are not automatically
+     inserted for other types of sections.
+
+
+File: auctex,  Node: Environments,  Prev: Sectioning,  Up: Frequently Used Commands
+
+Inserting Environment Templates
+===============================
+
+   A large apparatus is available that supports insertions of
+environments, that is `\begin{}' -- `\end{}' pairs.
+
+   AUC TeX is aware of most of the actual environments available in a
+specific document.  This is achieved by examining your `\documentclass'
+command, and consulting a precompiled list of environments available in
+a large number of styles.
+
+   You insert an environment with `C-c C-e', and select an environment
+type.  Depending on the environment, AUC TeX may ask more questions
+about the optional parts of the selected environment type.  With `C-u
+C-c C-e' you will change the current environment.
+
+ - Command: LaTeX-environment ARG
+     (`C-c C-e')  AUC TeX will prompt you for an environment to insert.
+     At this prompt, you may press <TAB> or <SPC> to complete a
+     partially written name, and/or to get a list of available
+     environments.  After selection of a specific environment AUC TeX
+     may prompt you for further specifications.
+
+     If the optional argument ARG is not-nil (i.e. you have given a
+     prefix argument), the current environment is modified and no new
+     environment is inserted.
+
+   As a default selection, AUC TeX will suggest the environment last
+inserted or, as the first choice the value of the variable
+`LaTeX-default-environment'.
+
+ - User Option: LaTeX-default-environment
+     Default environment to insert when invoking `LaTeX-environment'
+     first time.
+
+   If the document is empty, or the cursor is placed at the top of the
+document, AUC TeX will default to insert a `document' environment.
+
+   Most of these are described further in the following sections, and
+you may easily specify more, as described in `Customizing environments'.
+
+* Menu:
+
+* Equations::                   Equations
+* Floats::                      Floats
+* Itemize-like::                Itemize-like
+* Tabular-like::                Tabular-like
+* Customizing environments::    Customizing environments
+
+   You can close the current environment with `C-c ]', but we suggest
+that you use `C-c C-e' to insert complete environments instead.
+
+ - Command: LaTeX-close-environment
+     (`C-c ]') Insert an `\end' that matches the current environment.
+
+
+File: auctex,  Node: Equations,  Next: Floats,  Prev: Environments,  Up: Environments
+
+Equations
+---------
+
+   When inserting equation-like environments, the `\label' will have a
+default prefix, which is controlled by the following variables:
+
+ - User Option: LaTeX-equation-label
+     Prefix to use for `equation' labels.
+
+ - User Option: LaTeX-eqnarray-label
+     Prefix to use for `eqnarray' labels.
+
+ - User Option: LaTeX-amsmath-label
+     Prefix to use for amsmath equation labels.  Amsmath equations
+     include `align', `alignat', `xalignat', `aligned', `flalign' and
+     `gather'.
+
+
+File: auctex,  Node: Floats,  Next: Itemize-like,  Prev: Equations,  Up: Environments
+
+Floats
+------
+
+   Figures and tables (i.e., floats) may also be inserted using AUC TeX.
+After choosing either `figure' or `table' in the environment list
+described above, you will be prompted for a number of additional things.
+
+FLOAT-TO
+     This field is the option of float environments that controls how
+     they are placed in the final document.  In LaTeX this is a
+     sequence of the letters `htbp' as described in the LaTeX manual.
+     The value will default to the value of `LaTeX-float'.
+
+CAPTION
+     This is the caption of the float.
+
+LABEL
+     The label of this float.  The label will have a default prefix,
+     which is controlled by the variables `LaTeX-figure-label' and
+     `LaTeX-table-label'.
+
+   Moreover, in the case of a `figure' environment, you will be asked if
+you want to insert a `center' environment inside the figure.
+
+ - User Option: LaTeX-float
+     Default placement for floats.
+
+ - User Option: LaTeX-figure-label
+     Prefix to use for figure labels.
+
+ - User Option: LaTeX-table-label
+     Prefix to use for table labels.
+
+
+File: auctex,  Node: Itemize-like,  Next: Tabular-like,  Prev: Floats,  Up: Environments
+
+Itemize-like
+------------
+
+   In an itemize-like environment, nodes (i.e., `\item's) may be
+inserted using `C-c <LFD>'.
+
+ - Command: LaTeX-insert-item
+     (`C-c <LFD>') Close the current item, move to the next line and
+     insert an appropriate `\item' for the current environment. That is,
+     `itemize' and `enumerate' will have `\item ' inserted, while
+     `description' will have `\item[]' inserted.
+
+
+File: auctex,  Node: Tabular-like,  Next: Customizing environments,  Prev: Itemize-like,  Up: Environments
+
+Tabular-like
+------------
+
+   When inserting Tabular-like environments, that is, `tabular' `array'
+etc., you will be prompted for a template for that environment.
+
+
+File: auctex,  Node: Customizing environments,  Prev: Tabular-like,  Up: Environments
+
+Customizing environments
+------------------------
+
+   *Note Adding Environments::, for how to customize the list of known
+environments.
+
+
+File: auctex,  Node: Advanced Features,  Next: Formatting,  Prev: Frequently Used Commands,  Up: Top
+
+Advanced Editing Features
+*************************
+
+   The previous chapter described how to write the main body of the text
+easily and with a minimum of errors.  In this chapter we will describe
+some features for entering more specialized sorts of text, and for
+indenting and navigating through the document.
+
+* Menu:
+
+* Mathematics::                 Entering Mathematics
+* Completion::                  Completion
+* Commenting::                  Commenting
+* Marking and formatting::      Marking, Formatting and Indenting
+* Outline::                     Hiding text
+
+
+File: auctex,  Node: Mathematics,  Next: Completion,  Prev: Advanced Features,  Up: Advanced Features
+
+Entering Mathematics
+====================
+
+   TeX is written by a mathematician, and has always contained good
+support for formatting mathematical text.  AUC TeX supports this
+tradition, by offering a special minor mode for entering text with many
+mathematical symbols.  You can enter this mode by typing `C-c ~'.
+
+ - Command: LaTeX-math-mode
+     (`C-c ~') Toggle LaTeX-math-mode.  This is a minor mode rebinding
+     the key `LaTeX-math-abbrev-prefix' to allow easy typing of
+     mathematical symbols.  ``' will read a character from the keyboard,
+     and insert the symbol as specified in `LaTeX-math-list'.  If given
+     a prefix argument, the symbol will be surrounded by dollar signs.
+
+   You can use another prefix key (instead of ``') by  setting the
+variable LaTeX-math-abbrev-prefix.
+
+ - User Option: LaTeX-math-abbrev-prefix
+     A string containing the prefix of `LaTeX-math-mode' commands; This
+     value defaults to ``'.
+
+   The variable `LaTeX-math-list' holds the actual mapping.
+
+ - User Option: LaTeX-math-list
+     A list containing key command mappings to use in `LaTeX-math-mode'.
+     The car of each element is the key and the cdr is the macro name.
+
+   The AUC TeX distributions includes a reference card for
+`LaTeX-math-mode' with a list of all math mode commands.
+
+
+File: auctex,  Node: Completion,  Next: Commenting,  Prev: Mathematics,  Up: Advanced Features
+
+Completion
+==========
+
+   Emacs lisp programmers probably know the `lisp-complete-symbol'
+command, usually bound to `M-<TAB>'.  Users of the wonderful ispell
+mode know and love the `ispell-complete-word' command from that
+package.  Similarly, AUC TeX has a `TeX-complete-symbol' command,
+usually bound to `M-<TAB>'.  Using `LaTeX-complete-symbol' makes it
+easier to type and remember the names of long LaTeX macros.
+
+   In order to use `TeX-complete-symbol', you should write a backslash
+and the start of the macro.  Typing `M-<TAB>' will now complete as much
+of the macro, as it unambiguously can.  For example, if you type
+``\renewc'' and then ``M-<TAB>', it will expand to ``\renewcommand''.
+
+ - Command: TeX-complete-symbol
+     (`M-<TAB>')  Complete TeX symbol before point.
+
+   A more direct way to insert a macro is with `TeX-insert-macro',
+bound to `C-c C-m'.  It has the advantage over completion that it knows
+about the argument of most standard LaTeX macros, and will prompt for
+them.  It also knows about the type of the arguments, so it will for
+example give completion for the argument to `\include'.  Some examples
+are listed below.
+
+ - Command: TeX-insert-macro
+     (`C-c C-m') Prompt (with completion) for the name of a TeX macro,
+     and if AUC TeX knows the macro, prompt for each argument.
+
+   As a default selection, AUC TeX will suggest the macro last inserted
+or, as the first choice the value of the variable `TeX-default-macro'.
+
+ - User Option: TeX-default-macro
+     Default macro to insert when invoking `TeX-insert-macro' first
+     time.
+
+   A faster alternative is to bind the function `TeX-electric-macro' to
+`\'.  This can be done by setting the variable `TeX-electric-escape'
+
+ - User Option: TeX-electric-escape
+     If this is non-nil when AUC TeX is loaded, the TeX escape
+     character `\' will be bound to `TeX-electric-macro'
+
+   The difference between `TeX-insert-macro' and `TeX-electric-macro'
+is that space will complete and exit from the minibuffer in
+`TeX-electric-macro'.  Use <TAB> if you merely want to complete.
+
+ - Command: TeX-electric-macro
+     Prompt (with completion) for the name of a TeX macro, and if AUC
+     TeX knows the macro, prompt for each argument.  Space will
+     complete and exit.
+
+   By default AUC TeX will put an empty set braces `{}' after a macro
+with no arguments to stop it from eating the next whitespace.  This can
+be stopped by entering `LaTeX-math-mode', *note Mathematics::, or by
+setting `TeX-insert-braces' to nil
+
+ - User Option: TeX-insert-braces
+     If non-nil, append a empty pair of braces after inserting a macro.
+
+   Completions work because AUC TeX can analyze TeX files, and store
+symbols in emacs lisp files for later retrieval.  *Note Automatic::, for
+more information.
+
+   AUC TeX will also make completion for many macro arguments, for
+example existing labels when you enter a `\ref' macro with
+`TeX-insert-macro' or `TeX-electric-macro', and BibTeX entries when you
+enter a `\cite' macro.  For this kind of completion to work, parsing
+must be enabled as described in *note Parsing Files::.  For `\cite' you
+must also make sure that the BibTeX files have been saved at least once
+after you enabled automatic parsing on save, and that the basename of
+the BibTeX file does not conflict with the basename of one of TeX files.
+
+
+File: auctex,  Node: Commenting,  Next: Marking and formatting,  Prev: Completion,  Up: Advanced Features
+
+Commenting
+==========
+
+   It is often necessary to comment out temporarily a region of TeX or
+LaTeX code.  This can be done with the commands `C-c ;' and `C-c %'.
+`C-c ;' will comment out all lines in the current region, while `C-c %'
+will comment out the current paragraph.  To uncomment, simply type `C-u
+- C-c ;' to uncomment all lines in the region, or `C-u - C-c %'
+uncomment all comment lines around point.
+
+   By default, these commands will insert or remove a single `%'.  To
+insert more than one, give an argument. `C-u 5 C-c %' will add five `%'
+to each line, while `C-u - 5 C-c %' will remove up to 5 `%' from each
+line.
+
+ - Command: TeX-comment-region COUNT
+     (`C-c ;') Add or remove `%' from the beginning of each line in the
+     current region, as specified by COUNT.
+
+ - Command: TeX-comment-paragraph COUNT
+     (`C-c %') Add or remove `%' from the beginning of each line in the
+     current paragraph, as specified by COUNT.  When removing `%''s the
+     paragraph is considered to consist of all preceding and succeeding
+     lines starting with a `%', until the first non-comment line.
+
+
+File: auctex,  Node: Marking and formatting,  Next: Outline,  Prev: Commenting,  Up: Advanced Features
+
+Marking, Formatting and Indenting
+=================================
+
+   AUC TeX contains very advanced handling of indentation and
+reformatting of the LaTeX source.  If you have already tried AUC TeX
+with `auto-fill-mode' enabled, you may have noted that the source is
+automatically indented and formatted as you write it.  More over, AUC
+TeX is able to format sections of text on demand.
+
+   It is important to realize, that AUC TeX comes with `formatting' in
+two fashions.  Either letting TeX format the file, or letting AUC TeX
+make the ASCII document look better.
+
+   Indentation is done by LaTeX environments and by TeX groups, that is
+the body of an environment is indented by the value of
+`LaTeX-indent-level' (default 2).  Also, items of an `itemize-like'
+environment are indented by the value of `LaTeX-item-indent', default
+-2.  This indentation makes it easier to see the structure of the
+document, and to catch errors such as a missing close brace.  Thus, the
+indentation is done for precisely the same reasons that you would
+indent ordinary computer programs.
+
+   The following is a short sample of an itemize environment indented by
+AUC TeX.  If more environments are nested, they are indented
+`accumulated' just like most programming languages usually are seen
+indented in nested constructs.
+
+     \begin{itemize}
+     \item Insertion of templates for logical-structural compositions such as
+       environments and sections.
+     \item Hot-keys for easy access to certain often used constructs, e.g.,
+       font changes, accented letters, and mathematical symbols.
+     \item Running application programs (such as \TeX), and then parsing
+       the output so that errors in the document may be located
+       easily.
+     \item Support for multi-file documents.
+     \item Online help for \AllTeX\ error messages.
+     \item Outlining\Dash i.e., manipulating the document as a composition
+       of nested/sequential logical constructs.
+     \item Instant formatting and indentation of the \ascii-document in
+       order to make it easier to read.
+     \item `Completion' (and thereby spell-checking) of partially written
+       control sequences.
+     \end{itemize}
+
+   You can format and indent single lines, paragraphs, environments, or
+sections.
+
+`<TAB>'
+     `LaTeX-indent-line' will indent the current line.
+
+`<LFD>'
+     `reindent-then-newline-and-indent' indents the current line, and
+     then inserts a new line (much like <RET>) and move the cursor to an
+     appropriate position by the left margin.
+
+`M-q'
+     Alias for `C-c C-q C-p'
+
+`C-c C-q C-p'
+     `LaTeX-fill-paragraph' will reformat or `fill' the current
+     paragraph.
+
+`C-c C-q C-e'
+     `LaTeX-fill-environment' will reformat or `fill' the current
+     environment.  This may e.g. be the `document' environment, in
+     which case the entire document will be formatted.
+
+`C-c C-q C-s'
+     `LaTeX-fill-section' will reformat or `fill' the current logical
+     sectional unit.
+
+`M-g'
+     Alias for `C-c C-q C-r'
+
+`C-c C-q C-r'
+     `LaTeX-fill-region' will format or `fill' the current region.
+
+   *Warning:* The formatting cannot handle tabular-like environments.
+Those will be completely messed-up if you try to format them.
+
+ - User Option: LaTeX-indent-level
+     Number of spaces to add to the indentation for each `\begin' not
+     matched by a `\end'.
+
+ - User Option: LaTeX-item-indent
+     Number of spaces to add to the indentation for `\item''s in list
+     environments.
+
+ - User Option: TeX-brace-indent-level
+     Number of spaces to add to the indentation for each `{' not
+     matched by a `}'.
+
+
+File: auctex,  Node: Outline,  Prev: Marking and formatting,  Up: Advanced Features
+
+Outlining the Document
+======================
+
+   AUC TeX supports the standard outline minor mode using LaTeX
+sectioning commands as header lines.  *Note Outline Mode:
+(emacs)Outline Mode.  By default `outline-minor-mode' will use the
+prefix key `C-c' which is also used by AUC TeX, so it is suggested that
+you choose another prefix key by inserting
+
+       (setq outline-minor-mode-prefix "\C-c\C-o") ; Or whatever...
+
+   in your `.emacs' file.
+
+   You can add your own headings by setting the variable
+`TeX-outline-extra'.
+
+ - Variable: TeX-outline-extra
+     List of extra TeX outline levels.
+
+     Each element is a list with two entries.  The first entry is the
+     regular expression matching a header, and the second is the level
+     of the header.  A `^' is automatically prepended to the regular
+     expressions in the list, so they must match text at the beginning
+     of the line.
+
+     See `LaTeX-section-list' for existing header levels.
+
+   The following example add `\item' and `\bibliography' headers, with
+`\bibliography' at the same outline level as `\section', and `\item'
+being below `\subparagraph'.
+
+     (setq TeX-outline-extra
+           '(("[ \t]*\\\\\\(bib\\)?item\\b" 7)
+             ("\\\\bibliography\\b" 2)))
+
+   You may want to check out the unbundled `out-xtra' package for even
+better outline support.  It is available from your favorite emacs lisp
+archive.
+
+
+File: auctex,  Node: Formatting,  Next: Multifile,  Prev: Advanced Features,  Up: Top
+
+Formatting and Printing
+***********************
+
+   The most powerful features of AUC TeX may be those allowing you to
+run (La)TeX and other external commands like BibTeX and `makeindex'
+from within Emacs, viewing and printing the results, and moreover
+allowing you to _debug_ your documents.
+
+* Menu:
+
+* Commands::                    Invoking external commands.
+* Debugging::                   Debugging TeX and LaTeX output.
+* Checking::                    Checking the document.
+* Control::                     Controlling the processes.
+
+
+File: auctex,  Node: Commands,  Next: Debugging,  Prev: Formatting,  Up: Formatting
+
+Executing Commands
+==================
+
+   Formatting the document with TeX or LaTeX, viewing with a previewer,
+printing the document, running BibTeX, making an index, or checking the
+document with `lacheck' or `chktex' all require running an external
+command.
+
+   There are two ways to run an external command, you can either run it
+on all of the current documents with `TeX-command-master', or on the
+current region with `TeX-command-region'.
+
+ - Command: TeX-command-master
+     (`C-c C-c')  Query the user for a command, and run it on the master
+     file associated with the current buffer.  The name of the master
+     file is controlled by the variable `TeX-master'.  The available
+     commands are controlled by the variable `TeX-command-list'.
+
+   *Note Installation::, for a discussion about `TeX-command-list' and
+*Note Multifile:: for a discussion about `TeX-master'.
+
+ - Command: TeX-command-region
+     (`C-c C-r') Query the user for a command, and run it on the "region
+     file".  Some commands (typically those invoking TeX or LaTeX) will
+     write the current region into the region file, after extracting the
+     header and tailer from the master file.  If mark is not active,
+     use the old region.  The name of the region file is controlled by
+     the variable `TeX-region'.  The name of the master file is
+     controlled by the variable `TeX-master'.  The header is all text
+     up to the line matching the regular expression `TeX-header-end'.
+     The trailer is all text from the line matching the regular
+     expression `TeX-trailer-start'.  The available commands are
+     controlled by the variable `TeX-command-list'.
+
+   AUC TeX will allow one process for each document, plus one process
+for the region file to be active at the same time.  Thus, if you are
+editing N different documents, you can have N plus one processes
+running at the same time.  If the last process you started was on the
+region, the commands described in *Note Debugging:: and *Note Control::
+will work on that process, otherwise they will work on the process
+associated with the current document.
+
+ - User Option: TeX-region
+     The name of the file for temporarily storing the text when
+     formatting the current region.
+
+ - User Option: TeX-header-end
+     A regular expression matching the end of the header.  By default,
+     this is `\begin{document}' in LaTeX mode and `%**end of header' in
+     TeX mode.
+
+ - User Option: TeX-trailer-start
+     A regular expression matching the start of the trailer.  By
+     default, this is `\end{document}' in LaTeX mode and `\bye' in TeX
+     mode.
+
+   AUC TeX will try to guess what command you want to invoke, but by
+default it will assume that you want to run TeX in TeX mode and LaTeX
+in LaTeX mode.  You can overwrite this by setting the variable
+`TeX-command-default'.
+
+ - User Option: TeX-command-default
+     The default command to run in this buffer.  Must be an entry in
+     `TeX-command-list'.
+
+   If you want to overwrite the values of `TeX-header-end',
+`TeX-trailer-start', or `TeX-command-default', you can do that for all
+files by setting them in either `TeX-mode-hook', `plain-TeX-mode-hook',
+or `LaTeX-mode-hook'.  To overwrite them for a single file, define them
+as file variables (*note File Variables: (emacs)File Variables.).  You
+do this by putting special formatted text near the end of the file.
+
+     % Local Variables:
+     % TeX-header-end: "% End-Of-Header"
+     % TeX-trailer-start: "% Start-Of-Trailer"
+     % TeX-command-default: "SliTeX"
+     % End:
+
+   AUC TeX will try to save any buffers related to the document, and
+check if the document needs to be reformatted.  If the variable
+`TeX-save-query' is non-nil, AUC TeX will query before saving each
+file.  By default AUC TeX will check emacs buffers associated with
+files in the current directory, in one of the `TeX-macro-private'
+directories, and in the `TeX-macro-global' directories.  You can change
+this by setting the variable `TeX-check-path'.
+
+ - User Option: TeX-check-path
+     Directory path to search for dependencies.
+
+     If nil, just check the current file.  Used when checking if any
+     files have changed.
+
+
+File: auctex,  Node: Debugging,  Next: Checking,  Prev: Commands,  Up: Formatting
+
+Catching the errors
+===================
+
+   Once you've formatted your document you may `debug' it, i.e. browse
+through the errors (La)TeX reported.
+
+ - Command: TeX-next-error
+     (`C-c `')  Go to the next error reported by TeX.  The view will be
+     split in two, with the cursor placed as close as possible to the
+     error in the top view.  In the bottom view, the error message will
+     be displayed along with some explanatory text.
+
+   Normally AUC TeX will only report real errors, but you may as well
+ask it to report `bad boxes' as well.
+
+ - Command: TeX-toggle-debug-bad-boxes
+     (`C-c C-w')  Toggle whether AUC TeX should stop at bad boxes (i.e.
+     over/under full boxes) as well as at normal errors.
+
+   As default, AUC TeX will display that special `*help*' buffer
+containing the error reported by TeX along with the documentation.
+There is however an `expert' option, which allows you to display the
+real TeX output.
+
+ - User Option: TeX-display-help
+     When non-nil AUC TeX will automatically display a help text
+     whenever an error is encountered using `TeX-next-error' (`C-c `').
+
+
+File: auctex,  Node: Checking,  Next: Control,  Prev: Debugging,  Up: Formatting
+
+Checking for problems
+=====================
+
+   Running TeX or LaTeX will only find regular errors in the document,
+not examples of bad style.  Furthermore, description of the errors may
+often be confusing.  The utility `lacheck' can be used to find style
+errors, such as forgetting to escape the space after an abbreviation or
+using `...' instead of `\ldots' and many other problems like that.  You
+start `lacheck' with `C-c C-c C h e c k <RET>'.  The result will be a
+list of errors in the `*compilation*' buffer.  You can go through the
+errors with `C-x `' (`next-error', *note Compilation:
+(emacs)Compilation.), which will move point to the location of the next
+error.
+
+   Another newer program which can be used to find errors is `chktex'.
+It is much more configurable than `lacheck', but doesn't find all the
+problems `lacheck' does, at least in its default configuration.  You
+must install the programs before using them, and for `chktex' you must
+also modify `TeX-command-list'.  You can get `lacheck' from
+`<URL:ftp://sunsite.dk/pub/text/lacheck/>' or alternatively `chktex'
+from `<URL:ftp://ftp.dante.de/pub/tex/support/chktex/>'.  Search for
+`chktex' in `tex.el' to see how to switch between them.
+
+
+File: auctex,  Node: Control,  Prev: Checking,  Up: Formatting
+
+Controlling the output
+======================
+
+   A number of commands are available for controlling the output of an
+application running under AUC TeX
+
+ - Command: TeX-kill-job
+     (`C-c C-k')  Kill currently running external application.  This
+     may be either of TeX, LaTeX, previewer, BibTeX, etc.
+
+ - Command: TeX-recenter-output-buffer
+     (`C-c C-l')  Recenter the output buffer so that the bottom line is
+     visible.
+
+ - Command: TeX-home-buffer
+     (`C-c ^') Go to the `master' file in the document associated with
+     the current buffer, or if already there, to the file where the
+     current process was started.
+
+
+File: auctex,  Node: Multifile,  Next: Parsing Files,  Prev: Formatting,  Up: Top
+
+Multifile Documents
+*******************
+
+   You may wish to spread a document over many files (as you are likely
+to do if there are multiple authors, or if you have not yet discovered
+the power of the outline commands (*note Outline::)).  This can be done
+by having a "master" file in which you include the various files with
+the TeX macro `\input' or the LaTeX macro `\include'.  These files may
+also include other files themselves.  However, to format the document
+you must run the commands on the top level master file.
+
+   When you, for example, ask AUC TeX to run a command on the master
+file, it has no way of knowing the name of the master file.  By default,
+it will assume that the current file is the master file.  If you insert
+the following in your `.emacs' file AUC TeX will use a more advanced
+algorithm.
+
+     (setq-default TeX-master nil) ; Query for master file.
+
+   If AUC TeX finds the line indicating the end of the header in a
+master file (`TeX-header-end'), it can figure out for itself that this
+is a master file.  Otherwise, it will ask for the name of the master
+file associated with the buffer.  To avoid asking you again, AUC TeX
+will automatically insert the name of the master file as a file
+variable (*note File Variables: (emacs)File Variables.).  You can also
+insert the file variable yourself, by putting the following text at the
+end of your files.
+
+     % Local Variables:
+     % TeX-master: "master"
+     % End:
+
+   You should always set this variable to the name of the top level
+document.  If you always use the same name for your top level
+documents, you can set `TeX-master' in your `.emacs' file.
+
+     (setq-default TeX-master "master") ; All master files called "master".
+
+ - User Option: TeX-master
+     The master file associated with the current buffer.  If the file
+     being edited is actually included from another file, then you can
+     tell AUC TeX the name of the master file by setting this variable.
+     If there are multiple levels of nesting, specify the top level
+     file.
+
+     If this variable is `nil', AUC TeX will query you for the name.
+
+     If the variable is `t', then AUC TeX will assume the file is a
+     master file itself.
+
+     If the variable is `shared', then AUC TeX will query for the name,
+     but will not change the file.
+
+     It is suggested that you use the File Variables (*note File
+     Variables: (emacs)File Variables.) to set this variable permanently
+     for each file.
+
+ - User Option: TeX-one-master
+     Regular expression matching ordinary TeX files.
+
+     You should set this variable to match the name of all files, for
+     which it is a good idea to append a `TeX-master' file variable
+     entry automatically.  When AUC TeX adds the name of the master
+     file as a file variable, it does not need to ask next time you
+     edit the file.
+
+     If you dislike AUC TeX automatically modifying your files, you can
+     set this variable to `"<none>"'.  By default, AUC TeX will modify
+     any file with an extension of `.tex'.
+
+   AUC TeX keeps track of macros, environments, labels, and style files
+that are used in a given document.  For this to work with multifile
+documents, AUC TeX has to have a place to put the information about the
+files in the document.  This is done by having an `auto' subdirectory
+placed in the directory where your document is located.  Each time you
+save a file, AUC TeX will write information about the file into the
+`auto' directory.  When you load a file, AUC TeX will read the
+information in the `auto' directory about the file you loaded _and the
+master file specified by `TeX-master'_.  Since the master file (perhaps
+indirectly) includes all other files in the document, AUC TeX will get
+information from all files in the document.  This means that you will
+get from each file, for example, completion for all labels defined
+anywhere in the document.
+
+   AUC TeX will create the `auto' directory automatically if
+`TeX-auto-save' is non-nil.  Without it, the files in the document will
+not know anything about each other, except for the name of the master
+file.  *Note Automatic Local::.
+
+ - Command: TeX-save-document
+     (`C-c C-d') Save all buffers known to belong to the current
+     document.
+
+ - User Option: TeX-save-query
+     If non-nil, then query the user before saving each file with
+     `TeX-save-document'.
+

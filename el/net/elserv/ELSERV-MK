@@ -1,0 +1,162 @@
+;;; -*-Emacs-Lisp-*-
+
+;; ELSERV-MK: installer for ELSERV.
+
+;;; Code:
+
+(defvar default-load-path load-path)
+
+(add-to-list 'load-path
+	     (expand-file-name "../../site-lisp/apel" data-directory))
+(add-to-list 'load-path
+	     (expand-file-name "." data-directory))
+
+(condition-case nil
+    (require 'install)
+  (error (error "Please install APEL 8.7 or later.")))
+
+(defvar PREFIX install-prefix)
+(defvar LISP_BASE_DIR (install-detect-elisp-directory PREFIX))
+
+(add-to-list 'default-load-path LISP_BASE_DIR)
+(add-to-list 'load-path LISP_BASE_DIR)
+(add-to-list 'load-path (expand-file-name "apel" LISP_BASE_DIR))
+(add-to-list 'load-path (expand-file-name "flim" LISP_BASE_DIR))
+
+(add-to-list 'load-path (expand-file-name "."))
+
+(defvar ELSERV_PREFIX "elserv")
+(defvar EXEC_DIR (expand-file-name "bin" PREFIX))
+
+(defvar EXECS '("elservd"))
+
+(defvar LISP_DIR (expand-file-name ELSERV_PREFIX LISP_BASE_DIR))
+(defvar EXEC_SRC_DIR ".")
+(defvar ICON_SRC_DIR "./icons")
+(defvar ICON_DIR nil)
+
+(defvar PACKAGE_DIR
+  (if (boundp 'early-packages)
+      (let ((dirs (append (if early-package-load-path
+			      early-packages)
+			  (if late-package-load-path
+			      late-packages)
+			  (if last-package-load-path
+			      last-packages)))
+	    dir)
+	(while (not (file-exists-p
+		     (setq dir (car dirs))))
+	  (setq dirs (cdr dirs)))
+	dir)))
+
+;;; functions.
+(defun config-icon (&optional packagedir)
+  "Examine icon directory."
+  (let ((icon-dir (car command-line-args-left)))
+    (setq ICON_DIR
+	  (if (string= icon-dir "NONE")
+	      (if packagedir
+		  (expand-file-name "etc/elserv" packagedir)
+		(expand-file-name "elserv/icons" data-directory))
+	    icon-dir)))
+  (setq command-line-args-left (cdr command-line-args-left)))
+
+(defun config-ruby ()
+  (unless (file-exists-p (expand-file-name "elservd" EXEC_SRC_DIR))
+    (let ((path (exec-installed-p "ruby")))
+      (unless path
+	(error "Please install ruby first."))
+      (with-temp-buffer
+	(insert-file-contents (expand-file-name "elservd.in" EXEC_SRC_DIR))
+	(goto-char (point-min))
+	(if (search-forward "@ruby@")
+	    (replace-match path))
+	(write-region (point-min) (point-max)
+		      (expand-file-name "elservd" EXEC_SRC_DIR) nil
+		      'no-msg)
+	(set-file-modes (expand-file-name "elservd" EXEC_SRC_DIR)
+			(+ (* 64 7)(* 8 5) 5)) ; 0755
+	(princ "elservd is created.")))))
+
+(defun config-elserv (&optional silent)
+  (let (prefix lisp-dir exec-dir)
+    (config-ruby)
+    (and (setq prefix (car command-line-args-left))
+	 (or (string-equal "NONE" prefix)
+	     (setq PREFIX prefix)))
+    (setq command-line-args-left (cdr command-line-args-left))
+    (and (setq lisp-dir (car command-line-args-left))
+	 (or (string-equal "NONE" lisp-dir)
+	     (setq LISP_BASE_DIR lisp-dir)))
+    (setq command-line-args-left (cdr command-line-args-left))
+    (and (setq exec-dir (car command-line-args-left))
+	 (or (string-equal "NONE" exec-dir)
+	     (setq EXEC_DIR exec-dir)))
+    (setq command-line-args-left (cdr command-line-args-left)))
+  (config-icon)
+  (load-file "ELSERV-CFG")
+  (load-file "ELSERV-ELS")
+  (unless silent
+    (princ "\n")
+    (princ (format "LISP_DIR=%s\nEXEC_DIR=%s\n" LISP_DIR EXEC_DIR))
+    (if ICON_DIR
+	(princ (format "ICON_DIR=%s\n" ICON_DIR)))))
+
+(defun compile-elserv ()
+  (config-elserv)
+  (compile-elisp-modules elserv-modules-to-compile "."))
+
+(defun install-elserv ()
+  (config-elserv 'silent)
+  (install-elisp-modules elserv-modules	 "." LISP_DIR)
+  (install-files (directory-files ICON_SRC_DIR nil "\\.\\(gif\\|png\\)$")
+		 ICON_SRC_DIR ICON_DIR nil t)
+  (install-files EXECS EXEC_SRC_DIR EXEC_DIR nil t))
+
+(defun config-elserv-package ()
+  (let (package-dir exec-dir)
+    (config-ruby)
+    (and (setq package-dir (car command-line-args-left))
+	 (or (string= "NONE" package-dir)
+	     (setq PACKAGE_DIR package-dir)))
+    (setq command-line-args-left (cdr command-line-args-left))
+    (config-icon package-dir)
+    (load-file "ELSERV-CFG")
+    (load-file "ELSERV-ELS")
+    (princ "\n")
+    (princ (format "PACKAGE_DIR=%s\n" PACKAGE_DIR))))
+
+(defun compile-elserv-package ()
+  (config-elserv-package)
+  (setq autoload-package-name "elserv")
+  (add-to-list 'command-line-args-left ".")
+  (batch-update-directory)
+
+  (add-to-list 'command-line-args-left ".")
+  (Custom-make-dependencies)
+
+  (compile-elisp-modules (append elserv-modules-to-compile
+				 '(auto-autoloads custom-load))
+			 "."))
+
+(defun install-elserv-package ()
+  (config-elserv-package)
+  (install-elisp-modules (append elserv-modules
+				 '(auto-autoloads custom-load))
+			 "./"
+			 (expand-file-name ELSERV_PREFIX
+					   (expand-file-name "lisp"
+							     PACKAGE_DIR)))
+  (install-files (directory-files ICON_SRC_DIR nil "\\.\\(gif\\|png\\)$")
+		 ICON_SRC_DIR
+		 (expand-file-name ELSERV_PREFIX
+				   (expand-file-name "etc"
+						     PACKAGE_DIR))
+		 nil t)
+  (install-files EXECS EXEC_SRC_DIR
+		 (expand-file-name ELSERV_PREFIX
+				   (expand-file-name "etc"
+						     PACKAGE_DIR))
+		 nil t))
+
+;;; ELSERV-MK ends here

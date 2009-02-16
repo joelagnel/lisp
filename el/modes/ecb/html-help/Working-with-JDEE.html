@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Working%20with%20JDEE">Working with JDEE</a>,
+Next:<a rel=next accesskey=n href="Compile-window-on-demand.html#Compile-window%20on%20demand">Compile-window on demand</a>,
+Previous:<a rel=previous accesskey=p href="Grepping-directories.html#Grepping%20directories">Grepping directories</a>,
+Up:<a rel=up accesskey=u href="Tips-and-tricks.html#Tips%20and%20tricks">Tips and tricks</a>
+<hr><br>
+
+<h3>Working best with ECB and JDEE</h3>
+
+<p>ECB is completely language independent, i.e. it works with any
+language supported by semantic (e.g. C, C++, Java, Elisp etc.).
+
+<p>But there are some special integrations for the great
+Java-Development-Environment JDEE:
+
+<ul>
+<li>Displaying contents of class under point
+
+<p>With the command <code>ecb-jde-display-class-at-point</code> you can display
+the contents of the class which contains the definition of the
+"thing" at point (which can be a method, variable etc.).
+
+</p><li>Creating new source-files
+
+<p>The popup-menus in the directories- and the sources-buffer offer a
+command "Create Source" which allows easy creating new java-sources
+by calling the command <code>jde-gen-class-buffer</code>.
+
+</p><li>Adding user-extensions to the popup-menus
+
+<p>The options <code>ecb-directories-menu-user-extension</code> and
+<code>ecb-sources-menu-user-extension</code><a rel=footnote href="#fn-1"><sup>1</sup></a> allow adding often
+used JDEE-commands to the popup-menus of the directories- or
+sources-buffer. One example is to add building the project of current
+directory. Here is a function which could be added to
+<code>ecb-directories-menu-user-extension</code>:
+
+<br><pre>(defun ecb-dir-popup-jde-build (node)
+  "Build project in directory."
+  (let ((project-file
+	 (expand-file-name jde-ant-buildfile (tree-node-get-data node))))
+    (jde-ant-build project-file "build")))
+</pre>
+
+<p>Of course you can add entries to the option
+<code>ecb-methods-menu-user-extension</code> and
+<code>ecb-methods-menu-user-extension</code> too.
+
+</ul>
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>If you need a dynamic
+way of menu-extension then you should have a look at the options
+<code>ecb-directories-menu-user-extension-function</code> and
+<code>ecb-sources-menu-user-extension-function</code>.</p>
+
+</ol><hr>
+
+</body></html>
+

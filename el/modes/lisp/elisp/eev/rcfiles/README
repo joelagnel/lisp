@@ -1,0 +1,12 @@
+This is the `rcfiles/README' file of GNU eev.
+
+This directory contains scripts to create patched versions of rcfiles
+(change, change.awk), scripts that will be "source"d by the patched
+rcfiles (.bashrc, .bashrc-psne, .zshrc, .zshrc-pnse, .tclshrc), a few
+other rcfile fragments that are not installed by default (.fvwmrc,
+.pythonrc.py, .vimrc), and scripts that implement, huh, "direct
+communication thorugh channels" in some specific languages
+(channel.py, channel.tcl).
+
+  Eduardo Ochs
+  2005jan07

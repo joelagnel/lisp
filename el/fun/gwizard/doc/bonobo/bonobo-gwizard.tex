@@ -1,0 +1,521 @@
+%
+% bonobo-easy.tex
+%
+
+% includes
+\documentclass[final,10pt]{article}
+\usepackage{verbatim}
+\usepackage[breaklinks,colorlinks]{hyperref}
+\usepackage{simplemargins}
+\usepackage{epsfig}
+\usepackage{html}
+
+% macros
+\newcommand{\link}[1]{\htmladdnormallink{#1}{#1}}
+\begin{latexonly}
+\renewcommand{\link}[1]{\href{#1}{#1}}
+\end{latexonly}
+\newcommand{\gwizard}{{\tt gwizard}}
+
+\parskip 2mm                  
+\parsep 2mm 
+\parindent 0mm
+
+\title{Writing Bonobo Components: the easy way}
+\author{Dirk-Jan C. Binnema, 
+  {\link{http://www.djcbsoftware.nl}}\\
+  dirk-jan@djcbsoftware.nl}
+\begin{document}
+\maketitle
+\begin{abstract}
+  This article shows how creating a Bonobo components with
+  both {\em multiple} and {\em custom} interfaces is not hard at all,
+  using the \gwizard{} emacs-lisp macros.
+\end{abstract}
+
+\section{Introduction}
+There are some introductions to Bonobo that show some basic
+things. Up until now, there's not been a more advanced text 
+(that I know of). I hope
+this article can help you to take the next step. If you don't know
+the basics of Bonobo, please read \cite{bonobo-nluug} (technical overview),
+\cite{ipctrl} (how-to) or \cite{meeks1} first. Also, basic
+(working) knowledge of CORBA is assumed, and finally, you should know
+how to operate Emacs, because the \verb|gwizard| tool I'll be using is
+Emacs based.
+
+{\bf Big warning}: A wizard may help you save some typing, but should never be a
+substitute for knowing what you are doing!
+
+In this article I'll discuss the writing of a Bonobo component which has both
+\begin{itemize}
+        \item multiple interfaces, and 
+        \item custom interfaces. 
+\end{itemize}
+Actually, the same interfaces are both multiple and custom... 
+
+Creating Bonobo components is a lot easier with the right tools. Well,
+to save you from a lot of boring boilerplate code and RSI, I have
+written \verb|gwizard|, a set of Emacs elisp-macros~\cite{gwizard}.
+
+\section{Components have feelings too}
+Let's introduce our example component: \verb|MoodyComponent|. 
+\verb|MoodyComponent| is a, well, moody component: 
+sometimes, it's in a good mood, and sometimes, it's in a bad mood.
+
+We can model the moods of \verb|MoodyComponent| as separate
+interfaces: one interface for the good mood, and one interface for the
+bad mood. Figure~\ref{fig:moody-component} gives an artist's
+impression of this.
+\begin{figure}[ht]
+  \centerline{%
+    \epsfxsize=80mm
+    \epsffile{moody-component.eps}}
+  \caption{Component exposing multiple interfaces}
+  {\label{fig:moody-component}}
+\end{figure}
+
+\subsection{Writing the IDL}
+CORBA IDL is the language we use for the definition of the
+interfaces. We won't discuss CORBA IDL here any further; there are
+many places you can learn about that, for example \cite{HV99}, 
+and of course there's always 
+the official specification from the OMG \cite{omg}.
+
+Note that I put the interfaces in
+the \verb|Bonobo::Sample::| namespace. Also note that we're writing
+Bonobo interfaces, so by definition they derive (directly or
+indirectly, is this case directly) from \verb|Bonobo::Unknown|.
+Figure~\ref{fig:moods-uml} gives a UML-like class diagram.
+\begin{figure}[ht]
+  \centerline{%
+    \epsfxsize=80mm
+    \epsffile{moods-uml.eps}}
+  \caption{MoodyComponent class diagram}
+  {\label{fig:moods-uml}}
+\end{figure}
+We can now express these interfaces in CORBA IDL. To prevent the
+polution of the IDL namespace, we place our Moody interfaces
+in the \verb|Bonobo::Sample| namespace. Likewise, for the 
+\verb|.idl|-file, we choose the name \verb|Bonobo_Sample_Moody.idl|
+(it would be stylistically ugly to call it
+\verb|Bonobo_Sample_Moody_Component.idl|, because we'd like to maintain
+the separation of interface and implementation).
+
+The actual IDL is very simple, and looks like this:
+\begin{verbatim}
+/*
+ *  Bonobo_Sample_Moody.idl
+ */
+
+#include <Bonobo.idl>
+
+module Bonobo {
+        module Sample {
+                interface GoodMood : Bonobo::Unknown {
+                        string say_hello ();        
+                };
+        
+                interface BadMood : Bonobo::Unknown {
+                        string say_hi ();
+                };
+        };
+};
+
+\end{verbatim}
+If you wonder why \verb|GoodMood| has \verb|say_hello| and
+\verb|BadMood| has \verb|say_hi|, that's because I'd like to show they
+are really different; if they had the same name, some people may
+make the wrong assumptions.
+
+In the example, we derive our interfaces directly from
+\verb|Bonobo::Unknown|, because that's all we need. However, if we
+wanted to build a control we could derive for \verb|Bonobo::Control|,
+if we wanted to support structured storage we could derive from
+\verb|Bonobo::Storage| etc.
+
+\section{Implementation using Bonobo}
+\subsection{Background: interfaces and implementation}
+CORBA IDL-interfaces are really all about {\em interface inheritance}:
+they specify what methods an interface support, but leave the
+implementation of those methods up to {\bf you}. This holds also true
+for the Bonobo IDL, as they {\bf are} CORBA IDL interfaces like any
+other.
+
+However, together with the {\bf interfaces} hierarchy, Bonobo comes with an
+{\bf implementation} hierarchy that provides default implementations for the
+methods in the Bonobo interfaces. In the Bonobo source distribution, you'll
+find the IDL-interfaces in the \verb|idl/| directory, while the
+default implementations are in \verb|bonobo/|
+
+The mapping of IDL-interfaces upon implementation is mostly quite
+straightforward, for example the \verb|Bonobo::Print| interface has a
+default implementation in \verb|BonoboPrint| and \verb|Bonobo::Stream|
+finds its counterpart in \verb|BonoboStream|.  The notable exception here is
+\verb|Bonobo::Unknown|, which is implemented by \verb|BonoboXObject|.
+
+Also note that the implementations are done using the Gtk+ object
+system: they're \verb|GtkObject|s in Gtk+/Glib/Gnome 1.x, but will be
+\verb|GObject|'s in Gnome2. However, we're discussing only the former
+here. 
+
+\subsection{Generating the code}
+After we have specified the interfaces, we can implement them. This is
+quite easy, especially with \verb|gwizard|; after installation we can
+do (in Emacs):
+\begin{verbatim}
+M-x gwizard-new-bonobo1-interface[RET]  
+Interface: Bonobo::Sample::GoodMood[RET]
+Parent: Bonobo::Unknown[RET]
+Long names (y/n): n
+License (1=GPL, 2=LGPL, 3=none): 1
+\end{verbatim}
+So what are we doing here? Well:
+\begin{itemize}
+  \item The 'Interface' is the interface we want to implement. This
+  corresponds to the IDL interface, with full namespace qualification;
+  \item The 'Parent' is the interface we're deriving from. We derive
+    directly from \verb|Bonobo::Unknown|, so that's what we enter;
+  \item The 'Long names' refers to the naming of the generated files and
+  their contents for this interface; do you want
+  \verb|bonobo-sample-good-mood.c| or just \verb|good-mood.c|? If you
+  want the latter, say 'n' here;
+  \verb Finally, \verb|gwizard| can automatically insert the GPL or
+  LGPL license header if you want.
+\end{itemize}
+
+That leaves us with the boilerplate implementation code for the
+\verb|GoodMood| interface in \verb|good-mood.h| and
+\verb|good-mood.c|. I urge you to study the generated code; it's
+more-or-less a normal \verb|GtkObject|, as described in
+\cite{Pennington99}, so it shouldn't be too hard.
+
+\subsection{Filling out the details}
+\gwizard{} has done most of the boring work for use, but there are a couple
+of things we must do to finish the \verb|GoodMood|-implementation:
+\begin{enumerate}
+  \item \verb|good-mood.h|: Add the include file that CORBA created from the
+  \verb|Bonobo_Sample_MoodyComponent.idl|; 
+  \item \verb|good-mood.[ch]|: Add the declarations and
+  implementations for the \verb|say_hello| function in the
+  \verb|GoodMood| interface;
+  \item \verb|good-mood.c|: connect our object implementation to our
+  entry point vector; i.e. tell CORBA where it can find our implementation.
+\end{enumerate}
+
+Let's do these things:
+
+First, we add the include file with all the CORBA
+definitions. Remember our \verb|.idl| is called
+\verb|Bonobo_Sample_Moody.idl|; well, after IDL-compilation
+(which we haven't done yet), this will produce a file called
+\verb|Bonobo_Sample_Moody.h|, and that's the one we must
+include here. So we add to \verb|good-mood.h|, right under \#include
+that's already there:
+\begin{verbatim}
+#include "Bonobo_Sample_Moody.h"
+\end{verbatim}
+
+Ok, now for the \verb|say_hello| implementation, in \verb|good-mood.h|
+we add:
+\begin{verbatim}
+CORBA_char*  good_mood_say_hello (PortableServer_Servant servant,
+                                  CORBA_Environment * ev);
+\end{verbatim}
+(The signature can be deduced from the IDL$\to$C-mapping, or by
+grepping the generated \verb|Bonobo_Sample_Moody.h| file for
+\verb|say_hello| (you can
+compile it by hand with \verb|orbit-idl|). 
+The implementation in \verb|good-mood.c| is also very simple; add the
+end of this file add:
+\begin{verbatim}
+static CORBA_char*
+good_mood_say_hello (PortableServer_Servant servant,
+                     CORBA_Environment *ev)
+{
+   return CORBA_string_dup ("Hi! How are you?");
+}
+\end{verbatim}
+
+Now, the last thing we need to do is hooking uo our implementation up
+with the so-called {\em entry point vector} (epv), in the
+\verb|good_mood_class_init|:
+\begin{verbatim}
+    epv->say_hello = good_mood_say_hello;
+\end{verbatim}
+And that's it! The final step tells CORBA where to find our
+implementation for the \verb|say_hello| function.
+
+\subsection{What about the Bad Mood?}
+Not surprisingly, the implementation for \verb|BadMood| is very similar:
+\begin{verbatim}
+M-x gwizard-new-bonobo1-interface[RET]  
+Interface: Bonobo::Sample::GoodMood[RET]
+Parent: Bonobo::Unknown[RET]
+Long names (y/n): n
+License (1=GPL, 2=LGPL, 3=none): 1
+\end{verbatim}
+
+I guess it's a nice exercise for the reader to implement the
+\verb|BadMood|-interface without any help... Oh, remember you must
+create a \verb|bad_mood_say_hi|-method:
+\begin{verbatim}
+CORBA_char*     
+bad_mood_say_hi  (PortableServer_Servant _servant,
+                  CORBA_Environment * ev)
+{
+        CORBA_string_dup ("Grmpff... stop bothering me!");
+}
+\end{verbatim}
+Well, if you succeeded, we have now implemented the two
+interfaces. Hurray!
+
+\subsection{Writing the factory}
+Now we have implemented the two interfaces. To turn them into a 
+component, we need to have a 'factory', a piece of software that
+produces components. Writing factories is very easy using the
+\verb|gwizard-new-bonobo1-factory| macro in the \verb|gwizard|-
+package:
+\begin{verbatim}
+M-x gwizard-new-bonobo1-factory[RET] 
+Name: Bonobo::Sample::MoodyComponent[RET]
+License (1=GPL, 2=LGPL, 3=none): 1
+\end{verbatim}
+This generates \verb|bonobo-sample-moody-component.c| and
+\verb|Bonobo_Sample_MoodyComponent.oaf|. 
+
+Finishing \verb|bonobo-sample-moody-component.c| is quite easy:
+add \verb|#include|'s for \verb|good-mood.h| and \verb|bad-mood.h|,
+and tie them together in the factory method:
+
+\begin{verbatim}
+static BonoboObject*
+bonobo_sample_moody_component_factory (BonoboGenericFactory* factory,
+                                       void* data)
+{
+        GoodMood *good_mood = good_mood_new ();
+        BadMood  *bad_mood  = bad_mood_new ();
+        
+        bonobo_object_add_interface
+                (BONOBO_OBJECT(good_mood), BONOBO_OBJECT(bad_mood));
+       
+        return BONOBO_OBJECT (good_mood);
+}
+\end{verbatim}
+You must select one ``primary'' interface (\verb|good_mood|) in this
+case, to which you can add other interfaces. It doesn't matter which
+one you choose; just choose one.
+
+\subsection{Finishing the .oaf}
+Now, we've written all the code for the component, all that's left is
+registering it with OAF. The generated \verb|.oaf| should mostly work,
+but what you still need to do is add the interfaces you implement:
+\begin{verbatim}
+<oaf_attribute name="repo_ids" type="stringv">
+         <item value="IDL:Bonobo/Sample/GoodMood:1.0"/>
+         <item value="IDL:Bonobo/Sample/BadMood:1.0"/>
+</oaf_attribute>
+\end{verbatim}
+There are some comments in the \verb|.oaf| that indicate where to put
+this. 
+
+You should also check the \verb|location| attribute of the Factory;
+make sure it's either somewhere in your \verb|PATH| or fill in the
+path to the component executable.
+
+Place the \verb|.oaf| in your oaf-directory, which may be
+\verb|/usr/share/oaf|, or anywhere in your \verb|OAF_PATH|. Check
+the OAF-documentation \cite{liboaf} for details.
+
+\section{Compiling}
+Of course, we'd like to turn our work into some executable code. 
+We write a little \verb|Makefile| (this is not generated, but
+old-fashioned hand work):
+\begin{verbatim}
+#
+# Makefile for bonobo-sample-moody-component
+#
+
+CORBA_GENERATED = \
+        Bonobo_Sample_Moody-common.c \
+        Bonobo_Sample_Moody-skels.c \
+        Bonobo_Sample_Moody.h
+
+OBJECTS = \
+        Bonobo_Sample_Moody-common.o \
+        Bonobo_Sample_Moody-skels.o \
+        good-mood.o \
+        bad-mood.o \
+        bonobo-sample-moody-component.o 
+
+
+bonobo-sample-moody-component: ${CORBA_GENERATED} ${OBJECTS}
+        gcc -o $@ ${OBJECTS} `orbit-config --libs server`\ 
+                      `gnome-config --libs bonobo gnomeui`
+
+.c.o:   
+        gcc -c $< `orbit-config --cflags server` `gnome-config --cflags bonobo` 
+
+$(CORBA_GENERATED):
+        orbit-idl --nostubs Bonobo_Sample_Moody.idl \ 
+                           `gnome-config --cflags idl`
+
+clean:
+        rm -f *~ ${OBJECTS} ${CORBA_GENERATED} \
+                 bonobo-sample-moody-component
+
+\end{verbatim}
+
+\section{Writing a client}
+We can't do anything with our newly created component if we don't have
+some client. However, I won't discuss the writing of a client here;
+but - fear not - a test client is included with \gwizard{}, and looks
+a bit like this:
+\begin{verbatim}
+/*
+ *  bonobo-sample-moody-client.c
+ */
+#include <gnome.h>
+#include <liboaf/liboaf.h>
+#include <bonobo.h>
+#include "Bonobo_Sample_Moody.h"
+
+int
+main (int argc, char *argv[])
+{
+        CORBA_ORB orb;
+        CORBA_Environment ev;
+
+        BonoboObjectClient *server;
+
+        Bonobo_Unknown moody_object;
+        Bonobo_Sample_GoodMood good_mood;
+        Bonobo_Sample_BadMood  bad_mood;
+        
+        gnome_init_with_popt_table ("bonobo-sample-moody-client", 
+                                    "0.0.0", argc, argv,
+                                    oaf_popt_options, 0, NULL);
+        
+        if ((orb = oaf_init (argc, argv)) == CORBA_OBJECT_NIL)
+                g_error ("could not init orb\n");
+        
+        if (!bonobo_init (orb, CORBA_OBJECT_NIL, CORBA_OBJECT_NIL))
+                g_error ("could not initialize bonobo\n");
+
+        bonobo_activate ();
+        
+        if (!(server = bonobo_object_activate (
+                      "OAFIID:Bonobo_Sample_MoodyComponent", 0)))
+                g_error ("failed to create a moody component\n");
+        
+        CORBA_exception_init (&ev);
+        moody_object = BONOBO_OBJREF (server);
+
+        /*
+         *  good mood
+         */
+        good_mood = bonobo_object_client_query_interface 
+                (server, "IDL:Bonobo/Sample/GoodMood:1.0", &ev);
+        if (BONOBO_EX(&ev))
+                g_error ("error querying interface\n");
+        else {
+                char *msg = NULL;
+
+                g_print ("Q: hey good mood component, how are you?\n");
+                msg = Bonobo_Sample_GoodMood_say_hello (good_mood, &ev);
+                if (BONOBO_EX(&ev)) 
+                        g_warning ("error in say_hello\n");
+                else
+                        g_print ("A: %s\n", msg);
+                
+                CORBA_exception_free (&ev);
+                CORBA_free (msg);
+                
+                bonobo_object_release_unref (good_mood, NULL); 
+        }
+
+        /* 
+         * bad mood 
+         */
+        bad_mood = bonobo_object_client_query_interface 
+                (server, "IDL:Bonobo/Sample/BadMood:1.0", &ev);
+        if (BONOBO_EX(&ev))
+                g_error ("error querying interface\n");
+        else {
+                char *msg = NULL;
+
+                g_print ("Q: hey bad mood component, how are you?\n");
+                msg = Bonobo_Sample_BadMood_say_hi (bad_mood, &ev);
+                if (BONOBO_EX(&ev)) 
+                        g_warning ("error in say_hello\n");
+                else
+                        g_print ("A: %s\n", msg);
+                
+                CORBA_exception_free (\&ev);
+                CORBA_free (msg);
+                
+                bonobo_object_release_unref (bad_mood, NULL);       
+        }
+        
+                        
+        CORBA_exception_free (&ev);
+        bonobo_object_unref (BONOBO_OBJECT (server));
+        
+        return 0;
+\end{verbatim}   
+The corresponding \verb|Makefile| can be found in the \gwizard{}
+distribution. 
+
+I gladly admit the client looks quite complex for the little we do. 
+This is partly because small programs have a big ratio of boilerplate
+code; another reason is that C-language binding is inherently rather
+low-level. You might want to consider the Bonobo Python binding
+instead~\cite{pythonbonobo}...
+
+ \section{The impressive results}
+Now, let's compile the thing and we're ready for testing:
+we have already built our server (right?), and now we have a client too!
+\begin{verbatim}
+% ./bonobo-sample-moody-client 
+Q: hey good mood component, how are you?
+A: Hi, how are you!
+Q: hey bad mood component, how are you?
+A: Grmpff... stop bothering me!
+\end{verbatim}
+Yes: it worked! You've reached the next level. Sit back and relax. And
+enjoy a short Zen moment of Bonobo enlightenment.
+
+\section{Conclusions}
+Hopefully, this article has shown that writing Bonobo components is
+not hard at all (I hope). Also, I hope it will encourage, {\bf you}, the reader,
+to create some really cool Bonobo components -- a little imagination,
+a little transpiration and a little elisp can do wonders...
+
+\gwizard{} is quite handy; however I need to stress again that a
+code generator can never be a substitute for understanding. Study the
+generated code. Understand it.
+
+\section{Future work on gwizard}
+\gwizard{} is currenly alpha level software and probably still
+contains a number of bugs. It seems very useful though.
+
+Anyway, apart from fixing bugs, there are some features I may or may not add.
+\begin{itemize}
+  \item It would be easy to extend \gwizard{} to create the boilerplate for the
+  IDL-interfaces as well, and maybe the
+  \verb|Makefile|/\verb|Makefile.am|;
+  \item It would also be quite easy to generate the code for
+  shared-library components as well;
+  \item Some extra magic could be used to further ease the writing of
+  specific Bonobo components (such as Monikers);
+  \item There should be some shell scripts to run the elisp in batch
+  mode, which is more convenient for people that don't use Emacs;
+  \item Also, the current \gwizard{} support Bonobo version 1.x; work
+  is already underway to support the GNOME2/Bonobo2 platform as well.
+\end{itemize} 
+\bibliographystyle{plain} \flushleft
+\bibliography{books}
+\end{document}
+%
+% end of bonobo-easy.tex
+%

@@ -1,0 +1,1 @@
+link(<field "const char *OLDNAME">, <field "const char *NEWNAME">)<endpoint>

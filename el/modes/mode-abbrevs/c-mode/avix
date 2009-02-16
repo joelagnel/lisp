@@ -1,0 +1,2 @@
+ioctl(fd,CMD);
+memcpy(foo,bar);

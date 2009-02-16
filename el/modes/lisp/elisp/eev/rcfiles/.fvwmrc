@@ -1,0 +1,38 @@
+# -*- mode: fvwm-generic -*-
+# This is the `rcfiles/.fvwmrc' file of GNU eev.
+# Author and version: Eduardo Ochs, 2005jan07
+# This file is in the Public Domain.
+
+# (progn (fvwm-generic-mode) (font-lock-mode 1))
+# (find-eev "eev-langs.el" "eefvwm")
+
+# The easiest way to install this - i.e., to make fvwm e-scriptable -
+# is to add these commands (there are only three commands in this
+# file) to one of you fvwm initialization files. This is not done
+# automatically by "make preinstall"/"make install"; you'll have to do
+# it by hand.
+
+# (find-man "1 fvwm" "\nCONFIGURATION FILES\n")
+# (find-fline "~/.fvwm/")
+
+# Define a function `ee' that executes the temporary fvwm script.
+# Note that the temporary fvwm script is a file in ~/.fvwm/ , not in 
+# ~/eev-current/tmp/ .
+# (find-man "FvwmConsole")
+# (find-fvwmhelp "DestroyFunc")
+# (find-fvwmhelp "AddToFunc")
+#
+DestroyFunc ee
+AddToFunc ee "I" read ee.fvwm
+
+# Listen to commands from the outside.
+# Without this running `FvwmCommand' on a shell won't work.
+# `find-fvwm0' works by saving the fwvm commands in the temporary
+# fvwm script file and running "FvwmCommand ee" on a shell.
+# (find-man "FvwmCommand")
+# (find-man "FvwmCommand" "FvwmCommandS")
+# Tests: (find-sh0 "FvwmCommand 'CursorMove +5 +2'")
+#        (find-fvwm0 "CursorMove +5 +2")
+#        (find-fvwm0 "CursorMove -5 -2")
+#
+AddToFunc StartFunction "I" Module FvwmCommandS

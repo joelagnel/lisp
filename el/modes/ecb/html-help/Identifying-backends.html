@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Identifying%20backends">Identifying backends</a>,
+Next:<a rel=next accesskey=n href="Checking-the-state.html#Checking%20the%20state">Checking the state</a>,
+Previous:<a rel=previous accesskey=p href="Version-control-support.html#Version-control%20support">Version-control support</a>,
+Up:<a rel=up accesskey=u href="Version-control-support.html#Version-control%20support">Version-control support</a>
+<hr><br>
+
+<h4>How ECB identifies the VC-backend of a dir</h4>
+
+<p>ECB tries all functions added as identify-backend-funtions to the
+option <code>ecb-vc-supported-backends</code> until one of them returns not
+<code>nil</code> but a symbol which identifies the backend (e.g. 
+<code>CVS</code>). After this check ECB stores the result of this check
+(i.e. either the identified backend or the fact that the directory is
+not managed by a VC-system) for that directory in a special cache, so
+the identify-backend-process will be performed only once per
+directory. If for a directory a VC-backend could be identified ECB
+stores not only the backend itself for that directory but also the
+associated check-state-function defined in
+<code>ecb-vc-supported-backends</code> (see <a href="Checking-the-state.html#Checking%20the%20state">Checking the state</a>).
+
+<p>You can add arbitrary functions to this options as long as they get one
+directory-argument and return either nil or a backend-symbol. Per
+default ECB offers the following functions to identify the VC-backend
+CVS, RCS, SCCS or Subversion<a rel=footnote href="#fn-1"><sup>1</sup></a>:
+
+<dl>
+<dt><code>ecb-vc-dir-managed-by-CVS DIRECTORY</code>
+<dd>Return <code>CVS</code> if DIRECTORY is managed by CVS. nil if not.
+
+<p>This function tries to be as smart as possible: First it checks if
+DIRECTORY is managed by CVS by checking if there is a subdir
+<code>CVS</code>. If no then nil is returned. If yes then for GNU Emacs it
+takes into account the value of <code>vc-cvs-stay-local</code>: If t then
+just return <code>CVS</code>. Otherwise ECB checks the root repository if it
+is a remote repository. If not just <code>CVS</code> is returned. If a
+remote repository it checks if the value of <code>vc-cvs-stay-local</code>
+is a string and matches the host of that repository. If yes then just
+<code>CVS</code> is returned. If not then ECB checks if that host is
+currently accessible by performing a ping. If accessible <code>CVS</code> is
+returned otherwise nil. This has the advantage that ECB will not be
+blocked by trying to get the state from a remote repository while the
+host is not accessible (e.g. because the user works offline).
+
+<p>Special remark for XEmacs: XEmacs has a quite outdated VC-package
+which has no option <code>vc-cvs-stay-local</code> so the user can not work
+with remote CVS-repositories if working offline for example. So if
+there is no option <code>vc-cvs-stay-local</code> then ECB performs always
+the repository check mentioned above.
+
+<br><dt><code>ecb-vc-dir-managed-by-RCS DIRECTORY</code>
+<dd>Return <code>RCS</code> if DIRECTORY is managed by RCS. nil if not.
+
+<br><dt><code>ecb-vc-dir-managed-by-SCCS DIRECTORY</code>
+<dd>Return <code>SCCS</code> if DIRECTORY is managed by SCCS. nil if not.
+
+<br><dt><code>ecb-vc-dir-managed-by-SVN DIRECTORY</code>
+<dd>Return <code>SVN</code> if DIRECTORY is managed by Subversion. nil if not. 
+Returns always nil if the library vc-svn.el can not be found.
+
+</dl>
+
+<p>If ECB should support another VC-backend than CVS, RCS, SCCS or
+Subversion you have to write your own identify-backend-funtion for the
+used VC-backend (e.g. Clearcase)!
+
+<h5>Special remarks for XEmacs</h5>
+
+<p>XEmacs contains only a quite outdated VC-package, especially there is
+no backend-independent check-vc-state-function available (like
+<code>vc-state</code> for GNU Emacs). Only for CVS a check-vc-state-function
+is available: <code>vc-cvs-status</code>. Therefore ECB adds per default
+only support for CVS and uses <code>ecb-vc-managed-by-CVS</code> rsp. 
+<code>vc-cvs-status</code>. See also <a href="Known-VC-problems.html#Known%20VC-problems">Known VC-problems</a>!
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>For this the most recent version
+of the VC-package (incl. the library vc-svn.el) is needed - as
+contained in CVS Emacs</p>
+
+</ol><hr>
+
+</body></html>
+

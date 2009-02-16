@@ -1,0 +1,1 @@
+bsearch(<field "const void *key">, <field "const void *base">, <field "size_t nelem">, <field "size_t size">, <field "int (*cmp)(const void *ck, const void *ce)">)

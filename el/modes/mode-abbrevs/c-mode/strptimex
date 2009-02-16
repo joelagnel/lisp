@@ -1,0 +1,1 @@
+strptime(<field "const char *S">, <field "const char *FMT">, <field "struct tm *TP">)<endpoint>

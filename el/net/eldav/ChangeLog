@@ -1,0 +1,207 @@
+2003-11-30  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* 0.8.1 is released.
+	
+	* eldav.el (eldav-executable-property-namespace): New user option.
+	(eldav-proppatch): New function.
+	(eldav-directory-files): Use copy-sequence for sort argument.
+	(eldav-file-executable-p): Implemented.
+	(eldav-file-modes): Treat executable.
+	(eldav-insert-directory): Fixed parsing -d option;
+	Use copy-sequence for sort argument;
+	Bind eldav-inhibit-propfind-cache as t for redisplay propfind.
+	(eldav-set-file-executable-p): New function.
+	(dired-eldav-toggle-file-executable): New command.
+	(toplevel): Enclose require poe with eval-and-compile.
+	(eldav-static-if): New macro.
+	(eldav-exec): Use it.
+	(eldav-copy-file): Ditto.
+	(eldav-insert-file-contents): Ditto.
+	(eldav-select-safe-coding-system): Ditto.
+	(eldav-write-region): Ditto.
+
+2003-11-29  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* 0.8.0 is released.
+	
+	* eldav.el (eldav-node-property-value): New function.
+	(eldav-node-attributes): If file is executable, return 'x' for mode.
+	(eldav-file-props-directory-p): Assume the property value is a string.
+	(eldav-insert-file-contents): Use find-operation-coding-system
+	if it exists.
+	(toplevel): Require 'timezone.
+
+2003-11-08  Yuuichi Teranishi  <teranisi@ns.templewest.net>
+
+	* eldav.el (toplevel): Require timezone.
+
+2003-06-08  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* 0.7.2 is released.
+
+	* eldav.el (eldav-running-process): Changed definition position;
+	All other buffer local variables are also changed its definition
+	position.
+	(eldav-exec): Don't use eldav-process-password.
+	(eldav-put-buffer): Set file modes for Emacs 21.1-21.3.
+	(eldav-file-local-copy): Ditto.
+
+	* 0.7.1 is released.
+
+	* eldav.el (toplevel): Require poe.
+	(eldav-temporal-directory): Set default value as
+	temporary-file-directory.
+	(eldav-put-buffer): Use make-temp-file instead of make-temp-name.
+	(eldav-file-local-copy): Likewise.
+	(eldav-process-sentinel): New null function.
+	(eldav-exec): Use it.
+
+
+2003-03-06  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* 0.7.0 is released.
+
+2003-03-05  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (toplevel): Silence byte-compiler.
+	(eldav-process-sentinel): Removed (Based on the report from Ukai-san).
+	(eldav-exec): Don't setup process sentinel.
+	(eldav-file-props-directory-p): New function.
+	(eldav-file-directory-p): Use it.
+	(eldav-process-read-user): Catch quit signal and delete running
+	process while reading username.
+	(eldav-exec): Changed unexpected process exit message.
+
+2003-02-25  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (eldav-process-filter): Erase buffer before sending
+	auth string.
+
+2003-02-23  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (eldav-file-name-server-path): Avoid error when server
+	path length is zero.
+	(eldav-lockinfo-list): Don't use cache information.
+	(eldav-file-name-regexp): Changed 
+	(eldav-file-directory-p): Fix.
+	(eldav-insert-directory): Changed directory check.
+	(eldav-file-name-directory, eldav-real-file-name-directory): New
+	function.
+	(eldav-exec): Avoid error when nd exits with wrong status.
+	(eldav-use-vc): Changed default value.
+
+2002-10-18  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (eldav-lock-identifier): Changed default value.
+	(eldav-lockinfo-list): New function.
+	(eldav-lockinfo-list-search): Ditto.
+	(eldav-propfind): Don't store failure status.
+	(eldav-lock): Add '-o'.
+	(eldav-node-attributes): Delete lock-status-only node.
+	(eldav-file-directory-p): Changed check logic.
+	(eldav-use-vc): New user option.
+	(eldav-file-writable-p): Change behavior according to eldav-use-vc.
+	(eldav-write-region): Get lockinfo and use it.
+	(eldav-vc-registered): New function.
+
+	* vc-eldav.el: New file.
+
+2002-10-09  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (eldav-insert-file-contents): Fixed last change.
+
+2002-10-08  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (eldav-select-safe-coding-system): Don't use
+	default-coding-system if it is not bound.
+	(eldav-write-region): Likewise for buffer-file-coding-system.
+
+2002-10-07  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (toplevel): require poem if non-mule XEmacs.
+	(eldav-insert-file-contents): Don't use coding-system-for-read
+	if it is not bound.
+
+2002-09-08  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (eldav-expand-file-name): Concat "/" to the top
+	and call `expand-file-name' instead of using "/" as a second argument
+	of the 'expand-file-name', to avoid expanding "~".
+	(eldav-file-directory-p): Return cdr of `props'.
+
+2002-06-02  Yuuichi Teranishi  <teranisi@ns.templewest.net>
+
+	* eldav.el (eldav-time-less-p): Treat (HIGH . LOW) type time structure.
+	(eldav-verify-visited-file-modtime): Use eldav-time-less-p instead of
+	float-time.
+
+2002-05-29  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (eldav-copy-file): Check source file's file-name-handler.
+	(eldav-delete-file): Bind eldav-inhibit-propfind-cache as t.
+	(toplevel): Require 'cl at compile time.
+
+2002-04-11  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (eldav-process-connection-type): New variable.
+	(eldav-exec): Bind it; Don't use set-buffer-multibyte on XEmacs.
+	(eldav-copy-file): Likewise.
+	(eldav-lock): Commented out '-o'.
+	(eldav-file-attributes): Call eldav-real-file-attributes if normal
+	file.
+	(eldav-real-file-attributes): New function.
+	(eldav-write-region): Ignore rest of arguments.
+
+2002-03-11  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (eldav-url-realm-alist): New variable.
+	(eldav-set-url-realm): New function.
+	(eldav-url-realm): Ditto.
+	(eldav-process-filter): Bind enable-recursive-minibuffers locally;
+	Use eldav-set-url-realm; Set eldav-process-proxy-realm;
+	(eldav-process-proxy-realm): New buffer local variable.
+	(eldav-exec): Use eldav-url-realm;
+	Bind enable-recursive-minibuffers locally;
+	Specify -a and -A option according to realm cache.
+	(eldav-exec): Cause an error when process is interappted.
+
+2002-03-09  Toshiaki Tanaka <toc.tanaka@toshiba.co.jp>
+
+	* eldav.el (toplevel): Fixed `file-accessible-directory-p'.
+
+2002-03-06  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (eldav-auto-save): New user option.
+	(eldav-inhibit-propfind-cache): New variable.
+	(eldav-propfind): Use it.
+	(eldav-file-modtime): New function.
+	(eldav-set-buffer-mode): Ditto.
+	(eldav-verify-visited-file-modtime): Ditto.
+	(eldav-select-safe-coding-system): Ditto.
+	(eldav-write-region): Use eldav-select-safe-coding-system;
+	Set visited-file-modtime.
+	(toplevel): Add eldav-set-buffer-mode to the find-file-hook.
+
+2002-03-04  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (eldav-lock-identifier): New user option.
+	(eldav-lock): Use it.
+	(eldav-url-encode-string): New function.
+	(eldav-file-name-url): Use it.
+	(eldav-delete-file): Signal if directory not found.
+	(eldav-url-coding-system): New user option.
+	(eldav-url-decode-string): New function.
+	(eldav-propfind): Use it.
+	(eldav-file-name-server-path): Ditto.
+	(eldav-copy-file): Fix.
+	(eldav-node-attributes): Fix.
+
+2002-03-01  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* eldav.el (eldav-exec): Bind http_proxy as nil if eldav-proxy is nil.
+	(eldav-put-buffer): Bind default-directory.
+	(eldav-insert-directory): Treat 'd' switch.
+	(eldav-real-write-region): New function.
+	(eldav-real-expand-file-name): Rewrite.
+	(eldav-expand-file-name): Rewrite.
+

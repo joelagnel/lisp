@@ -1,0 +1,1 @@
+printf(<field "const char *restrict format">, <field "...">)

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 26
+/svn/!svn/ver/27/trunk/doc
+END
+dbg.eps
+K 25
+svn:wc:ra_dav:version-url
+V 33
+/svn/!svn/ver/3/trunk/doc/dbg.eps
+END
+short-desc
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/3/trunk/doc/short-desc
+END
+distel.texi
+K 25
+svn:wc:ra_dav:version-url
+V 38
+/svn/!svn/ver/27/trunk/doc/distel.texi
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/3/trunk/doc/Makefile
+END
+.cvsignore
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/3/trunk/doc/.cvsignore
+END

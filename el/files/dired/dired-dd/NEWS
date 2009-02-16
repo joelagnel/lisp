@@ -1,0 +1,542 @@
+See also ChangeLog for details of those changes.
+
+* Version 0.9.1.28
+
+	*** Now dired-dd-delete-recursive() asks if the relevant buffer
+	should be killed.
+
+	*** Variable `dired-dd-delete-recursive-options' defaults ("-rf").
+
+	*** locate-dired.el is refined to handle weird filename encodings.
+
+* Version 0.9.1.27
+
+	*** Files dropped by drag-mouse-2 on root window is always opened
+	in a newly created emacs frame.
+
+* Version 0.9.1.26
+
+	*** [drag-mouse-1] and [M-drag-mouse-1] mark a file with the
+	relevant mark if the file is already marked with a different mark
+	as well.  Now you need not clear "*" with [drag-mouse-1] before
+	marking with "D" by [M-drag-mouse-1]: You can use just
+	[M-drag-mouse-1] no matter what mark is on it.  Of course
+	[M-drag-mouse-1] clears "D" only when it is marked with"D".
+
+* Version 0.9.1.25
+
+	*** Now all the file dropped into *w3m* buffer, or opened via
+	button 3 menu are opened with independent w3m process.  The
+	behaviour is controlled by a new user option
+	dired-dd-w3m-new-session defaulting t, which makes files dropped
+	into *w3m* buffer are opened as new-session of emacs-w3m.  If
+	dired-dd-w3m-new-session is turned off, only the first file marked
+	in dired buffuer is opened. dired-dd-w3m-new-session is defined in
+	dired-dd-w3m.el, so, if you don't install dired-dd-w3m.el and the
+	default behaviour is desirable, (setq dired-dd-w3m-new-session t)
+	in your .emacs(.el).
+
+* Version 0.9.1.24
+
+	*** A new file dired-dd-w3m.el in "non-dired-drop" directory,
+	including a new handler function `dired-dd-w3m-drop-handler' to
+	drop a file (perhaps an html) into *w3m* buffer. See
+	http://emacs-w3m.namazu.org/ for w3m, the emacs web browser.
+
+	See the comments at the top of non-dired-drop/dired-dd-w3m.el
+	to install.
+
+* Version 0.9.1.23
+
+	*** Now you can remove directories recursively even in
+	/you@otherhost:/home/ via "Delete Recursive" [mouse-3]
+	menu-item (you should be able to do rsh to the ftp host as well).
+
+	*** Now you can copy-recursively files even when `from' or
+	`to' directory is remote ftp directory (you should be able to
+	do rcp between the ftp host as well).
+
+	*** Now "w3m-open-local" item in the [mouse-3] menu.
+	Requires emacs-w3m from
+		http://emacs-w3m.namazu.org/
+	which works far better than `w3'.
+
+* Version 0.9.1.22
+
+	*** A fix on external command handler function
+	dired-dd-exec-async-shell-command.
+	Now you can include "&" in a dired-guess-shell-alist-user entry
+	like this:
+
+	("\\.jpe*g$"
+	 "xv * &"
+	 "display * &"
+	 "my-jpg-cvt-script * &"
+	 "animate * &"
+	 "xanim * &"
+	 "xli -onroot * > /dev/null")
+
+	Older version didn't work as expected if "&" is included in the
+	command lines.
+
+* Version 0.9.1.21
+
+	*** Workarounds for emacs-21, and CVS version of fvwm2.
+
+* Version 0.9.1.20
+
+	*** A new command [C-mouse-2] dired-dd-view-file available.
+	Might be convenient while browsing through a directory full of
+	jpeg files in emacs-21.x.
+
+	*** dired-dd-watch.el dropped.  Found serious bug. Maybe
+	it won't come back so soon, because the bug is related to
+	the basic configuration of the program.
+
+	*** "Copy Recursive" commands requires `file-name-coding-system'
+	or `pathname-coding-system' to be setup correctly (in
+	emacs-19/20/21), because now command `dired-dd-copy-recursive'
+	is refined not to use dired-shell-stuff-it().
+	`dired-shell-stuff-it' is totally useless for some multi-byte
+	encoded (eg. SJIS) file names.
+
+	*** Accordingly the format of variable
+	`dired-dd-copy-recursive-command' is changed: Now this
+	variable should be just a command name string (defauls "cp" --
+	GNU cp is implied) and the commad option should be defined in
+	new variable `dired-dd-copy-recursive-options' (defaulting
+	'("-a")).
+
+	*** "Delete Recursive" item (in B2, and B3 menu) is also fixed
+	not to use dired-shell-stuff-it().  Accordingly, variable
+	`dired-dd-shell-rm-R-command' is deprecated, and new variables
+	`dired-dd-delete-recursive-command' (defaults "rm"), and
+	`dired-dd-delete-recursive-options' (defaults `("-r")) are introduced.
+	The new "Delete Recursive" handler is `dired-dd-delete-recursive'
+	in dired-dd.el, which invokes `dired-dd-delete-recursive-command'
+	in background (experimentally).
+
+	*** There are many commands calling commands via `shell-file-name'
+	left in dired-dd-b3-menu.el.  These might be fixed similarly, but
+	they are not fixed, because they are thought to belong to a `kind' 
+	other than that of "copy" or "delete" and fixing them might make
+	the system inflexible.
+
+	*** dired-dd.ps removed from the archive.
+
+* Version 0.9.1.19
+
+	*** Works on emacs-21.0.95.
+
+	*** Now dired-dd-copy-recursive() (the "Copy Recursive" item
+	in button 2/3 menu) copies files in asynchronous fashion.
+	You can return to emacs even when you copied huge files.
+
+	Thus dired-dd-copy-recursive() returns faster than normal key
+	command `C' (dired-do-copy), or "Copy" menu item, so it has a
+	merit to use even for plain files, especially when they are
+	huge in size.
+
+	Caveat: Target dired buffer *may* not be updated correctly
+	after "Copy Recursive": hit `g' over there.
+
+	dired-dd-copy-recursive() is fixed to handle filenames
+	including shell meta-characters as well.
+
+	*** Found that Shift-JIS encoded filename can be drag-and-dropped
+	if
+		(setq file-name-coding-system 'sjis)
+	in emacs-20.7.	In mule-2.3 (19.28/19.34),
+
+		(setq pathname-coding-system *sjis*)
+
+	is rumoured to work, but it requires the mule to be built with
+	--mcpath option, and I could not the test the feature for I
+	have no such mule.
+
+	*** "Delete Recursive" menu item is also in B2 menu.
+
+	*** New command:
+	C-M-down-mouse-2 (or S-down-mouse-3) (dired-dd-popup-shell-alist-menu)
+	raises shell command selector for (marked) file(s).  It popups
+	a menu of registered in dired-guess-shell-alist-user /
+	dired-guess-shell-alist-default, associated with the filename
+	extensions.  The selected command out of the menu is executed
+	asynchronously.  As in case of M-mouse-2/double-mouse-1,
+	number of the asynchronous commands is unlimited.  The B2-menu
+	raised drag-mouse-2 also has entry point "Select Related CMD"
+	to dired-dd-popup-shell-alist-menu.  The `related' shell
+	commands should be listed directly in the B2-menu, but this
+	feature is still in my TODO list.
+	
+	*** New program dired-dd-watch.el is included in the archive.
+	It automatically fires up g (revert-buffer) with a timer
+	interval so that you can `watch' the dired (or even non-dired) buffer.
+	It adds a submenu in the B3 big menu (after "Refresh Listing"),
+	and after "Revert Buffer" in system's [Files] menu.
+	See docstring or the source for installation.
+	Here is a brief description on the feature of dired-dd-watch.el:
+
+	Hitting "`w" (in dired buffer: "`" is new prefix key),
+	M-x dired-dd-start-watch-timer RET (in non-dired buffer),
+	or selecting item "Watch Buffer" -> "Watch This Buffer"
+	in the global menu-bar starts the `watch timer'.
+
+	An interactive call C-u M-x dired-dd-start-watch-timer RET
+	forces to refresh the buffer content even when you are
+	in other buffer.  This forced refresh is controlled by a variable
+	dired-dd-watch-current-only, which can be toggled
+	through the submenu.  The watch interval is stored in a variable
+	dired-dd-watch-timer-interval, whose default is 5 (sec).
+
+	"`l" in dired buffer,
+	M-x dired-dd-watch-list-timer RET in non-dired buffer,
+	or menu item "Watch Buffer" -> "List watch timer"
+	raises the list of `watch timer'.  The list works almost the same
+	as in the output list from C-x C-b (list-buffers).
+	You can use most of key bindings in `Buffer-menu-mode' as you
+	may expect, and 3 more commands are available:
+
+	g               (dired-dd-watch-list-timer)        ; refresh the list
+	c               (dired-dd-cancel-listed-timer)
+	i               (dired-dd-change-listed-timer-interval)
+
+	Conceived to watch MP3 files arriving in ~/gnapster/MP3/downloaded,
+	or watching various log file contents.
+
+	*** dired-dd-watch.el are sort of experimental. May not be
+	merged into dired-dd.el or dired-dd-b3-menu.el (at least) for
+	a little while.
+
+	*** New drop handler dired-dd-mpg123.el is added.  You can drop
+	mp3 file(s), playlist(s), or directory(s) into the *mpg123* buffer.
+
+	To get mpg123.el, see:
+	http://www.gentei.org/~yuuji/software/mpg123el/
+
+	See also my player MonK at http://www.asahi-net.or.jp/~pi9s-nnb/monk/
+	which supports dired-dd from the first.
+
+	*** New add-on program dired-do-emacs-command.el.  Provides a command
+
+	   \ (dired-do-emacs-command)
+
+	in dired-mode (independent from dired-dd. Just depends on dired).
+	Example:
+	On "index.html" line in `dired' buffer, hit
+
+	   \ w3-open-local RET
+
+	opens the HTML file with `w3-open-local' command, or
+	on "Hammerklavier.mp3", "ringo.m3u", or on directory "mp3files" line,
+
+	   \ mpg123
+
+	fires up mpg123.  `dired-guess-shell-alist-user' sort of command
+	dictionary is not yet implemented.
+
+	It may be advisable to
+
+		(setq dired-dd-play-audio nil)
+
+	if you use dired-dd-mpg123.el.
+
+	*** Drag-and-drop into non-dired buffer via Keyboard (!) is supported.
+	But, what's good with the `drag-drop' via KEYBOARD ?:
+
+	Most of other dired-dd command/functions can be executed via
+	equivalent keyboard command, but `non-dired' drop was a few
+	exceptions in older `dired-dd' versions: there was no such
+	keyboard command to drop files into MH/Mew/TiMidity/Monk/Gnus
+	buffers.  Now these commands are available:
+
+	| (dired-dd-exec-non-dired-drop-kbd)         : (1)
+	C-| (dired-dd-exec-non-dired-drop-kbd-C)     : (2)
+	C-M-| (dired-dd-exec-non-dired-drop-kbd-C-M) : (3)
+
+	each equivalent to:
+
+	(1) Plain drop       ([drag-mouse-2])
+	(2) `CTRL' drop      ([C-drag-mouse-2])
+	(3) `CTRL-META' drop ([C-M-drag-mouse-2])
+
+	The dropped file is of course marked file(s) or a file on which
+	current point is sitting on in case there is no mark in the
+	dired buffer.  The targeg window is other (next) window to which
+	you could switch to with C-x o (other-window) -- the drop fails
+	if there is no such window.
+
+* Version 0.9.1.18
+
+	*** Item "Man & Info" in B3 menu is renamed to "Man, Info,
+	HTML", and it has new sub-menu item "w3-open-local".  The item
+	order in the sub-menu is also changed to mandoc, w3openlocal,
+	then info.  w3 is assumed to be setup correctly elsewhere.
+
+	*** The region swept by mouse button 1 will never be copied to
+	to kill-ring, and the kill-ring top will never be affected.
+
+* Version 0.9.1.17
+
+	*** New variable dired-dd-no-fancy-stuff, and
+	dired-dd-inhibit-bogo-profile. The former disables all the
+	fancy facilities of dired-dd, and might be used to make
+	dired-dd work on the disabled operating systems (but nobody
+	tested that yet).  Setting dired-dd-no-fancy-stuff to non-nil
+	automatically switches dired-dd-inhibit-bogo-profile to
+	non-nil as well, which is implemented to avoid weird death of
+	remote emacs-20 on my note PC (see ChangeLog in the package).
+
+	*** Now "Delete Recursive" B3 menu item executes the relevant
+	shell command in background. With this fix, the dired buffer
+	may not be updated after the deletion, but I couldn't stand
+	while I am deleting a big directory.
+
+	*** Fixed the function dired-dd-copy-recursive corresponding to
+	"Copy Recursive" in B2/B3 menu. GNU "cp -a" copies a directory
+	differently dependig whether the target directory already
+	exists or not, and this fix remedies the difference of the
+	behaviour.
+
+	*** New drop-handler dired-dd-lm.el for drag-and-drop into
+	non-dired buffer, which creates a MIME mail framework in
+	mail/article drafting buffer of Gnus, mew, mh-e, or a `Mail'
+	mode buffer upon dropping MIME attachment file(s) from dired
+	buffer. It requires lm.el (also newly included), which is a
+	simple interface to /usr/local/bin/uuenview (which should have
+	-a option). In lm.el, Japanese character coding-system handler
+	is hard-coded, so perhaps the program does not make sense at
+	all in drafting non-Japanese mail, sorry.
+
+* Version 0.9.1.16
+
+	*** Now most of shell commands invoked from mouse-3 are
+	executed asynchronously.
+
+	*** Supported drag-and-drop into timidity-mode buffer by
+	dired-dd-timidity.el.
+	Yet another sample of dired-dd-non-dired-drop-handler.
+
+	Timidity is a MIDI soft-synthesizer, which has an emacs
+	interface timidity.el.  M-x timidity RET (in an independent
+	emacs frame, you may prefer that) creates a timidity buffer,
+	and then, you can drop midi file(s) into it.  If you drop
+	multiple MIDI files (they could be gzip'ed, timidity knows how
+	to deal with them), the MIDI files are played in the mark
+	order.
+
+	Current timidity release is called TiMidity++, and can be
+	retrieved (perhaps) from:
+
+	http://www.goice.co.jp/member/mo/timidity/
+
+	*** Now non-dired-drop handlers are in `non-dired-drop' directory.
+
+	*** 	Added more rational `find-other-win' command:
+	S-mouse-2 (dired-dd-find-file-other-window)
+	You can still use old the hairy mouse binding:
+	C-S-mouse-2 (dired-dd-find-file-other-window)
+
+* Version 0.9.1.15
+
+	*** contrib directory added.  dired-dd-mime.el contributed by
+	OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>, which is a
+	`non-dired-drop' handler for dropping MIME attachment files
+	into a draft buffers of Wanderlust
+	(http://www.gohome.org/wl/), Gnus, mh-e etc.  Requires
+	SEMI/MIME-Edit, or tm-edit.
+
+	*** Added a mouse command [mode-line C-M-mouse-3] (mouse-delete-frame).
+	If you want to use this command globally, refer to
+	section "Using dired-dd in multiple window / frame environment"
+	in dired-dd.info.
+
+	*** Fixed a bug that async and sync shell commands invoked from
+	M-mouse-2/double-mouse-1 or menu raised by mouse-3 can't handle
+	filenames including whitespace or meta-characters.
+
+	*** dired-dd-shell-command and dired-dd-shell-command2 in
+	dired-dd-b3-menu.el supported "*" grammar to specify filename
+	position as in dired-guess-shell-alist-user.  If you are
+	modifying code to call (especially) dired-dd-shell-command2,
+	change "%s" to "*".  dired-dd-shell-command2 does not support
+	"%s" anymore as marker of filename position.  Very sorry.
+
+	*** Spinout directory now contains a perl script "jcol.pl",
+	which is Japanized version of `col' command to post-processing
+	of "man -mandoc" output.  dired-dd-b3-menu.el assumes the script.
+
+	*** Cleanup.
+
+* Version 0.9.1.14
+
+	*** Bug fix on dired-dd-b3-menu.el by courtesy of
+	Yuji Yamano <yyamano@kt.rim.or.jp>.
+	Now byte-compilation never fails even if no $LANG is set.
+
+	*** Slight cleanup of Makefile.
+
+* Version 0.9.1.13
+
+	*** BUG fix on dired-dd-insert-fname.el.  See ChangeLog.
+
+* Version 0.9.1.12
+
+	*** Slight fix.  ARGLIST handed to functions registered in variable
+	dired-dd-non-dired-drop-handlers format is changed.  Current format
+	is:
+		(FILENAME-LIST WINDOW MODIFIERS POINT)
+
+	If the parameters included in the ARGLIST is not enough,
+	you can also use variables such as modifiers, event, start-window
+	etc., which are defined in upper functions.
+
+	*** dired-dd-insert-file.el is included. Another sample of 
+	`dired-dd-non-dired-drop-handler'.  Inserts file content at
+	the dropped point by S-drag-mouse-2.  Buffer mode is not checked,
+	so that file(s) can be drop-inserted into any non-dired buffer.
+
+	*** dired-dd-insert-fname.el: Another non-dired-buffer-drop handler.
+	Insert filename by Drag-and-drop in any non-dired-buffer.
+	Supports:	
+		C-drag-mouse-2: insert plain filename(s)
+		M-drag-mouse-2: insert fullpath name(s)
+
+* Version 0.9.1.11
+
+	*** An generic non-dired target buffer (window) handlers support.
+	User can define a prefered handler function for a non-dired target
+	buffer.
+	
+	The Handler functions can be registered in a new
+	variable dired-dd-non-dired-drop-handlers.
+
+	An example of the handler function is enclosed
+	is dired-dd-mew.el, which enables drag-and-drop attachment file
+	into "attachments" field into Mew's draft buffer.
+
+	See doc string for dired-dd-non-dired-drop-handlers for detail.
+
+* Version 0.9.1.10
+
+      *** Double clicking mouse button 1 provides a generic file opening
+        facility (not only for find-file anymore).
+	Now you don't have to worry about whether the file should be
+	opend with emacs, or external commands (Just like in Macintosh, or
+	Windows)!:
+
+	* [double-mouse-1] (dired-dd-find-file-or-exec):
+	Now [double-mouse-1] eventually calls for dired-dd-find-file-or-exec,
+	which examines related command for marked files first, then, if
+	command is found, branch to dired-dd-exec-command-directly, otherwise
+	to dired-dd-find-marked-files (this is new too) to just find the
+	marked file.
+
+      *** A new variable dired-dd-find-multiple-file to force
+	double-mouse-1 (dired-dd-find-file-or-exec) to find-file
+	(opeing-with-emacs) all the marked files/directories (default:
+	nil).
+
+      *** Further, one spinout function, which is unbound by default:
+
+	The dired-find-file-other-frame can be called from keyboard.
+	Possible ~/.emacs settings (not well tested):
+
+	  (define-key dired-mode-map "\e\C-o" 'dired-find-file-other-frame)
+	  (autoload 'dired-find-file-other-frame "dired-dd" nil t)
+
+* Version 0.9.1.9
+
+	** Another bunch of small fixes.
+	** Fixed bug on drop onto root window (multiple marked directories
+	were not correctly opened).
+	** Fixed bug in async command execution (M-mouse-2) deep down in
+	recursive dired listing (eg. with adding `ls' listing flag `R' by C-u s).
+
+* Version 0.9.1.8
+
+	** Minor fixes.
+
+* Version 0.9.1.7
+
+	** Supported drop objects on root window:
+	   file or directory is opend with new frame.
+	** New variable dired-dd-iconify-control-on-root-drop:
+	   iconify or deiconify new frame in Emacs-20.xx upon root window drop.
+	** Supported M-drag-mouse-1 to flag files with `D'.
+	** "wrong-type-argument integerp nil" error rarely occurs in mule-2.3 fixed.
+	** Minor fixes.
+
+* Version 0.9.1.6
+
+	** Now dired-dd is distributed under GPL (version 2) from
+	this version 0.9.1.6.
+
+	** spinout/str-arg.el is added.  get-string-arg-and-call works like
+	C-u C-x C-f (dired-x-find-file) RET, but works also for
+	non-filename and any commands which takes string as first argument.
+
+* Version 0.9.1.5
+
+	** Fixed the bug that mark (at BOL of dired buffer) is not
+	retained in inter-frame drag & drop.
+
+	** Now menu raised by mouse button 3 has `Launch Terminal'
+	entry at the top.  It fires up xterm or kterm (determined
+	automatically depending upon LANG environment variable)
+	asynchronously with `cd'ing current dired buffer's default
+	(current) directory.
+
+	** spinout/locate-dired.el: Now window locate-dired uses
+	current window.  If older version's behavior is favored, set
+	variable locate-dired-use-other-window to t.
+
+	** A short file INSTALL describing installation knowhow added.
+
+* Version 0.9.1.4
+
+	** Small fix.  Potential bug of infinite loop in loading
+	dired-dd (order of provide feature, and run-hooks for
+	dired-dd-load-hook).  Perhaps it has been ok in older
+	versions, if user does not have (require 'dired-dd) in
+	dired-dd-load-hook functions.
+
+* Version 0.9.1.3
+
+	** M-mouse-2 (dired-dd-exec-command-directly) executes
+	shell-command asynchronously.  Now the same command can be
+	executed from the menu raised by drag-mouse-2.
+	
+	** Copy recursive entry in the two menus.
+
+	** dired-dd-default-symlink-method is renamed to
+	dired-dd-default-link-method, and is not referred anymore.
+	Please modify your ~/.emacs if required.  Sorry.
+
+	** Refined pointer animation by dired-dd-version.
+	dired-dd-version just display version # without the animation if
+	your display or network is too slow.
+
+	** Copying notice.  See the top section of dired-dd.el, e.g.
+
+	** BUG Fixes.
+
+	** spinout/locate-dired: Now output buffer looks like dired buffer
+	closely evermore.
+
+	** New command (C-x4L: just suggested)
+	(locate-dired-other-frame) in spinout/locate-dired.el
+
+	** archie.el-v3.0.diff.gz:
+	Two new commands:
+	    o (archie-dired-other-window)
+	    F (archie-dired-other-frame) (calls other-win if on non X)
+
+* Version 0.0.0.8
+
+	** First publicly distributed version. For older changes, see
+	attached ChangeLog.
+
+local variables:
+mode: indented-text
+end:

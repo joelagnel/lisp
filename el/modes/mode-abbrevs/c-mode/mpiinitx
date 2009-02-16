@@ -1,0 +1,12 @@
+if ((rc = MPI_Init(&argc, &argv)) != 0) {
+    fprintf(stderr, "ERROR: MPI_Init (%d)\n", rc);
+    exit(1);
+}
+if ((rc = MPI_Comm_rank(MPI_COMM_WORLD, &rank)) != 0) {
+    fprintf(stderr, "ERROR: MPI_Comm_rank (%d)\n", rc);
+    exit(1);
+}
+if ((rc = MPI_Comm_size(MPI_COMM_WORLD, &size)) != 0) {
+    fprintf(stderr, "ERROR: MPI_Comm_size (%d)\n", rc);
+    exit(1);
+}

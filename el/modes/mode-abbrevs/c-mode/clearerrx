@@ -1,0 +1,1 @@
+clearerr(<field "FILE *stream">)

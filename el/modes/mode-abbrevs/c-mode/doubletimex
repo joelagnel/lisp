@@ -1,0 +1,9 @@
+#include <sys/time.h>
+#include <time.h>
+
+inline double doubletime()
+{
+    struct timeval tp;
+    gettimeofday(&tp, NULL);
+    return (double) tp.tv_sec + (double) tp.tv_usec / 1000000.0;
+}

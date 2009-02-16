@@ -1,0 +1,286 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eev-walk.el (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .doc {
+      }
+      .eev-glyph-face-green {
+        /* eev-glyph-face-green */
+        color: #00ff00;
+      }
+      .eev-glyph-face-red {
+        /* eev-glyph-face-red */
+        color: #ff0000;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .negation-char {
+      }
+      .regexp-grouping-backslash {
+      }
+      .regexp-grouping-construct {
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #98fb98;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #ffc0cb;
+        font-weight: bold;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;;; </span><span class="comment">eev-walk.el -- execute textual series of Emacs "actions" step by step
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Copyright (C) 2005 Free Software
+</span><span class="comment-delimiter">;; </span><span class="comment">Foundation, Inc.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This file is part of GNU eev.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is free software; you can redistribute it and/or modify
+</span><span class="comment-delimiter">;; </span><span class="comment">it under the terms of the GNU General Public License as published by
+</span><span class="comment-delimiter">;; </span><span class="comment">the Free Software Foundation; either version 2, or (at your option)
+</span><span class="comment-delimiter">;; </span><span class="comment">any later version.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is distributed in the hope that it will be useful,
+</span><span class="comment-delimiter">;; </span><span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of
+</span><span class="comment-delimiter">;; </span><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU General Public License for more details.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">You should have received a copy of the GNU General Public License
+</span><span class="comment-delimiter">;; </span><span class="comment">along with GNU Emacs; see the file COPYING.  If not, write to the
+</span><span class="comment-delimiter">;; </span><span class="comment">Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+</span><span class="comment-delimiter">;; </span><span class="comment">Boston, MA 02111-1307, USA.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Author:     Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Maintainer: Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Version:    2005jul24
+</span><span class="comment-delimiter">;; </span><span class="comment">Keywords:   e-scripts, help, hyperlinks, hypertext, processes,
+</span><span class="comment-delimiter">;;             </span><span class="comment">shell, tex
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Latest version: &lt;<a href="http://angg.twu.net/eev-current/eev-walk.el">http://angg.twu.net/eev-current/eev-walk.el</a>&gt;
+</span><span class="comment-delimiter">;;       </span><span class="comment">htmlized: &lt;<a href="http://angg.twu.net/eev-current/eev-walk.el.html">http://angg.twu.net/eev-current/eev-walk.el.html</a>&gt;
+</span><span class="comment-delimiter">;;       </span><span class="comment">See also: &lt;<a href="http://angg.twu.net/eev-current/README.html">http://angg.twu.net/eev-current/README.html</a>&gt;
+</span>
+<span class="comment-delimiter">;;; </span><span class="comment">Commentary:
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">This is a visual version of the `</span><span class="comment"><span class="constant">eesteps</span></span><span class="comment">' feature or eev.
+</span><span class="comment-delimiter">;; </span><span class="comment">It was inspired by:
+</span><span class="comment-delimiter">;; </span><span class="comment">http://lists.gnu.org/archive/html/emacs-devel/2005-06/msg01574.html
+</span><span class="comment-delimiter">;; </span><span class="comment">http://article.gmane.org/gmane.emacs.devel/39555
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">More later.
+</span>
+(<span class="keyword">require</span> '<span class="constant">eev</span>)
+
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Basic functions
+</span><span class="comment-delimiter">;;; </span><span class="comment">2005jul16--2005jul24
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defvar</span> <a name="eewalk-marker"><span class="variable-name">eewalk-marker</span></a> nil)              <span class="comment-delimiter">; </span><span class="comment">a buffer or window or frame
+</span>
+(<span class="keyword">defmacro</span> <a name="eewalk-on-marker"><span class="function-name">eewalk-on-marker</span></a> (<span class="type">&amp;rest</span> body)
+  `(<span class="keyword">cond</span> ((bufferp eewalk-marker)
+          (<span class="keyword">with-current-buffer</span> eewalk-marker . ,body))
+         ((windowp eewalk-marker)
+          (<span class="keyword">with-selected-window</span> eewalk-marker . ,body))
+         ((framep eewalk-marker)
+          (<span class="keyword">with-selected-window</span> (frame-selected-window eewalk-marker)
+            . ,body))
+         (t (<span class="warning">error</span> <span class="string">"Not buffer, window, or frame: %S"</span> eewalk-marker))))
+
+(<span class="keyword">defun</span> <a name="eewalk-skip-whitespace"><span class="function-name">eewalk-skip-whitespace</span></a> ()
+  (looking-at <span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[ \t]*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">;[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\n]*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">?\n?</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">*"</span>)
+  (goto-char (match-end 0)))
+  
+(<span class="keyword">defun</span> <a name="eewalk-read"><span class="function-name">eewalk-read</span></a> ()
+  (<span class="keyword">if</span> (or (= (point) (point-max)) (= (char-after) ?\)))
+      (<span class="warning">error</span> <span class="string">"No more steps for eewalk"</span>))
+  (read (current-buffer)))
+
+(<span class="keyword">defun</span> <a name="eewalk-flash-next-step"><span class="function-name">eewalk-flash-next-step</span></a> ()
+  (interactive)
+  (eewalk-on-marker
+   (<span class="keyword">save-excursion</span>
+     (eewalk-skip-whitespace)
+     (eeflash (point) (<span class="keyword">progn</span> (eewalk-read) (point))))))
+
+(<span class="keyword">defun</span> <a name="eewalk-do-walk"><span class="function-name">eewalk-do-walk</span></a> ()
+  (interactive)
+  (eesteps-perform
+   (eewalk-on-marker (eewalk-read)))
+  (eewalk-on-marker (eewalk-skip-whitespace)))
+
+(<span class="keyword">defun</span> <a name="eewalk-do-walk-or-set"><span class="function-name">eewalk-do-walk-or-set</span></a> (<span class="type">&amp;optional</span> arg)
+  (interactive <span class="string">"P"</span>)
+  (<span class="keyword">cond</span> ((eq arg 0) (eewalk-flash-next-step))
+        ((eq arg 1) (eewalk-use-this-window)) <span class="comment-delimiter">; </span><span class="comment">mnemonic: wIndow - I=1
+</span>        ((eq arg 2) (eewalk-use-this-buffer)) <span class="comment-delimiter">; </span><span class="comment">mnemonic: Buffer - B=2
+</span>        ((eq arg 5) (eewalk-orig-frame))
+        ((eq arg 6) (eewalk-eewalk-frame))
+        (t (eewalk-do-walk))))
+
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Functions to select a buffer of frame
+</span><span class="comment-delimiter">;;; </span><span class="comment">(and to switch between them)
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defvar</span> <a name="eewalk-orig-frame"><span class="variable-name">eewalk-orig-frame</span></a> nil)
+
+(<span class="keyword">defun</span> <a name="eewalk-use-this-window"><span class="function-name">eewalk-use-this-window</span></a> ()
+  (interactive)
+  (setq eewalk-marker (selected-window))
+  (eewalk-on-marker (eewalk-skip-whitespace))
+  (message
+   <span class="string">"(use &lt;F8&gt; to read a step (from this window) and execute it (anywhere))"</span>)
+  '(use &lt;F8&gt; to read a step (from this window) and execute it (anywhere)))
+
+(<span class="keyword">defun</span> <a name="eewalk-use-this-buffer"><span class="function-name">eewalk-use-this-buffer</span></a> ()
+  (interactive)
+  (setq eewalk-marker (current-buffer))
+  (eewalk-on-marker (eewalk-skip-whitespace))
+  (message
+   <span class="string">"(use &lt;F8&gt; to read a step (from this buffer) and execute it (anywhere))"</span>)
+  '(use &lt;F8&gt; to read a step (from this buffer) and execute it (anywhere)))
+
+(<span class="keyword">defun</span> <a name="eewalk-orig-frame"><span class="function-name">eewalk-orig-frame</span></a> ()
+  (interactive)
+  (select-frame-set-input-focus eewalk-orig-frame))
+
+(<span class="keyword">defun</span> <a name="eewalk-eewalk-frame"><span class="function-name">eewalk-eewalk-frame</span></a> ()
+  (interactive)
+  (select-frame-set-input-focus         <span class="comment-delimiter">; </span><span class="comment">right now this works only
+</span>   (window-frame eewalk-marker)))       <span class="comment-delimiter">; </span><span class="comment">when eewalk-marker is a window
+</span>
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Support for creating and using a dedicated frame
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defvar</span> <a name="eewalk-make-frame-commands"><span class="variable-name">eewalk-make-frame-commands</span></a> nil)
+
+(<span class="keyword">defun</span>  <a name="eewalk-make-frame-hook-function"><span class="function-name">eewalk-make-frame-hook-function</span></a> (frame)
+  (remove-hook 'after-make-frame-functions
+               'eewalk-make-frame-hook-function)
+  (select-frame-set-input-focus frame)
+  (eval (cons 'progn eewalk-make-frame-commands)))
+
+(<span class="keyword">defmacro</span> <a name="eewalk-make-frame"><span class="function-name">eewalk-make-frame</span></a> (<span class="type">&amp;rest</span> commands)
+  <span class="doc">"Switch to another frame and run COMMANDS there."</span>
+  `(<span class="keyword">progn</span> (setq eewalk-make-frame-commands ',commands)
+          (add-hook 'after-make-frame-functions
+                    'eewalk-make-frame-hook-function 'append)
+          (make-frame-command)))
+
+(<span class="keyword">defmacro</span> <a name="eewalk-make-frame-or-next"><span class="function-name">eewalk-make-frame-or-next</span></a> (<span class="type">&amp;rest</span> commands)
+  <span class="doc">"Switch to the next frame or to another frame and run COMMANDS there.
+Create another frame if there is only one frame visible.  The
+other frame will be visiting the same buffer as this one, and
+will have the same value of point."</span>
+  `(<span class="keyword">if</span> (eq 1 (length (visible-frame-list)))
+       (eewalk-make-frame . ,commands)
+     (<span class="keyword">let</span> ((buffer (current-buffer))
+           (pos (point)))
+       (other-frame 1)
+       (switch-to-buffer buffer)
+       (goto-char pos)
+       . ,commands)))
+
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">eewalk-region
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defvar</span> <a name="eewalk-region-prefix"><span class="variable-name">eewalk-region-prefix</span></a> <span class="string">"\
+;; Use &lt;f8&gt; to read steps from this window and execute
+;; them (anywhere). Each step is either a string --
+;; meaning a series of keys, in the format used by
+;; `</span><span class="string"><span class="constant">edmacro-mode</span></span><span class="string">' -- or a sexp to be evaluated. See:
+;;   (find-efunctiondescr 'steps)
+\(eewalk-orig-frame)\n\n"</span>)
+
+(<span class="keyword">defun</span> <a name="eewalk-region"><span class="function-name">eewalk-region</span></a> (s <span class="type">&amp;optional</span> e)
+  (interactive <span class="string">"r"</span>)
+  (<span class="keyword">let</span> ((str (concat eewalk-region-prefix (ee-se-to-string s e))))
+    (setq eewalk-orig-frame (selected-frame))
+    (eval `(eewalk-make-frame-or-next
+            (<span class="keyword">let</span> ((ee-buffer-name <span class="string">"*eewalk*"</span>)) (find-estring ,str))
+            <span class="comment-delimiter">;; </span><span class="comment">(eewalk-use-this-window)
+</span>            <span class="comment-delimiter">;; </span><span class="comment">(eewalk-orig-frame)
+</span>            (setq eewalk-marker (selected-window))
+            ))))
+
+(<span class="keyword">defalias</span>   '<a name="eewr"><span class="function-name">eewr</span></a> 'eewalk-region)
+(eeb-define 'eewr-bounded 'eewalk-region <span class="string">"\n;;</span><span class="eev-glyph-face-red">*</span><span class="string">\n"</span> nil t t)
+
+<span class="comment-delimiter">;; </span><span class="comment">(eewr "\"foo\"")
+</span><span class="comment-delimiter">;; </span><span class="comment">(eewalk-duplicate-frame (find-estring "foo"))
+</span><span class="comment-delimiter">;; </span><span class="comment">(setq eewalk-marker (selected-window))
+</span><span class="comment-delimiter">;; </span><span class="comment">(eewalk-on-marker (eewalk-skip-whitespace))
+</span>
+
+(<span class="keyword">provide</span> '<span class="constant">eev-walk</span>)
+
+
+<span class="comment-delimiter">;; </span><span class="comment">Local Variables:
+</span><span class="comment-delimiter">;; </span><span class="comment">mode:              outline-minor
+</span><span class="comment-delimiter">;; </span><span class="comment">coding:            raw-text-unix
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-anchor-format:  "</span><span class="eev-glyph-face-green">&#171;</span><span class="comment">%s</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">"
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-anchor-format:  "defun %s "
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-comment-prefix: ";;"
+</span><span class="comment-delimiter">;; </span><span class="comment">no-byte-compile:   t
+</span><span class="comment-delimiter">;; </span><span class="comment">End:
+</span></pre>
+  </body>
+</html>

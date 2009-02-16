@@ -1,0 +1,5 @@
+struct sockaddr_un clientAddr;
+socklen_t clientAddrLen = sizeof(clientAddr);
+int accept_socket = accept(<field "listen_socket">,
+                           (struct sockaddr*)&clientAddr,
+                           (socklen_t*)&clientAddrLen);

@@ -1,0 +1,3 @@
+sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+sock.bind(<field "filename">)
+sock.listen(5)

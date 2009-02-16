@@ -1,0 +1,42 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Filtering%20Sources">Filtering Sources</a>,
+Next:<a rel=next accesskey=n href="Filtering-History.html#Filtering%20History">Filtering History</a>,
+Previous:<a rel=previous accesskey=p href="Filtering-Directories.html#Filtering%20Directories">Filtering Directories</a>,
+Up:<a rel=up accesskey=u href="Filtering-the-tree-buffers.html#Filtering%20the%20tree-buffers">Filtering the tree-buffers</a>
+<hr><br>
+
+<h4>Applying filters to the Sources-buffer</h4>
+
+<h5>Interactive Sources-filters</h5>
+
+<p>The command <code>ecb-sources-filter</code> allows to filter these
+tree-buffer either by a regular expression or by an extension (e.g. 
+java, cc, el for java-, c++- rsp elisp-sources). This functionality is
+also available via the popup-menu of the Sources-tree-buffer.
+
+<p>The currently applied filter is indicated in the modeline of the
+related tree-buffer. Applying a new filter replaces an eventually
+already applied filter.
+
+<h5>Default Sources-filters</h5>
+
+<p>The option <code>ecb-source-file-regexps</code> allow to specify which
+source-files should be displayed and which not. This is done on a
+directory-basis, ie. for each directory-regexp the files to display
+can be specified. See the documentation of this option for all
+details.
+
+<p>In addition to this option you should also know the option
+<code>ecb-sources-exclude-cvsignore</code> (see <a href="Filtering-Directories.html#Filtering%20Directories">Filtering Directories</a>).
+
+</body></html>
+

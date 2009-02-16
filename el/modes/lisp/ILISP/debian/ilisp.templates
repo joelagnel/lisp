@@ -1,0 +1,14 @@
+Template: ilisp/fsf-compliant
+Type: boolean
+Default: true
+_Description: Use FSF-compliant keybindings?
+ ILISP allows the choice of using FSF-compliant keybindings which start
+ with a Control-C character. The older ILISP keybindings use a Control-Z
+ character as the prefix.
+ .
+ In general, the non-FSF compliant keybindings are easier to use: the ILISP
+ manual in the Debian package ilisp-doc uses the non-FSF compliant
+ keybindings and these keybindings often use fewer keystrokes.
+ .
+ If you change you mind later, you can run dpkg-reconfigure ilisp and
+ change your keybinding selection.

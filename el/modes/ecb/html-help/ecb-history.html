@@ -1,0 +1,254 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="ecb-history">ecb-history</a>,
+Next:<a rel=next accesskey=n href="ecb-analyse.html#ecb-analyse">ecb-analyse</a>,
+Previous:<a rel=previous accesskey=p href="ecb-methods.html#ecb-methods">ecb-methods</a>,
+Up:<a rel=up accesskey=u href="Customizable-options.html#Customizable%20options">Customizable options</a>
+<hr><br>
+
+<h4>Group ecb-history</h4>
+
+<p>This group contains settings for the history-buffer in the ECB:
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>history-buffer-after-create-hook</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Local hook running after the creation of the history-buffer. Every
+function of this hook is called once without arguments direct after
+creating the history-buffer of ECB and it's local key-map. So for
+example a function could be added which performs calls of
+<code>local-set-key</code> to define new keybindings only for the
+history-buffer of ECB. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>history-buffer-name</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Name of the ECB history buffer. Because it is not a normal buffer for
+editing you should enclose the name with stars, e.g. "*ECB
+History*".
+
+<p>If it is necessary for you you can get emacs-lisp access to the
+buffer-object of the ECB-history-buffer by this name, e.g. by a call
+of <code>set-buffer</code>.
+
+<p>Changes for this option at runtime will take affect only after
+deactivating and then activating ECB again! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>history-exclude-file-regexps</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+List of regexps which exclude source-files from being historized. Be
+aware that each always full filenames (ie. incl. full path) are
+matched against these regexps! Therefore be carefore with regexps
+beginning with ^! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>history-item-name</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+The name to use for items in the history buffer. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>history-menu-sorter</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Function which re-sorts the menu-entries of the directories buffer.
+
+<p>If a function then this function is called to sort the menu-entries of
+the combined menu-entries of the user-menu-extensions of
+<code>ecb-history-menu-user-extension</code> and the built-in-menu
+<code>ecb-history-menu</code>. If nil then no special sorting will be done
+and the user-extensions are placed in front of the built-in-entries.
+
+<p>For the guidelines for such a sorter-function see
+<code>ecb-directories-menu-sorter</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>history-menu-user-extension</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Static user extensions for the popup-menu of the history buffer. For
+further explanations see <code>ecb-directories-menu-user-extension</code>.
+
+<p>The node-argument of a menu-function contains as data the filename of
+the source for which the popup-menu has been opened.
+
+<p>Per default the static user-extensions are added at the beginning of
+the built-in menu-entries of <code>ecb-history-menu</code> but the whole
+menu can be re-arranged with <code>ecb-history-menu-sorter</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>history-menu-user-extension-function</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Dynamic user extensions for the popup-menu of the history buffer. A
+function which has to return a list in the same format like the option
+<code>ecb-history-menu-user-extension</code>. This function is called when
+the user opens the popup-menu for the history buffer.
+
+<p>If no dynamically evaluated menu-extensions should be added to the
+history-buffer the function has to return nil. Therefore the
+default-value of this option is <code>ignore</code>.
+
+<p>Per default the dynamic user-extensions are added in front of the
+static extensions of <code>ecb-history-menu-user-extension</code> but the
+whole menu can be re-arranged with <code>ecb-history-menu-sorter</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>history-show-node-info</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+When to display which node-info in the history-buffer. Define which
+node info should displayed after moving the mouse over a node (or
+after a shift click onto the node) in the history-buffer.
+
+<p>You can define "when" a node-info should be displayed: See
+<code>ecb-directories-show-node-info</code> for the possible choices.
+
+<p>You can define what info should be displayed: See
+<code>ecb-directories-show-node-info</code> for the possible choices.
+
+<p>Do NOT set this option directly via setq but use always customize! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>history-sort-ignore-case</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Ignore case for sorting the history-entries. See also
+<code>ecb-history-sort-method</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>history-sort-method</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Defines how the entries in the history-buffer are sorted.
+<ul>
+<li><code>name</code>:
+Sorting by name (default). 
+<li><code>extension</code>:
+Sorting first by extension and then by name. 
+<li><code>nil</code>:
+No sorting, means the most recently used buffers are on the top of the
+history and the seldom used buffers at the bottom. 
+</ul>
+
+<p>See also <code>ecb-history-sort-ignore-case</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>kill-buffer-clears-history</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Define if <code>kill-buffer</code> should also clear the history. There are
+three options:
+
+<ul>
+<li><code>auto</code>:
+Removes automatically the corresponding history-entry after the buffer
+has been killed. 
+<li><code>ask</code>:
+Asks, if the history-entry should be removed after the kill. 
+<li><code>nil</code>:
+<code>kill-buffer</code> does not affect the history (this is the default). 
+</ul>
+</td></tr>
+</table>
+
+</body></html>
+

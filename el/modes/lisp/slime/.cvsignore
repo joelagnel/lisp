@@ -1,0 +1,5 @@
+*.x86f
+*.fasl
+*.dfsl
+*.elc
+_darcs

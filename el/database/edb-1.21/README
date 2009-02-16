@@ -1,0 +1,87 @@
+This is the README file for EDB, a database program for GNU Emacs.
+The bulk of the EDB documentation is in the texinfo file database.texi.
+EDB was written by Michael Ernst <mernst@theory.lcs.mit.edu>.
+
+
+Files in EDB
+============
+
+(In lexographic order)
+
+Makefile	Byte-compile, create documentation, etc., from the shell
+
+README		This file:  manifest and installation instructions
+
+README-example	README file for the separate EDB examples distribution
+
+database.el	The main file; primarily loads other files
+
+db-convert.el	Changing database structure:  add and remove fields, etc.
+
+db-file-io.el	Saving databases to disk, loading databases from disk
+
+db-format.el	Displaying and editing a single database record
+
+db-interfa.el	Keystroke bindings, wrapper functions
+
+db-isbn.el	ISBN type
+
+db-isbntst.el	Test cases for ISBN type
+
+db-rdb.el	Support for RDB databases
+
+db-rep.el	Data abstractions and operations upon them
+
+db-search.el	Searching and matching records
+
+db-sort.el	Sorting records
+
+db-summary.el	Summary buffer with limited info about every database record
+
+db-tagged.el	Support for tagged database files
+
+db-time.el	Definitions of time and date field types
+
+db-two-dbs.el	Operations on two databases:  merging, comparing, etc.
+
+db-types.el	Definitions of useful field types
+
+db-util.el	Useful non-EDB specific utility functions
+
+edb.texi	Texinfo documentation:  user manual
+
+See below for how to get pre-processed copies of the documentation.
+
+
+Installation
+============
+
+See edb-inst.texi for more complete and definitive instructions.
+
+In short, place the .el files in your Emacs load path (probably in a
+directory of their own).  You can add a directory to your Emacs lisp load
+path by putting something similar to the following in your .emacs file:
+
+	(setq load-path (cons (expand-file-name "~/emacs/edb") load-path))
+
+In order to autoload EDB, put the following in your .emacs file:
+
+	(autoload 'db-find-file "database" "EDB database package" t)
+
+Use M-x db-find-file to start up EDB on a particular database file.
+
+It is recommended that, lest it run very slowly, you byte-compile the code.
+You can do so either by calling function byte-compile-database, or by
+typing "make" to the shell in the EDB directory.
+
+The texinfo documentation uses version 2 of texinfo, which is available
+from prep.ai.mit.edu.  Earlier versions of texinfo will not properly format
+the manual, either for TeX or for info.  If you don't have a sufficiently
+up-to-date version of texinfo, you can simply get the files edb.dvi,
+edb.ps, edb.info, and edb.info-[123456] (six files) from
+theory.lcs.mit.edu:/pub/emacs/edb/; these are versions of the documentation
+ready for printing and for use in info, respectively.  Likewise, you can
+get edb-inst.{dbi,ps,info}.
+
+Sample databases can be found in the file examples.tar.Z or the directory
+examples, both in theory.lcs.mit.edu:/pub/emacs/edb/.

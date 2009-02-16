@@ -1,0 +1,2 @@
+(tempfd, tempfn) = tempfile.mkstemp(suffix=<field "suffix">)
+os.close(tempfd)

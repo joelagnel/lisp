@@ -1,0 +1,4 @@
+if (pthread_mutex_lock(<field "pthread_mutex_t *mutex">) != 0) {
+    fprintf(stderr, "ERROR: calling pthread_mutex_lock()\n");
+    exit(1);
+}

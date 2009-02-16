@@ -1,0 +1,38 @@
+This is the `README-0.95.0' file of GNU eev.
+This file is in the Public Domain.
+eev-0.95.0 was released some time ago. eev-current is better.
+See <http://angg.twu.net/README.html>,
+    <http://angg.twu.net/INSTALL.html>,
+and <http://angg.twu.net/INSTALL-0.95.0>.
+
+The contents of the original README-0.95.0 file were:
+
+--snip--snip--snip--
+
+2004dec31, 23:34 (timezone: BRST)
+
+Great news! The current version of eev-current has just become
+eev-0.95.0! The tarball will be kept at:
+
+  <http://angg.twu.net/eev-0.95.0.tar.gz>
+
+I didn't change the occurrences of `eev-current' in the files to
+`eev-0.95.0', so you'll have to believe what this file says. The file
+VERSION in this directory is created automatically by "make", and if
+it says that the time in the BRST timezone was between 23:30 and 23:59
+when the file was created then, trust me, you're looking at version
+0.95.0.
+
+Happy new year! The current versions of the individual files are
+accessible at:
+
+  <http://angg.twu.net/eev-current/>
+
+A good point to start is here:
+
+  <http://angg.twu.net/eev-current/README.html>
+
+Cheers,
+  Eduardo Ochs
+  edrx@mat.puc-rio.br
+  http://angg.twu.net/

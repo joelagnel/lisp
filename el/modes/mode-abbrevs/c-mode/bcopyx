@@ -1,0 +1,1 @@
+bcopy(<field "const void *FROM">, <field "void *TO">, <field "size_t SIZE">)<endpoint>

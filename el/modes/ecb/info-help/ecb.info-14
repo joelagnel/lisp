@@ -1,0 +1,699 @@
+This is ecb.info, produced by makeinfo version 4.2 from ecb.texi.
+
+INFO-DIR-SECTION GNU Emacs Lisp
+START-INFO-DIR-ENTRY
+* ECB: (ecb).           Emacs Code Browser
+END-INFO-DIR-ENTRY
+
+
+File: ecb.info,  Node: FAQ,  Next: Command Index,  Prev: Conflicts and bugs,  Up: Top
+
+Frequently asked questions
+**************************
+
+This is the Emacs Code Browser FAQ.
+
+QUESTION                          ANSWER
+
+What is the first step i          Read carefully the related sections of the
+should do if i have problems      online-help of ECB.
+with ECB?                         
+
+What should i do, if a have a     Send a problem-report to the ECB-mailing-list
+problem which can not be          with the command `ecb-submit-problem-report'.
+solved even after reading the     See *Note Submitting problem report::.
+online-help?                      
+
+What should i do, if another      Take a look into *Note Conflicts::. If your
+package seems not to work         package is not listed there then submit a
+correct with ECB?                 problem-report.
+
+Can ECB parse and display         Yes, in all version >= 1.94. ECB can now
+source-contents not supported     parse and display all source-contents
+by semantic?                      supported by semantic, imenu or etags - same
+                                  as speedbar. See *Note Non-semantic sources::.
+
+Why are the lines in the ECB-,    Check the variable
+temp- and compilation-buffers     `truncate-partial-width-windows' and set it to
+not wrapped but truncated?        nil.
+
+Why doesn't ECB work correct      The variable `vc-delete-logbuf-window' must
+with VC?                          be set to nil during active ECB. This can be
+                                  done with the hooks of ECB.
+
+Does ECB support C++ as well      This depends strongly on the used
+as Java?                          semantic-version, but all semantic-versions
+                                  >= semantic-1.4.3 support C++ really well.
+
+Does ECB support Perl?            If perl can be parsed either by imenu, etags
+                                  or semantic then ECB supports perl. Of course
+                                  ECB would support perl best if perl is
+                                  supported by semantic.
+
+Does ECB support language XYZ?    See question "Does ECB support Perl?" and
+                                  replace "Perl" with "XYZ" in the answer.
+
+How to add new languages to       Add the language XYZ to semantic (perform all
+ECB?                              necessary steps described in the
+                                  semantic-manual) and ECB will automatically
+                                  support language XYZ!  There is nothing to do
+                                  in ECB itself! Same when you write an imenu-
+                                  or etags-support for language XYZ.
+
+Why does ECB not recognize my     Your C++-files have probably an extension
+source-files for C++?             which is not mapped to c++-mode in
+                                  `auto-mode-alist' and/or your own Emacs-setup
+                                  has "destroyed" the correct value of the
+                                  hook-variable `c++-mode-hook'.
+                                  See *Note Setting up Emacs::.
+
+Why doesn't ECB display the       There can be several reasons: First the value
+node name in the echo area if     of the option
+mouse moves over it?              `ecb-show-node-name-in-minibuffer' must be
+                                  either `always' or `if-too-long'. If this is
+                                  OK, then maybe you have turned on
+                                  follow-mouse AFTER activating ECB;
+                                  follow-mouse must be turned on BEFORE ECB is
+                                  activated, e.g. in the `ecb-activate-hook'!
+                                  But with Emacs 21.X and XEmacs there are no
+                                  problems with this feature, just activate it.
+
+Is it possible to make the        You can use the library "desktop.el" which
+history of ECB persistent?        works very well with ECB.  Then all files of
+                                  your recent Emacs-session will be opened
+                                  automatically after next Emacs-start and will
+                                  be added automatically to the ECB-history
+                                  after ECB-start.
+
+Is there an                       For Java the JDEE(1) has this feature and for
+"Intellisense"-mechanism like     all other languages semantic offer something
+with other IDEs?                  similar, see
+                                  <http://cedet.sourceforge.net/intellisense.shtml>
+
+Can i use ECB in combination      You can, but for ECB-versions < 1.96 it is
+with Gnus within one frame?       not recommended because each of them has it's
+                                  own window-management and probably there will
+                                  be conflicts, so use different frames for ECB
+                                  and Gnus! But beginning with ECB 1.96 you can
+                                  use either escreen.el or winring.el as
+                                  "window-manager" which allows you in
+                                  consequence to use ECB and applications like
+                                  Gnus in one frame!
+                                  *Note Window-managers and ECB::.
+
+Can i speed up displaying the     Yes, see the option
+contents of big-size              `ecb-cache-directory-contents'. Read the
+directories?                      section
+                                  *Note Large directories::.
+
+Is it possible to create/use      Yes. *Note Creating a new ECB-layout:: and
+other layouts than the            *Note The layout-engine:: are the relevant
+built-in ones?                    sections. The former one describes how to
+                                  create interactively new layouts where the
+                                  latter one is for Elisp-programmers.
+
+Can i use speedbar as             Yes, see *Note Integrating speedbar::.
+directory-browser within ECB?     
+
+Can i exclude subdirectories      Yes, see *Note Grepping directories::.
+from the recursive grep in the    
+directories buffer?               
+
+How can i prevent                 Set `semanticdb-default-save-directory' to a
+contaminating each directory      directory.
+with a file `semantic-cache'?     
+
+Why ECB displays large            This comes from semantic;
+portions of current               see *Note Setting up Emacs::.
+source-file with dark             
+background?                       
+
+Why ECB underlines some parts     This comes from semantic;
+of current source-file?           see *Note Setting up Emacs::.
+
+Can i add my own commands to      Yes, see *Note Using the mouse::.
+the popup-menus of                
+tree-buffers?                     
+
+Can ECB display the               Yes, see *Note Tips and tricks::.
+compile-window "on demand"?       
+
+Which buffers are treated as      See the docstring of the function
+compilation-buffers by ECB?       `ecb-compilation-buffer-p'.
+
+How can i change the modeline     You can change it with the options
+of an ECB-tree-buffer?            `ecb-mode-line-prefixes',
+                                  `ecb-mode-line-data' and
+                                  `ecb-mode-line-display-window-number'.
+
+Can the tree-buffers being        Yes, see option
+selected faster than with the     `ecb-mode-line-display-window-number'.
+standard-keybindings of ECB?      
+
+Can ECB display the               Yes, see option
+window-number in the modeline     `ecb-mode-line-display-window-number'.
+of the special windows?           
+
+How can i change the              You can do this with option `ecb-key-map'
+keybindings of ECB?               (*note ecb-general::).
+
+What can i do if                  Either the current `major-modes' is not
+hiding/showing from the           supported by hideshow or you have to add an
+methods-buffer does not work?     entry to `hs-special-modes-alist'
+                                  (*note Hide-show::).
+
+Can i maximize one of the         Yes, see *Note Maximizing the ECB windows::.
+ECB-windows for better            
+overlook?                         
+
+Can i hide the ECB-windows for    Yes, see *Note Hiding the ECB windows::.
+getting more editing-space?       
+
+Can i define the actions ECB      Yes, see *Note Visiting tags::.
+performs after visiting a tag?    
+
+Buffers are not displayed         See *Note Problems with the compile window::.
+correctly in the                  
+compile-window?                   
+
+Can ECB work together with        Yes, see *Note Window-managers and ECB::.
+window-managers like              
+escreen.el?                       
+
+Can i remove these "ugly"         Yes, see option `ecb-tree-buffer-style'.
+vertical lines from a             
+tree-buffer?                      
+
+ECB does not display images in    Customize `ecb-tree-buffer-style' and restart
+the tree-buffers - what can i     ECB. But note: GNU Emacs <= 21.3.X for
+do?                               Windows does not support image-display so ECB
+                                  uses always ascii-guide-lines even when here
+                                  the image-style is set in
+                                  `ecb-tree-buffer-style'.
+
+Do `special-display-function'     Yes, see
+et. al. work with ECB.            *Note Using special-display with ECB::.
+
+Can i activate the popup-menu     Yes, see *Note Using popup-menus::.
+of a tree-buffer from keyboard?   
+
+Can i display the popup-menu      Yes, see *Note Using popup-menus::.
+of a tree-buffer with tmm?        
+
+Does ECB disable all advices      "Nes"(2), see remarks in the documentation of
+after deactivation?               the option
+                                  `ecb-split-edit-window-after-start'.
+
+Can ECB preserve the full         Yes, see the option
+state of ECB between              `ecb-split-edit-window-after-start'.
+deactivation and next             
+activation?                       
+
+Can i change the behavior how     Yes, see *Note The other window::.
+ECB chooses another window for    
+selecting it or scrolling it.     
+
+Can i increase the allowed        Yes, see the docstring of the option
+depth of nested submenus.         `ecb-directories-menu-user-extension'.
+
+Can i apply some filters to       Yes, see *Note Filtering the tree-buffers::
+the Tree-buffers.                 
+
+With XEmacs i get sometimes an    Disable the func-menu support in your
+error "Wrong number of            XEmacs-setup. See *Note Conflicts::.
+arguments: widen (1)". What       
+can i do?                         
+
+Can i use desktop.el in           Yes, see *Note Conflicts::.
+combination with ECB?             
+
+Opening directories takes a       Read *Note Large directories::.
+long time - what can i do?        
+
+ECB seems to be blocked           ECB performs some stealthy tasks when idle -
+sometimes - what is the reason?   this can cause sometimes a blocked Emacs but
+                                  this tasks will be immetiatelly interrupted
+                                  by any user-event so there should be normally
+                                  no problems. But especially for mounted
+                                  net-drives some of the stealthy tasks can
+                                  take time up to some seconds for each file -
+                                  and during one file-operation it can not be
+                                  interrupted. See also
+                                  `ecb-stealthy-tasks-delay'.
+
+Can i exclude certain             Yes, see option
+directories from being checked    `ecb-prescan-directories-exclude-regexps'.
+for emptyness?                    
+
+Can i exclude certain             Yes, see option
+directories from checking the     `ecb-vc-directory-exclude-regexps'.
+VC-state of the contained         
+sources?                          
+
+Can i exclude certain             Yes, see option
+directories from checking the     `ecb-read-only-check-exclude-regexps'.
+read-only-state of the            
+contained sources?                
+
+ECB ignores the remote-paths i    Maybe you have to check the option
+have added to                     `ecb-ping-options'. Ensure that this option
+`ecb-source-path'.                contains a value suitable for your
+                                  ping-program (see `ecb-ping-program').
+                                  See also *Note Remote directories::.
+
+ECB seems to be blocked a long    Maybe you use cygwin-XEmacs. Then either the
+time.                             empty-dir-check (see option
+                                  `ecb-prescan-directories-for-emptyness') or
+                                  the VC-support (see `ecb-vc-enable-support')
+                                  can block ECB.
+                                  For the latter one see *Note Known
+                                  VC-problems::.
+
+ECB seems to be blocked during    Maybe the root repository for the current
+the VC-state update in the        directory is a remote-repository. This can
+tree-windows.                     result in a long lasting check-time per file.
+                                  See also *Note Version-control support:: for
+                                  hints what you can do.
+
+I have encountered some           See also *Note Version-control support:: for
+problems with the display of      hints what you can do.
+the VC-state in the               
+tree-buffers.                     
+
+I get errors when trying to       Ensure that the ECB-configuration of these
+download new ECB with             tools is correct for your system (see
+`ecb-download-ecb'.               `ecb-wget-setup', `ecb-gzip-setup' and
+                                  `ecb-tar-setup').
+
+---------- Footnotes ----------
+
+(1) <http://jdee.sunsite.dk/>
+
+(2) Nes is a combination of No and Yes :-)
+
+
+File: ecb.info,  Node: Command Index,  Next: Option Index,  Prev: FAQ,  Up: Top
+
+Command Index
+*************
+
+This index contains all user commands of ECB.
+
+*Please note*: The commands in this index are listed without the prefix
+"ecb-" (e.g. the command `ecb-activate' is listed with name "activate").
+
+* Menu:
+
+* activate:                              Interactive ECB commands.
+* add-all-buffers-to-history:            Interactive ECB commands.
+* analyse-buffer-sync:                   Interactive ECB commands.
+* balance-windows:                       The edit-area.
+* change-layout:                         Interactive ECB commands.
+* clear-history:                         Interactive ECB commands.
+* create-new-layout:                     Interactive ECB commands.
+* customize:                             Interactive ECB commands.
+* customize-most-important:              Interactive ECB commands.
+* cycle-maximized-ecb-buffers:           Interactive ECB commands.
+* cycle-through-compilation-buffers:     Interactive ECB commands.
+* deactivate:                            Interactive ECB commands.
+* delete-new-layout:                     Interactive ECB commands.
+* delete-other-windows:                  The edit-area.
+* delete-window:                         The edit-area.
+* delete-windows-on:                     The edit-area.
+* display-buffer:                        The edit-area.
+* display-news-for-upgrade:              Interactive ECB commands.
+* display-upgraded-options:              Interactive ECB commands.
+* download-ecb:                          Interactive ECB commands.
+* download-semantic:                     Interactive ECB commands.
+* dump-semantic-toplevel:                Interactive ECB commands.
+* eshell-current-buffer-sync:            Interactive ECB commands.
+* eshell-recenter:                       Interactive ECB commands.
+* expand-directory-nodes:                Interactive ECB commands.
+* expand-methods-nodes:                  Interactive ECB commands.
+* goto-window-analyse:                   Interactive ECB commands.
+* goto-window-compilation:               Interactive ECB commands.
+* goto-window-directories:               Interactive ECB commands.
+* goto-window-edit-last:                 Interactive ECB commands.
+* goto-window-edit1:                     Interactive ECB commands.
+* goto-window-edit2:                     Interactive ECB commands.
+* goto-window-history:                   Interactive ECB commands.
+* goto-window-methods:                   Interactive ECB commands.
+* goto-window-sources:                   Interactive ECB commands.
+* history-filter:                        Interactive ECB commands.
+* jde-display-class-at-point:            Interactive ECB commands.
+* layout-define:                         Programming a new layout.
+* layout-undefine:                       Programming a new layout.
+* maximize-window-analyse:               Interactive ECB commands.
+* maximize-window-directories:           Interactive ECB commands.
+* maximize-window-history:               Interactive ECB commands.
+* maximize-window-methods:               Interactive ECB commands.
+* maximize-window-sources:               Interactive ECB commands.
+* maximize-window-speedbar:              Interactive ECB commands.
+* methods-filter:                        Interactive ECB commands.
+* methods-filter-current-type:           Interactive ECB commands.
+* methods-filter-delete-last:            Interactive ECB commands.
+* methods-filter-function:               Interactive ECB commands.
+* methods-filter-nofilter:               Interactive ECB commands.
+* methods-filter-protection:             Interactive ECB commands.
+* methods-filter-regexp:                 Interactive ECB commands.
+* methods-filter-tagclass:               Interactive ECB commands.
+* minor-mode:                            Interactive ECB commands.
+* nav-goto-next:                         Interactive ECB commands.
+* nav-goto-previous:                     Interactive ECB commands.
+* other-window:                          The edit-area.
+* other-window-for-scrolling:            The edit-area.
+* rebuild-methods-buffer:                Interactive ECB commands.
+* redraw-layout:                         Interactive ECB commands.
+* restore-default-window-sizes:          Interactive ECB commands.
+* restore-window-sizes:                  Interactive ECB commands.
+* select-ecb-frame:                      Interactive ECB commands.
+* show-help:                             Interactive ECB commands.
+* show-layout-help:                      Interactive ECB commands.
+* show-tip-of-the-day:                   Interactive ECB commands.
+* sources-filter:                        Interactive ECB commands.
+* split-window:                          The edit-area.
+* split-window-horizontally:             The edit-area.
+* split-window-vertically:               The edit-area.
+* store-window-sizes:                    Interactive ECB commands.
+* submit-problem-report:                 Interactive ECB commands.
+* switch-to-buffer:                      The edit-area.
+* switch-to-buffer-other-window:         The edit-area.
+* toggle-auto-expand-tag-tree:           Interactive ECB commands.
+* toggle-compile-window:                 Interactive ECB commands.
+* toggle-compile-window-height:          Interactive ECB commands.
+* toggle-ecb-windows:                    Interactive ECB commands.
+* toggle-layout:                         Interactive ECB commands.
+* toggle-scroll-other-window-scrolls-compile: Interactive ECB commands.
+* toggle-window-sync:                    Interactive ECB commands.
+* update-directories-buffer:             Interactive ECB commands.
+* upgrade-options:                       Interactive ECB commands.
+* window-sync:                           Interactive ECB commands.
+
+
+File: ecb.info,  Node: Option Index,  Next: Concept Index,  Prev: Command Index,  Up: Top
+
+Option Index
+************
+
+This index contains all customizable options of ECB.
+
+*Please note*: All options in this index are listed without the prefix "ecb-"
+(e.g. the option `ecb-layout-name' is listed with name "layout-name").
+
+* Menu:
+
+* activate-before-layout-draw-hook:      ecb-general.
+* activate-before-new-frame-created-hook: ecb-layout.
+* activate-hook:                         ecb-general.
+* activation-selects-ecb-frame-if-already-active: ecb-general.
+* add-path-for-not-matching-files:       ecb-directories.
+* advice-window-functions:               ecb-layout.
+* advice-window-functions-signal-error:  ecb-layout.
+* after-directory-change-hook:           ecb-directories.
+* analyse-bucket-element-face:           ecb-analyse.
+* analyse-bucket-node-face:              ecb-analyse.
+* analyse-buffer-after-create-hook:      ecb-analyse.
+* analyse-buffer-name:                   ecb-analyse.
+* analyse-collapsed-buckets:             ecb-analyse.
+* analyse-face:                          ecb-analyse.
+* analyse-fontified-buckets:             ecb-analyse.
+* analyse-gen-tag-info-fn:               ecb-analyse.
+* analyse-general-face:                  ecb-analyse.
+* analyse-show-node-info:                ecb-analyse.
+* analyse-show-tag-info-fn:              ecb-analyse.
+* auto-activate:                         ecb-general.
+* auto-compatibility-check:              ecb-general.
+* auto-expand-directory-tree:            ecb-directories.
+* auto-expand-tag-tree:                  ecb-methods.
+* auto-expand-tag-tree-collapse-other:   ecb-methods.
+* auto-save-before-etags-methods-rebuild: ecb-non-semantic.
+* auto-update-methods-after-save:        ecb-methods.
+* before-activate-hook:                  ecb-general.
+* before-deactivate-hook:                ecb-general.
+* bucket-node-display:                   ecb-general.
+* cache-directory-contents:              ecb-directories.
+* cache-directory-contents-not:          ecb-directories.
+* change-layout-preserves-compwin-state: ecb-compilation.
+* clear-caches-before-activate:          ecb-general.
+* common-tree-buffer-after-create-hook:  ecb-tree-buffer.
+* compilation-buffer-names:              ecb-compilation.
+* compilation-major-modes:               ecb-compilation.
+* compilation-predicates:                ecb-compilation.
+* compile-window-height:                 ecb-compilation.
+* compile-window-prevent-shrink-below-height: ecb-compilation.
+* compile-window-temporally-enlarge:     ecb-compilation.
+* compile-window-width:                  ecb-compilation.
+* create-layout-file:                    ecb-create-layout.
+* current-buffer-sync-hook:              ecb-general.
+* deactivate-hook:                       ecb-general.
+* debug-mode:                            ecb-general.
+* default-tag-filter:                    ecb-methods.
+* directories-buffer-after-create-hook:  ecb-directories.
+* directories-buffer-name:               ecb-directories.
+* directories-general-face:              ecb-face-options.
+* directories-menu-sorter:               ecb-directories.
+* directories-menu-user-extension:       ecb-directories.
+* directories-menu-user-extension-function: ecb-directories.
+* directories-show-node-info:            ecb-directories.
+* directory-face:                        ecb-face-options.
+* directory-not-accessible-face:         ecb-face-options.
+* display-default-dir-after-start:       ecb-directories.
+* display-image-icons-for-semantic-tags: ecb-methods.
+* download-delete-archive:               ecb-download.
+* download-install-parent-dir:           ecb-download.
+* download-package-version-type:         ecb-download.
+* download-url:                          ecb-download.
+* ecb-create-layout-frame-height:        ecb-create-layout.
+* ecb-create-layout-frame-width:         ecb-create-layout.
+* enlarged-compilation-window-max-height: ecb-compilation.
+* eshell-auto-activate:                  ecb-eshell.
+* eshell-enlarge-when-eshell:            ecb-eshell.
+* eshell-fit-window-to-command-output:   ecb-eshell.
+* eshell-synchronize:                    ecb-eshell.
+* exclude-parents-regexp:                ecb-methods.
+* excluded-directories-regexps:          ecb-directories.
+* expand-methods-switch-off-auto-expand: ecb-methods.
+* fix-window-size:                       ecb-layout.
+* font-lock-tags:                        ecb-methods.
+* grep-find-function:                    ecb-general.
+* grep-function:                         ecb-general.
+* gzip-setup:                            ecb-download.
+* help-html-path:                        ecb-help.
+* help-info-path:                        ecb-help.
+* hide-ecb-windows-after-hook:           ecb-layout.
+* hide-ecb-windows-before-hook:          ecb-layout.
+* highlight-tag-with-point:              ecb-methods.
+* highlight-tag-with-point-delay:        ecb-methods.
+* history-buffer-after-create-hook:      ecb-history.
+* history-buffer-name:                   ecb-history.
+* history-exclude-file-regexps:          ecb-history.
+* history-face:                          ecb-face-options.
+* history-general-face:                  ecb-face-options.
+* history-item-name:                     ecb-history.
+* history-menu-sorter:                   ecb-history.
+* history-menu-user-extension:           ecb-history.
+* history-menu-user-extension-function:  ecb-history.
+* history-show-node-info:                ecb-history.
+* history-sort-ignore-case:              ecb-history.
+* history-sort-method:                   ecb-history.
+* host-accessible-check-valid-time:      ecb-directories.
+* ignore-display-buffer-function:        ecb-layout.
+* ignore-special-display:                ecb-layout.
+* key-map:                               ecb-general.
+* kill-buffer-clears-history:            ecb-history.
+* layout-always-operate-in-edit-window:  ecb-layout.
+* layout-debug-mode:                     ecb-layout.
+* layout-name:                           ecb-layout.
+* layout-window-sizes:                   ecb-layout.
+* major-modes-show-or-hide:              ecb-general.
+* maximize-ecb-window-after-selection:   ecb-layout.
+* maximize-next-after-maximized-select:  ecb-layout.
+* method-face:                           ecb-face-options.
+* method-non-semantic-face:              ecb-face-options.
+* methods-buffer-after-create-hook:      ecb-methods.
+* methods-buffer-name:                   ecb-methods.
+* methods-filter-replace-existing:       ecb-methods.
+* methods-general-face:                  ecb-face-options.
+* methods-menu-sorter:                   ecb-methods.
+* methods-menu-user-extension:           ecb-methods.
+* methods-menu-user-extension-function:  ecb-methods.
+* methods-nodes-collapse-spec:           ecb-methods.
+* methods-nodes-expand-spec:             ecb-methods.
+* methods-separate-prototypes:           ecb-methods.
+* methods-show-node-info:                ecb-methods.
+* minor-mode-text:                       ecb-general.
+* mode-line-data:                        ecb-mode-line.
+* mode-line-data-face:                   ecb-mode-line.
+* mode-line-display-window-number:       ecb-mode-line.
+* mode-line-prefix-face:                 ecb-mode-line.
+* mode-line-prefixes:                    ecb-mode-line.
+* mode-line-win-nr-face:                 ecb-mode-line.
+* mouse-click-destination:               ecb-general.
+* new-ecb-frame:                         ecb-layout.
+* non-semantic-exclude-modes:            ecb-non-semantic.
+* non-semantic-methods-initial-expand:   ecb-non-semantic.
+* non-semantic-parsing-function:         ecb-non-semantic.
+* other-window-behavior:                 ecb-layout.
+* ping-options:                          ecb-directories.
+* ping-program:                          ecb-directories.
+* post-process-semantic-taglist:         ecb-methods.
+* prescan-directories-exclude-regexps:   ecb-directories.
+* prescan-directories-for-emptyness:     ecb-directories.
+* primary-secondary-mouse-buttons:       ecb-tree-buffer.
+* process-non-semantic-files:            ecb-non-semantic.
+* read-only-check-exclude-regexps:       ecb-sources.
+* rebuild-non-semantic-methods-before-hook: ecb-non-semantic.
+* redraw-layout-after-hook:              ecb-layout.
+* redraw-layout-before-hook:             ecb-layout.
+* redraw-layout-quickly:                 ecb-layout.
+* run-ediff-in-ecb-frame:                ecb-general.
+* scroll-other-window-scrolls-compile-window: ecb-compilation.
+* select-edit-window-on-redraw:          ecb-layout.
+* show-ecb-windows-after-hook:           ecb-layout.
+* show-ecb-windows-before-hook:          ecb-layout.
+* show-help-format:                      ecb-help.
+* show-only-positioned-tags:             ecb-methods.
+* show-source-file-extension:            ecb-sources.
+* show-sources-in-directories-buffer:    ecb-directories.
+* show-tags:                             ecb-methods.
+* source-face:                           ecb-face-options.
+* source-file-regexps:                   ecb-sources.
+* source-in-directories-buffer-face:     ecb-face-options.
+* source-path:                           ecb-directories.
+* source-read-only-face:                 ecb-face-options.
+* sources-buffer-after-create-hook:      ecb-sources.
+* sources-buffer-name:                   ecb-sources.
+* sources-exclude-cvsignore:             ecb-sources.
+* sources-general-face:                  ecb-face-options.
+* sources-menu-sorter:                   ecb-sources.
+* sources-menu-user-extension:           ecb-sources.
+* sources-menu-user-extension-function:  ecb-sources.
+* sources-perform-read-only-check:       ecb-sources.
+* sources-show-node-info:                ecb-sources.
+* sources-sort-ignore-case:              ecb-sources.
+* sources-sort-method:                   ecb-sources.
+* speedbar-before-activate-hook:         ecb-speedbar.
+* split-edit-window-after-start:         ecb-layout.
+* stealthy-tasks-delay:                  ecb-general.
+* tag-display-function:                  ecb-methods.
+* tag-header-face:                       ecb-face-options.
+* tag-jump-sets-mark:                    ecb-methods.
+* tag-visit-post-actions:                ecb-methods.
+* tar-setup:                             ecb-download.
+* tip-of-the-day:                        ecb-general.
+* tip-of-the-day-file:                   ecb-general.
+* toggle-layout-sequence:                ecb-layout.
+* tree-buffer-style:                     ecb-tree-buffer.
+* tree-do-not-leave-window-after-select: ecb-tree-buffer.
+* tree-easy-hor-scroll:                  ecb-tree-buffer.
+* tree-expand-symbol-before:             ecb-tree-buffer.
+* tree-image-icons-directories:          ecb-tree-buffer.
+* tree-incremental-search:               ecb-tree-buffer.
+* tree-indent:                           ecb-tree-buffer.
+* tree-mouse-action-trigger:             ecb-tree-buffer.
+* tree-navigation-by-arrow:              ecb-tree-buffer.
+* tree-truncate-lines:                   ecb-tree-buffer.
+* truncate-long-names:                   ecb-tree-buffer.
+* type-tag-display:                      ecb-methods.
+* type-tag-expansion:                    ecb-methods.
+* use-recursive-edit:                    ecb-general.
+* use-speedbar-instead-native-tree-buffer: ecb-directories.
+* vc-directory-exclude-regexps:          ecb-version-control.
+* vc-enable-support:                     ecb-version-control.
+* vc-state-mapping:                      ecb-version-control.
+* vc-supported-backends:                 ecb-version-control.
+* vc-xemacs-exclude-remote-cvs-repository: ecb-version-control.
+* version-check:                         ecb-general.
+* wget-setup:                            ecb-download.
+* window-sync:                           ecb-general.
+* window-sync-delay:                     ecb-general.
+* windows-height:                        ecb-layout.
+* windows-width:                         ecb-layout.
+* winman-escreen-number:                 ecb-winman.
+* winman-winring-name:                   ecb-winman.
+
+
+File: ecb.info,  Node: Concept Index,  Prev: Option Index,  Up: Top
+
+Concept Index
+*************
+
+* Menu:
+
+* Activation hook-sequence:              Standard activation.
+* Adviced functions:                     The edit-area.
+* Analyse:                               Semantic analyser.
+* Automatic activation:                  Automatic activation.
+* Automatic deactivation:                Automatic activation.
+* BBDB:                                  Conflicts.
+* bs package:                            Conflicts.
+* bs-show:                               Conflicts.
+* Bug report:                            Submitting problem report.
+* calendar package:                      Conflicts.
+* collapsing:                            Navigation/Selection.
+* compilation buffers:                   Temp- and compile-buffers.
+* Creating new layouts:                  Creating a new ECB-layout.
+* cygwin-mount package:                  Conflicts.
+* Deactivation hook-sequence:            Standard activation.
+* desktop:                               Conflicts.
+* Directories:                           ECB Directories-buffer.
+* Download:                              Downloading new versions.
+* ECB-layout:                            The ECB-layout.
+* ECB-windows:                           Overview.
+* edebug:                                Conflicts.
+* ediff:                                 Conflicts.
+* edit-window:                           The edit-area.
+* escreen:                               Window-managers and ECB.
+* eshell:                                Using eshell.
+* expanding:                             Navigation/Selection.
+* Faces:                                 Changing faces.
+* Filter:                                Filtering the tree-buffers.
+* func-menu package:                     Conflicts.
+* Gnus:                                  Conflicts.
+* grep buffers:                          Temp- and compile-buffers.
+* help buffers:                          Temp- and compile-buffers.
+* Hide windows:                          Hiding the ECB windows.
+* History:                               ECB Sources-buffer.
+* Hooks:                                 List of hooks.
+* Incremental search:                    Incremental search.
+* interactor:                            Overview.
+* JDEE:                                  Conflicts.
+* layout:                                The ECB-layout.
+* Methods:                               ECB Methods-buffer.
+* minor mode:                            Standard activation.
+* mouse button:                          Using the mouse.
+* New layouts:                           Creating a new ECB-layout.
+* non-semantic-sources:                  The Methods buffer.
+* other window:                          The other window.
+* POWER-click:                           Using the mouse.
+* primary button:                        Using the mouse.
+* Problem report:                        Submitting problem report.
+* Redraw:                                Redrawing the ECB-layout.
+* RETURN key:                            Navigation/Selection.
+* scroll-all:                            Conflicts.
+* scroll-all-mode:                       Conflicts.
+* secondary button:                      Using the mouse.
+* semantic tag:                          Customizing the display.
+* semantic-sources:                      The Methods buffer.
+* SHIFT-click:                           Using the mouse.
+* Show windows:                          Hiding the ECB windows.
+* Small screen:                          Small screens.
+* Sources:                               ECB Sources-buffer.
+* special-display:                       Temp- and compile-buffers.
+* Speedbar:                              Simulating speedbar.
+* TAB key:                               Navigation/Selection.
+* tag:                                   Customizing the display.
+* temporary buffers:                     Temp- and compile-buffers.
+* tmm:                                   Using popup-menus.
+* tree-buffer:                           Overview.
+* VC package:                            Conflicts.
+* Version control:                       Conflicts.
+* VM package:                            Conflicts.
+* wb-line-number:                        Conflicts.
+* window-manager:                        Window-managers and ECB.
+* winner:                                Conflicts.
+* winner-mode:                           Conflicts.
+* winring:                               Window-managers and ECB.
+* xrefactory:                            Conflicts.
+
+

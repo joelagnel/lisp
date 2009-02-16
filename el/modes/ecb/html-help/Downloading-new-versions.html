@@ -1,0 +1,124 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Downloading%20new%20versions">Downloading new versions</a>,
+Next:<a rel=next accesskey=n href="Auto.-option-upgrading.html#Auto.%20option-upgrading">Auto. option-upgrading</a>,
+Previous:<a rel=previous accesskey=p href="Upgrading.html#Upgrading">Upgrading</a>,
+Up:<a rel=up accesskey=u href="Upgrading.html#Upgrading">Upgrading</a>
+<hr><br>
+
+<h3>Downloading new versions of ECB and/or required packages</h3>
+
+<p>ECB offers the possibility to upgrade to newer versions direct from
+the ECB-website. This can be done if the following requirements are
+satisfied:
+
+<ol type=1 start=1>
+</p><li>A connection to the web is available
+<li>The tools "wget", "tar" and "gzip" are installed
+
+<p>With Unix-systems these tools are in the
+standard-distribution. If you are running any Microsoft Windows system
+then you need cygwin<a rel=footnote href="#fn-1"><sup>1</sup></a> which offers these tools too. On every
+system these tools must reside in the <code>PATH</code> environment-variable!
+
+<p>If you are behind a firewall and you have to use a proxy you maybe
+need the following wget-configuration in your file <code>~/.wgetrc</code>:
+
+<br><pre># Define your proxies (where 8080 and 8081 are examples
+# for the port-numbers)
+http_proxy = http://your.proxy.com:8080
+ftp_proxy  = http://your.ftpproxy.com:8081
+
+# If you do not want to use proxy at all, set this to off.
+use_proxy = on
+</pre>
+</ol>
+
+<p>If these requirements are satisfied you can download and install both
+ECB itself and also the required versions of semantic, eieio and
+speedbar:
+
+<ul>
+<li>Download a new ECB-version with <code>ecb-download-ecb</code>:
+
+<p>A description for this command you will find in <a href="Interactive-ECB-commands.html#Interactive%20ECB%20commands">Interactive ECB commands</a>. Check also the options of the customize-group
+'ecb-download' (see <a href="ecb-download.html#ecb-download">ecb-download</a>).
+
+<p><a name="Download%20required%20packages"></a>
+</p><li>Download and install of required packages:
+
+<p>ECB checks at load-time if the packages semantic, eieio and speedbar
+are at least installed and at start-time if the required versions of
+semantic, eieio and speedbar (see <code>README</code>) are installed and
+loaded into Emacs. If not you will be asked if you want auto. download
+and install them. If you confirm this then ECB does the following:
+
+<ol type=1 start=1>
+</p><li>Checking which versions are available at the download-site of the
+required packages. With the option
+<code>ecb-download-package-version-type</code> you can specify which type of
+versions (only stable, stable and betas or stable, betas and alphas)
+you allow to download and install. This option offers also the choice
+of asking you for a certain version. Depending on this setting ECB
+either ask you which version it should download and install or chooses
+autom. the newest version available which is matching both its
+min-max-requirements and the setting in
+<code>ecb-download-package-version-type</code>.
+
+<p>NOTE: Currently there are only beta-versions of speedbar available
+therefore this option has to be set to 1 (allow stable and beta
+versions). But the speedbar beta-versions are very stable!
+
+</p><li>Downloading and installing the right version (see 1.) of the required
+packages. ECB downloads and installs the new package versions in
+subdirectories of <code>ecb-download-install-parent-dir</code>.
+</ol>
+
+<p>If both of these actions succeed then you will get a message-buffer
+which tells you something like:
+
+<br><pre>-----------------------------------------------------------------
+Current state of the required packages semantic, eieio, speedbar:
+
+- semantic author-version must be [1.4, 1.4.9]:
+  Installed in /usr/local/lib/site-lisp/semantic-1.4
+
+- eieio author-version must be [0.17, 0.17.9]:
+  Correct version already loaded!
+
+- speedbar author-version must be [0.14beta1, 0.15.9]:
+  Correct version already loaded!
+
+After adding the new directory to your <code>load-path</code> and then
+restarting Emacs the new package(s) can be activated.
+-----------------------------------------------------------------
+</pre>
+
+<p><strong>Remark 1</strong>: "P author-version must be [x y]" means, that ECB
+requires package P in a version-number &gt;= x and &lt;= y.
+
+<p><strong>Remark 2</strong>: By setting the option <code>ecb-version-check</code> to
+<code>nil</code> you can prevent ECB from checking correct versions of
+semantic, eieio and speedbar but it's strongly recommended not to do
+this! 
+</ul>
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>cygwin is available at
+<a href="http://cygwin.com/">http://cygwin.com/</a>
+</p>
+
+</ol><hr>
+
+</body></html>
+

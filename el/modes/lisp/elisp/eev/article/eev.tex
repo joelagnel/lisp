@@ -1,0 +1,1733 @@
+\def\myversion{2005jul25  2:05}
+
+\documentclass[12pt]{article}
+\usepackage{sbc2003}
+% \def\address#1{\gdef\@address{#1}}
+\usepackage{graphicx,url}
+\usepackage[latin1]{inputenc}  
+\sloppy
+
+% «.abstract»			(to "abstract")
+% «.note»			(to "note")
+% «.three-kinds-of-interfaces»	(to "three-kinds-of-interfaces")
+% «.one-thing-well»		(to "one-thing-well")
+% «.making-progs-receive-cmds»	(to "making-progs-receive-cmds")
+% «.sending-commands»		(to "sending-commands")
+% «.hyperlinks»			(to "hyperlinks")
+% «.shorter-hyperlinks»		(to "shorter-hyperlinks")
+% «.forward-and-back»		(to "forward-and-back")
+% «.dangerous-hyperlinks»	(to "dangerous-hyperlinks")
+% «.generating-hyperlinks»	(to "generating-hyperlinks")
+% «.returning»			(to "returning")
+% «.local-copies»		(to "local-copies")
+% «.glyphs»			(to "glyphs")
+% «.compose-pairs»		(to "compose-pairs")
+% «.delimited-regions»		(to "delimited-regions")
+% «.channels»			(to "channels")
+% «.channels-implementation»	(to "channels-implementation")
+% «.anchors»			(to "anchors")
+% «.e-scripts»			(to "e-scripts")
+% «.splitting-eev.el»		(to "splitting-eev.el")
+% «.eesteps»			(to "eesteps")
+% «.big-modular-e-scripts»	(to "big-modular-e-scripts")
+% «.iskidip»			(to "iskidip")
+% «.availability»		(to "availability")
+
+% (eek "C-a C-q 233 C-o")
+
+\long\def\IGNORE#1\ENDIGNORE{}
+
+\IGNORE
+;;
+;; (ee-once (eeb-eval))
+(defun mkto2 () (interactive)
+  (mkto) (eek "<up> C-a C-SPC <down> C-w")
+  (save-excursion (ee-goto-position "\233") (eek "C-a C-y")))
+(defun c () (interactive)
+  (eev "cd ~/eev-current/article/; rm eev.aux
+    latex eev.tex && latex eev.tex && rexdvi eev.dvi"))
+(defun c1 () (interactive)
+  (eev "cd ~/eev-current/article/; rm eev.aux
+    latex eev.tex && rexdvi eev.dvi"))
+;;
+\ENDIGNORE
+
+\title{Emacs and eev, or: How to Automate Almost Everything}
+\author{Eduardo Ochs}
+\address{\texttt{http://angg.twu.net/} \\
+         \email{edrx@mat.puc-rio.br} \\
+         Not currently affiliated to any institution. \\
+         Snail-mail address: R.\ Jardim Botânico 622/103B, Jardim
+         Botânico, Rio de Janeiro, RJ, Brazil, CEP 22461-000.
+        }
+\begin{document} 
+\maketitle
+\begin{abstract}
+% «abstract»  (to ".abstract")
+%
+Interacting with programs with command-line interfaces always involves
+a bit of line editing, and each CLI program tends to implement
+independently its own minimalistic editing features. We show a way of
+centralizing these editing tasks by making these programs receive
+commands that are prepared, and sent from, Emacs. The resulting system
+is a kind of Emacs- and Emacs Lisp-based ``universal scripting
+language'' in which commands can be sent to both external programs and
+to Emacs itself either in blocks or step-by-step under very fine
+control from the user.
+\end{abstract}
+
+% (find-fline "~/FISL/eev.tex")
+% (find-fline "~/tmp/fisl.txt")
+% (eev "cd ~/FISL/; latex eev.tex && rexdvi eev.dvi &")
+
+\def\myttbox#1{{\setbox0=\hbox{\texttt{a}}\hbox to \wd0{\hss#1\hss}}}
+\catcode`=13 \def{\myttbox{$\bullet$}}
+\catcode`«=13 \def«{\myttbox{$\langle\!\langle$}}
+\catcode`»=13 \def»{\myttbox{$\rangle\!\rangle$}}
+\catcode`×=13 \def×{\myttbox{$\times$}}                       % used only once
+\catcode`ª=13 \defª{\myttbox{${}^{\underline{\mathtt{a}}}$}}  % used only once
+\catcode`›=13 \def›{}
+\def\lrang#1{\hbox{$\langle$#1$\rangle$}}
+
+\IGNORE
+(remove-from-keymap tex-mode-map ?\")
+(defun m (s e str)
+  (interactive "r\nsColor: ")
+  (if (equal str "") (setq str "chocolate3"))
+  (set-text-properties s e `(face (:foreground ,str))))
+;;
+;; (find-fline "~/FISL/README")
+\ENDIGNORE
+
+\bigskip
+
+\fbox{\parbox{5in}{
+
+% «note»  (to ".note")
+
+{\bf Note:} this is a working draft that has many pieces missing and
+needs urgent revision on the pieces it has. Current version:
+\myversion. Newer versions are being uploaded to
+\lrang{http://angg.twu.net/eev-current/article/}, and two animations
+(in Flash) showing eev at work can be found at:
+
+\par\noindent
+\lrang{http://angg.twu.net/eev-current/anim/channels.anim.html} and
+\par\noindent
+\noindent \lrang{http://angg.twu.net/eev-current/anim/gdb.anim.html}.
+
+}}
+
+
+
+
+
+%%%%%
+%  _   _                     _       _             __                     
+% | |_| |__  _ __ ___  ___  (_)_ __ | |_ ___ _ __ / _| __ _  ___ ___  ___ 
+% | __| '_ \| '__/ _ \/ _ \ | | '_ \| __/ _ \ '__| |_ / _` |/ __/ _ \/ __|
+% | |_| | | | | |  __/  __/ | | | | | ||  __/ |  |  _| (_| | (_|  __/\__ \
+%  \__|_| |_|_|  \___|\___| |_|_| |_|\__\___|_|  |_|  \__,_|\___\___||___/
+% 
+%%%%%
+
+\section{Three kinds of interfaces}
+% «three-kinds-of-interfaces»  (to ".three-kinds-of-interfaces")
+
+Interactive programs in a Un*x system%
+%
+\footnote{Actually we are more interested in GNU systems than in
+``real'' Unix systems; the reasons will become clear in the section
+nnn. By the way: the term ``Unix'' is Copyright (C) Bell Labs).}
+%
+can have basically three kinds of interfaces: they can be
+mouse-oriented, like most programs with graphical interfaces nowadays,
+in which commands are given by clicking with the mouse; they can be
+character-oriented, like most editors and mail readers, in which most
+commands are single keys or short sequences of keys; and they can be
+line-oriented, as, for example, shells are: in a shell commands are
+given by editing a full line and then typing ``enter'' to process that
+line.
+
+It is commonplace to classify computer users in a spectrum where the
+``users'' are in one extreme and the ``programmers'' are in the other;
+the ``users'' tend to use only mouse-oriented and character-oriented
+programs, and the ``programmers'' only character-oriented and
+line-oriented programs.
+
+In this paper we will show a way to ``automate'' interactions with
+line-oriented programs, and, but not so well, to character-oriented
+programs; more precisely, it is a way to edit commands for these
+programs in a single central place --- Emacs --- and then send them to
+the programs; re-sending the same commands afterwards, with or without
+modifications, then becomes very easy.
+
+This way (``e-scripts'') can not be used to send commands to
+mouse-oriented programs --- at least not without introducing several
+new tricks. But ``programmers'' using Un*x systems usually see most
+mouse-oriented programs --- except for a few that are {\sl
+intrinsically} mouse-oriented, like drawing programs --- as being just
+wrappers around line-oriented programs than perform the same tasks
+with different interfaces; and so, most mouse-oriented programs ``do
+not matter'', and our method of automating interactions using
+e-scripts can be used to automate ``almost everything''; hence the
+title of the paper.
+
+
+%%%%%                 _   _     _                            _ _ 
+%   ___  _ __   ___  | |_| |__ (_)_ __   __ _  __      _____| | |
+%  / _ \| '_ \ / _ \ | __| '_ \| | '_ \ / _` | \ \ /\ / / _ \ | |
+% | (_) | | | |  __/ | |_| | | | | | | | (_| |  \ V  V /  __/ | |
+%  \___/|_| |_|\___|  \__|_| |_|_|_| |_|\__, |   \_/\_/ \___|_|_|
+%                                       |___/                    
+%%%%%
+
+\section{``Make each program do one thing well''}
+% «one-thing-well»  (to ".one-thing-well")
+
+One of the tenets of the Unix philosophy is that each program should
+do one thing, and do it well; this is a good design rule for Unix
+programs because the system makes it easy to invoke external programs
+to perform tasks, and to connect programs.
+
+Some of parts of a Unix system are more like ``meta-programs'' or
+``sub-programs'' than like self-contained programs that do some
+clearly useful task by themselves. Shells, for example, are
+meta-programs: their main function is to allow users to invoke ``real
+programs'' and to connect these programs using pipes, redirections,
+control structures (if, for, etc) and Unix ``signals''. On the other
+hand, libraries are sub-programs: for example, on GNU systems there's
+a library called GNU readline that line-oriented programs can use to
+get input; if a program, say, bc (a calculator) gets its input by
+calling readline(...) instead of using the more basic function
+fgets(...) then its line-oriented interface will have a little more
+functionality: it will allow the user to do some minimal editing in
+the current line, and also to recall, edit and issue again some of the
+latest commands given.
+
+
+
+%%%%%                _       _                                        _     
+%  _ __ ___  ___ ___(_)_   _(_)_ __   __ _    ___ _ __ ___  _ __   __| |___ 
+% | '__/ _ \/ __/ _ \ \ \ / / | '_ \ / _` |  / __| '_ ` _ \| '_ \ / _` / __|
+% | | |  __/ (_|  __/ |\ V /| | | | | (_| | | (__| | | | | | | | | (_| \__ \
+% |_|  \___|\___\___|_| \_/ |_|_| |_|\__, |  \___|_| |_| |_|_| |_|\__,_|___/
+%                                    |___/                                  
+%%%%%
+
+\section{Making programs receive commands}
+% «making-progs-receive-cmds»  (to ".making-progs-receive-cmds")
+\label{ee}
+
+Many line-oriented programs allow ``scripting'', which means executing
+commands from a file. For example, in most shells we can say ``source
+\~{}/ee.sh'', and the shell will then execute the commands in the file
+\~{}/ee.sh. There are other ways of executing commands from a file ---
+like ``sh \~{}/ee.sh'' --- but the one with ``source'' is the one that
+we'll be more interested in, because it is closer to running the
+commands in \~{}/ee.sh one by one by hand: for example, with ``source
+\~{}/ee.sh'' the commands that change parameters of the shell --- like
+the current directory and the environment variables --- will work in
+the obvious way, while with ``sh \~{}/ee.sh'' they would only change
+the parameters of a temporary sub-shell; the current directory and the
+environment variables of the present shell would be ``protected''.
+
+So, it is possible to prepare commands for a shell (or for scriptable
+line-oriented programs; for arbitrary line-oriented programs see the
+section nnn) in several ways: by typing them at the shell's interface
+--- and if the shell uses readline its interface can be reasonably
+friendly --- or, alternatively, by using a text editor to edit a file,
+say, \~{}/ee.sh, and by then ``executing'' that file with ``source
+\~{}/ee.sh''. ``source \~{}/ee.sh'' is a lot of keystrokes, but that
+can be shortened if we can define a shell function: by putting
+
+\begin{verbatim}
+  function ee () { source ~/ee.sh; }
+\end{verbatim}
+%
+in the shell's initialization file (\~{}/.bashrc, \~{}/.zshrc, ...) we
+can reduce ``source \~{}/ee.sh'' to just ``ee'': e, e, enter --- three
+keystrokes.
+
+We just saw how a shell --- or, by the way, any line-oriented program
+in which we can define an `ee' function like we did for the shell ---
+can receive commands prepared in an external editor and stored in a
+certain file; let's refer to that file, \~{}/ee.sh, as a ``temporary
+script file''. Now it remains to see how an external text editor can
+``send commands to the shell'', i.e., how to make the editor save some
+commands in a temporary script file in a convenient way, that is,
+without using too many keystrokes...
+
+
+
+%%%%%                 _ _                                        _
+%  ___  ___ _ __   __| (_)_ __   __ _    ___ _ __ ___  _ __   __| |___ 
+% / __|/ _ \ '_ \ / _` | | '_ \ / _` |  / __| '_ ` _ \| '_ \ / _` / __|
+% \__ \  __/ | | | (_| | | | | | (_| | | (__| | | | | | | | | (_| \__ \
+% |___/\___|_| |_|\__,_|_|_| |_|\__, |  \___|_| |_| |_|_| |_|\__,_|___/
+%                               |___/                                  
+%%%%%
+
+\section{Sending commands}
+% «sending-commands»  (to ".sending-commands")
+\label{eev}
+
+GNU Emacs, ``the extensible, self-documenting text-editor'' ([S79]),
+does at least two things very well: one is to edit text, and so it can
+be used to edit temporary scripts, and thus to send commands to shells
+and to line-oriented programs with `ee' functions; and the other one
+is to run Lisp. Lisp is a powerful programming language, and (at least
+in principle!) any action or series of actions can be expressed as a
+program in Lisp; the first thing that we want to do is a way to mark a
+region of a text and ``send it as commands to a shell'', by saving it
+in a temporary script file. We implement that in two ways:
+
+\begin{verbatim}
+   1: (defun ee (s e)
+   2:   "Save the region in a temporary script"
+   3:   (interactive "r")
+   4:   (write-region s e "~/ee.sh"))
+   5:
+   6: (defun eev (s e)
+   7:   "Like `ee', but the script executes in verbose mode"
+   8:   (interactive "r")
+   9:   (write-region
+  10:    (concat "set -v\n" (buffer-substring s e)
+  11:            "\nset+v")
+  12:    nil "~/ee.sh"))
+\end{verbatim}
+%
+`ee' (the name stands for something like `emacs-execute') just saves
+the currently-marked region of text to \~{}/ee.sh; `eev' (for
+something like `emacs-execute-verbose') does the same but adding to
+the beginning of the temporary script a command to put the shell in
+``verbose mode'', where each command is displayed before being
+executed, and also adding at the end an command to leave verbose mode.
+
+We can now use `ee' and `eev' to send a block of commands to a shell:
+just select a region and then run `ee' or `eev'. More precisely: mark
+a region, that is, put the cursor at one of the extremities of the
+region, then type C-SPC to set Emacs's ``mark'' to that position, then
+go to other extremity of the region and type M-x eev (C-SPC and M-x
+are Emacs's notations for Control-Space and Alt-x, a.k.a. ``Meta-x'').
+After doing that, go to a shell and make it ``receive these
+commands'', by typing `ee'.
+
+
+%%%%%
+%  _                           _ _       _        
+% | |__  _   _ _ __   ___ _ __| (_)_ __ | | _____ 
+% | '_ \| | | | '_ \ / _ \ '__| | | '_ \| |/ / __|
+% | | | | |_| | |_) |  __/ |  | | | | | |   <\__ \
+% |_| |_|\__, | .__/ \___|_|  |_|_|_| |_|_|\_\___/
+%        |___/|_|                                 
+%%%%%
+
+\section{Hyperlinks}
+% «hyperlinks»  (to ".hyperlinks")
+\label{hyperlinks}
+\label{C-xC-e}
+
+% When we are learning Un*x --- and until the point where we become a
+% genius or an {\sl idiot savant} who knows all the documentation
+% files by heart; but I've been using GNU systems for 10 years and I'm
+% neither of these yet --- we spend a lot of the time when we are not
+% issuing commands (which are mostly to shells) accessing and reading
+% documentation files; and we can use Emacs Lisp ``one-liners'' to
+% create ``hyperlinks'' to files:
+
+When we are using a system like *NIX, in a part of the time we are
+using programs with which we are perfectly familiar, and in the rest
+of the time we are using things that we don't understand completely
+and that make us have to access the documentation from time to time.
+In a GNU system the documentation is all on-line, and the steps needed
+to access any piece of documentation can be automated. We can use
+Emacs Lisp ``one-liners'' to create ``hyperlinks'' to files:
+
+\begin{verbatim}
+  A: (info "(emacs)Lisp Eval")
+  B: (find-file "~/usrc/busybox-1.00/shell/ash.c")
+  C: (find-file "/usr/share/emacs/21.4/lisp/info.el")
+\end{verbatim}
+
+These expressions, when executed --- which is done by placing the
+cursor after them and then typing C-x C-e, or, equivalently, M-x
+eval-last-sexp --- will ($A$) open a page of Emacs manual (the manual
+is a set of files in ``Info'' format), ($B$) open the source file
+`shell/ash.c' of a program called busybox, and ($C$) open the file
+`info.el' from the Emacs sources, respectively. As some of these files
+and pages can be very big, these hyperlinks are not yet very
+satisfactory: we want ways to not only open these files and pages but
+also to ``point to specific positions'', i.e., to make the cursor go
+to these positions automatically. We can do that by defining some new
+hyperlink functions, that are invoked like this:
+
+\begin{verbatim}
+  A': (find-node "(emacs)Lisp Eval" "C-x C-e")
+  B': (find-fline "~/usrc/busybox-1.00/shell/ash.c"
+                  "void\nevalpipe")
+  C': (find-fline "/usr/share/emacs/21.4/lisp/info.el"
+                  "defun info")
+\end{verbatim}
+
+The convention is that these ``extended hyperlink functions'' have
+names like `find-{\sl xxx}node', `find-{\sl xxx}file', or `find-{\sl
+  xxxyyy}'; as the name `find-file' was already taken by a standard
+Emacs function we had to use `find-fline' for ours.
+
+Here are the definitions of `find-node' and `find-fline':
+
+\begin{verbatim}
+  14: (defun ee-goto-position (&optional pos-spec)
+  15:   "If POS-SPEC is a string search for its first
+  16:    occurrence in the file; if it is a number go to the
+  17:    POS-SPECth line; if it is nil, don't move."
+  18:   (cond ((null pos-spec))
+  19:         ((numberp pos-spec)
+  20:          (goto-char (point-min))
+  21:          (forward-line (1- pos-spec)))
+  22:         ((stringp pos-spec)
+  23:          (goto-char (point-min))
+  24:          (search-forward pos-spec))
+  25:         (t (error "Invalid pos-spec: %S" pos-spec))))
+  26:
+  27: (defun find-fline (fname &optional pos-spec)
+  28:   "Like (find-file FNAME), but accepts a POS-SPEC"
+  29:   (find-file fname)
+  20:   (ee-goto-position pos-spec))
+  31:
+  32: (defun find-node (node &optional pos-spec)
+  33:   "Like (info NODE), but accepts a POS-SPEC"
+  34:   (info node)
+  35:   (ee-goto-position pos-spec)))
+\end{verbatim}
+
+Now consider what happens when we send to a shell a sequence of
+commands like this one:
+
+\begin{verbatim}
+  # (find-node "(gawk)Fields")
+  seq 4 9 | gawk '{print $1, $1*$1}'
+\end{verbatim}
+%
+the shell ignores the first line because of the `\#', that makes the
+shell treat that line as a comment; but when we are editing that in
+Emacs we can execute the `(find-node ...)' with C-x C-e. Hyperlinks
+can be mixed with shell code --- they just need to be marked as
+comments.
+
+Note: the actual definitions of `eev', `ee-goto-position',
+`find-fline' and `find-node' in eev's source code are a bit more
+complex than the code in the listings above (lines 6--12 in the
+previous section and 14--35 in the current section). In all the (few)
+occasions in this paper where we will present the source code of eev's
+functions what will be shown are versions that implement only the
+``essence'' of those functions, stripped down of all extra
+functionality. The point that we wanted to stress with those listings
+is how natural it is to use Emacs in a certain way, as an editor for
+commands for external programs, and with these plain-text hyperlinks
+that can be put almost anywhere: the essence of that idea can be
+implemented in 30 lines of Lisp and one or two lines of shell code.
+
+[See also: Section \ref{e-scripts}]
+
+
+
+
+
+%%%%%
+%      _                _              _ _       _        
+%  ___| |__   ___  _ __| |_ ___ _ __  | (_)_ __ | | _____ 
+% / __| '_ \ / _ \| '__| __/ _ \ '__| | | | '_ \| |/ / __|
+% \__ \ | | | (_) | |  | ||  __/ |    | | | | | |   <\__ \
+% |___/_| |_|\___/|_|   \__\___|_|    |_|_|_| |_|_|\_\___/
+%                                                         
+%%%%%
+
+\section{Shorter Hyperlinks}
+% «shorter-hyperlinks»  (to ".shorter-hyperlinks")
+
+The hyperlinks in lines $A''$, $B''$ and $C''$, below,
+
+\begin{verbatim}
+  A'': (find-enode "Lisp Eval" "C-x C-e")
+  B'': (find-busyboxfile "shell/ash.c" "void\nevalpipe")
+  C'': (find-efile "info.el" "defun info")
+\end{verbatim}
+%
+are equivalent to the ones labeled $A'$, $B'$, $C'$ in Section
+\ref{hyperlinks}, but are a bit shorter, and they hide details like
+Emacs's path and the version of BusyBox; if we switch to newer
+versions of Emacs and BusyBox we only need to change the definitions
+of `find-busyboxfile' and `find-efile' to update the hyperlinks.
+Usually not many things change from one version of a package to
+another, so most hyperlinks continue to work after the update.
+
+Eev defines a function called `code-c-d' that makes defining functions
+like `find-enode', `find-busyboxfile' and `find-efile' much easier:
+
+\begin{verbatim}
+  (code-c-d "busybox" "~/usrc/busybox-1.00/")
+  (code-c-d "e" "/usr/share/emacs/21.4/lisp/" "emacs")
+\end{verbatim}
+%
+The arguments for `code-c-d' are (1) a ``code'' (the ``{\sl xxx}'' in
+a ``find-{\sl xxx}file''), (2) a directory, and optionally (3) the
+name of a manual in Info format. The definition of code-c-d is not
+very interesting, so we won't show it here.
+
+
+%%%%%
+%   __                                  _    ___     _                _    
+%  / _| ___  _ ____      ____ _ _ __ __| |  ( _ )   | |__   __ _  ___| | __
+% | |_ / _ \| '__\ \ /\ / / _` | '__/ _` |  / _ \/\ | '_ \ / _` |/ __| |/ /
+% |  _| (_) | |   \ V  V / (_| | | | (_| | | (_>  < | |_) | (_| | (__|   < 
+% |_|  \___/|_|    \_/\_/ \__,_|_|  \__,_|  \___/\/ |_.__/ \__,_|\___|_|\_\
+%                                                                          
+%%%%%
+
+\section{Keys for following hyperlinks and for going back}
+% «forward-and-back»  (to ".forward-and-back")
+\label{M-e}
+
+[Rewrite this; mention M-k, M-K, `to' and the (disabled) stubs to
+  implement a `back' command]
+
+It is so common to have Lisp hyperlinks that extend from some position
+in a line --- usually after a comment sign --- to the end of the line
+that eev implements a special key for executing these hyperlinks: the
+effect of typing M-e (when eev is installed and ``eev mode'' is on) is
+roughly the same of first going to the end of the line and then typing
+C-x C-e; that is, M-e does the same as the key sequence C-e C-x
+C-e\footnote{The main difference between M-e and C-e C-x C-e is how
+  they behave when called with numeric ``prefix arguments'': for
+  example, M-0 M-e highlights temporarily the Lisp expression instead
+  of executing it and M-4 M-e executes it with some debugging flags
+  turned on, while C-x C-e when called with any prefix argument
+  inserts the result of the expression at the cursor instead of just
+  showing it at the echo area.}.
+
+[There are many other kinds of hyperlinks. Examples?]
+
+
+
+%%%%%
+%      _                                              _ _       _        
+%   __| | __ _ _ __   __ _  ___ _ __ ___  _   _ ___  | (_)_ __ | | _____ 
+%  / _` |/ _` | '_ \ / _` |/ _ \ '__/ _ \| | | / __| | | | '_ \| |/ / __|
+% | (_| | (_| | | | | (_| |  __/ | | (_) | |_| \__ \ | | | | | |   <\__ \
+%  \__,_|\__,_|_| |_|\__, |\___|_|  \___/ \__,_|___/ |_|_|_| |_|_|\_\___/
+%                    |___/                                               
+%%%%%
+
+\section{Dangerous hyperlinks}
+% «dangerous-hyperlinks»  (to ".dangerous-hyperlinks")
+
+Note that these ``hyperlinks'' can do very dangerous things. If we
+start to execute blindly every Lisp expression we see just because it
+can do something interesting or take us to an interesting place then
+we can end up running something like:
+
+\begin{verbatim}
+  (shell-command "r›m -Rf ~")
+\end{verbatim}
+
+which destroy all files in our home directory; not a good idea.
+Hyperlinks should be a bit safer than that...
+
+The modern approach to safety in hyperlinks --- the one found in web
+browsers, for example --- is that following a hyperlink can execute
+only a few kinds of actions, all known to be safe; the ``target'' of a
+hyperlink is something of the form http://..., ftp://..., file://...,
+info://..., mailto:... or at worst like javascript:...; none of these
+kinds of actions can even erase our files. That approach limits a lot
+what hyperlinks can do, but makes it harmless to hide the hyperlink
+action and display only some descriptive text.
+
+Eev's approach is the opposite of that. I wrote the first functions of
+eev in my first weeks after installing GNU/Linux in my home machine
+and starting using GNU Emacs, in 1994; before that I was using mostly
+Forth (on MS-DOS), and I hadn't had a lot of exposure to *nix systems
+by then --- in particular, I had tried to understand *nix's notions of
+user IDs and file ownerships and permissions, and I felt that they
+were a thick layer of complexity that I wasn't being able to get
+through.
+
+Forth's attitude is more like ``the user knows what he's doing''; the
+system is kept very simple, so that understanding all the consequences
+of an action is not very hard. If the user wants to change a byte in a
+critical memory position and crash the machine he can do that, and
+partly because of that simplicity bringing the machine up again didn't
+use to take more than one minute (in the good old days, of course).
+Forth people developed good backup strategies to cope with the
+insecurities, and --- as strange as that might sound nowadays, where
+all machines are connected and multi-user and crackers abound ---
+using the system in the Forth way was productive and fun.
+
+*NIX systems are not like Forth, but when I started using them I was
+accustomed to this idea of achieving simplicity through the lack of
+safeguards, and eev reflects that. The only thing that keeps eev's
+hyperlinks reasonably safe is {\sl transparency}: the code that a
+hyperlink executes is so visible that it is hard to mistake a
+dangerous Lisp expression for a ``real'' hyperlink. Also, all the safe
+hyperlink functions implemented by eev start with `find-', and all the
+`find-' functions in eev are safe, except for those with names like
+`find-{\sl xxx}sh' and `find-{\sl xxx}sh0: for example,
+
+\begin{verbatim}
+  (find-sh "wget --help" "recursive download")
+\end{verbatim}
+%
+executes ``wget -{}-help'', puts the output of that in an Emacs buffer
+and then jumps to the first occurrence of the string ``recursive
+download'' there; other `find-{\sl xxx}sh' functions are variations on
+that that execute some extra shell commands before executing the first
+argument --- typically either switching to another directory or
+loading an initialization file, like \~{}/.bashrc or \~{}/.zshrc. The
+`find-{\sl xxx}sh0' functions are similar to their `find-{\sl xxx}sh'
+counterparts, but instead of creating a buffer with their output they
+just show it at Emacs's echo area and they use only the first argument
+and ignore the others (the pos-spec).
+
+
+
+%%%%%                              _   _               _ _       _        
+%   __ _  ___ _ __   ___ _ __ __ _| |_(_)_ __   __ _  | (_)_ __ | | _____ 
+%  / _` |/ _ \ '_ \ / _ \ '__/ _` | __| | '_ \ / _` | | | | '_ \| |/ / __|
+% | (_| |  __/ | | |  __/ | | (_| | |_| | | | | (_| | | | | | | |   <\__ \
+%  \__, |\___|_| |_|\___|_|  \__,_|\__|_|_| |_|\__, | |_|_|_| |_|_|\_\___/
+%  |___/                                       |___/                      
+%
+%%%%%
+
+\section{Generating Hyperlinks}
+% «generating-hyperlinks»  (to ".generating-hyperlinks")
+
+Do we need to remember the names of all hyperlinks functions, like
+find-fline and find-node? Do we need to type the code for each
+hyperlink in full by hand? The answers are ``no'' and ``no''.
+
+Eev implements several functions that create temporary buffers
+containing hyperlinks, that can then be cut and pasted to other
+buffers. For example, `M-h M-f' creates links about an Emacs Lisp
+function: typing `M-h M-f' displays a prompt in a minibuffer asking
+for the name of an Elisp function; if we type, say, `find-file' there
+(note: name completion with the TAB key works in that prompt) we get a
+buffer like the one in figure~\ref{fig:M-h}.
+
+% (find-eevex "screenshots.e" "fisl-screenshots-M-h")
+% (find-fline "README" "ss-lua")
+% (find-fline "")
+% (find-eimage0 "./ss-lua.png")
+%
+\begin{figure}[tb]
+% \includegraphics[scale=0.72]{ss-m-h.eps}
+% \centerline{\includegraphics[scale=1.44]{ss-m-h.eps}}
+\centerline{\includegraphics[scale=1.80]{ss-m-h.eps}}
+\caption{\label{fig:M-h}the result of typing M-h M-f find-file}
+\end{figure}
+
+The first line of that buffer is a hyperlink to that
+dynamically-generated page of hyperlinks. Its function ---
+`find-efunction-links' --- has a long name that is hard to remember,
+but there's a shorter link that will do the same job:
+
+\begin{verbatim}
+  (eek "M-h M-f find-file")
+\end{verbatim}
+
+The argument to `eek' is a string describing a sequence of keys in a
+certain verbose format, and the effect of running, say,
+\verb|(eek "M-h M-f find-file")| is the same as of typing `M-h M-f
+find-file'.
+
+
+[M-h is a prefix; \verb|(eek "M-h C-h")| shows all the sequences with
+the same prefix.]
+
+[Exceptions: M-h M-c, M-h M-2, M-h M-y. Show examples of how to edit
+hyperlinks with M-h M-2 and M-h M-y.]
+
+[Mention hyperlinks about a key sequence?
+\verb|(eek "M-h M-k C-x C-f")|]
+ 
+[Mention hyperlinks about a Debian package?]
+
+
+
+
+
+%%%%%       _                    _             
+%  _ __ ___| |_ _   _ _ __ _ __ (_)_ __   __ _ 
+% | '__/ _ \ __| | | | '__| '_ \| | '_ \ / _` |
+% | | |  __/ |_| |_| | |  | | | | | | | | (_| |
+% |_|  \___|\__|\__,_|_|  |_| |_|_|_| |_|\__, |
+%                                        |___/ 
+%%%%%
+
+\section{Returning from Hyperlinks}
+% «returning»  (to ".returning")
+
+[Mention M-k to kill the current buffer, and how Emacs asks for
+  confirmation when it's a file and it's modified]
+
+[Mention M-K for burying the current buffer]
+
+[Mention what to do in the cases where a hyperlink points to the
+  current buffer (section \ref{anchors}); there used to be an
+  ``ee-back'' function bound to M-B, but to reactivate it I would have
+  to add back some ugly code to `to'... (by the way, that included
+  Rubikitch's contributions)]
+
+[web browsers have a way to ``return'' from hyperlinks: the ``back''
+button... In eev we have many kinds of hyperlinks, including some that
+are unsafe and irreversible, but we have a few kinds of ``back''s that
+work... 1) if the hyperlink opened a new file or buffer, then to kill
+the file or buffer, use M-k (an eev binding for kill-this-buffer);
+note that it asks for a confirmation when the buffer is associated to
+a file and it has been modified --- or we can use bury-buffer; M-K is
+an eev binding for bury-buffer. [explain how emacs keeps a list of
+buffers?] Note: if the buffer contains, say, a manpage, or an html
+page rendered by w3m, which take a significant time to generate, then
+M-K is better is than M-k. 2) if the hyperlink was a `to' then it
+jumped to another position in the same file... it is possible to keep
+a list of previous positions in a buffer and to create an `ee-back'
+function (suggestion: bind it to M-B) but I haver never been satisfied
+with the implementations that I did so we're only keeping a hook in
+`to' for a function that saves the current position before the jump]
+
+[dto recommended winner-undo]
+
+
+
+%%%%%
+%  _                 _                   _           
+% | | ___   ___ __ _| |   ___ ___  _ __ (_) ___  ___ 
+% | |/ _ \ / __/ _` | |  / __/ _ \| '_ \| |/ _ \/ __|
+% | | (_) | (_| (_| | | | (_| (_) | |_) | |  __/\__ \
+% |_|\___/ \___\__,_|_|  \___\___/| .__/|_|\___||___/
+%                                 |_|                
+%%%%%
+
+\section{Local copies of files from the internet}
+% «local-copies»  (to ".local-copies")
+
+Emacs knows how to fetch files from the internet, but for most
+purposes it is better to use local copies. Suppose that the
+environment variable $S$ is set to \~{}/snarf/; then running this on a
+shell
+
+\begin{verbatim}
+  mkdir -p $S/http/www.gnu.org/software/emacs/
+  cd       $S/http/www.gnu.org/software/emacs/
+  wget http://www.gnu.org/software/emacs/emacs-paper.html
+
+  # (find-fline "$S/http/www.gnu.org/software/emacs/emacs-paper.html")
+  # (find-w3m   "$S/http/www.gnu.org/software/emacs/emacs-paper.html")
+\end{verbatim}
+%
+creates a local copy of emacs-paper.html inside \~{}/snarf/http/. The
+two last lines are hyperlinks to the local copy; `find-w3m' opens it
+``as HTML'', using a web browser called w3m that can be run either in
+standalone mode or inside Emacs; `find-w3m' uses w3m's Emacs
+interface, and it accepts extra arguments, which are treated as a
+pos-spec-list.
+
+Instead of running the `mkdir', `cd' and `wget' lines above we can run
+a single command that does everything:
+
+\begin{verbatim}
+  psne http://www.gnu.org/software/emacs/emacs-paper.html
+\end{verbatim}
+%
+which also adds a line with that URL to a log file (usually
+\~{}/.psne.log). It is more convenient to have a `psne' that changes the
+current directory of the shell than one that doesn't, and for that it
+must be defined as a shell function.
+
+Eev comes with an installer script, called eev-rctool, that can help
+in adding the definitions for eev (like the ``function ee () { source
+~/ee.sh; }'' of section \ref{ee}) to initialization files like
+~/.bashrc (such initialization files are termed ``rcfiles'').
+Eev-rctool does {\sl not} add by default the definitions for `psne'
+and for $S$ to rcfiles; however, it adds commented-out lines with
+instructions, which might be something like:
+
+\begin{verbatim}
+  # To define $S and psne uncomment this:
+  #   . $EEVTMPDIR/psne.sh
+  # (find-eevtmpfile "psne.sh")
+\end{verbatim}
+
+
+
+
+
+%%%%%    _             _         
+%   __ _| |_   _ _ __ | |__  ___ 
+%  / _` | | | | | '_ \| '_ \/ __|
+% | (_| | | |_| | |_) | | | \__ \
+%  \__, |_|\__, | .__/|_| |_|___/
+%  |___/   |___/|_|              
+%
+%%%%%
+ 
+\section{Glyphs}
+% «glyphs»  (to ".glyphs")
+
+Emacs allows redefining how characters are displayed, and one of the
+modules of eev --- eev-glyphs --- uses that to make some characters
+stand out. Character 15, for example, is displayed on the screen by
+default as '\verb|^O|' (two characters, suggesting ``control-O''),
+sometimes in a different color from normal text\footnote{Determined by
+the ``face'' escape-glyph-face, introduced in GNU Emacs in late
+2004.}.
+
+Eev changes the appearance of char 15 to make it be displayed as a red
+star. Here is how: Emacs has some structures called ``faces'' that
+store font and color information, and `eeglyphs-face-red' is a face
+that says ``use the default font and the default background color, but
+a red foreground''; eev's initialization code runs this,
+
+\begin{verbatim}
+  (eev-set-glyph 15 ?* 'eev-glyph-face-red)
+\end{verbatim}
+%
+which sets the representation of char 15 to the ``glyph'' made of a
+star in the face eeglyphs-face-red. 
+
+For this article, as red doesn't print well in black and white, we
+used this instead:
+
+\begin{verbatim}
+  (eev-set-glyph 15 342434)
+\end{verbatim}
+%
+this made occurrences of char 15 appear as the character 342434, `'
+(note that this is outside of the ascii range), using the default
+face, i.e., the default font and color.
+
+Eev also sets a few other glyphs with non-standard faces. The most
+important of those are `«' and '»', which are set to appear in green
+against the default background, with:
+
+\begin{verbatim}
+  (eev-set-glyph 171 171 'eev-glyph-face-green)
+  (eev-set-glyph 187 187 'eev-glyph-face-green)
+\end{verbatim}
+%
+There's a technical point to be raised here. Emacs can use several
+``encodings'' for files and buffers, and `«' and `»' only have
+character codes 171 and 187 in a few cases, mainly in the `raw-text'
+encoding and in ``unibyte'' buffers; in most other encodings they have
+other char codes, usually above 255, and when they have these other
+codes Emacs considers that they are other characters for which no
+special glyphs were set and shows them in the default face. This
+visual distinction between the below-255 `«' and `»' and the other `«'
+and `»'s is deliberate --- it helps preventing some subtle bugs
+involving the anchor functions of section \ref{anchors}.
+
+
+
+%%%%%
+%   ___ ___  _ __ ___  _ __   ___  ___  ___ 
+%  / __/ _ \| '_ ` _ \| '_ \ / _ \/ __|/ _ \
+% | (_| (_) | | | | | | |_) | (_) \__ \  __/
+%  \___\___/|_| |_| |_| .__/ \___/|___/\___|
+%                     |_|                   
+%%%%%
+
+\section{Compose Pairs}
+% «compose-pairs»  (to ".compose-pairs")
+
+To insert a `' in a text we type `C-q C-o' --- C-q ``quotes'' the
+next key that Emacs receives, and `C-q C-o' inserts a ``literal C-o'',
+which is a char 15. Typing `«' and `»'s --- and other non-standard
+glyphs, if we decide to define our own --- involves using another
+module of eev: eev-compose.
+
+Eev-compose defines a few variables that hold tables of ``compose
+pairs'', which map pairs of characters that are easy to type into
+other, weirder characters; for example, `eev-composes-otheriso' says
+that the pair \verb|"<<"| is mapped to \verb|"«"| and that \verb|">>"|
+is mapped to \verb|"»"|, among others. When we are in ``eev mode'' the
+prefix `\verb|M-,|' can be used to perform the translation: typing
+`\verb|M-, < <|' enters `\verb|«|', and typing `\verb|M-, > >|' enters
+`\verb|»|'.
+
+The variable `eev-composes-accents' holds mappings for accented chars,
+like \verb|"'a"| to \verb|"á"| and \verb|"cc"| to \verb|"ç"|;
+`eev-composes-otheriso' takes care of the other mappings that still
+concern characters found in the ISO8859-1 character set, like `«' and
+'»' as above, \verb|"_a"| to \verb|"ª"|, \verb|"xx"| to \verb|"×"|,
+and a few others; `eev-composes-globalmath' and
+`eev-composes-localmath' are initially empty and are meant to be used
+for used-defined glyphs. The suffix `math' in their names is a relic:
+Emacs implements its own ways to enter special characters, which
+support several languages and character encodings, but their code is
+quite complex and they are difficult to extend; the code that
+implements eev's `\verb|M-,|', on the other hand, takes about just 10
+lines of Lisp (excluding the tables of compose pairs) and it is
+trivial to understand and to change its tables of pairs. `\verb|M-,|'
+was created originally to enter special glyphs for editing
+mathematical texts in \TeX, but it turned out to be a convenient hack,
+and it stuck.
+
+
+
+
+%%%%%  _      _ _           _ _           _                  _                 
+%   __| | ___| (_)_ __ ___ (_) |_ ___  __| |  _ __ ___  __ _(_) ___  _ __  ___ 
+%  / _` |/ _ \ | | '_ ` _ \| | __/ _ \/ _` | | '__/ _ \/ _` | |/ _ \| '_ \/ __|
+% | (_| |  __/ | | | | | | | | ||  __/ (_| | | | |  __/ (_| | | (_) | | | \__ \
+%  \__,_|\___|_|_|_| |_| |_|_|\__\___|\__,_| |_|  \___|\__, |_|\___/|_| |_|___/
+%                                                      |___/                   
+%%%%%
+
+\section{Delimited regions}
+\label{bounded}
+% «delimited-regions»  (to ".delimited-regions")
+
+Sometimes it happens that we need to run a certain (long) series of
+commands over and over again, maybe with some changes from one run to
+the next; then having to mark the block all the time becomes a hassle.
+
+One alternative to that is using a variaton on `M-x eev': `M-x
+eev-bounded'. It saves the region around the cursor up to certain
+delimiters instead of saving what's between Emacs's ``point'' and
+``mark''.
+
+The original definition of eev-bounded was something like this:
+
+\begin{verbatim}
+  (defun eev-bounded ()
+    (interactive)
+    (eev (ee-search-backwards "\n#\n")
+         (ee-search-forward   "\n#\n")))
+\end{verbatim}
+%
+the call to `ee-search-backwards' searches for the first occurrence of
+the string \verb|"\n#\n"| (newline, hash sign, control-O, newline)
+before the cursor and returns the position after the \verb|"\n#\n"|,
+without moving the cursor; the call to ee-search-forward does
+something similar with a forward search. As the arguments to `eev'
+indicate the extremities of the region to be saved into the temporary
+script, this saves the region between the first \verb|"\n#\n"|
+backwards from the cursor to the first \verb|"\n#\n"| after the
+cursor.
+
+The actual definition of `eev-bounded' includes some extra code to
+highlight temporarily the region that was used; see Figure
+\ref{fig:F3}. Normally the highlighting lasts for less than one
+second, but here we have set its duration to several seconds to
+produce a more interesting screenshot.
+
+% (find-eevex "screenshots.e" "fisl-screenshots")
+% (find-es "tex" "png_screenshots")
+% (find-fline "README" "ss-lua")
+% (find-eimage0 "./ss-lua.png")
+%
+\begin{figure}[tb]
+\includegraphics[scale=0.72]{ss-lua.eps}
+\caption{\label{fig:F3}sending a delimited block with F3}
+\end{figure}
+
+Eev binds the key F3 to the function `eeb-default', which runs the
+current ``default bounded function'' (which is set initially to `eev',
+{\sl not} `eev-bounded') on the region between the current default
+delimiters, using the current default ``highlight-spec''; so, instead
+of typing `M-x eev-bounded' inside the region to save it we can just
+type F3.
+
+All these defaults values come from a single list, which is stored in
+the variable `eeb-defaults'. The real definition of `eev-bounded' is
+something like:
+
+\begin{verbatim}
+  (setq eev-bounded
+    '(eev ee-delimiter-hash nil t t))
+
+  (defun eev-bounded ()
+    (interactive)
+    (setq eeb-defaults eev-bounded)
+    (eeb-default))
+\end{verbatim}
+
+Note that in Emacs Lisp (and in most other Lisps) each symbol has a
+value as a variable that is independent from its ``value as a
+function'': actually a symbol is a structure containg a name, a
+``value cell'', a ``function cell'' and a few other fields. Our
+definition of `eev-bounded', above, includes both a definition of the
+function `eev-bounded' and a value for the variable `eev-bounded'.
+
+Eev has an auxiliary function for defining these ``bounded
+functions''; running
+
+\begin{verbatim}
+  (eeb-define 'eev-bounded 'eev 'ee-delimiter-hash nil t t)
+\end{verbatim}
+%
+has the same effect as doing the `setq' and the `defun' above.
+
+As for the meaning of the entries of the list `eeb-defaults', the
+first one (`eev') says which function to run; the second one
+(`ee-delimiter-hash') says which initial delimiter to use --- in this
+case it is a symbol instead of a string, and so `eeb-default' takes
+the value of the variable `ee-delimiter-hash'; the third one (nil) is
+like the second one, but for the final delimiter, and when it is nil
+`eeb-default' considers that the final delimiter is equal to the
+initial delimiter; the fourth entry (t) means to use the standard
+highlight-spec, and the fifth one (t, again) tells `eeb-default' to
+make an adjustment to the highlighted region for purely aestethical
+reasons: the saved region does not include the initial \verb|"\n"| in
+the final delimiter, \verb|"\n#\n"|, but the highlighting looks nicer
+if it is included; without it the last highlighted line in Figure
+\ref{fig:F3} would have only its first character --- an apostrophe ---
+highlighted.
+
+Eev also implements other of these ``bounded'' functions. For example,
+running `M-x eelatex' on a region saves it in a temporary \LaTeX{}
+file, and also saves into the temporary script file the commands to
+process it with \LaTeX{}; `eelatex-bounded' is defined by
+
+\begin{verbatim}
+  (eeb-define 'eelatex-bounded 'eelatex
+    'ee-delimiter-percent nil t t)
+\end{verbatim}
+%
+where the variable `ee-delimiter-percent' holds the string
+\verb|"\n%\n"|; comments in \LaTeX{} start with percent signs, not
+hash signs, and it is convenient to use delimiters that are treated as
+comments.
+
+[The block below ... tricky ... blah. How to typeset `' in \LaTeX.
+  Running eelatex-bounded changed the defaults stored in eeb-defaults,
+  but ee-once blah doesn't.]
+
+% (find-lsrcfile "base/ltmiscen.dtx" "subsection{Verbatim}")
+%
+\begin{verbatim}
+  %
+  % (eelatex-bounded)
+  % (ee-once (eelatex-bounded))
+  \def\myttbox#1{%
+    \setbox0=\hbox{\texttt{a}}%
+    \hbox to \wd0{\hss#1\hss}%
+  }
+  \catcode`=13 \def{\myttbox{$\bullet$}}
+  \begin{verb›atim}
+  abcdefg
+     dfg
+  \end{verb›atim}
+  %
+\end{verbatim}
+
+
+...for example eelatex, that saves the region (plus certain standard
+header and footer lines) to a ``temporary \LaTeX{} file'' and saves
+into the temporary script file the commands to make `ee' run \LaTeX{}
+on that and display the result. The block below is an example of (...)
+
+...The block below shows a typical application of eev-bounded:
+
+% (find-es "lua5" "install-5.0.2")
+% (find-es "lua5" "install-5.0.2" "Edrx's changes")
+%
+\begin{verbatim}
+  # (code-c-d "lua5" "/tmp/usrc/lua-5.0.2/")
+  # (find-lua5file "INSTALL")
+  # (find-lua5file "config" "support for dynamic loading")
+  # (find-lua5file "config")
+  # (find-lua5file "")
+  #
+  rm   -Rv ~/usrc/lua-5.0.2/
+  mkdir -p ~/usrc/lua-5.0.2/
+  tar   -C ~/usrc/ \
+     -xvzf $S/http/www.lua.org/ftp/lua-5.0.2.tar.gz
+  cd       ~/usrc/lua-5.0.2/
+  cat >> config <<'---'
+  LOADLIB= -DUSE_DLOPEN=1
+  DLLIB= -ldl
+  MYLDFLAGS= -Wl,-E
+  EXTRA_LIBS= -lm -ldl
+  ---
+  make test  2>&1 | tee omt
+  ./bin/lua -e 'print(loadlib)'
+  #
+\end{verbatim}
+%
+in unpacks a program (the interpreter for Lua), changes its default
+configuration slightly, then compiles and tests it.
+
+[about the size: the above code is ``too small for being a script'',
+and the hyperlinks are important]
+
+\par gdb (here-documents, gcc, ee-once)
+\par (alternative: here-documents, gcc, gdb, screenshot(s) for gdb)
+
+
+
+
+
+%%%%%   _                            _     
+%   ___| |__   __ _ _ __  _ __   ___| |___ 
+%  / __| '_ \ / _` | '_ \| '_ \ / _ \ / __|
+% | (__| | | | (_| | | | | | | |  __/ \__ \
+%  \___|_| |_|\__,_|_| |_|_| |_|\___|_|___/
+%                                          
+%%%%%
+
+\section{Communication channels}
+\label{channels}
+% «channels»  (to ".channels")
+
+The way that we saw to send commands to a shell is in two steps: first
+we use M-x eev in Emacs to ``send'' a block of commands, and then we
+run `ee' at the shell to make it ``receive'' these commands. But there
+is also a way to create shells that ``listen'' not only to the
+keyboard for their input, but also to certain ``communication
+channels''; by making Emacs send commands through these communication
+channels we can skip the step of going to the shell and typing `ee'
+--- the commands are received immediately.
+
+% (find-eevex "screenshots.e" "fisl-screenshots")
+% (find-eimage0 "~/FISL/ss-f9.png")
+% (find-fline "ss-f9.png")
+% (find-es "tex" "png_screenshots")
+% (find-fline "README" "ss-f9")
+
+\begin{figure}[tb]
+\includegraphics[scale=0.72]{ss-f9.eps}
+\caption{\label{fig:F9}sending commands to two xterms using F9}
+\end{figure}
+
+The screenshot at Figure \ref{fig:F9}{} shows this at work. The user
+has started with the cursor at the second line from the top of the
+screen in the Emacs window and then has typed F9 several times. Eev
+binds F9 to a command that operates on the current line and then moves
+down to the next line; if the current line starts with `' then what
+comes after the `' is considered as Lisp code and executed
+immediately, and the current line doesn't start with `' then its
+contents are sent through the default communication channel, or though
+a dummy communication channel if no default was set.
+
+The first F9 executed \texttt{(eechannel-xterm "A")}, which created an
+xterm with title ``channel A'', running a shell listening on the
+communication channel ``A'', and set the default channel to A; the
+second F9 created another xterm, now listening to channel B, and set
+the default channel to B.
+
+The next two `F9's sent each one one line to channel B. The first line
+was a shell comment (``\texttt{\#{} Listen}...''); the second one
+started the program netcat, with options to make netcat ``listen to
+the internet port 1234'' and dump to standard output what it receives.
+
+The next line had just `'; executing the rest of it as Lisp did
+nothing. The following line changed the default channel to A.
+
+In the following lines there is a small shell program that outputs
+``hi'', then waits one second, then outputs ``bye'', then waits for
+another second, then finishes; due to the ``\texttt{| netcat }...''
+its output is redirected to the internet port 1234, and so we see it
+appearing as the output of the netcat running on channel B, with all
+the expected delays: one second between ``hi'' and ``bye'', and one
+second after ``bye''; after that last one-second delay the netcat at
+channel A finishes receiving input (because the program between
+`\texttt{\{}' and `\texttt{\}}' ends) and it finishes its execution,
+closing the port 1234; the netcat at B notices that the port was
+closed and finishes its execution too, and both shells return to the
+shell prompt.
+
+There are also ways to send whole blocks of lines at once through
+communication channels; see Section \ref{bigmodular}.
+
+
+
+%%%%%   _                            _        ___               __  
+%   ___| |__   __ _ _ __  _ __   ___| |___   / (_)_ __ ___  _ __\ \ 
+%  / __| '_ \ / _` | '_ \| '_ \ / _ \ / __| | || | '_ ` _ \| '_ \| |
+% | (__| | | | (_| | | | | | | |  __/ \__ \ | || | | | | | | |_) | |
+%  \___|_| |_|\__,_|_| |_|_| |_|\___|_|___/ | ||_|_| |_| |_| .__/| |
+%                                            \_\           |_|  /_/ 
+%%%%%
+
+\subsection{The Implementation of Communication Channels}
+% «channels-implementation»  (to ".channels-implementation")
+
+Communication channels are implemented using an auxiliary script
+called `eegchannel', which is written in Expect ([L90] and [L95]). If
+we start an xterm in the default way it starts a shell (say,
+/bin/bash) and interacts with it: the xterm sends to the shell as
+characters the keystrokes that it receives from the window manager and
+treats the characters that the shell sends back as being instructions
+to draw characters, numbers and symbols on the screen. But when we run
+\texttt{(eechannel-xterm "A")} Emacs creates an xterm that interacts
+with another program --- eegchannel --- instead of with a shell, and
+eegchannel in its turn runs a shell and interacts with it.
+
+Eegchannel passes characters back and forth between the xterm and the
+shell without changing them in any way; it mostly tries to pretend
+that it is not there and that the xterm is communicating directly with
+the shell. However, when eegchannel receives a certain signal it sends
+to the shell a certain sequence of characters that were not sent by
+the xterm; it ``fakes a sequence of keystrokes''.
+
+Let's see a concrete example. Suppose than Emacs was running with
+process id (``pid'') 1000, and running \texttt{(eechannel-xterm "A")}
+in it made it create an xterm, which got pid 1001; that xterm ran
+eegchannel (pid 1002), which ran /bin/bash (pid 1003). Actually Emacs
+invoked xterm using this command line:
+
+\begin{verbatim}
+  xterm -n "channel A" -e eegchannel A /bin/bash
+\end{verbatim}
+%
+and xterm invoked eegchannel with \texttt{eegchannel A /bin/bash};
+eegchannel saw the `A', saved its pid (1002) to the file
+\~{}/.eev/eeg.A.pid, and watched for SIGUSR1 signals; every time that
+it (the eegchannel) receives a SIGUSR1 it reads the contents of
+\~{}/.eev/eeg.A.str and sends that as fake input to the shell that it
+is controlling. So, running
+
+\begin{verbatim}
+  echo 'echo $[1+2]' > ~/.eev/eeg.A.str
+  kill -USR1 $(cat ~/.eev/eeg.A.pid)
+\end{verbatim}
+%
+in a shell sends the string ``\texttt{echo \$[1+2]}'' (plus a newline)
+``through the channel A''; what Emacs does when we type F9 on a line
+that does not start with `' corresponds exactly to that.
+
+% (find-lsrcfile "moreverb/")
+
+
+%%%%%               _                    
+%   __ _ _ __   ___| |__   ___  _ __ ___ 
+%  / _` | '_ \ / __| '_ \ / _ \| '__/ __|
+% | (_| | | | | (__| | | | (_) | |  \__ \
+%  \__,_|_| |_|\___|_| |_|\___/|_|  |___/
+%
+%%%%%
+
+\section{Anchors}
+% «anchors»  (to ".anchors")
+\label{anchors}
+
+The function `to' can be used to create hyperlink to certain positions
+--- called ``anchors'' --- in the current file. For example,
+
+\begin{verbatim}
+  # Index:
+  # «.first_block»        (to "first_block")
+  # «.second_block»       (to "second_block")
+
+  #
+  # «first_block»  (to ".first_block")
+  echo blah
+  #
+  # «second_block»  (to ".second_block")
+  echo blah blah
+  #
+\end{verbatim}
+%
+What `to' does is simply to wrap its argument inside `\texttt{«}' and
+`\texttt{»}' characters and then jump to the first occurrence of the
+resulting string in the current file. In the (toy) example above, the
+line that starts with ``\verb|# «.first_block»|'' has a link that
+jumps to the line that starts with ``\verb|# «first_block»|'', which
+has a link that jumps back --- the anchors and ``(to ...)''s act like
+an index for that file.
+
+The function `find-anchor' works like a `to' that first opens another
+file:
+
+\begin{verbatim}
+  (find-anchor "~/.zshrc" "update-homepage")
+\end{verbatim}
+%
+does roughly the same as:
+
+\begin{verbatim}
+  (find-fline "~/.zshrc" "«update-homepage»")
+\end{verbatim}
+
+Actually `find-anchor' consults a variable, `ee-anchor-format', to see
+in which strings to wrap the argument. Some functions modify
+`ee-anchor-format' temporarily to obtain special effects; for example,
+a lot of information about the packages installed in a Debian GNU
+system is kept in a text file called /var/lib/dpkg/info/status;
+\verb|(find-status "emacs21")| opens this file and searches for the
+string \verb|"\nPackage: emacs21\n"| there --- that string is the
+header for the block with information about the package emacs21, and
+it tells the size of the package, description, version, whether it is
+installed or not, etc, in a format that is both machine-readable and
+human-readable.
+
+
+
+
+
+%%%%%                       _       _       
+%   ___       ___  ___ _ __(_)_ __ | |_ ___ 
+%  / _ \_____/ __|/ __| '__| | '_ \| __/ __|
+% |  __/_____\__ \ (__| |  | | |_) | |_\__ \
+%  \___|     |___/\___|_|  |_| .__/ \__|___/
+%                            |_|            
+%%%%%
+
+\section{E-scripts}
+% «e-scripts»  (to ".e-scripts")
+\label{e-scripts}
+
+The best short definition for eev that I've found involves some
+cheating, as it is a circular definition: ``eev is a library that adds
+support for e-scripts to Emacs'' --- and e-scripts are files that
+contain chunks meant to be processed by eev's functions. Almost any
+file can contain parts ``meant for eev'': for example, a HOWTO or
+README file about some program will usually contain some example shell
+commands, and we can mark these commands and execute them with M-x
+eev; and if we have the habit of using eev and we are writing code in,
+say, C or Lua we will often put elisp hyperlinks inside comment blocks
+in our code. These two specific languages (and a few others) have a
+feature that is quite convenient for eev: they have syntactical
+constructs that allow comment blocks spanning several lines --- for
+example, in Lua, where these comment blocks are delimited by
+``\texttt{--[[}'' and ``\texttt{--]]}''s, we can have a block like
+
+\begin{verbatim}
+  --[[
+  #
+  # This file: (find-fline "~/LUA/lstoindexhtml.lua")
+  # A test:
+  cd /tmp/
+  ls -laF | col -x \
+    | lua50 ~/LUA/lstoindexhtml.lua tmp/ \
+    | lua50 -e 'writefile("index.html", io.read("*a"))'
+  #
+  --]]
+\end{verbatim}
+%
+in a Lua script, and the script will be at the same time a Lua script
+and an e-script.
+
+When I started using GNU and Emacs the notion of an e-script was
+something quite precise to me: I was keeping notes on what I was
+learning and on all that I was trying to do, and I was keeping those
+notes in a format that was partly English (or Portuguese), partly
+executable things --- not all of them finished, or working --- after
+all, it was much more practical to write
+
+\begin{verbatim}
+  rm -Rv ~/usrc/busybox-1.00/
+  tar -C ~/usrc/ -xvzf \
+    $S/http/www.busybox.net/downloads/busybox-1.00.tar.gz
+  cd ~/usrc/busybox-1.00/
+  cp -iv ~/BUSYBOX/myconfig .config
+  make menuconfig
+  make       2>&1 | tee om
+\end{verbatim}
+%
+than to write
+
+\begin{verbatim}
+  Unpack BusyBox's source, then run "make menuconfig"
+  and "make" on its main directory
+\end{verbatim}
+%
+and then have to translate that from English into machine commands
+every time... So, those files where I was keeping my notes contained
+``executable notes'', or were ``scripts for Emacs'', and I was quite
+sure that everyone else around were also keeping notes in executable
+formats, possibly using other editors and environments (vi, maybe?)
+and that if I showed these people my notes and they were about some
+task that they were also struggling with then they would also show me
+{\sl their} notes... I ended up making a system that uploaded
+regularly all my e-scripts (no matter how messy they were) to my home
+page, and writing a text --- ``The Eev Manifesto'' ([O99]) --- about
+sharing these executable notes.
+
+Actually trying to define an e-script as being ``a file containing
+executable parts, that are picked up and executed interactively''
+makes the concept of an e-script {\sl very} loose.
+
+% (...) Thus e-scriptness lies in the eye of the beholder: most
+% languages have a syntax that allows inclusion of Lisp one-liners in
+% comments --- SmallTalk is an example of a language that does {\sl
+% not} allow that, as it uses `\texttt{"}'s to mark the beginning and
+% the end of comments --- and many languages have a syntax for
+% ``comment blocks'': the following code
+
+Note that we {\sl can} execute the Lua parts in the code above by
+running the Lua interpreter on it, we {\sl can} execute the elisp
+one-liner with M-e in Emacs, and we {\sl can} execute the shell
+commands using F3 or M-x eev; but the code will do nothing by itself
+--- it is passive.
+
+A piece of code containing instructions in English on how to use it is
+also an e-script, in a sense; but to execute these instructions we
+need to invoke an external entity --- a human, usually ourselves ---
+to interpret them. This is much more flexible, but also much more
+error-prone and slow, than just pressing a simple sequence of keys
+like M-e, or F9, or F3, alt-tab, e, e, enter.
+
+
+
+
+%%%%%        _ _ _                     
+%  ___ _ __ | (_) |_    ___  _____   __
+% / __| '_ \| | | __|  / _ \/ _ \ \ / /
+% \__ \ |_) | | | |_  |  __/  __/\ V / 
+% |___/ .__/|_|_|\__|  \___|\___| \_/  
+%     |_|                              
+%%%%%
+
+\section{Splitting eev.el}
+% «splitting-eev.el»  (to ".splitting-eev.el")
+
+When I first submittted eev for inclusion in GNU Emacs, in 1999, the
+people at the FSF requested some changes. One of them was to split
+eev.el --- the code at that point was all in a single Emacs Lisp file,
+called eev.el --- into several separate source files according to
+functionality; at least the code for saving temporary scripts and the
+code for hyperlinks should be kept separate.
+
+It turned out that that was the wrong way of splitting eev. The
+frontier between what is a hyperlink and what is a block of commands
+is blurry:
+
+\begin{verbatim}
+  man foo
+  man -P 'less +/bar' foo
+  # (eev "man foo")
+  # (eev "man -P 'less +/bar' foo")
+  # (find-man "foo" "bar")
+\end{verbatim}
+
+The two `man' commands above can be considered as hyperlinks to a
+manpage, but we need to send those commands to a shell to actually
+open the manpage; the option -P 'less +/bar' instructs `man' to use
+the program `less' to display the manpage, and it tells `less' to jump
+to the first occurrence of the string ``bar'' in the text, and so it
+is a hyperlink to a specific position in a manpage. Each of the two
+`eev' lines, when executed, saves one of these `man' commands to the
+temporary script file; because they contain Lisp expressions they look
+much more like hyperlinks than the `man' lines. The last line,
+`find-man', behaves much more like a ``real'' hyperlink: it opens the
+manpage {\sl inside Emacs} and searches for the first occurrence of
+`bar' there; but Emacs's code for displaying manpages was tricky, and
+it took me a few years to figure out how to add support for
+pos-spec-lists to it...
+
+So, what happens is that often a new kind of hyperlink will begin its
+life as a series of shell commands (another example: using `gv --page
+14 file.ps' to open a PostScript file and then jump to a certain page)
+and then it takes some time to make a nice hyperlink function that
+does the same thing; and often these functions are implemented by
+executing commands in external programs.
+
+There's a much better way to split conceptually what eev does, though.
+Most functions in eev take a region of text (for example Emacs's own
+``selected region'', or the extent of Lisp expression coming before
+the cursor) and ``execute'' that in some way; the kinds of regions are
+
+\begin{tabular}{|p{12em}|p{12em}|}
+\hline
+Emacs's (selected) region   & M-x eev, M-x eelatex \hfill (sec.\ \ref{eev})\\
+\hline
+last-sexp (Lisp expression at the left of the cursor)
+                            & C-x C-e, M-E \hfill (sec.\ \ref{C-xC-e}) \\
+\hline
+sexp-eol (go to end of line, then last-sexp)
+                            & C-e C-x C-e, M-e \hfill (sec.\ \ref{M-e}) \\
+\hline
+bounded region & F3, M-x eev-bounded,
+                 M-x eelatex-bounded \hfill (sec.\ \ref{bounded}) \\
+\hline
+bounded region around {\sl anchor} &  (ee-at ``{\sl anchor}'' ...)
+                                      \hfill (sec.\ \ref{ee-at}) \\
+\hline
+current line  & F9 \hfill (sec.\ \ref{channels}) \\
+\hline
+no text (instead use the next item in a list)
+              & F12 \hfill (sec.\ \ref{steps}) \\
+\hline
+\end{tabular}
+
+Actions (can be composed):
+
+\begin{itemize}
+\item Saving a region or a string into a file
+\item Sending a signal to a process
+\item Executing as Lisp
+\item Executing immediately in a shell
+\item Start a debugger
+\end{itemize}
+
+[Emacs terminology: commands]
+
+
+
+%%%%%             _                 
+%   ___  ___  ___| |_ ___ _ __  ___ 
+%  / _ \/ _ \/ __| __/ _ \ '_ \/ __|
+% |  __/  __/\__ \ ||  __/ |_) \__ \
+%  \___|\___||___/\__\___| .__/|___/
+%                        |_|        
+%%%%%
+
+\section{Steps}
+\label{steps}
+% «eesteps»  (to ".eesteps")
+
+[Simple examples]
+
+[writing demos]
+
+[hyperlinks for which no short form is known]
+
+[producing animations and screenshots]
+
+
+%%%%%
+%  _     _                                  _       _       
+% | |__ (_) __ _    ___       ___  ___ _ __(_)_ __ | |_ ___ 
+% | '_ \| |/ _` |  / _ \_____/ __|/ __| '__| | '_ \| __/ __|
+% | |_) | | (_| | |  __/_____\__ \ (__| |  | | |_) | |_\__ \
+% |_.__/|_|\__, |  \___|     |___/\___|_|  |_| .__/ \__|___/
+%          |___/                             |_|            
+%%%%%
+
+\section{Big Modular E-scripts}
+\label{bigmodular}
+\label{ee-at}
+% «big-modular-e-scripts»  (to ".big-modular-e-scripts")
+
+% (find-eevex "screenshots.e" "fisl-screenshots-modular")
+% (find-eimage0 "./ss-modular.png")
+% (find-fline     "ss-modular.png")
+% (find-es "tex" "png_screenshots")
+% (find-fline "README" "ss-modular")
+
+
+A shell can be run in two modes: either interactively, by
+expecting lines from the user and executing them as soon as they
+are received\footnote{except for multi-line commands.}, or by
+scripts: in the later case the shell already has access to the
+commands, and executes them in sequence as fast as possible, with
+no pause between one command and the next.
+
+When we are sending lines to a shell with F9 we are telling it not
+only {\sl what} to execute but also {\sl when} to execute it; this is
+somewhat similar to running a program step-by-step inside a debugger
+--- but note that most shells provide no single-stepping facilities.
+
+We will start with a toy example --- actually the example from Section
+\ref{anchors} with five new lines added at the end --- and then in the
+next section we will see a real-world example that uses these ideas.
+
+\begin{figure}[tb]
+\includegraphics[scale=0.72]{ss-modular.eps}
+\caption{\label{fig:modular}sending a block at once
+  with eevnow-at}
+\bigskip
+\includegraphics[scale=1.80]{ss-gdbwide.eps}
+\caption{\label{fig:gdb}single-stepping through a C program}
+\end{figure}
+
+[Somewhere between a script and direct user interaction]
+
+[No loops, no conditionals]
+
+[Several xterms]
+
+
+
+%%%%%
+%  _     _    _     _ _       
+% (_)___| | _(_) __| (_)_ __  
+% | / __| |/ / |/ _` | | '_ \ 
+% | \__ \   <| | (_| | | |_) |
+% |_|___/_|\_\_|\__,_|_| .__/ 
+%                      |_|    
+%%%%%
+
+\section{Internet Skills for Disconnected People}
+\label{iskidip}
+% «iskidip»  (to ".iskidip")
+
+Suppose that we have a person $P$ who has learned how to use a
+computer and now wants to learn how the internet works. That person
+$P$ knows a bit of programming and can use Emacs, and sure she can use
+e-mail clients and web browsers by clicking around with the mouse, but
+she has grown tired of just using those things as black boxes; now she
+wants to experiment with setting up HTTP and mail servers, to
+understand how data packets are driven around, how firewalls can block
+some connections, such things.
+
+The problem is that $P$ has never had access to any machine besides
+her own, which is connected to the internet only through a modem; and
+also, she doesn't have any friends who are computer technicians or
+sysadmins, because from the little contact that she's had with these
+people she's got the impression that they live lifes that are almost
+as grey as the ones of factory workers, and she's afraid of them. To
+add up to all that, $P$ has some hippie job that makes her happy but
+poor, so she's not going to buy a second computer, and the books she
+can borrow, for example, Richard Stevens' series on TCP/IP
+programming, just don't cut.
+
+One of eev's intents isto make life easier for autodidacts. Can it be
+used to rescue people in positions like $P$'s\footnote{by the way, I
+  created $P$ inspired on myself; my hippie job is being a
+  mathematician.}? It was thinking on that that I created a
+side-project to eev called ``Internet Skills for Disconnected
+People'': it consists of e-scripts about running a second machine,
+called the ``guest'', emulated inside the ``host'', and making the two
+talk to each other via standard internet protocols, via emulated
+ethernet cards. Those e-scripts make heavy use of the concepts in the
+last section [...]
+
+% (find-fline "")
+% (find-eimage0 "./iskidip.png")
+%
+\begin{figure}[tb]
+\centerline{\includegraphics[scale=1.00]{iskidip.eps}}
+\caption{\label{fig:callmap}A call map}
+\end{figure}
+
+% (find-eevex "busybox.e" "bb_chroot_main")
+% (find-eevex "busybox.e" "bbinitrd-qemu-main")
+% (find-eevex "busybox.e" "iso-qemu-main")
+% (find-eevex "busybox.e" "iso-qemu-main-2")
+
+
+
+
+%%%%%%              _ _       _     _ _ _ _         
+%   __ ___   ____ _(_) | __ _| |__ (_) (_) |_ _   _ 
+%  / _` \ \ / / _` | | |/ _` | '_ \| | | | __| | | |
+% | (_| |\ V / (_| | | | (_| | |_) | | | | |_| |_| |
+%  \__,_| \_/ \__,_|_|_|\__,_|_.__/|_|_|_|\__|\__, |
+%                                             |___/ 
+%%%%%
+
+\section{Availability and Resources}
+% «availability»  (to ".availability")
+
+Eev can be downloaded from the author's homepage,
+http://angg.twu.net/. That page also contains lots of examples, some
+animations showing some of eev's features at work, a mailing list,
+etc.
+
+Eev is in the middle of the process of becoming a standard part of GNU
+Emacs; I expect it to be integrated just after the release of GNU
+Emacs 22.1 in mid-2005. Eev's copyright has already been transferred
+to the FSF; it is distributed under the GPL license.
+
+
+
+
+% \section{Conceptual issues}
+
+% \subsection{Actions and code}
+%   actions in a shell are easy to record
+%   actions in Emacs: view-lossage, tracing lisp
+%   if we want to automate actions in a GUI...
+%   actions in GUIs need a lot of hacking:
+%     recompiling, tracing, patching.
+
+% \subsection{The Scientific Method}
+% \par Reproducibility
+% \par Modifiability
+% \par   Experiments
+% \par Permanence
+% \par   versions change
+% \par   single-stepping
+% \par   examining the commands: man, finding progs, updating options
+
+% \subsection{Sharing e-scripts}
+% \par   "I do not want to share my e-scripts"
+% \par   That's fair enough, but I'm sharing mine.
+% \par   It took me a while to realize that that wasn't so dangerous.
+% \par   It required a bit of discipline, though.
+% \par   I would have liked to see the scripts of my favourite hackers.
+% \par   Think the other way: it can become easier to learn things if
+% \par   other people share their e-scripts...
+% \par   Use other people's e-scripts. Convince other people to share.
+% \par   Maybe some programs or (maga)zines can come with bundled e-scripts.
+
+% \subsection{Point to the primary sources}
+% \par   Documents, source code
+% \par   no time wasted rephrasing
+% \par   things are in their own context
+% \par   very well written, we can learn a lot from that
+% \par   point to strcpy
+% \par   point to pipe
+
+% \subsection{Relevance to Free Software}
+% \par   people mistify programmers
+% \par   people think that code is to be read like a book
+% \par   it was hard to get something that runs
+% \par   dialogs involve snippets (impact on the lurkers)
+% \par   a car whose hood is not locked
+% \par   the best things in life are free
+% \par   programming is not for geniuses: if a problem is hard, simplify it!
+% \par   this is how we think, this is how we structure our ideas.
+% \par   oral culture for lurkers
+% \par   do it yourself (like us)
+
+% in an interview someone said "it was very hard, it took us 20 of the
+% best programmers in the world working for one month, and it costed
+% us one million dollars." this is very frustrating, and it's winners
+% stuff. compare with messages in a mailing list.
+
+
+
+%%%%%
+%  _   _                 _
+% | |_| |__   __ _ _ __ | | _____
+% | __| '_ \ / _` | '_ \| |/ / __|
+% | |_| | | | (_| | | | |   <\__ \
+%  \__|_| |_|\__,_|_| |_|_|\_\___/
+%
+%%%%%
+
+\section{Acknowledgments}
+
+I'd like to thank David O'Toole, Diogo Leal and Leslie Watter for our
+countless hours of discussions about eev; many of the recent features
+of eev --- almost half of this article --- were conceived at our
+talks.
+
+[Thank also the people at \#emacs, for help with the code and for
+  small revision tips]
+
+
+
+
+%%%%%        __                                   
+%  _ __ ___ / _| ___ _ __ ___ _ __   ___ ___  ___ 
+% | '__/ _ \ |_ / _ \ '__/ _ \ '_ \ / __/ _ \/ __|
+% | | |  __/  _|  __/ | |  __/ | | | (_|  __/\__ \
+% |_|  \___|_|  \___|_|  \___|_| |_|\___\___||___/
+% 
+%%%%%
+
+\section{References}
+
+[L90] - Libes, D. {\sl Expect: Curing Those Uncontrollable Fits of
+Interaction}. 1990. Available online from http://expect.nist.gov/ .
+
+[L95] - Libes, D. {\sl Exploring Expect}. O'Reilly, 1995.
+
+[O99] - Ochs, E. {\sl The Eev Manifesto}.
+http://angg.twu.net/eev-manifesto.html
+
+[S79] - Stallman, R. {\sl EMACS: The Extensible, Customizable Display
+  Editor.} http://www.gnu.org/software/emacs/emacs-paper.html
+
+\end{document}
+
+
+# Local Variables:
+# coding:               raw-text-unix
+# End:

@@ -1,0 +1,891 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eev-insert.el (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .doc {
+      }
+      .eev-glyph-face-green {
+        /* eev-glyph-face-green */
+        color: #00ff00;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .negation-char {
+      }
+      .regexp-grouping-backslash {
+      }
+      .regexp-grouping-construct {
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #98fb98;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;;; </span><span class="comment">eev-insert.el --- create and insert Elisp hyperlinks
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Copyright (C) 1999,2000,2001,2002,2003,2004,2005,2006 Free Software
+</span><span class="comment-delimiter">;; </span><span class="comment">Foundation, Inc.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This file is part of GNU eev.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is free software; you can redistribute it and/or modify
+</span><span class="comment-delimiter">;; </span><span class="comment">it under the terms of the GNU General Public License as published by
+</span><span class="comment-delimiter">;; </span><span class="comment">the Free Software Foundation; either version 2, or (at your option)
+</span><span class="comment-delimiter">;; </span><span class="comment">any later version.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is distributed in the hope that it will be useful,
+</span><span class="comment-delimiter">;; </span><span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of
+</span><span class="comment-delimiter">;; </span><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU General Public License for more details.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">You should have received a copy of the GNU General Public License
+</span><span class="comment-delimiter">;; </span><span class="comment">along with GNU Emacs; see the file COPYING.  If not, write to the
+</span><span class="comment-delimiter">;; </span><span class="comment">Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+</span><span class="comment-delimiter">;; </span><span class="comment">Boston, MA 02111-1307, USA.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Author:     Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Maintainer: Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Version:    2006oct15
+</span><span class="comment-delimiter">;; </span><span class="comment">Keywords:   e-scripts, help, hyperlinks, hypertext
+</span>
+<span class="comment-delimiter">;;; </span><span class="comment">Commentary:
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">2006aug17: Major rewrite! The old version was moved to
+</span><span class="comment-delimiter">;; </span><span class="comment">eev-insert-old.el.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">This is the ugliest part of eev's code. It's being rewritten. Even
+</span><span class="comment-delimiter">;; </span><span class="comment">if work on it may seem stalled, it _is_ being rewritten. In some
+</span><span class="comment-delimiter">;; </span><span class="comment">sense.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">I got tired of writing all my hyperlinks by hand, so I created
+</span><span class="comment-delimiter">;; </span><span class="comment">these functions. The "new way of creating hyperlinks" (the first
+</span><span class="comment-delimiter">;; </span><span class="comment">block of this file) adds the following key bindings to
+</span><span class="comment-delimiter">;; </span><span class="comment">eev-mode-map:
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;   </span><span class="comment">M-h M-k  find-ekey-links
+</span><span class="comment-delimiter">;;   </span><span class="comment">M-h M-f  find-efunction-links
+</span><span class="comment-delimiter">;;   </span><span class="comment">M-h M-v  find-evariable-links
+</span><span class="comment-delimiter">;;   </span><span class="comment">M-h M-i  find-einfo-links
+</span><span class="comment-delimiter">;;   </span><span class="comment">M-h M-d  find-debpkg-links
+</span><span class="comment-delimiter">;;   </span><span class="comment">M-h f    find-file-links
+</span><span class="comment-delimiter">;;   </span><span class="comment">M-h m    find-last-manpage-links
+</span><span class="comment-delimiter">;;   </span><span class="comment">M-h M-m  find-manpage-links
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">All of them work similarly. For example: type M-h M-k RET, and
+</span><span class="comment-delimiter">;; </span><span class="comment">`</span><span class="comment"><span class="constant">find-ekey-links</span></span><span class="comment">' will create and display a buffer called "*Elisp
+</span><span class="comment-delimiter">;; </span><span class="comment">hyperlinks*", like this:
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;    </span><span class="comment">_____________________________________________________________ 
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-ekey-links "\r")                                       |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-elongkey-links "RET")                                  |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-elongkey-links "RET  ;; newline")                      |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|"RET  ;; newline"                                            |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|                                                             |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(where-is 'newline)                                          |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(describe-function 'newline)                                 |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-efunctiondescr 'newline)                               |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-efunction 'newline)                                    |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-efunctionpp 'newline)                                  |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-efunctiond 'newline)                                   |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-eCfunction 'newline)                                   |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-estring (documentation 'newline))                      |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-estring (documentation 'newline t))                    |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|                                                             |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(describe-key "\r")                                          |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(describe-key-briefly "\r")                                  |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-ekeydescr "\r")                                        |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(Info-goto-emacs-key-command-node "\r")                      |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(Info-goto-emacs-command-node 'newline)                      |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-enode "Command Index" "* newline:")                    |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(find-elnode "Index" "* newline:")                           |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|                                                             |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(key-description "\r")                                       |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(format-kbd-macro "\r")                                      |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(format-kbd-macro "\r" t)                                    |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|(key-binding "\r")                                           |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|                                                             |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|                                                             |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|                                                             |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|--:**  *Elisp hyperlinks*   All L28     (Fundamental)--------|
+</span><span class="comment-delimiter">;;   </span><span class="comment">|_____________________________________________________________|
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">That is, a lot of hyperlinks pointing to interesting pieces of
+</span><span class="comment-delimiter">;; </span><span class="comment">information about the key RET and the command (`</span><span class="comment"><span class="constant">newline</span></span><span class="comment">') that is
+</span><span class="comment-delimiter">;; </span><span class="comment">bound to it. Then you may follow these hyperlinks by evaluating the
+</span><span class="comment-delimiter">;; </span><span class="comment">sexps or you may copy them to other files by copying their text.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">[To do: explain M-h M-y. There's an example in `</span><span class="comment"><span class="constant">eesteps</span></span><span class="comment">' format in
+</span><span class="comment-delimiter">;; </span><span class="comment">the NEWS file.]
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">See: &lt;<a href="http://angg.twu.net/eev-current/README.html">http://angg.twu.net/eev-current/README.html</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">and: &lt;<a href="http://angg.twu.net/eev-current/NEWS.html">http://angg.twu.net/eev-current/NEWS.html</a>&gt;
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">The second part of this file contains some older functions that
+</span><span class="comment-delimiter">;; </span><span class="comment">insert Elisp hyperlinks at the current buffer -- like `</span><span class="comment"><span class="constant">inn</span></span><span class="comment">', that
+</span><span class="comment-delimiter">;; </span><span class="comment">inserts a hyperlink to the info node currently being visited -- or
+</span><span class="comment-delimiter">;; </span><span class="comment">transform text -- for example, a series of lines, each one
+</span><span class="comment-delimiter">;; </span><span class="comment">containing the name of a Debian package -- into hyperliks.
+</span>
+
+<span class="comment-delimiter">;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;;; </span><span class="comment">Inserting hyperlinks (new way)
+</span><span class="comment-delimiter">;;;; </span><span class="comment">This code quite recent - I wrote the first functions of it in 2004nov11.
+</span><span class="comment-delimiter">;;;; </span><span class="comment">Many function names are ugly.
+</span><span class="comment-delimiter">;;;;</span><span class="comment">
+</span>
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Basic support functions
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Moved to eev.el.
+</span><span class="comment-delimiter">;; </span><span class="comment">(defvar ee-hyperlink-prefix "")
+</span>
+(<span class="keyword">defun</span> <a name="ee-addhp"><span class="function-name">ee-addhp</span></a> (string)
+  <span class="doc">"Prepend `</span><span class="doc"><span class="constant">ee-hyperlink-prefix</span></span><span class="doc">' to STRING"</span>
+  (concat ee-hyperlink-prefix string))
+
+(<span class="keyword">defun</span> <a name="ee-pph"><span class="function-name">ee-pph</span></a> (object <span class="type">&amp;optional</span> tick)
+  <span class="doc">"Pretty-print OBJECT into a hyperlink line."</span>
+  (ee-addhp (ee-pp0 object tick)))
+
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Code for dealing with lists of hyperlinks.
+</span><span class="comment-delimiter">;;; </span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="ee-link-to-string"><span class="function-name">ee-link-to-string</span></a>  (link)
+  <span class="doc">"Internal use; convert a \"raw hyperlink\" to a hyperlink line."</span>
+  (concat (<span class="keyword">cond</span> ((eq link nil) <span class="string">""</span>)      <span class="comment-delimiter">; </span><span class="comment">`</span><span class="comment"><span class="constant">nil</span></span><span class="comment">'s become empty lines
+</span>                ((stringp link) link)   <span class="comment-delimiter">; </span><span class="comment">strings become themselves
+</span>                (t (ee-pph link)))      <span class="comment-delimiter">; </span><span class="comment">lispish things are ee-pph'ed
+</span>          <span class="string">"\n"</span>))                        <span class="comment-delimiter">; </span><span class="comment">always add a newline
+</span>
+(<span class="keyword">defun</span> <a name="ee-links-to-string"><span class="function-name">ee-links-to-string</span></a> (links)
+  <span class="doc">"Convert a list of (raw) hyperlinks to a string.
+Each element of LINKS becomes a line in the result.
+See the source for details: (find-efunction 'ee-link-to-string)"</span>
+  (concat (mapconcat 'ee-link-to-string links <span class="string">""</span>)))
+
+(<span class="keyword">defun</span> <a name="find-elinks"><span class="function-name">find-elinks</span></a> (links <span class="type">&amp;rest</span> pos-spec-list)
+  <span class="doc">"Visit a temporary buffer containing LINKS converted to hyperlink lines."</span>
+  (<span class="keyword">let</span> ((ee-buffer-name (or ee-buffer-name <span class="string">"*Elisp hyperlinks*"</span>)))
+    (apply 'find-estring (ee-links-to-string links) pos-spec-list)))
+
+(<span class="keyword">defalias</span> '<a name="find-elinks-new"><span class="function-name">find-elinks-new</span></a> 'find-elinks)
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Make lists of Elisp hyperlinks
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="ee-links-for-eboundkey"><span class="function-name">ee-links-for-eboundkey</span></a> (key f)
+  <span class="doc">"From KEY and its binding, F, produce a list of hyperlinks."</span>
+  `((where-is ',f)
+    (describe-function ',f)
+    (find-efunctiondescr ',f)
+    (find-efunction ',f)
+    (find-efunctionpp ',f)
+    (find-efunctiond ',f)
+    (find-eCfunction ',f)
+    (find-estring (documentation ',f))
+    (find-estring (documentation ',f t))
+    <span class="string">""</span>
+    (describe-key ,key)
+    (describe-key-briefly ,key)
+    (find-ekeydescr ,key)
+    (Info-goto-emacs-key-command-node ,key)
+    (Info-goto-emacs-command-node ',f)
+    (find-enode <span class="string">"Command Index"</span> ,(format <span class="string">"* %S:"</span> f))
+    (find-elnode <span class="string">"Index"</span> ,(format <span class="string">"* %S:"</span> f))
+    <span class="string">""</span>
+    (key-description ,key)
+    (format-kbd-macro ,key)
+    (format-kbd-macro ,key t)
+    (key-binding ,key)
+    ))
+
+(<span class="keyword">defun</span> <a name="ee-links-for-efunction"><span class="function-name">ee-links-for-efunction</span></a> (f)
+  <span class="doc">"Return a list of hyperlinks for F (a function symbol)."</span>
+  `((where-is ',f)
+    (describe-function ',f)
+    (find-efunctiondescr ',f)
+    (find-efunction ',f)
+    (find-efunctionpp ',f)
+    (find-efunctiond ',f)
+    (find-eCfunction ',f)
+    (find-estring (documentation ',f))
+    (find-estring (documentation ',f t))
+    <span class="string">""</span>
+    ,@(<span class="keyword">if</span> (commandp f)
+          `((Info-goto-emacs-command-node ',f)
+            (find-enode <span class="string">"Command Index"</span> ,(format <span class="string">"* %S:"</span> f))
+            ))
+    (find-elnode <span class="string">"Index"</span> ,(format <span class="string">"* %S:"</span> f))
+    ))
+
+(<span class="keyword">defun</span> <a name="ee-links-for-evariable"><span class="function-name">ee-links-for-evariable</span></a> (var)
+  <span class="doc">"Return a list of hyperlinks for VAR (a variable, as a symbol)."</span>
+  `(,var
+    (describe-variable ',var)
+    (find-evardescr ',var)
+    (find-evariable ',var)
+    (find-eCvariable ',var)
+    (find-epp ,var)
+    <span class="string">""</span>
+    (find-enode <span class="string">"Variable Index"</span> ,(format <span class="string">"* %S:"</span> var))
+    (find-elnode <span class="string">"Index"</span> ,(format <span class="string">"* %S:"</span> var))
+    ))
+
+<span class="comment-delimiter">;; </span><span class="comment">(find-ekey-links "\C-x2")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-ekey-links [down])
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-elongkey-links "&lt;down&gt;")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunction-links '+)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunction-links 'next-line)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-evariable-links 'default-directory)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-debpkg-links "bash")
+</span>
+(<span class="keyword">defun</span> <a name="find-ekey-links"><span class="function-name">find-ekey-links</span></a> (key <span class="type">&amp;rest</span> rest)
+<span class="doc">"Visit a temporary buffer containing hyperlinks related to the key sequence KEY."</span>
+  (interactive <span class="string">"kElisp hyperlinks for key: "</span>)
+  (<span class="keyword">let</span> ((longkey (format-kbd-macro key))
+        (longkey+ (replace-regexp-in-string <span class="string">"[ \t][ \t]+"</span> <span class="string">"  "</span>
+                                            (format-kbd-macro key t)))
+        (binding (key-binding key)))
+    (apply 'find-elinks-new
+           `((find-ekey-links ,key)
+             (find-elongkey-links ,longkey)
+             (find-elongkey-links ,longkey+)
+             ,longkey+
+             <span class="string">""</span>
+             <span class="comment-delimiter">;; </span><span class="comment">,@(eemakelinks-eboundkey key binding)
+</span>             ,@(ee-links-for-eboundkey key binding)
+             )
+           rest)))
+
+(<span class="keyword">defun</span> <a name="find-elongkey-links"><span class="function-name">find-elongkey-links</span></a> (longkey <span class="type">&amp;rest</span> rest)
+  <span class="doc">"Like `</span><span class="doc"><span class="constant">find-ekey-links</span></span><span class="doc">', but LONGKEY is a key sequence \"spelled out\".
+Example: (find-elongkey-links \"M-h M-k\")
+See `</span><span class="doc"><span class="constant">read-kbd-macro</span></span><span class="doc">' and `</span><span class="doc"><span class="constant">edmacro-mode</span></span><span class="doc">' for the format."</span>
+  (interactive <span class="string">"sElisp hyperlinks for key (long format): "</span>)
+  (<span class="keyword">let*</span> ((key (read-kbd-macro longkey))
+         (binding (key-binding key)))
+    (apply 'find-elinks-new
+           `((find-elongkey-links ,longkey)
+             (find-ekey-links ,key)
+             <span class="string">""</span>
+             <span class="comment-delimiter">;; </span><span class="comment">,@(eemakelinks-eboundkey key binding)
+</span>             ,@(ee-links-for-eboundkey key binding)
+             )
+           rest)))
+
+(<span class="keyword">defun</span> <a name="find-efunction-links"><span class="function-name">find-efunction-links</span></a> (f <span class="type">&amp;rest</span> rest)
+  <span class="doc">"Visit a temporary buffer containing hyperlinks related to the function F."</span>
+  (interactive (find-function-read))
+  (apply 'find-elinks-new
+         `((find-efunction-links ',f)
+           <span class="string">""</span>
+           <span class="comment-delimiter">;; </span><span class="comment">,@(eemakelinks-efunction f)
+</span>           ,@(ee-links-for-efunction f)
+           )
+         rest))
+
+(<span class="keyword">defun</span> <a name="find-evariable-links"><span class="function-name">find-evariable-links</span></a> (var <span class="type">&amp;rest</span> rest)
+  <span class="doc">"Visit a temporary buffer containing hyperlinks related to the variable VAR."</span>
+  (interactive (find-function-read 'variable))
+  (apply 'find-elinks-new
+         `((find-evariable-links ',var)
+           <span class="string">""</span>
+           <span class="comment-delimiter">;; </span><span class="comment">,@(eemakelinks-evariable var)
+</span>           ,@(ee-links-for-evariable var)
+           )
+         rest))
+
+<span class="comment-delimiter">;; </span><span class="comment">Missing, for variables (?): links to configuration info and to docstrings
+</span>
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Links to files
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">To do:
+</span><span class="comment-delimiter">;;   </span><span class="comment">shorten file names (/home/edrx -&gt; ~)
+</span><span class="comment-delimiter">;;   </span><span class="comment">add links to code to change permissions
+</span>
+(<span class="keyword">defun</span> <a name="ee-filter"><span class="function-name">ee-filter</span></a> (function list)
+  <span class="doc">"Return a sublist of LIST with only the elements for which (FUNCTION elt) is true."</span>
+  (<span class="keyword">let</span> (newlist)
+    (<span class="keyword">while</span> (consp list)
+      (<span class="keyword">if</span> (funcall function (car list))
+          (setq newlist (cons (car list) newlist)))
+      (setq list (cdr list)))
+    (nreverse newlist)))
+
+(<span class="keyword">defun</span> <a name="ee-filter-out-nils"><span class="function-name">ee-filter-out-nils</span></a> (list)
+  <span class="doc">"Return a list with the elements of LIST that are not nil."</span>
+  (ee-filter 'identity list))
+
+(<span class="keyword">defun</span> <a name="ee-prefixp"><span class="function-name">ee-prefixp</span></a> (prefix str)
+  <span class="doc">"Return t if STR begins with PREFIX."</span>
+  (and (&lt;= (length prefix) (length str))
+       (equal prefix (substring str 0 (length prefix)))))
+
+(<span class="keyword">defun</span> <a name="code-c-d-prefixes"><span class="function-name">code-c-d-prefixes</span></a> (path)
+<span class="doc">"Return the entries (C D) in `</span><span class="doc"><span class="constant">code-c-d-list</span></span><span class="doc">' for which D is a prefix of PATH."</span> 
+  (ee-filter (<span class="keyword">lambda</span> (c-d) (ee-prefixp (car (cdr c-d)) path))
+             code-c-d-list))
+
+<span class="comment-delimiter">;;</span><span class="comment">(code-c-d-prefixes (ee-expand "~/bigsrc/kernel-source-2.6.8/Documentation/"))
+</span><span class="comment-delimiter">;; </span><span class="comment">(ee-links-for-findxxxfile-1 "foo" "/usr/src/foo/" "/usr/src/foo/bar")
+</span><span class="comment-delimiter">;; </span><span class="comment">(ee-links-for-findxxxfile (ee-expand "~/bigsrc/kernel-source-2.6.8/Documentation/"))
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-file-links "~/bigsrc/kernel-source-2.6.8/Documentation/")
+</span>
+(<span class="keyword">defun</span> <a name="ee-remove-prefix"><span class="function-name">ee-remove-prefix</span></a> (prefix str)
+  (substring str (length prefix)))
+
+(<span class="keyword">defun</span> <a name="ee-links-for-findxxxfile-1"><span class="function-name">ee-links-for-findxxxfile-1</span></a> (c d path)
+  (list (intern (format <span class="string">"find-%sfile"</span> c))
+        (ee-remove-prefix d path)))
+
+(<span class="keyword">defun</span> <a name="ee-links-for-findxxxfile"><span class="function-name">ee-links-for-findxxxfile</span></a> (path)
+  (mapcar (<span class="keyword">lambda</span> (c-d) (ee-pph (ee-links-for-findxxxfile-1
+                                 (car c-d) (nth 1 c-d) path)))
+          (code-c-d-prefixes path)))
+
+(<span class="keyword">defun</span> <a name="find-file-links"><span class="function-name">find-file-links</span></a> (fname <span class="type">&amp;rest</span> rest)
+  <span class="doc">"Visit a temporary buffer containing hyperlinks related a file."</span>
+  (interactive (list (or (buffer-file-name) default-directory)))
+  (apply 'find-elinks
+         `((find-file-links ,fname)
+           <span class="string">""</span>
+           (find-fline ,fname)
+           <span class="string">""</span>
+           ,@(ee-links-for-findxxxfile (ee-expand fname)))
+         rest))
+
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Links to info pages
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="find-einfo-links"><span class="function-name">find-einfo-links</span></a> (<span class="type">&amp;optional</span> book+ <span class="type">&amp;rest</span> rest)
+  <span class="doc">"Visit a temporary buffer containing hyperlinks related to an info page.
+The default is to use the info page being visited in the \"*info*\" buffer."</span>
+  (interactive)
+  (<span class="keyword">let*</span> ((book+ (or book+ (<span class="keyword">with-current-buffer</span> <span class="string">"*info*"</span> Info-current-file)))
+         (book- (file-name-nondirectory book+))
+         (code- (file-name-nondirectory ee-info-file))
+         (code  (<span class="keyword">if</span> (string= book- code-) code-))
+         (find-xxxnode (<span class="keyword">if</span> code (read (format <span class="string">"find-%snode"</span> ee-info-code))))
+         (node (<span class="keyword">with-current-buffer</span> <span class="string">"*info*"</span> Info-current-node))
+         (booknode (format <span class="string">"(%s)%s"</span> book- node)))
+    (apply 'find-elinks
+           `((find-einfo-links)
+             <span class="string">""</span>
+             (info ,booknode)
+             (find-node ,booknode)
+             ,@(<span class="keyword">if</span> find-xxxnode (list `(,find-xxxnode ,node))))
+           rest)))
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Links to manpages
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="ee-buffer-manpage-name"><span class="function-name">ee-buffer-manpage-name</span></a> (<span class="type">&amp;optional</span> bufname)
+  <span class="doc">"Return the name of the manpage in the buffer BUFNAME, or nil if none.
+The default for BUFNAME is the name of the current buffer.
+This function does a simple string matching and converts \"*Man
+foo*\" to \"foo\"."</span>
+  (<span class="keyword">if</span> (null bufname)
+      (setq bufname (buffer-name)))
+  (and bufname
+       (string-match <span class="string">"^\\*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">Wo</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">?Man </span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">\\*$"</span> bufname)
+       (match-string 2 bufname)))
+  
+(<span class="keyword">defun</span> <a name="find-last-manpage-links"><span class="function-name">find-last-manpage-links</span></a> (manpagename <span class="type">&amp;rest</span> rest)
+  <span class="doc">"Visit a temporary buffer containing hyperlinks related to a manpage.
+Use this when you are in a manpage buffer and you want links to it."</span>
+  (interactive (list (ee-buffer-manpage-name)))
+  (apply 'find-elinks
+         (list (ee-pph `(find-man-links ,manpagename))
+               <span class="string">""</span>
+               (ee-pph `(find-man ,manpagename)))
+         rest))
+
+(<span class="keyword">defun</span> <a name="find-manpage-links"><span class="function-name">find-manpage-links</span></a> (manpagename <span class="type">&amp;rest</span> rest)
+  <span class="doc">"Visit a temporary buffer containing hyperlinks related to a manpage.
+Use this when point is over a manpage name and you want links to that page."</span>
+  (interactive (list (ee-manpagename-ask)))
+  (apply 'find-elinks
+         (list (ee-pph `(find-man-links ,manpagename))
+               <span class="string">""</span>
+               (ee-pph `(find-man ,manpagename)))
+         rest))
+
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Links to Debian packages
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Tests:
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-elinks (ee-dfs0 "bash" "list"))
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-elinks (ee-dfs0 "bash" "badextension"))
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-elinks (ee-links-for-debpkg "bash"))
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-sh "ls /var/lib/dpkg/info/ | awk -F . '{print $NF}' | sort | uniq")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-elinks (ee-links-for-debpkg-extra-vldi "bash"))
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-elinks (ee-links-for-debpkg-extra-vldi "apache"))
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-debpkg-links "bash")
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defun</span> <a name="ee-dfs0"><span class="function-name">ee-dfs0</span></a> (pkg ext)
+  <span class="doc">"If the file /var/lib/dpkg/info/PKG.EXT exists, return a link to it."</span>
+  (<span class="keyword">let</span> ((fname (concat pkg <span class="string">"."</span> ext)))
+    (<span class="keyword">if</span> (file-exists-p (ee-vldifile fname))
+        (format <span class="string">"%s(find-vldifile \"%s\")"</span> ee-hyperlink-prefix fname))))
+
+(<span class="keyword">defun</span> <a name="ee-links-for-debpkg"><span class="function-name">ee-links-for-debpkg</span></a> (pkg)
+  <span class="doc">"Return the three main links for the debian package named PKG."</span>
+  (list (format <span class="string">"%s(find-status   \"%s\")"</span>      ee-hyperlink-prefix pkg)
+        (format <span class="string">"%s(find-vldifile \"%s.list\")"</span> ee-hyperlink-prefix pkg)
+        (format <span class="string">"%s(find-udfile   \"%s/\")"</span>     ee-hyperlink-prefix pkg)))
+
+(<span class="keyword">defun</span> <a name="ee-links-for-debpkg-extra-vldi"><span class="function-name">ee-links-for-debpkg-extra-vldi</span></a> (pkg)
+  <span class="doc">"Return a list of links for files in /var/lib/dpkg/info/ belonging to PKG."</span>
+  (ee-filter-out-nils
+   (list (ee-dfs0 pkg <span class="string">"preinst"</span>)   (ee-dfs0 pkg <span class="string">"postinst"</span>)
+         (ee-dfs0 pkg <span class="string">"prerm"</span>)     (ee-dfs0 pkg <span class="string">"postrm"</span>)
+         (ee-dfs0 pkg <span class="string">"conffiles"</span>) (ee-dfs0 pkg <span class="string">"config"</span>)
+         (ee-dfs0 pkg <span class="string">"templates"</span>)
+         (ee-dfs0 pkg <span class="string">"md5sums"</span>)   (ee-dfs0 pkg <span class="string">"shlibs"</span>))))
+
+(<span class="keyword">defun</span> <a name="ee-debian-pooldir"><span class="function-name">ee-debian-pooldir</span></a> (pkg)
+  <span class="doc">"Used by find-debpkg-links; \"foo\" -&gt; \"f\", \"libfoo\" -&gt; \"libf\"."</span>
+  (<span class="keyword">if</span> (string-match <span class="string">"^</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">lib</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">?."</span> pkgname)
+      (match-string 0 pkgname)))
+
+(<span class="keyword">defun</span> <a name="find-debpkg-links"><span class="function-name">find-debpkg-links</span></a> (pkgname <span class="type">&amp;rest</span> rest)
+  <span class="doc">"Visit a temporary buffer containing hyperlinks related to a Debian package."</span>
+  (interactive (list (ee-debpkgname-ask)))
+  (apply 'find-elinks
+         `((find-debpkg-links ,pkgname)
+           <span class="string">""</span>
+           (find-available ,pkgname)
+           <span class="string">""</span>
+           ,@(ee-links-for-debpkg pkgname)
+           <span class="string">""</span>
+           ,@(ee-links-for-debpkg-extra-vldi pkgname)
+           <span class="string">""</span>
+           ,(concat <span class="string">"http://packages.debian.org/"</span> pkgname)
+           ,(concat <span class="string">"http://packages.debian.org/src:"</span> pkgname)
+           ,(format <span class="string">"http://ftp.debian.org/debian/pool/main/%s/%s/"</span>
+                    (ee-debian-pooldir pkgname) pkgname)
+           ,(format <span class="string">"http://backports.org/debian/pool/main/%s/%s/"</span>
+                    (ee-debian-pooldir pkgname) pkgname)
+           ,(format <span class="string">"http://bugs.debian.org/cgi-bin/pkgreport.cgi?which=pkg&amp;data=%s&amp;archive=no"</span> pkgname))
+         rest))
+
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">A trick to add a pos-spec to an elisp hyperlink.
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eemklinks-duplicate-this-line"><span class="function-name">eemklinks-duplicate-this-line</span></a> ()
+  <span class="doc">"Duplicate the current line (without any changes to the kill ring)."</span>
+  (interactive)
+  (<span class="keyword">let</span> ((line (buffer-substring (ee-bol) (ee-eol))))
+    (<span class="keyword">save-excursion</span> (beginning-of-line) (insert-before-markers line <span class="string">"\n"</span>))))
+
+(<span class="keyword">defun</span> <a name="eemklinks-yank-pos-spec"><span class="function-name">eemklinks-yank-pos-spec</span></a> ()
+  <span class="doc">"Append the top of the kill ring to a hyperlink sexp, as a Lisp string.
+This command is useful for \"refining elisp hyperlinks\" by adding a
+pos-spec argument to them.  Here's an example; if you are using the
+default `</span><span class="doc"><span class="constant">eev-mode-map</span></span><span class="doc">' keybindings then
+
+  `M-h M-i' runs `</span><span class="doc"><span class="constant">find-einfo-links</span></span><span class="doc">',
+  `M-h M-2' runs `</span><span class="doc"><span class="constant">eemklinks-duplicate-this-line</span></span><span class="doc">', and
+  `M-h M-2' runs `</span><span class="doc"><span class="constant">eemklinks-yank-pos-spec</span></span><span class="doc">'.
+
+Suppose that you are visiting the info node below,
+
+  (find-enode \"Lisp Eval\")
+
+and you find some interesting information in that page, close to
+an occurrence of the string \"`</span><span class="doc"><span class="constant">defvar</span></span><span class="doc">'\". You mark that string,
+add it to the kill-ring with `</span><span class="doc"><span class="constant">M-w</span></span><span class="doc">', then type `M-h M-i', go to
+the line that contains
+
+  # (find-enode \"Lisp Eval\")
+
+and then you type `M-h M-2 M-h M-y'; it becomes these two lines:
+
+  # (find-enode \"Lisp Eval\")
+  # (find-enode \"Lisp Eval\" \"`</span><span class="doc"><span class="constant">defvar</span></span><span class="doc">'\")
+
+Now you check that the second line points to where you wanted,
+and you copy that hyperlink to a more permanent place."</span>
+  (interactive)
+  (goto-char (1- (point-at-eol)))       <span class="comment-delimiter">; </span><span class="comment">put point before the ")"
+</span>  (insert <span class="string">" "</span> (ee-pp0 (ee-no-properties (car kill-ring))))) <span class="comment-delimiter">; </span><span class="comment">insert pos-spec
+</span>
+
+<span class="comment-delimiter">;; </span><span class="comment">(find-efunctiondescr 'eemklinks-yank-pos-spec)
+</span>
+
+
+
+
+<span class="comment-delimiter">;; </span><span class="comment">A lispish interface for customizing a variable.
+</span><span class="comment-delimiter">;; </span><span class="comment">Important note: this is just a proof-of-concept thing at the
+</span><span class="comment-delimiter">;; </span><span class="comment">moment, implemented for just one variable, using a function with
+</span><span class="comment-delimiter">;; </span><span class="comment">the same name of the variable. No generality at all!
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Running M-x ee-hyperlink-prefix produces a buffer like this:
+</span><span class="comment-delimiter">;;    </span><span class="comment">________________________________________________________ 
+</span><span class="comment-delimiter">;;   </span><span class="comment">|# (ee-hyperlink-prefix)                                 |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|# (setq ee-hyperlink-prefix "# ")                       |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|                                                        |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|# (setq ee-hyperlink-prefix "# ")                       |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|# (setq ee-hyperlink-prefix ";; ")                      |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|# (setq ee-hyperlink-prefix "-- ")                      |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|# (setq ee-hyperlink-prefix "% ")                       |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|                                                        |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|                                                        |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|--:**  *Elisp hyperlinks*   All L10    (Fundamental)----|
+</span><span class="comment-delimiter">;;   </span><span class="comment">|________________________________________________________|
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Note that in this interface instead of questions and buttons we
+</span><span class="comment-delimiter">;; </span><span class="comment">have sexps that can be changed and executed, and that the second
+</span><span class="comment-delimiter">;; </span><span class="comment">of those sexps (see the source code below) contains the current
+</span><span class="comment-delimiter">;; </span><span class="comment">value of the variable ee-hyperlink-prefix. The first sexp - as
+</span><span class="comment-delimiter">;; </span><span class="comment">always in these lists of hyperlinks - contains a sexp that
+</span><span class="comment-delimiter">;; </span><span class="comment">regenerates the buffer; changing the value of the variable
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-hyperlink-prefix and then running the first sexp again will
+</span><span class="comment-delimiter">;; </span><span class="comment">generate the buffer again with the new value of
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-hyperlink-prefix; for example, the result can be this:
+</span><span class="comment-delimiter">;;    </span><span class="comment">________________________________________________________ 
+</span><span class="comment-delimiter">;;   </span><span class="comment">|;; (ee-hyperlink-prefix)                                |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|;; (setq ee-hyperlink-prefix ";; ")                     |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|                                                        |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|;; (setq ee-hyperlink-prefix "# ")                      |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|;; (setq ee-hyperlink-prefix ";; ")                     |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|;; (setq ee-hyperlink-prefix "-- ")                     |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|;; (setq ee-hyperlink-prefix "% ")                      |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|                                                        |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|                                                        |
+</span><span class="comment-delimiter">;;   </span><span class="comment">|--:**  *Elisp hyperlinks*   All L10    (Fundamental)----|
+</span><span class="comment-delimiter">;;   </span><span class="comment">|________________________________________________________|
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defun</span> <a name="ee-hyperlink-prefix"><span class="function-name">ee-hyperlink-prefix</span></a> ()
+  <span class="doc">"A lispish interface for customizing the variable `</span><span class="doc"><span class="constant">ee-hyperlink-prefix</span></span><span class="doc">'.
+See the comments in the source code."</span>
+  (interactive)
+  (find-elinks-new
+   `((ee-hyperlink-prefix)
+     (setq ee-hyperlink-prefix ,ee-hyperlink-prefix)
+     <span class="string">""</span>
+     (setq ee-hyperlink-prefix <span class="string">"# "</span>)
+     (setq ee-hyperlink-prefix <span class="string">";; "</span>)
+     (setq ee-hyperlink-prefix <span class="string">"-- "</span>)
+     (setq ee-hyperlink-prefix <span class="string">"% "</span>)
+     )))
+
+
+
+
+
+
+<span class="comment-delimiter">;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">inserting hyperlinks
+</span><span class="comment-delimiter">;; </span><span class="comment">(the old way)
+</span><span class="comment-delimiter">;; </span><span class="comment">I need to document those...
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;;;;</span><span class="comment">
+</span>
+(<span class="keyword">defvar</span> <a name="ee-comment-prefix"><span class="variable-name">ee-comment-prefix</span></a> nil)
+(make-variable-buffer-local 'ee-comment-prefix)
+(<span class="keyword">defun</span>  <a name="ee-comment-prefix"><span class="function-name">ee-comment-prefix</span></a> ()
+  (or ee-comment-prefix <span class="string">"# "</span>))          <span class="comment-delimiter">; </span><span class="comment">to do: mode -&gt; "#"/"%"/" *"/"--"
+</span>(<span class="keyword">defun</span> <a name="ee-set-comment-prefix"><span class="function-name">ee-set-comment-prefix</span></a> (value)
+  (interactive <span class="string">"Xee-comment-prefix (in Lisp): "</span>)
+  (set (make-variable-buffer-local 'ee-comment-prefix) value))
+
+
+(<span class="keyword">defun</span> <a name="ee-no-properties"><span class="function-name">ee-no-properties</span></a> (str)
+  (setq str (copy-sequence str))
+  (set-text-properties 0 (length str) nil str)
+  str)
+
+
+(<span class="keyword">defun</span> <a name="ee-info-file-code"><span class="function-name">ee-info-file-code</span></a> (infofile)
+  (<span class="keyword">if</span> (and infofile
+           ee-info-file
+           (string= (file-name-nondirectory infofile)
+                    (file-name-nondirectory ee-info-file)))
+      ee-info-code))
+
+(<span class="keyword">defun</span> <a name="ee-string-to-posspec"><span class="function-name">ee-string-to-posspec</span></a> (str)
+  (<span class="keyword">if</span> str (replace-regexp-in-string <span class="string">"\n"</span> <span class="string">"\\\\n"</span> (format <span class="string">" %S"</span> str))
+    <span class="string">""</span>))
+
+(<span class="keyword">defun</span> <a name="ee-info-file-link0"><span class="function-name">ee-info-file-link0</span></a> (usecode infofile infonode posstr)
+  (<span class="keyword">let*</span> ((code (and usecode (ee-info-file-code infofile)))
+         (infofile-nondirectory (file-name-nondirectory infofile))
+         (parenstr (<span class="keyword">if</span> code <span class="string">""</span> (format <span class="string">"(%s)"</span> infofile-nondirectory))))
+    (format <span class="string">"(find-%snode \"%s%s\"%s)"</span>
+            (or code <span class="string">""</span>)
+            parenstr
+            infonode
+            (ee-string-to-posspec posstr))))
+
+(<span class="keyword">defun</span> <a name="ee-info-file-link"><span class="function-name">ee-info-file-link</span></a> (usecode posstr)
+  (format <span class="string">"%s%s\n"</span>
+          (ee-comment-prefix)
+          (ee-info-file-link0
+           usecode
+           (<span class="keyword">save-excursion</span> (set-buffer <span class="string">"*info*"</span>) Info-current-file)
+           (<span class="keyword">save-excursion</span> (set-buffer <span class="string">"*info*"</span>) Info-current-node)
+           posstr)))
+
+(<span class="keyword">defun</span> <a name="ee-inn"><span class="function-name">ee-inn</span></a> (arg)
+  (interactive <span class="string">"P"</span>)
+  (insert (ee-info-file-link arg nil)))
+
+(<span class="keyword">defun</span> <a name="ee-inns"><span class="function-name">ee-inns</span></a> (arg)
+  (interactive <span class="string">"P"</span>)
+  (insert (ee-info-file-link arg (ee-no-properties (current-kill 0)))))
+
+(<span class="keyword">defun</span> <a name="ee-delete-and-extract-line"><span class="function-name">ee-delete-and-extract-line</span></a> ()
+  (delete-and-extract-region (<span class="keyword">progn</span> (beginning-of-line) (point))
+                             (<span class="keyword">progn</span> (end-of-line) (point))))
+
+(<span class="keyword">defun</span> <a name="ee-dfa"><span class="function-name">ee-dfa</span></a> (N)
+  (interactive <span class="string">"p"</span>)
+  (<span class="keyword">dotimes</span> (i N)
+    (insert (format <span class="string">"%s(find-available \"%s\")"</span>
+                    (ee-comment-prefix) (ee-delete-and-extract-line)))
+    (next-line 1)))
+
+(<span class="keyword">defun</span> <a name="ee-dff"><span class="function-name">ee-dff</span></a> (N)
+  (interactive <span class="string">"p"</span>)
+  (<span class="keyword">dotimes</span> (i N)
+    (<span class="keyword">let</span> ((pkgname (ee-delete-and-extract-line))
+          (prefix (ee-comment-prefix)))
+      (insert (format (concat <span class="string">"%s(find-status   \"%s\")\n"</span>
+                              <span class="string">"%s(find-vldifile \"%s.list\")\n"</span>
+                              <span class="string">"%s(find-udfile   \"%s/\")"</span>)
+                      prefix pkgname prefix pkgname prefix pkgname))
+      (next-line 1))))
+
+(<span class="keyword">defun</span> <a name="ee-ill"><span class="function-name">ee-ill</span></a> (N)
+  (interactive <span class="string">"p"</span>)
+  (<span class="keyword">dotimes</span> (i N)
+    (beginning-of-line)
+    (<span class="keyword">if</span> (looking-at <span class="string">"^</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">\n\\1/"</span>)
+        (delete-region (point) (<span class="keyword">progn</span> (forward-line 1) (point)))
+      (<span class="keyword">cond</span> ((looking-at
+              <span class="string">"^[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\n]*/man./</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\n\t /]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">\\.</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[0-9A-Za-z]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">\\.gz$"</span>)
+             (replace-match (format <span class="string">"%s(find-man \"%s %s\")"</span>
+                                    (ee-comment-prefix)
+                                    (match-string 2)
+                                    (match-string 1)) t t))
+            ((looking-at <span class="string">"^/usr/share/doc/</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span>)
+             (replace-match (format <span class="string">"%s(find-udfile \"%s\")"</span>
+                                    (ee-comment-prefix)
+                                    (match-string 1)) t t))
+            ((looking-at <span class="string">"^</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\n]*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">$"</span>)
+             (replace-match (format <span class="string">"%s(find-fline \"%s\")"</span>
+                                    (ee-comment-prefix)
+                                    (match-string 1)) t t)))
+      (forward-line 1))))
+
+
+
+
+<span class="comment-delimiter">;; </span><span class="comment">Obsolete utility functions.
+</span><span class="comment-delimiter">;; </span><span class="comment">Tests:
+</span><span class="comment-delimiter">;; </span><span class="comment">(ee-concat '("foo" nil ("bar" nil (("squeak" "")))))
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>' (<span class="keyword">defun</span> <a name="ee-concat"><span class="function-name">ee-concat</span></a> (list <span class="type">&amp;optional</span> sep)
+    <span class="doc">"(OBSOLETE) Flatten LIST and concat it as a series of lines."</span>
+    (setq list (ee-flatten list))
+    (or sep (setq sep <span class="string">"\n"</span>))
+    (setq list (mapcar (<span class="keyword">lambda</span> (str) (concat str sep)) list))
+    (apply 'concat list))
+
+<span class="comment-delimiter">;; </span><span class="comment">Obsolete - renamed to -old
+</span>' (<span class="keyword">defun</span> <a name="find-elinks-old"><span class="function-name">find-elinks-old</span></a> (list <span class="type">&amp;rest</span> rest)
+    <span class="doc">"OBSOLETE- Use find-elinks-new instead."</span>
+    (<span class="keyword">let</span> ((ee-buffer-name <span class="string">"*Elisp hyperlinks*"</span>))
+      (apply 'find-estring (ee-concat list) rest)))
+
+
+
+
+
+<span class="comment-delimiter">;; </span><span class="comment">Obsolete functions commented out
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">(defun eemakelinks-eboundkey (key f)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(list (ee-pph `(where-is ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(describe-function ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-efunctiondescr ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-efunction ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-efunctionpp ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-efunctiond ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-eCfunction ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-estring (documentation ',f)))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-estring (documentation ',f t)))
+</span><span class="comment-delimiter">;;         </span><span class="comment">""
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(describe-key ,key))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(describe-key-briefly ,key))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-ekeydescr ,key))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(Info-goto-emacs-key-command-node ,key))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(Info-goto-emacs-command-node ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-enode "Command Index" ,(format "* %S:" f)))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-elnode "Index" ,(format "* %S:" f)))
+</span><span class="comment-delimiter">;;         </span><span class="comment">""
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(key-description ,key))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(format-kbd-macro ,key))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(format-kbd-macro ,key t))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(key-binding ,key))
+</span><span class="comment-delimiter">;;         </span><span class="comment">))
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">(defun eemakelinks-efunction (f)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(list (ee-pph `(where-is ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(describe-function ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-efunctiondescr ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-efunction ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-efunctionpp ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-efunctiond ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-eCfunction ',f))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-estring (documentation ',f)))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-estring (documentation ',f t)))
+</span><span class="comment-delimiter">;;         </span><span class="comment">""
+</span><span class="comment-delimiter">;;         </span><span class="comment">(if (commandp f)
+</span><span class="comment-delimiter">;;             </span><span class="comment">(list (ee-pph `(Info-goto-emacs-command-node ',f))
+</span><span class="comment-delimiter">;;                   </span><span class="comment">(ee-pph `(find-enode "Command Index" ,(format "* %S:" f)))
+</span><span class="comment-delimiter">;;                   </span><span class="comment">))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-elnode "Index" ,(format "* %S:" f)))
+</span><span class="comment-delimiter">;;         </span><span class="comment">))
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">(defun eemakelinks-evariable (var)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(list (ee-pph var)
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(describe-variable ',var))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-evardescr ',var))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-evariable ',var))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-eCvariable ',var))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-epp ,var))
+</span><span class="comment-delimiter">;;         </span><span class="comment">""
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-enode "Variable Index" ,(format "* %S:" var)))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(ee-pph `(find-elnode "Index" ,(format "* %S:" var)))
+</span><span class="comment-delimiter">;;         </span><span class="comment">))
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">old:
+</span><span class="comment-delimiter">;; </span><span class="comment">(defun find-ekey-links (key &amp;rest rest)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(interactive "kElisp hyperlinks for key: ")
+</span><span class="comment-delimiter">;;   </span><span class="comment">(let ((longkey (format-kbd-macro key))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(longkey+ (replace-regexp-in-string "[ \t][ \t]+" "  "
+</span><span class="comment-delimiter">;;                                             </span><span class="comment">(format-kbd-macro key t)))
+</span><span class="comment-delimiter">;;         </span><span class="comment">(binding (key-binding key)))
+</span><span class="comment-delimiter">;;     </span><span class="comment">(apply 'find-elinks
+</span><span class="comment-delimiter">;;            </span><span class="comment">(list (ee-pph `(find-ekey-links ,key))
+</span><span class="comment-delimiter">;;                  </span><span class="comment">(ee-pph `(find-elongkey-links ,longkey))
+</span><span class="comment-delimiter">;;                  </span><span class="comment">(ee-pph `(find-elongkey-links ,longkey+))
+</span><span class="comment-delimiter">;;                  </span><span class="comment">(ee-pph longkey+)
+</span><span class="comment-delimiter">;;                  </span><span class="comment">""
+</span><span class="comment-delimiter">;;                  </span><span class="comment">(eemakelinks-eboundkey key binding))
+</span><span class="comment-delimiter">;;            </span><span class="comment">rest)))
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">old:
+</span><span class="comment-delimiter">;; </span><span class="comment">(defun find-elongkey-links (longkey &amp;rest rest)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(interactive "sElisp hyperlinks for key (long format): ")
+</span><span class="comment-delimiter">;;   </span><span class="comment">(let* ((key (read-kbd-macro longkey))
+</span><span class="comment-delimiter">;;          </span><span class="comment">(binding (key-binding key)))
+</span><span class="comment-delimiter">;;     </span><span class="comment">(apply 'find-elinks
+</span><span class="comment-delimiter">;;            </span><span class="comment">(list (ee-pph `(find-elongkey-links ,longkey))
+</span><span class="comment-delimiter">;;                  </span><span class="comment">(ee-pph `(find-ekey-links ,key))
+</span><span class="comment-delimiter">;;                  </span><span class="comment">""
+</span><span class="comment-delimiter">;;                  </span><span class="comment">(eemakelinks-eboundkey key binding))
+</span><span class="comment-delimiter">;;            </span><span class="comment">rest)))
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">old
+</span><span class="comment-delimiter">;; </span><span class="comment">(defun find-efunction-links (f &amp;rest rest)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(interactive (find-function-read))
+</span><span class="comment-delimiter">;;   </span><span class="comment">(apply 'find-elinks
+</span><span class="comment-delimiter">;;          </span><span class="comment">(list (ee-pph `(find-efunction-links ',f))
+</span><span class="comment-delimiter">;;                </span><span class="comment">""
+</span><span class="comment-delimiter">;;                </span><span class="comment">(eemakelinks-efunction f))
+</span><span class="comment-delimiter">;;          </span><span class="comment">rest))
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">old
+</span><span class="comment-delimiter">;; </span><span class="comment">(defun find-evariable-links (var &amp;rest rest)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(interactive (find-function-read 'variable))
+</span><span class="comment-delimiter">;;   </span><span class="comment">(apply 'find-elinks
+</span><span class="comment-delimiter">;;          </span><span class="comment">(list (ee-pph `(find-evariable-links ',var))
+</span><span class="comment-delimiter">;;                </span><span class="comment">""
+</span><span class="comment-delimiter">;;                </span><span class="comment">(eemakelinks-evariable var))
+</span><span class="comment-delimiter">;;          </span><span class="comment">rest))
+</span>
+
+
+
+
+<span class="comment-delimiter">;; </span><span class="comment">Local Variables:
+</span><span class="comment-delimiter">;; </span><span class="comment">coding:            raw-text-unix
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-anchor-format:  "</span><span class="eev-glyph-face-green">&#171;</span><span class="comment">%s</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">"
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-comment-prefix: ";; "
+</span><span class="comment-delimiter">;; </span><span class="comment">no-byte-compile:   t
+</span><span class="comment-delimiter">;; </span><span class="comment">End:
+</span></pre>
+  </body>
+</html>

@@ -1,0 +1,1 @@
+strtoumax(<field "const char *restrict STRING">, <field "char **restrict TAILPTR">, <field "int BASE">)<endpoint>

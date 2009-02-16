@@ -1,0 +1,46 @@
+
+ (find-eevanim "channels.swf" 600 400)
+
+The animation above shows Emacs sending commands to xterms one line at
+a time through "communication channels".
+
+When the user types <F9> Emacs checks if the current line starts with
+a ""; if it does, then the rest of the line is executed as Lisp code,
+and if doesn't then the line is sent to the program at the end of the
+current communication channel. The user only had to type a series of
+<F9>s at the Emacs window for all this to happen.
+
+The line
+
+   (eechannel-xterm "A") ;; create
+
+creates a xterm "listening to channel A", and sets the default channel
+to A; similarly,
+
+   (eechannel-xterm "B") ;; create
+
+creates a xterm "listening to channel A" and sets the default channel
+to B. After that some lines are send to the xterm at channel B, then
+
+   (eechannel "A") ;; change target
+
+sets the default channel to A; the next lines are sent to A, and so
+on.
+
+After executing/sending all those lines the user switches the focus to
+an xterm and types "exit" there to close it, and then does the same
+with the other xterm. Note that these xterms "listen" to the user's
+keystrokes as usual, but _in addition to that_ they also listen to
+input from Emacs.
+
+
+For more information:
+  The code that runs in the movie:     (find-eevex "anim.e" "movie1")
+  The preparatives for the recording:  (find-eevex "anim.e" "movie1_A0")
+  The code for F9:             (find-eev "eev.el" "eechannel-do-this-line")
+  An auxiliary program:        (find-eev "eegchannel")
+  The program that produced the animation:
+    <http://www.unixuser.org/~euske/vnc2swf/rec_vncserver.html>
+  Compiling vnc2swf (and some auxiliary libraries and programs):
+                                (find-eevex "anim.e" "compile-ming")
+  More about SWF:               (find-eevfile "anim/README")

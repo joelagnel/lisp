@@ -1,0 +1,51 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Visiting%20tags">Visiting tags</a>,
+Next:<a rel=next accesskey=n href="Expanding.html#Expanding">Expanding</a>,
+Previous:<a rel=previous accesskey=p href="The-Methods-buffer.html#The%20Methods%20buffer">The Methods buffer</a>,
+Up:<a rel=up accesskey=u href="The-Methods-buffer.html#The%20Methods%20buffer">The Methods buffer</a>
+<hr><br>
+
+<h4>Possible actions after visiting a tag</h4>
+
+<p>You visit a tag by clicking with either the primary oder secondary
+mouse-button (or by hitting <kbd>RET</kbd> or <kbd>C-RET</kbd> if using the
+keyboard) onto a node in the Methods-tree-buffer of ECB. This simply
+selects the "right" edit-window (depends if clicked with the primary
+or secondary button, in how many windows the edit-area is splitted and
+the value of <code>ecb-mouse-click-destination</code>) and puts the point
+onto the first line of the clicked tag.
+
+<p>But you can define if after this "basic" tag-visit-action more
+additional actions should be performed by ECB. You can either use some
+of the predefined actions (e.g. highlighting the header-line of the
+tag) or define own actions. You can set different actions for
+different major-modes. All this is done via the option
+<code>ecb-tag-visit-post-actions</code>.
+
+<p>The following actions are currently predefined:
+<ul>
+<li><code>ecb-tag-visit-highlight-tag-header</code>
+<li><code>ecb-tag-visit-smart-tag-start</code>
+<li><code>ecb-tag-visit-recenter</code>
+<li><code>ecb-tag-visit-recenter-top</code>
+<li><code>ecb-tag-visit-goto-doc-start</code>
+<li><code>ecb-tag-visit-narrow-tag</code>
+</ul>
+
+<p>See the documentation of these function for details what they do.
+
+<p>Per default ECB performs the actions
+<code>ecb-tag-visit-smart-tag-start</code> and
+<code>ecb-tag-visit-highlight-tag-header</code> for all major-modes.
+
+</body></html>
+

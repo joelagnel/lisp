@@ -1,0 +1,105 @@
+#!/bin/sh
+# the next line restarts using expect \
+exec expect "$0" -- "$@"
+# (find-man "tclsh" "#!")
+
+## eegchannel: run an interactive program accepting input from a "channel".
+
+# Copyright (C) 2004 Free Software Foundation, Inc.
+#
+# This file is part of GNU eev.
+#
+# GNU eev is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# GNU eev is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU eev; see the file COPYING.  If not, write to the
+# Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+# Boston, MA 02111-1307, USA.
+#
+# Author:     Eduardo Ochs <edrx@mat.puc-rio.br>
+# Maintainer: Eduardo Ochs <edrx@mat.puc-rio.br>
+# Version:    2005feb07
+# Keywords:   e-scripts, processes
+#
+# Latest version: <http://angg.twu.net/eev-current/eegchannel>
+#       htmlized: <http://angg.twu.net/eev-current/eegchannel.html>
+#       See also: <http://angg.twu.net/eev-current/README.html>
+#            and: <http://angg.twu.net/eev-current/eeg4.html>
+
+# eegchannel: run an interactive program accepting input from a "channel".
+# eegchannel is a version of eeg/eeg4 in which the sending of a command to
+# the spawned process is triggered by a SIGUSR1, not by a M-L.
+# Usage:
+#
+#   eegchannel <channelname> <prog> [<arg1> [<arg2> ...]]
+#
+# For example:
+#
+#   eegchannel A bash
+#
+# will invoke "bash" and run it interactively, with no keyboard or
+# output translation; but eegchannel will create a file eeg.A.pid and
+# will use it and a file called eeg.A.str to establish a
+# (unidirectional) extra communication channel from the outside world
+# to the spawned process ("bash" in this case). If we do
+#
+#   echo 'echo $[1+2]' > $EEVTMPDIR/eeg.A.str
+#   kill -USR1 $(cat $EEVTMPDIR/eeg.A.pid)
+#
+# we are storing a line of input ("echo $[1+2]\n") in eeg.A.str and
+# then saying to eegchannel "send that to the process you're
+# controlling". From the point of view of the controlled process,
+# thanks to Expect's usual magic, things will be exactly as if the
+# user typed interactively "echo $[1+2]" and then a "return".
+#
+# For a high-level example of how this can be used see:
+#   (find-eevfile "doc/shot-f9.png")
+#   (find-eev "eev-dev.el" "eechannel-do-this-line")
+#
+# (find-eev "eeg4" "misc")
+# (find-eev "eeg4" "arguments")
+# (find-eev "eeg4" "dospawn")
+
+proc readfile {fname} {
+  set ch [open $fname r]; set str [read $ch]; close $ch; return $str
+}
+proc writefile {fname str} {
+  set ch [open $fname w]; puts -nonewline $ch $str; close $ch
+}
+proc getenv {key {defaultvalue {}}} {
+  global env; expr {[info exist env($key)]?$env($key):$defaultvalue}
+}
+proc EEVTMPDIR {} { getenv EEVTMPDIR [getenv HOME]/eev-current/tmp }
+
+proc rmlastnewline {str} { regexp "^(.*)\n\$" $str -> str; return $str }
+proc pidfile {} { global channel; return [EEVTMPDIR]/eeg.${channel}.pid }
+proc strfile {} { global channel; return [EEVTMPDIR]/eeg.${channel}.str }
+
+set channel [lindex $argv 0];	# first argument
+set argv [lrange $argv 1 end];	# discard first argument
+
+writefile [pidfile] "[pid]\n"
+trap {send -- [readfile [strfile]]} USR1
+
+# Transmit resizings. From <http://www.hadron.org/~hatch/goodies/rrr>.
+trap {
+  stty rows [stty rows] columns [stty columns] < $spawn_out(slave,name)
+} WINCH
+
+eval spawn -noecho $argv
+stty raw;		# A relic. Why this? For \n -> \r translation?
+interact
+
+#  Local Variables:
+#  mode:		 tcl
+#  coding:               raw-text-unix
+#  ee-anchor-format:     "«%s»"
+#  End:

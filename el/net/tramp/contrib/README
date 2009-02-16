@@ -1,0 +1,20 @@
+This directory contains some files which are not part of Tramp but
+are used by it.  Often, you don't need these files at all, because
+your Emacs otherwise provides the necessary functionality.
+
+base64.el
+        The functionality is part of the Emacs C core since Emacs
+        20.5 or so.  You can decide if you need it by typing `ESC :'
+        and then entering the following command:
+                (require 'base64)
+        If Emacs prints "base64" in the echo area, you have the
+        functionality and do not need the file.
+        If Emacs prints an error message about being unable to open
+        the file, then you need it.
+
+format-spec.el
+        This file is originally from Gnus.  So if your Emacs contains
+        a sufficiently recent Gnus, you do not need this.  You can
+        use the same check as above for finding out if you need it.
+
+Kai Grossjohann <Kai.Grossjohann@CS.Uni-Dortmund.DE>

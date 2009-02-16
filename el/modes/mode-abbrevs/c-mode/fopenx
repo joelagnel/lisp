@@ -1,0 +1,7 @@
+if ((f = fopen(<field "char * filename">, <choose><choice ""r""><choice ""w""><choice ""a""><choice ""r+""></choose>)) == NULL) {
+    std::cerr << "ERROR: errno=" << errno << " opening file"
+              << " at " << __FILE__ << ":" << __LINE__
+              << std::endl << std::flush;
+    exit(1);
+}
+<endpoint>

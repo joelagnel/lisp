@@ -1,0 +1,302 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eev-glyphs.el (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #b0c4de;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .doc {
+      }
+      .eev-glyph-face-bang {
+        /* eev-glyph-face-bang */
+        color: #0000ff;
+        background-color: #ff0000;
+      }
+      .eev-glyph-face-blue {
+        /* eev-glyph-face-blue */
+        color: #0000ff;
+      }
+      .eev-glyph-face-bluebg {
+        /* eev-glyph-face-bluebg */
+        background-color: #0000ff;
+      }
+      .eev-glyph-face-green {
+        /* eev-glyph-face-green */
+        color: #00ff00;
+      }
+      .eev-glyph-face-red {
+        /* eev-glyph-face-red */
+        color: #ff0000;
+      }
+      .eev-glyph-face-yellow-on-red {
+        /* eev-glyph-face-yellow-on-red */
+        color: #ffff00;
+        background-color: #ff0000;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #98fb98;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;;; </span><span class="comment">eev-glyphs.el - change how some special characters are displayed
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Copyright (C) 1999,2000,2001,2002,2003,2004 Free Software
+</span><span class="comment-delimiter">;; </span><span class="comment">Foundation, Inc.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This file is part of GNU eev.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is free software; you can redistribute it and/or modify
+</span><span class="comment-delimiter">;; </span><span class="comment">it under the terms of the GNU General Public License as published by
+</span><span class="comment-delimiter">;; </span><span class="comment">the Free Software Foundation; either version 2, or (at your option)
+</span><span class="comment-delimiter">;; </span><span class="comment">any later version.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is distributed in the hope that it will be useful,
+</span><span class="comment-delimiter">;; </span><span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of
+</span><span class="comment-delimiter">;; </span><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU General Public License for more details.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">You should have received a copy of the GNU General Public License
+</span><span class="comment-delimiter">;; </span><span class="comment">along with GNU Emacs; see the file COPYING.  If not, write to the
+</span><span class="comment-delimiter">;; </span><span class="comment">Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+</span><span class="comment-delimiter">;; </span><span class="comment">Boston, MA 02111-1307, USA.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Author:     Eduardo Ochs &lt;<a href="mailto:eduardoochs&#64;gmail.com">eduardoochs&#64;gmail.com</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Maintainer: Eduardo Ochs &lt;<a href="mailto:eduardoochs&#64;gmail.com">eduardoochs&#64;gmail.com</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Version:    2006oct02
+</span><span class="comment-delimiter">;; </span><span class="comment">Keywords:   display, glyphs
+</span><span class="comment-delimiter">;; </span><span class="comment">Latest version: &lt;<a href="http://angg.twu.net/eev-current/eev-glyphs.el">http://angg.twu.net/eev-current/eev-glyphs.el</a>&gt;
+</span><span class="comment-delimiter">;;       </span><span class="comment">htmlized: &lt;<a href="http://angg.twu.net/eev-current/eev-glyphs.el.html">http://angg.twu.net/eev-current/eev-glyphs.el.html</a>&gt;
+</span>
+<span class="comment-delimiter">;;; </span><span class="comment">Commentary:
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">This library sets some "glyphs" in Emacs's default display table.
+</span><span class="comment-delimiter">;; </span><span class="comment">Glyphs are usually considered ugly hacks, but I find them convenient -
+</span><span class="comment-delimiter">;; </span><span class="comment">they are easy to use, to understand (when you think that a file is
+</span><span class="comment-delimiter">;; </span><span class="comment">a sequence of bytes and each byte is a character) and to explain to
+</span><span class="comment-delimiter">;; </span><span class="comment">people.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">The following glyphs are set:
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;   </span><span class="comment">appearance  position         how to type it
+</span><span class="comment-delimiter">;;   </span><span class="eev-glyph-face-bluebg"> </span><span class="comment">             8 (backspace)  C-q C-h
+</span><span class="comment-delimiter">;;   </span><span class="eev-glyph-face-yellow-on-red">L</span><span class="comment">            12 (formfeed)   C-q C-l
+</span><span class="comment-delimiter">;;   </span><span class="eev-glyph-face-blue">M</span><span class="comment">         ;  13 (CR)         C-q C-m
+</span><span class="comment-delimiter">;;   </span><span class="eev-glyph-face-red">*</span><span class="comment">            15 (^O)         C-q C-o
+</span><span class="comment-delimiter">;;   </span><span class="eev-glyph-face-bang">!</span><span class="comment">           155 (CSI)
+</span><span class="comment-delimiter">;;   </span><span class="eev-glyph-face-green">&#171;</span><span class="comment"> and </span><span class="eev-glyph-face-green">&#187;</span><span class="comment">     171 and 187      M-, &lt; &lt; and M-, &gt; &gt;
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">M-, is defined in &lt;<a href="http://angg.twu.net/eev-current/eev-compose.el">http://angg.twu.net/eev-current/eev-compose.el</a>&gt;
+</span><span class="comment-delimiter">;;                   </span><span class="comment">&lt;<a href="http://angg.twu.net/eev-current/eev-compose.el.html">http://angg.twu.net/eev-current/eev-compose.el.html</a>&gt;.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "Display Tables")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "Glyphs")</a></span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Known bugs:
+</span><span class="comment-delimiter">;;   </span><span class="comment">* Emacs treats most chars with codes below 32 as whitespace by
+</span><span class="comment-delimiter">;;     </span><span class="comment">default, and in some cases (for example when leaving
+</span><span class="comment-delimiter">;;     </span><span class="comment">picture-mode) it will remove our red stars together with the
+</span><span class="comment-delimiter">;;     </span><span class="comment">"real" whitespace.
+</span><span class="comment-delimiter">;;   </span><span class="comment">* When we move text with "</span><span class="eev-glyph-face-green">&#171;&#187;</span><span class="comment">"s from unibyte- to multibyte buffers
+</span><span class="comment-delimiter">;;     </span><span class="comment">Emacs will convert the "</span><span class="eev-glyph-face-green">&#171;&#187;</span><span class="comment">"s to characters with higher codes
+</span><span class="comment-delimiter">;;     </span><span class="comment">for which no glyphs were set; the converted "</span><span class="eev-glyph-face-green">&#171;&#187;</span><span class="comment">"s will be
+</span><span class="comment-delimiter">;;     </span><span class="comment">displayed in the default face.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "Defining Faces")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunctiondescr 'defface)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunction 'defface)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunction 'custom-declare-face)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efile "generic-x.el" "(background light)")
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Note: older versions of this file used to behave specially when
+</span><span class="comment-delimiter">;; </span><span class="comment">Emacs was running on a Linux VT (i.e., when TERM=linux); using
+</span><span class="comment-delimiter">;; </span><span class="comment">string glyphs and character sequences that only worked on Linux's
+</span><span class="comment-delimiter">;; </span><span class="comment">"virtual consoles" they would create a glyph for ^O that would
+</span><span class="comment-delimiter">;; </span><span class="comment">appear as a small red square instead of a red star, and do other
+</span><span class="comment-delimiter">;; </span><span class="comment">hackish things involving characters that were tricky to display.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-linux26file "drivers/char/vt.c")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-man "console_codes" "ECMA-48 Set Graphics Rendition" "foreground")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-man "console_codes" "CSI (0x9B) is equivalent to ESC [")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-man "4 console_codes" "ESC % @")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-man "4 console_codes" "ESC % G")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-man "4 console_codes" "straight to character ROM")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-man "7 charsets" "1110xxxx")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-man "7 utf-8" "0x00000800 - 0x0000FFFF:")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-man "8 consolechars" "straight-to-font zone")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-udfile "console-tools/lct.txt.gz" "from U+F000 to U+F1FF")
+</span>
+(<span class="keyword">defface</span> <a name="eev-glyph-face-bluebg"><span class="variable-name">eev-glyph-face-bluebg</span></a>
+  '((t (<span class="builtin">:background</span> <span class="string">"blue"</span>)))
+  <span class="doc">"Face used for the glyph for backspace (char 8; a solid blue box)."</span>)
+
+(<span class="keyword">defface</span> <a name="eev-glyph-face-yellow-on-red"><span class="variable-name">eev-glyph-face-yellow-on-red</span></a>
+  '((t (<span class="builtin">:foreground</span> <span class="string">"yellow"</span> <span class="builtin">:background</span> <span class="string">"red"</span>)))
+  <span class="doc">"Face used for the formfeed glyph (char 12)."</span>)
+
+(<span class="keyword">defface</span> <a name="eev-glyph-face-blue"><span class="variable-name">eev-glyph-face-blue</span></a>
+  '((t (<span class="builtin">:foreground</span> <span class="string">"blue"</span>)))
+  <span class="doc">"Face used for the glyph for CR (char 13)."</span>)
+
+(<span class="keyword">defface</span> <a name="eev-glyph-face-red"><span class="variable-name">eev-glyph-face-red</span></a>
+  '((t (<span class="builtin">:foreground</span> <span class="string">"red"</span>)))
+  <span class="doc">"Face used for the red star glyph (char 15)."</span>)
+
+(<span class="keyword">defface</span> <a name="eev-glyph-face-bang"><span class="variable-name">eev-glyph-face-bang</span></a>
+  '((t (<span class="builtin">:foreground</span> <span class="string">"blue"</span> <span class="builtin">:background</span> <span class="string">"red"</span>)))
+  <span class="doc">"Face used for the CSI glyph (char 128+27=155)."</span>)
+
+(<span class="keyword">defface</span> <a name="eev-glyph-face-green"><span class="variable-name">eev-glyph-face-green</span></a>
+  '((((class color) (background dark))
+     (<span class="builtin">:foreground</span> <span class="string">"green"</span>))
+    (((class color) (background light))
+     (<span class="builtin">:foreground</span> <span class="string">"forest green"</span>))
+    (t (<span class="builtin">:bold</span> t)))
+  <span class="doc">"Face used for the green glyphs (`</span><span class="doc"><span class="constant">&lt;&lt;</span></span><span class="doc">' and `</span><span class="doc"><span class="constant">&gt;&gt;</span></span><span class="doc">', chars 171 and 187)."</span>)
+
+(<span class="keyword">defun</span> <a name="ee-glyph"><span class="function-name">ee-glyph</span></a> (char <span class="type">&amp;optional</span> face)
+  <span class="doc">"Convert CHAR and FACE to a number that can be used in a glyph.
+CHAR can be a number or a string (with length 1); FACE can be a
+face name (a symbol) or nil.
+See:\n
+  (find-elnode \"Glyphs\")
+  (find-elnode \"Display Tables\")
+  (find-elnode \"Display Table Format\")\n
+Example: the two sexps below set the display table entry for the
+TAB character to a string:\n
+  (aset standard-display-table 9 [?&lt; ?t ?a ?b ?&gt;])
+  (aset standard-display-table 9
+    (vector (logior ?&lt; (ash (face-id 'highlight) 19))
+            (logior ?t (ash (face-id 'highlight) 19))
+            (logior ?a (ash (face-id 'highlight) 19))
+            (logior ?b (ash (face-id 'highlight) 19))
+            (logior ?&gt; (ash (face-id 'highlight) 19))))\n
+And this one makes tabs \"normal\" again:\n
+  (aset standard-display-table 9 nil)\n
+Using `</span><span class="doc"><span class="constant">ee-glyph</span></span><span class="doc">' we can replace the \"(logior ...)\"s above by sexps
+like:\n
+  (ee-glyph ?&lt; 'highlight)"</span>
+  (logior (<span class="keyword">if</span> (numberp char) char (string-to-char char))
+          (ash (<span class="keyword">if</span> face (face-id face) 0)
+               19)))
+
+(<span class="keyword">defun</span> <a name="eev-set-glyph"><span class="function-name">eev-set-glyph</span></a> (pos <span class="type">&amp;optional</span> char face)
+  <span class="doc">"Set a face glyph for the char at position POS in `</span><span class="doc"><span class="constant">standard-display-table</span></span><span class="doc">'.
+If both CHAR and FACE are non-nil then display POS as CHAR with face FACE.
+If only CHAR is non-nil then display POS as CHAR with the default face.
+If both CHAR and FACE are nil then display POS in the default way.
+
+Use `</span><span class="doc"><span class="constant">let</span></span><span class="doc">' to operate on another display table:
+  (let ((standard-display-table my-display-table))
+    (eev-glyph-set ?\\^A ?A 'eev-glyph-face-red))"</span>
+  (aset standard-display-table pos
+        (<span class="keyword">if</span> char (vector (ee-glyph char face)))))
+
+(<span class="keyword">defun</span> <a name="eev-set-default-glyphs"><span class="function-name">eev-set-default-glyphs</span></a> ()
+  <span class="doc">"Set the default glyphs for eev on `</span><span class="doc"><span class="constant">standard-display-table</span></span><span class="doc">'.
+Note that the glyphs for \"</span><span class="eev-glyph-face-green">&#171;</span><span class="doc">\" and \"</span><span class="eev-glyph-face-green">&#187;</span><span class="doc">\" only work on raw-text or
+unibyte buffers."</span>
+  (or standard-display-table
+      (setq standard-display-table (make-display-table)))
+  (eev-set-glyph    8 32 'eev-glyph-face-bluebg)
+  (eev-set-glyph   12 ?L 'eev-glyph-face-yellow-on-red)
+  (eev-set-glyph   13 ?M 'eev-glyph-face-blue)
+  (eev-set-glyph ?\^O ?* 'eev-glyph-face-red)
+  (eev-set-glyph  155 ?! 'eev-glyph-face-bang)
+  (eev-set-glyph   ?<span class="eev-glyph-face-green">&#171;</span> ?<span class="eev-glyph-face-green">&#171;</span> 'eev-glyph-face-green)
+  (eev-set-glyph   ?<span class="eev-glyph-face-green">&#187;</span> ?<span class="eev-glyph-face-green">&#187;</span> 'eev-glyph-face-green))
+
+(<span class="keyword">provide</span> '<span class="constant">eev-glyphs</span>)
+
+<span class="comment-delimiter">;; </span><span class="comment">The comments below are remnants of previous versions and should be
+</span><span class="comment-delimiter">;; </span><span class="comment">deleted soon.
+</span>
+<span class="comment-delimiter">;; <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "Association Lists")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efile "")
+</span>
+<span class="comment-delimiter">;; <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "Display Tables")</a></span><span class="comment">
+</span><span class="comment-delimiter">;;  <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "Glyphs")</a></span><span class="comment">
+</span><span class="comment-delimiter">;;  <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "Active Display Table")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "Usual Display")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efile "disp-table.el")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-evardescr 'glyph-table)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-evardescr 'buffer-display-table)
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">(find-fline "~/LATEX/dout/doutface.el")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efile "term/tty-colors.el")
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">A first attempt to modernize the code above (2004oct21)...
+</span><span class="comment-delimiter">;; <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "Defining Faces")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunctiondescr 'defface)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunction 'defface)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunction 'custom-declare-face)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efile "generic-x.el" "(background light)")
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">(defface glyphs-face-green
+</span><span class="comment-delimiter">;;   </span><span class="comment">'((((class color) (background dark))  (:foreground "green"))
+</span><span class="comment-delimiter">;;     </span><span class="comment">(((class color) (background light)) (:foreground "forest green"))
+</span><span class="comment-delimiter">;;     </span><span class="comment">(t (:bold t)))
+</span><span class="comment-delimiter">;;   </span><span class="comment">"Face for the glyphs `</span><span class="comment"><span class="constant">&lt;&lt;</span></span><span class="comment">' and `</span><span class="comment"><span class="constant">&gt;&gt;</span></span><span class="comment">'.")
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">(eev "emacs -bg white -fg black  ~/eev-current/glyphs.el &amp;")
+</span><span class="comment-delimiter">;; </span><span class="comment">(eev "emacs -bg black -fg bisque ~/eev-current/glyphs.el &amp;")
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">This is how I used to test the console codes for string glyphs:
+</span><span class="comment-delimiter">;; </span><span class="comment">(ee-write-string (glyphs-make-string "1;31;41" ?! nil) "/dev/tty3")
+</span>
+<span class="comment-delimiter">;; </span><span class="eev-glyph-face-bluebg"> </span><span class="eev-glyph-face-yellow-on-red">L</span><span class="eev-glyph-face-blue">M</span><span class="eev-glyph-face-red">*</span><span class="eev-glyph-face-bang">!</span><span class="eev-glyph-face-green">&#171;&#187;</span><span class="comment">
+</span>
+
+<span class="comment-delimiter">;; </span><span class="comment">Local Variables:
+</span><span class="comment-delimiter">;; </span><span class="comment">coding:               raw-text-unix
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-anchor-format:     "</span><span class="eev-glyph-face-green">&#171;</span><span class="comment">%s</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">"
+</span><span class="comment-delimiter">;; </span><span class="comment">End:
+</span></pre>
+  </body>
+</html>

@@ -1,0 +1,1 @@
+fchmod(<field "int FILEDES">, <field "int MODE">)<endpoint>

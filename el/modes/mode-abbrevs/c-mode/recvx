@@ -1,0 +1,1 @@
+recv(<field "int SOCKET">, <field "void *BUFFER">, <field "size_t SIZE">, <field "int FLAGS">)<endpoint>

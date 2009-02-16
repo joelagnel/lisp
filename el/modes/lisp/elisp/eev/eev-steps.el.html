@@ -1,0 +1,632 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eev-steps.el (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .doc {
+      }
+      .eev-glyph-face-green {
+        /* eev-glyph-face-green */
+        color: #00ff00;
+      }
+      .eev-glyph-face-red {
+        /* eev-glyph-face-red */
+        color: #ff0000;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .negation-char {
+      }
+      .regexp-grouping-backslash {
+      }
+      .regexp-grouping-construct {
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #98fb98;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #ffc0cb;
+        font-weight: bold;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;;; </span><span class="comment">eev-steps.el -- single-steppers.
+</span><span class="comment-delimiter">;; </span><span class="comment">I'm trying to move some block from eev.el to this file,
+</span><span class="comment-delimiter">;; </span><span class="comment">but I haven't moved anything yet - just copied some stuff -
+</span><span class="comment-delimiter">;; </span><span class="comment">and this file isn't loadable yet.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Stuff that I wrote in 2006aug17:
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Introduction
+</span><span class="comment-delimiter">;; </span><span class="comment">============
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Think of Emacs as being a huge Turing Machine in which some of the
+</span><span class="comment-delimiter">;; </span><span class="comment">memory cells control what is shown on the screen. Then, following
+</span><span class="comment-delimiter">;; </span><span class="comment">an elisp hyperlink - like, say, (find-node "(elisp)Undo") - means
+</span><span class="comment-delimiter">;; </span><span class="comment">going from one Emacs state to another one, in a way that is usually
+</span><span class="comment-delimiter">;; </span><span class="comment">reversible; killing or burying the new Info buffer will in most
+</span><span class="comment-delimiter">;; </span><span class="comment">cases make Emacs display what it was displaying before.
+</span><span class="comment-delimiter">;; </span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">In a sense, (find-node "(elisp)Undo") "finds" - like `</span><span class="comment"><span class="constant">find-file</span></span><span class="comment">' does,
+</span><span class="comment-delimiter">;; </span><span class="comment">and like web browsers do - an Info node; in another sense, it "finds"
+</span><span class="comment-delimiter">;; </span><span class="comment">a new Emacs state, in which the specified Info node is shown on the
+</span><span class="comment-delimiter">;; </span><span class="comment">current buffer.
+</span><span class="comment-delimiter">;; </span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Sometimes we want to "find" - or rather, to "find out" - the effect a
+</span><span class="comment-delimiter">;; </span><span class="comment">certain series of operations; we just want to apply those operation to
+</span><span class="comment-delimiter">;; </span><span class="comment">the current Emacs state to go to another state. For example,
+</span><span class="comment-delimiter">;; </span><span class="comment">
+</span><span class="comment-delimiter">;;  </span><span class="comment">(find-eek "C-x 4 C-h")
+</span><span class="comment-delimiter">;; </span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">finds the "effect of the key sequence" `C-x 4 C-h'. Incidentally, this
+</span><span class="comment-delimiter">;; </span><span class="comment">creates a buffer with some hyperlinks, and it is an operation that is
+</span><span class="comment-delimiter">;; </span><span class="comment">as reversible as a `</span><span class="comment"><span class="constant">find-file</span></span><span class="comment">' or `</span><span class="comment"><span class="constant">find-node</span></span><span class="comment">' - but this doesn't need
+</span><span class="comment-delimiter">;; </span><span class="comment">to be the case always.
+</span><span class="comment-delimiter">;; </span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">A `</span><span class="comment"><span class="constant">progn</span></span><span class="comment">' expression can also be seen as an elisp hyperlink to a new
+</span><span class="comment-delimiter">;; </span><span class="comment">Emacs state.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">The steppers
+</span><span class="comment-delimiter">;; </span><span class="comment">============
+</span><span class="comment-delimiter">;; </span><span class="comment">Sometimes we have series of steps that we want to execute, but for one
+</span><span class="comment-delimiter">;; </span><span class="comment">reason or another we have to execute those steps one by one, not all
+</span><span class="comment-delimiter">;; </span><span class="comment">at once; what we do is that we "program" the list of steps somehow,
+</span><span class="comment-delimiter">;; </span><span class="comment">and we create a button - actually a key; we bind a command to it -
+</span><span class="comment-delimiter">;; </span><span class="comment">that when we press it Emacs interprets it as meaning "now execute the
+</span><span class="comment-delimiter">;; </span><span class="comment">next step in the list".
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Currently there are four different steppers, and they are not unified.
+</span><span class="comment-delimiter">;; </span><span class="comment">They implement their "get the next step from the list" things in
+</span><span class="comment-delimiter">;; </span><span class="comment">different ways, and they use different keys as their "Next" buttons.
+</span><span class="comment-delimiter">;; </span><span class="comment">Let me explain them one by one, in historical order, starting by the
+</span><span class="comment-delimiter">;; </span><span class="comment">ones that appeared earlier.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;  </span><span class="comment">`</span><span class="comment"><span class="constant">ee-yank-one-line</span></span><span class="comment">' - the last killed string is considered as a
+</span><span class="comment-delimiter">;;    </span><span class="comment">list of steps; in this case "get the next step" means "remove
+</span><span class="comment-delimiter">;;    </span><span class="comment">the first line from the string at the top of the kill ring",
+</span><span class="comment-delimiter">;;    </span><span class="comment">and "execute the step" means insert the removed line at point
+</span><span class="comment-delimiter">;;    </span><span class="comment">and then run the command bound to RET. This is useful, for
+</span><span class="comment-delimiter">;;    </span><span class="comment">example, to send several lines in sequence to an `M-x shell' or
+</span><span class="comment-delimiter">;;    </span><span class="comment">`M-x eshell' buffer as if we were typing the lines one by one.
+</span><span class="comment-delimiter">;;  </span><span class="comment">`</span><span class="comment"><span class="constant">eesteps</span></span><span class="comment">'
+</span><span class="comment-delimiter">;;  </span><span class="comment">`</span><span class="comment"><span class="constant">eechannel</span></span><span class="comment">'
+</span><span class="comment-delimiter">;;  </span><span class="comment">`</span><span class="comment"><span class="constant">eepitch</span></span><span class="comment">'
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">The rest was written in 2006jan10 or earlier.
+</span><span class="comment-delimiter">;; </span><span class="comment">The corresponding portions of code in eev.el have probably been
+</span><span class="comment-delimiter">;; </span><span class="comment">changed in eev.el; I need to sync the functions.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">See:
+</span><span class="comment-delimiter">;; </span><span class="comment">http://article.gmane.org/gmane.emacs.eev.devel/28
+</span><span class="comment-delimiter">;; </span><span class="comment">http://article.gmane.org/gmane.emacs.eev.devel/32
+</span><span class="comment-delimiter">;; </span><span class="comment">http://article.gmane.org/gmane.emacs.eev.devel/33
+</span><span class="comment-delimiter">;; </span><span class="comment">http://lists.gnu.org/archive/html/eev/2005-12/msg00003.html
+</span><span class="comment-delimiter">;; </span><span class="comment">http://lists.gnu.org/archive/html/eev/2005-12/msg00007.html
+</span><span class="comment-delimiter">;; </span><span class="comment">http://lists.gnu.org/archive/html/eev/2005-12/msg00009.html
+</span><span class="comment-delimiter">;; </span><span class="comment">http://lists.gnu.org/archive/html/eev/2006-01/msg00000.html
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Copyright (C) 2004,2005,2006 Free Software
+</span><span class="comment-delimiter">;; </span><span class="comment">Foundation, Inc.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This file is part of GNU eev.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is free software; you can redistribute it and/or modify
+</span><span class="comment-delimiter">;; </span><span class="comment">it under the terms of the GNU General Public License as published by
+</span><span class="comment-delimiter">;; </span><span class="comment">the Free Software Foundation; either version 2, or (at your option)
+</span><span class="comment-delimiter">;; </span><span class="comment">any later version.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is distributed in the hope that it will be useful,
+</span><span class="comment-delimiter">;; </span><span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of
+</span><span class="comment-delimiter">;; </span><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU General Public License for more details.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">You should have received a copy of the GNU General Public License
+</span><span class="comment-delimiter">;; </span><span class="comment">along with GNU Emacs; see the file COPYING.  If not, write to the
+</span><span class="comment-delimiter">;; </span><span class="comment">Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+</span><span class="comment-delimiter">;; </span><span class="comment">Boston, MA 02111-1307, USA.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Author:     Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Maintainer: Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Version:    2005dec20
+</span><span class="comment-delimiter">;; </span><span class="comment">Keywords:   e-scripts, help, hyperlinks, hypertext, processes,
+</span><span class="comment-delimiter">;;             </span><span class="comment">shell, tex
+</span>
+<span class="comment-delimiter">;;; </span><span class="comment">Commentary:
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">For a description of what eev and e-scripts are please see the
+</span><span class="comment-delimiter">;; </span><span class="comment">README (and (soon) the manual in texinfo format).
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Latest version: &lt;<a href="http://angg.twu.net/eev-current/eev-steps.el">http://angg.twu.net/eev-current/eev-steps.el</a>&gt;
+</span><span class="comment-delimiter">;;       </span><span class="comment">htmlized: &lt;<a href="http://angg.twu.net/eev-current/eev-steps.el.html">http://angg.twu.net/eev-current/eev-steps.el.html</a>&gt;
+</span><span class="comment-delimiter">;;       </span><span class="comment">See also: &lt;<a href="http://angg.twu.net/eev-current/README.html">http://angg.twu.net/eev-current/README.html</a>&gt;
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Structure of this file:
+</span><span class="comment-delimiter">;; </span><span class="comment">...
+</span>
+
+
+(<span class="keyword">defvar</span> <a name="eesteps-pos"><span class="variable-name">eesteps-pos</span></a> 0)
+(<span class="keyword">defvar</span> <a name="eesteps-list"><span class="variable-name">eesteps-list</span></a> ())
+(<span class="keyword">defvar</span> <a name="eechannel-default"><span class="variable-name">eechannel-default</span></a> nil)
+(<span class="keyword">defvar</span> <a name="eepitch-code"><span class="variable-name">eepitch-code</span></a> '(<span class="warning">error</span> <span class="string">"eepitch not set up"</span>))
+(<span class="keyword">defvar</span> <a name="eepitch-target-buffer"><span class="variable-name">eepitch-target-buffer</span></a> nil)
+
+<span class="comment-delimiter">;; </span><span class="comment">Hey, I'm not sure if the code for the help page should be here...
+</span>
+(<span class="keyword">defvar</span> <a name="eev-help-page-file-name"><span class="variable-name">eev-help-page-file-name</span></a> <span class="string">"$EEVTMPDIR/HELP"</span>)
+(<span class="keyword">defvar</span> <a name="eev-help-previous-buffer"><span class="variable-name">eev-help-previous-buffer</span></a> nil
+  <span class="doc">"Non-nil when we're on a help page buffer. Used by `</span><span class="doc"><span class="constant">eev-help-page</span></span><span class="doc">'."</span>)
+
+(make-variable-buffer-local 'eev-help-previous-buffer)
+
+(<span class="keyword">defun</span> <a name="ee-bol"><span class="function-name">ee-bol</span></a> () (point-at-bol))
+(<span class="keyword">defun</span> <a name="ee-eol"><span class="function-name">ee-eol</span></a> () (point-at-eol))
+(<span class="keyword">defun</span> <a name="ee-eval-string"><span class="function-name">ee-eval-string</span></a> (str)
+  <span class="doc">"Wrap STR in a progn then read it and eval it.
+Examples: (ee-eval-string \"(+ 1 2) (* 3 4) ;; this returns 12=3*4\")
+          (ee-eval-string \";; this returns nil\")"</span>
+  (eval (read (concat <span class="string">"(progn\n"</span> str <span class="string">"\n)"</span>))))
+
+
+
+
+
+<span class="comment-delimiter">;;;                 </span><span class="comment">_                 
+</span><span class="comment-delimiter">;;;   </span><span class="comment">___  ___  ___| |_ ___ _ __  ___ 
+</span><span class="comment-delimiter">;;;  </span><span class="comment">/ _ \/ _ \/ __| __/ _ \ '_ \/ __|
+</span><span class="comment-delimiter">;;; </span><span class="comment">|  __/  __/\__ \ ||  __/ |_) \__ \
+</span><span class="comment-delimiter">;;;  </span><span class="comment">\___|\___||___/\__\___| .__/|___/
+</span><span class="comment-delimiter">;;;                        </span><span class="comment">|_|        
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">hyperlinks to key sequences and series of Emacs actions
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eesteps"><span class="function-name">eesteps</span></a> (list)
+  <span class="doc">"Set the LIST of steps that `</span><span class="doc"><span class="constant">eesteps-do-step</span></span><span class="doc">' will execute.\n
+Here's an example: run\n
+  (eesteps '(\"C-x b * scratch * RET   ;;; change to the buffer *scratch*\"
+             \"foobar\"
+             \"3*&lt;left&gt;\"
+             (insert \"!\")))\n
+then type \\[</span><span class="doc"><span class="constant">eesteps-do-step</span></span><span class="doc">] four times.\n
+Each step is either a string -- meaning a series of keys, in the
+format used by `</span><span class="doc"><span class="constant">edmacro-mode</span></span><span class="doc">' -- or a sexp to be evaluated."</span>
+  (setq eesteps-pos 0)
+  (setq eesteps-list list)
+  `(,(length list) steps stored - use &lt;f12&gt; to execute a step))
+
+(<span class="keyword">defun</span> <a name="eek"><span class="function-name">eek</span></a> (s <span class="type">&amp;optional</span> e count)
+  <span class="doc">"Execute the region between S and E (or the string S) as a keyboard macro.
+See `</span><span class="doc"><span class="constant">edmacro-mode</span></span><span class="doc">' for the exact format.\n
+An example: (eek \"C-x 4 C-h\")"</span>
+  (interactive <span class="string">"r"</span>)
+  (execute-kbd-macro (read-kbd-macro (ee-se-to-string s e)) count))
+
+(<span class="keyword">defun</span> <a name="eek0"><span class="function-name">eek0</span></a> (kbmacro <span class="type">&amp;optional</span> count)
+  <span class="doc">"This is similar to `</span><span class="doc"><span class="constant">eek</span></span><span class="doc">', but uses the low-level formats for macros.
+Example: (eek \"\\C-x4\\C-h\")"</span>
+  (execute-kbd-macro kbmacro count))
+
+(<span class="keyword">defun</span> <a name="eesteps-perform"><span class="function-name">eesteps-perform</span></a> (step <span class="type">&amp;rest</span> rest)
+  (<span class="keyword">if</span> (stringp step)
+      (eek step)
+    (eval step))
+  (<span class="keyword">if</span> rest (apply 'eesteps-eval rest)))
+
+(<span class="keyword">defun</span> <a name="eesteps-do-step"><span class="function-name">eesteps-do-step</span></a> (<span class="type">&amp;optional</span> arg)
+  (interactive <span class="string">"P"</span>)
+  (<span class="keyword">if</span> (&gt;= eesteps-pos (length eesteps-list))
+      (<span class="warning">error</span> <span class="string">"No more steps"</span>))
+  (<span class="keyword">if</span> (eq arg 0)
+      (message <span class="string">"Next step: %d = %S"</span> eesteps-pos (nth eesteps-pos eesteps-list))
+    (eesteps-perform (nth eesteps-pos eesteps-list))
+    (setq eesteps-pos (1+ eesteps-pos))))
+
+<span class="comment-delimiter">;; </span><span class="comment">(defun eesteps-do-step ()
+</span><span class="comment-delimiter">;;   </span><span class="comment">(interactive)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(if (&gt;= eesteps-pos (length eesteps-list))
+</span><span class="comment-delimiter">;;       </span><span class="comment">(error "No more steps"))
+</span><span class="comment-delimiter">;;   </span><span class="comment">(let ((step (nth eesteps-pos eesteps-list)))
+</span><span class="comment-delimiter">;;     </span><span class="comment">(cond ((stringp step) (eek step))
+</span><span class="comment-delimiter">;;           </span><span class="comment">(t (eval step))))
+</span><span class="comment-delimiter">;;   </span><span class="comment">(setq eesteps-pos (1+ eesteps-pos)))
+</span>
+
+
+
+<span class="comment-delimiter">;;;                                           </span><span class="comment">_     _      
+</span><span class="comment-delimiter">;;;   </span><span class="comment">___  _____   __     _ __   _____      _| |__ (_) ___ 
+</span><span class="comment-delimiter">;;;  </span><span class="comment">/ _ \/ _ \ \ / /____| '_ \ / _ \ \ /\ / / '_ \| |/ _ \
+</span><span class="comment-delimiter">;;; </span><span class="comment">|  __/  __/\ V /_____| | | |  __/\ V  V /| |_) | |  __/
+</span><span class="comment-delimiter">;;;  </span><span class="comment">\___|\___| \_/      |_| |_|\___| \_/\_/ |_.__/|_|\___|
+</span><span class="comment-delimiter">;;;                                                        </span><span class="comment">
+</span>(<span class="keyword">defun</span> <a name="eev-newbie"><span class="function-name">eev-newbie</span></a> ()
+  (interactive)
+  (setq debug-on-error nil)
+  (setq eval-expression-debug-on-error nil)
+  <span class="comment-delimiter">;; </span><span class="comment">(setq pop-up-windows nil)
+</span>  (eev-mode 1)
+  (message <span class="string">"Newbie settings activated.  Have you tried `M-x eev-demos'?"</span>))
+
+
+<span class="comment-delimiter">;;;                           </span><span class="comment">_                          
+</span><span class="comment-delimiter">;;;   </span><span class="comment">___  _____   __      __| | ___ _ __ ___   ___  ___ 
+</span><span class="comment-delimiter">;;;  </span><span class="comment">/ _ \/ _ \ \ / /____ / _` |/ _ \ '_ ` _ \ / _ \/ __|
+</span><span class="comment-delimiter">;;; </span><span class="comment">|  __/  __/\ V /_____| (_| |  __/ | | | | | (_) \__ \
+</span><span class="comment-delimiter">;;;  </span><span class="comment">\___|\___| \_/       \__,_|\___|_| |_| |_|\___/|___/
+</span><span class="comment-delimiter">;;;                                                      </span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">eev-newbie and eev-demos
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eekl"><span class="function-name">eekl</span></a> (str <span class="type">&amp;rest</span> rest)
+  (eek0 (concat str <span class="string">"\r"</span>))
+  (<span class="keyword">if</span> rest (apply 'eekl rest)))
+
+(<span class="keyword">defun</span> <a name="eekv"><span class="function-name">eekv</span></a> (str) (eek str) (message str))
+
+<span class="comment-delimiter">;; </span><span class="comment">A hack for showing the region (temporarily) in Emacs &lt;= 21.1.3.
+</span><span class="comment-delimiter">;; </span><span class="comment">These functions are used by some demos. They may be removed in the future.
+</span><span class="comment-delimiter">;; </span><span class="comment">Note that in recent Emacsen C-SPC C-SPC &lt;movement&gt; highlights the region:
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efile "ChangeLog" "temporary transient-mark-mode")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-eetcfile "NEWS" "C-SPC C-SPC; this enables Transient Mark mode")
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defun</span> <a name="eekr"><span class="function-name">eekr</span></a>  (str) (eek str)  (eeflash (point) (mark)))
+(<span class="keyword">defun</span> <a name="eekvr"><span class="function-name">eekvr</span></a> (str) (eekv str) (eeflash (point) (mark)))
+
+(<span class="keyword">defun</span> <a name="eev-demos"><span class="function-name">eev-demos</span></a> (arg)
+  (interactive <span class="string">"P"</span>)
+  (find-eevexfile <span class="string">"demos.e"</span>)
+  (<span class="keyword">if</span> (and arg (&gt;= arg 1) (&lt;= arg 5))
+      (<span class="keyword">progn</span> (ee-goto-position (format <span class="string">"\n;; End of demo %d\n"</span> arg))
+             (forward-line -2)
+             (message <span class="string">"Type M-e to load the demo above the cursor."</span>))
+    (<span class="keyword">let</span> ((message-truncate-lines nil))
+      (message (concat <span class="string">"Use `M-1 M-x eev-demos' to go to the 1st demo,\n"</span>
+                       <span class="string">"`M-2 M-x eev-demos' for the 2nd demo, etc (up to 4)."</span>)))))
+
+
+<span class="comment-delimiter">;;;  </span><span class="comment">_          _                                
+</span><span class="comment-delimiter">;;; </span><span class="comment">| |__   ___| |_ __    _ __   __ _  __ _  ___ 
+</span><span class="comment-delimiter">;;; </span><span class="comment">| '_ \ / _ \ | '_ \  | '_ \ / _` |/ _` |/ _ \
+</span><span class="comment-delimiter">;;; </span><span class="comment">| | | |  __/ | |_) | | |_) | (_| | (_| |  __/
+</span><span class="comment-delimiter">;;; </span><span class="comment">|_| |_|\___|_| .__/  | .__/ \__,_|\__, |\___|
+</span><span class="comment-delimiter">;;;              </span><span class="comment">|_|     |_|          |___/      
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">eev-help-page
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eev-help-page"><span class="function-name">eev-help-page</span></a> ()
+  <span class="doc">"Switch to the eev help page buffer, or, if we're already on it, switch back."</span>
+  (interactive)
+  (<span class="keyword">if</span> eev-help-previous-buffer                 <span class="comment-delimiter">; </span><span class="comment">are we on a help page buffer?
+</span>      (<span class="keyword">if</span> (buffer-live-p eev-help-previous-buffer)    <span class="comment-delimiter">; </span><span class="comment">can we go back?
+</span>          (switch-to-buffer eev-help-previous-buffer) <span class="comment-delimiter">; </span><span class="comment">yes: switch back
+</span>        (bury-buffer))                                <span class="comment-delimiter">; </span><span class="comment">no: bury the help buffer
+</span>    (<span class="keyword">let</span> ((buffer (current-buffer)))           <span class="comment-delimiter">; </span><span class="comment">we're not on a help page bufer.
+</span>      (find-fline eev-help-page-file-name)     <span class="comment-delimiter">; </span><span class="comment">visit the help file
+</span>      (setq eev-help-previous-buffer buffer)))) <span class="comment-delimiter">; </span><span class="comment">and mark it as a help buffer
+</span>
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">more tools
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">ee-flatten is obsolte - using backticks is better
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">(ee-flatten '((1 2 3) (4 5) (((6)) 7) nil nil 8 9))
+</span><span class="comment-delimiter">;; </span><span class="comment">(ee-flatten '(1 2 3) '(4 5) '(((6)) 7) nil nil 8 9)
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defun</span> <a name="ee-flatten"><span class="function-name">ee-flatten</span></a> (obj <span class="type">&amp;rest</span> rest)
+  (<span class="keyword">cond</span> (rest (append (ee-flatten obj) (ee-flatten rest)))
+        ((null obj) nil)
+        ((listp obj) (append (ee-flatten (car obj)) (ee-flatten (cdr obj))))
+        (t (list obj))))
+
+(<span class="keyword">defun</span> <a name="ee-read-file"><span class="function-name">ee-read-file</span></a> (fname)
+  (<span class="keyword">with-temp-buffer</span>
+    (insert-file-contents fname)
+    (buffer-string)))
+
+(<span class="keyword">defun</span> <a name="ee-no-trailing-nl"><span class="function-name">ee-no-trailing-nl</span></a> (str)
+  (replace-regexp-in-string <span class="string">"\n$"</span> <span class="string">""</span> str))
+
+
+
+<span class="comment-delimiter">;;;                    </span><span class="comment">_    
+</span><span class="comment-delimiter">;;;  </span><span class="comment">_   _  __ _ _ __ | | __
+</span><span class="comment-delimiter">;;; </span><span class="comment">| | | |/ _` | '_ \| |/ /
+</span><span class="comment-delimiter">;;; </span><span class="comment">| |_| | (_| | | | |   &lt; 
+</span><span class="comment-delimiter">;;;  </span><span class="comment">\__, |\__,_|_| |_|_|\_\
+</span><span class="comment-delimiter">;;;  </span><span class="comment">|___/                  
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">yanking lines one of a time inside emacs
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="ee-yank-one-line"><span class="function-name">ee-yank-one-line</span></a> ()
+  <span class="doc">"Yank the first line of the killed text and do a RET.
+Insert the first line from the latest kill-ring entry and run the
+action associated to the RET key. The kill-ring entry is then
+altered so that subsequent calls of yank-first-line will yank
+successive lines.
+
+As a special case, if the first line of the kill starts with
+\"</span><span class="eev-glyph-face-red">*</span><span class="doc">\" then evaluate the rest of it instead of yanking it, using
+`</span><span class="doc"><span class="constant">ee-eval-string</span></span><span class="doc">'.
+
+For an example of usage see: (find-efunctiondescr 'eestore)"</span>
+  (interactive)
+  (<span class="keyword">let</span> ((bigstr (car kill-ring)))
+    (<span class="keyword">if</span> (equal bigstr <span class="string">""</span>) (<span class="warning">error</span> <span class="string">"No more lines"</span>))
+    (string-match <span class="string">"^</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\n]*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">\n</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">$</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span> bigstr)
+    (<span class="keyword">let</span> ((line (match-string 1 bigstr))           <span class="comment-delimiter">; </span><span class="comment">first line from the kill
+</span>          (rest (substring bigstr (match-end 0)))) <span class="comment-delimiter">; </span><span class="comment">rest of the kill
+</span>      (<span class="keyword">if</span> (string-match <span class="string">"^</span><span class="eev-glyph-face-red">*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span> line)         <span class="comment-delimiter">; </span><span class="comment">lines with a red star
+</span>          (ee-eval-string (match-string 1 line))   <span class="comment-delimiter">; </span><span class="comment">are eval'ed
+</span>        (insert line)                              <span class="comment-delimiter">; </span><span class="comment">other lines are "typed"
+</span>        (call-interactively (key-binding <span class="string">"\r"</span>)))   <span class="comment-delimiter">; </span><span class="comment">and then we do a RET
+</span>      (setcar kill-ring rest))))                   <span class="comment-delimiter">; </span><span class="comment">remove the first line
+</span>
+(<span class="keyword">defun</span> <a name="eestore"><span class="function-name">eestore</span></a> (s <span class="type">&amp;optional</span> e)
+  <span class="doc">"Store the region between S and E in the kill ring.
+This is especially useful in conjunction with `</span><span class="doc"><span class="constant">ee-yank-one-line</span></span><span class="doc">'.
+Here's an example; to run it eval the `</span><span class="doc"><span class="constant">eestore-bounded</span></span><span class="doc">', then
+type `\\[</span><span class="doc"><span class="constant">ee-yank-one-line</span></span><span class="doc">]' several times.
+
+#</span><span class="eev-glyph-face-red">*</span><span class="doc">
+</span><span class="eev-glyph-face-red">*</span><span class="doc"> (shell) ;; (eestore-bounded)
+echo $[1+2]
+echo foo
+#</span><span class="eev-glyph-face-red">*</span><span class="doc">
+"</span>
+  (kill-new (ee-se-to-string s e))
+  (format <span class="string">"Stored in the kill-ring"</span>))
+
+(eeb-define 'eestore-bounded  'eestore 'ee-delimiter-hash  nil t t)
+
+
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Sending lines to processes running in other Emacs buffers
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">NOTE: this is Rubikitch's "eethrow" function, only a bit less fragile.
+</span><span class="comment-delimiter">;; </span><span class="comment">See: http://lists.gnu.org/archive/html/eev/2005-12/msg00007.html
+</span><span class="comment-delimiter">;;      </span><span class="comment">http://article.gmane.org/gmane.emacs.eev.devel/32
+</span>
+(<span class="keyword">defun</span> <a name="eepitch-prepare"><span class="function-name">eepitch-prepare</span></a> (code)
+<span class="doc">"Run CODE, remember its buffer, then split the frame to show also that buffer.
+This function is usually called through the macro `</span><span class="doc"><span class="constant">eepitch</span></span><span class="doc">'.
+See `</span><span class="doc"><span class="constant">eepitch-this-line</span></span><span class="doc">' for an example of use."</span>
+  (<span class="keyword">let</span> ((pop-up-windows t)
+        (same-window-buffer-names nil))
+    (<span class="keyword">save-window-excursion</span>
+      (setq eepitch-code code)
+      (eval code)
+      (setq eepitch-target-buffer (current-buffer)))
+    (display-buffer eepitch-target-buffer)))
+
+(<span class="keyword">defmacro</span> <a name="eepitch"><span class="function-name">eepitch</span></a> (code)
+<span class="doc">"Call `</span><span class="doc"><span class="constant">eepitch-prepare</span></span><span class="doc">'; this macro quotes its argument CODE, just like setq.
+See `</span><span class="doc"><span class="constant">eepitch-this-line</span></span><span class="doc">' for an example of use."</span>
+  `(eepitch-prepare ',code))
+
+(<span class="keyword">defun</span> <a name="eepitch-this-line"><span class="function-name">eepitch-this-line</span></a> ()
+<span class="doc">"Send the current line to another buffer (in another window).
+When the line starts with \"</span><span class="eev-glyph-face-red">*</span><span class="doc">\" execute it as Lisp instead of sending it.
+If the target buffer (stored in `</span><span class="doc"><span class="constant">eepitch-target-buffer</span></span><span class="doc">') is not
+visible then make it become visible again, by running the code
+stored in `</span><span class="doc"><span class="constant">eepitch-code</span></span><span class="doc">' with `</span><span class="doc"><span class="constant">eepitch-prepare</span></span><span class="doc">'.
+Here is an example (execute each line with \\[</span><span class="doc"><span class="constant">eepitch-this-line</span></span><span class="doc">]):\n
+</span><span class="eev-glyph-face-red">*</span><span class="doc"> (eepitch (shell))
+echo foo
+</span><span class="eev-glyph-face-red">*</span><span class="doc"> (message (format \"%S\" `(eepitch ,eepitch-code)))
+</span><span class="eev-glyph-face-red">*</span><span class="doc"> (delete-other-windows)
+echo bar\n\n"</span>
+  (interactive)
+  (<span class="keyword">let</span> ((line (buffer-substring (ee-bol) (ee-eol)))) <span class="comment-delimiter">; </span><span class="comment">contents of this line
+</span>    (<span class="keyword">if</span> (string-match <span class="string">"^</span><span class="eev-glyph-face-red">*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span> line)             <span class="comment-delimiter">; </span><span class="comment">lines with a red star
+</span>        (ee-eval-string (match-string 1 line))       <span class="comment-delimiter">; </span><span class="comment">are eval'ed
+</span>      (<span class="keyword">if</span> (not (get-buffer-window eepitch-target-buffer))  <span class="comment-delimiter">; </span><span class="comment">if we need then
+</span>          (eepitch-prepare eepitch-code))   <span class="comment-delimiter">; </span><span class="comment">make the target window visible
+</span>      (<span class="keyword">save-selected-window</span>
+        (select-window (get-buffer-window eepitch-target-buffer))
+        (insert line)                              <span class="comment-delimiter">; </span><span class="comment">other lines are "typed"
+</span>        (call-interactively (key-binding <span class="string">"\r"</span>))))  <span class="comment-delimiter">; </span><span class="comment">and then we do a RET
+</span>    (next-line 1)))
+
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">starting background processes
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eebg-channel-xterm"><span class="function-name">eebg-channel-xterm</span></a> (channel <span class="type">&amp;optional</span> prog-and-args xterm-args)
+  <span class="doc">"This is the low-level way of creating an xterm listening on channel CHANNEL.
+See `</span><span class="doc"><span class="constant">eechannel-xterm</span></span><span class="doc">'."</span>
+  (interactive <span class="string">"sChannel: "</span>)
+  (apply 'start-process (format <span class="string">"xterm (channel %s)"</span> channel) <span class="string">"*Messages*"</span>
+         (ee-flatten
+          <span class="string">"xterm"</span> <span class="string">"-T"</span> (concat <span class="string">"channel "</span> channel) xterm-args <span class="string">"-e"</span>
+          (ee-expand <span class="string">"$EEVDIR/eegchannel"</span>) channel
+          (or prog-and-args (ee-expand <span class="string">"$SHELL"</span>)))))
+
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">sending strings to external programs through "channels"
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eechannel-pidfile"><span class="function-name">eechannel-pidfile</span></a> (channel)
+  (ee-expand (format <span class="string">"$EEVTMPDIR/eeg.%s.pid"</span> channel)))
+(<span class="keyword">defun</span> <a name="eechannel-strfile"><span class="function-name">eechannel-strfile</span></a> (channel)
+  (ee-expand (format <span class="string">"$EEVTMPDIR/eeg.%s.str"</span> channel)))
+
+(<span class="keyword">defun</span> <a name="eechannel-send"><span class="function-name">eechannel-send</span></a> (channel str)
+  (<span class="keyword">if</span> (not channel) (setq channel eechannel-default))
+  (ee-write str nil <span class="string">""</span> <span class="string">""</span> (eechannel-strfile channel))
+  (find-sh0 (format <span class="string">"kill -USR1 $(cat %s)"</span> (eechannel-pidfile channel))))
+
+(<span class="keyword">defun</span> <a name="eechannel"><span class="function-name">eechannel</span></a> (channel <span class="type">&amp;optional</span> str)
+  (interactive <span class="string">"sDefault channel: "</span>)
+  (<span class="keyword">if</span> (not str)
+      (setq eechannel-default channel)
+    (eechannel-send channel str)))
+
+(<span class="keyword">defun</span> <a name="eechannel-do-this-line"><span class="function-name">eechannel-do-this-line</span></a> () (interactive)
+  (<span class="keyword">let</span> ((line (buffer-substring (ee-bol) (ee-eol)))) <span class="comment-delimiter">; </span><span class="comment">contents of this line
+</span>    (<span class="keyword">if</span> (string-match <span class="string">"^</span><span class="eev-glyph-face-red">*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span> line)             <span class="comment-delimiter">; </span><span class="comment">lines with a red star
+</span>        (ee-eval-string (match-string 1 line))       <span class="comment-delimiter">; </span><span class="comment">are eval'ed
+</span>      (eechannel-send nil (concat line <span class="string">"\n"</span>)))       <span class="comment-delimiter">; </span><span class="comment">other lines are sent
+</span>    (next-line 1)))                                  <span class="comment-delimiter">; </span><span class="comment">go down
+</span>
+(<span class="keyword">defun</span> <a name="eech"><span class="function-name">eech</span></a> (s <span class="type">&amp;optional</span> e)             <span class="comment-delimiter">; </span><span class="comment">bad name?
+</span>  (interactive <span class="string">"r"</span>)
+  (eechannel-send eechannel-default (ee-se-to-string s e)))
+
+(eeb-define 'eech-bounded 'eech 'ee-delimiter-hash nil t t)
+
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">sending strings through "channels": high-level functions
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="ee-pid-running-p"><span class="function-name">ee-pid-running-p</span></a> (pid)
+  <span class="doc">"Return t if a process with pid PID is running. This is linux-specific.
+This function just checks if a file /proc/&lt;pid&gt; exists.
+
+If you need something that is kernel-independent then the
+following idea might work: run \"ps PID\", discard the output,
+test its exit code."</span>
+  (file-exists-p (format <span class="string">"/proc/%s"</span> pid)))
+
+(<span class="keyword">defun</span> <a name="eechannel-pid"><span class="function-name">eechannel-pid</span></a> (channel)
+  <span class="doc">"Note: this function returns either a pid (as a string) or nil."</span>
+  (<span class="keyword">let</span> ((pidfile (eechannel-pidfile channel)))
+    (<span class="keyword">if</span> (file-exists-p pidfile) (ee-no-trailing-nl (ee-read-file pidfile)))))
+
+(<span class="keyword">defun</span> <a name="eechannel-running-p"><span class="function-name">eechannel-running-p</span></a> (channel)
+  <span class="doc">"Returns t if there is a process listening on CHANNEL."</span>
+  (<span class="keyword">let</span> ((pid (eechannel-pid channel)))
+    (<span class="keyword">if</span> pid (ee-pid-running-p pid))))
+
+(<span class="keyword">defun</span> <a name="eechannel-xterm"><span class="function-name">eechannel-xterm</span></a> (channel <span class="type">&amp;optional</span> prog-and-args xterm-args)
+  <span class="doc">"If there's no process listening on CHANNEL then create an xterm there.
+This function always sets the default channel to CHANNEL.
+PROG-AND-ARGS and XTERM-ARGS are lists of strings: see `</span><span class="doc"><span class="constant">eebg-channel-xterm</span></span><span class="doc">'."</span>
+  (interactive <span class="string">"sChannel: "</span>)
+  (eechannel channel)
+  (<span class="keyword">if</span> (eechannel-running-p channel)
+      (message <span class="string">"Reusing channel %s"</span> channel)
+    (eebg-channel-xterm channel prog-and-args xterm-args)))
+
+(<span class="keyword">defun</span> <a name="eechannel-kill"><span class="function-name">eechannel-kill</span></a> (channel)
+  <span class="doc">"Kill the process associated to channel CHANNEL."</span>
+  (find-sh0 (format <span class="string">"kill -9 $(cat %s)"</span> (eechannel-pidfile channel))))
+
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">sending blocks through channels
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eevnow"><span class="function-name">eevnow</span></a> (s <span class="type">&amp;optional</span> e)
+  (interactive <span class="string">"r"</span>)
+  (eev s e)
+  (eech <span class="string">"ee\n"</span>))
+
+(eeb-define 'eevnow-bounded 'eevnow 'ee-delimiter-hash nil t t)
+
+(<span class="keyword">defmacro</span> <a name="ee-at"><span class="function-name">ee-at</span></a> (anchor <span class="type">&amp;rest</span> body)
+  `(<span class="keyword">save-excursion</span>
+     (ee-goto-position (format ee-anchor-format ,anchor))
+     . ,body))
+
+(<span class="keyword">defmacro</span> <a name="ee-at-file"><span class="function-name">ee-at-file</span></a> (fname anchor <span class="type">&amp;rest</span> body)
+  `(<span class="keyword">with-current-buffer</span> (find-file-noselect (ee-expand ,fname))
+     (ee-goto-position (format ee-anchor-format ,anchor))
+     . ,body))
+
+(<span class="keyword">defun</span> <a name="eevnow-at"><span class="function-name">eevnow-at</span></a> (anchor)
+<span class="doc">"Move temporarily to the anchor ANCHOR and run `</span><span class="doc"><span class="constant">eevnow-bounded</span></span><span class="doc">' there.
+If EE-ARG is non-nil then work as a hyperlink instead: just jump to ANCHOR.
+This function is typically used in red-star lines inside F9-able blocks:
+a line like\n
+</span><span class="eev-glyph-face-red">*</span><span class="doc"> (eevnow-at \"anchorname\")\n
+works as a kind of subroutine call when executed with F9 (when F9 is
+bound to `</span><span class="doc"><span class="constant">eechannel-do-this-line</span></span><span class="doc">'), and as a hyperlink when run with,
+say, M-2 M-2 M-e (when M-e is bound to `</span><span class="doc"><span class="constant">eek-eval-sexp-eol</span></span><span class="doc">')."</span>
+  (<span class="keyword">if</span> ee-arg (to anchor)
+    (ee-at anchor (ee-once (eevnow-bounded)))))
+
+(<span class="keyword">defun</span> <a name="eevnow-at-file"><span class="function-name">eevnow-at-file</span></a> (fname anchor)
+<span class="doc">"Move temporarily to file FNAME, at anchor ANCHOR, run `</span><span class="doc"><span class="constant">eevnow-bounded</span></span><span class="doc">' there.
+This function is similar to `</span><span class="doc"><span class="constant">eevnow-at</span></span><span class="doc">'."</span>
+  (<span class="keyword">if</span> ee-arg (find-anchor fname anchor)
+    (ee-at-file fname anchor (ee-once (eevnow-bounded)))))
+
+
+
+
+(<span class="keyword">provide</span> '<span class="constant">eev-steps</span>)
+
+
+
+<span class="comment-delimiter">;; </span><span class="comment">Local Variables:
+</span><span class="comment-delimiter">;; </span><span class="comment">mode:              outline-minor
+</span><span class="comment-delimiter">;; </span><span class="comment">coding:            raw-text-unix
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-anchor-format:  "</span><span class="eev-glyph-face-green">&#171;</span><span class="comment">%s</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">"
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-anchor-format:  "defun %s "
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-comment-prefix: ";;"
+</span><span class="comment-delimiter">;; </span><span class="comment">no-byte-compile:   t
+</span><span class="comment-delimiter">;; </span><span class="comment">End:
+</span></pre>
+  </body>
+</html>

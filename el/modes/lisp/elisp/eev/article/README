@@ -1,0 +1,125 @@
+This is the `article/README' file of GNU eev.
+Copyright (C) 2005 Free Software Foundation, Inc.
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+Author and version: Eduardo Ochs, 2005jun03.
+
+[Note: the same copyright terms apply to all files in this directory.
+TO DO: state that in the right way.]
+
+
+This directory holds the source for an article about eev that I
+started to write for a conference... I missed the deadline by far
+(it's still unfinished), and the organizers were asking for articles
+of 10 pages or fewer; but my article is 17 pages long now and is still
+growing. Well, whatever. Enjoy.
+
+You can find pre-TeXed versions of it (a .ps.gz and a .pdf) at:
+  <http://angg.twu.net/FISL/>
+
+To TeX it run "make" or "make eev.dvi"; you will need imagemagick. I
+you are me and you're producing screenshots you'll need pngcrush too.
+
+Note: to include the .eps figures in the text I'm having to use two
+different "scale" parameters; it seems that my version of `convert' (I
+use Debian Sarge) is using different scales for different .png files.
+I haven't had time to investigate why.
+
+Plain text, texinfo and html versions of this article will be made at
+some point in the future, but probably only after I have finished the
+LaTeX version. The .tex contains dirty tricks (for example glyphs via
+catcodes) and some screenshots; converting that to other formats will
+not be trivial.
+
+Please ignore the rest of this file.
+
+
+
+
+#
+cd ~/eev-current/article/
+make
+#
+cd ~/eev-current/article/
+make
+Scp eev.ps.gz eev.2.ps.gz eev.pdf \
+  edrx@angg.twu.net:slow_html/eev-current/article/
+
+#
+cd ~/eev-current/article/
+make eev.dvi
+rexdvi eev.dvi
+#
+cd ~/eev-current/article/
+make extraclean
+laf
+#
+cd ~/eev-current/article/
+mcopy eev.2.ps.gz a:eev2ps.gz
+
+#
+
+#
+cd ~/FISL/
+rm eev.aux
+latex eev.tex && latex eev.tex
+rexdvi eev.dvi &
+
+#
+# (find-sh "pngcrush -h")
+# (find-sh "pngcrush -h" "convert color to grayscale")
+# (find-sh "pngcrush -h" "delete an unwanted alpha channel")
+# (find-sh "pngcrush -h" "0 means try all of 1-10")
+# (find-man "convert")
+
+cd ~/FISL/
+pngcrush -c 0 -m 0 ss-f9.png ss-f9-crush.png;   laf ss-f9*
+convert ss-f9-crush.png ss-f9.eps;              laf ss-f9*
+
+pngcrush -c 0 -m 0 ss-lua.png ss-lua-crush.png; laf ss-lua*
+convert ss-lua-crush.png ss-lua.eps;            laf ss-lua*
+
+pngcrush -c 0 -m 0 ss-m-h.png ss-m-h-crush.png; laf ss-m-h*
+convert ss-m-h-crush.png ss-m-h.eps;            laf ss-m-h*
+
+#
+cd ~/FISL/
+dvips  -o eev.ps   eev.dvi
+dvired -o eev.2.ps eev.dvi
+gzip -9f eev.ps
+gzip -9f eev.2.ps
+dvipdf    eev.dvi  eev.pdf
+Scp eev.ps.gz eev.2.ps.gz eev.pdf edrx@angg.twu.net:slow_html/FISL/
+
+#
+cd ~/FISL/
+dvipdf eev.dvi eev.pdf
+
+#
+cd ~/FISL/
+Scp sbc2003.sty                     edrx@angg.twu.net:slow_html/FISL/
+Scp ss-f9.png ss-lua.png ss-m-h.png edrx@angg.twu.net:slow_html/FISL/
+
+#
+ (eebgTWU)
+zsh
+#
+cd        ~/slow_html/eev-current/article/
+cp -v * ~/public_html/eev-current/article/
+cd      ~/public_html/eev-current/article/
+LC_COLLATE=C lstoindexhtml_lua_maybe eev-current/article
+
+cd        ~/slow_html/FISL/
+cp -v * ~/public_html/FISL/
+cd      ~/public_html/FISL/
+LC_COLLATE=C lstoindexhtml_lua_maybe FISL
+
+#
+# http://www.mat.puc-rio.br/~edrx/FISL/eev.ps.gz
+# http://www.mat.puc-rio.br/~edrx/FISL/eev.2.ps.gz
+
+# http://angg.twu.net/FISL/eev.ps.gz
+# http://angg.twu.net/FISL/eev.2.ps.gz
+
+#

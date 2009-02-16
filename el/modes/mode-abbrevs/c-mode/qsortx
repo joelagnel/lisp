@@ -1,0 +1,1 @@
+qsort(<field "void *base">, <field "size_t nelem">, <field "size_t size">, <field "int (*cmp)(const void *e1, const void *e2)">)

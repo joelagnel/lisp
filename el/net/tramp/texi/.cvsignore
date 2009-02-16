@@ -1,0 +1,17 @@
+rcp.info
+*.aux
+*.cp
+*.dvi
+*.fn
+*.ky
+*.log
+*.pg
+*.tmp
+*.toc
+*.tp
+*.vr
+*.vrs
+*.html
+*.info
+dir
+dir.lock

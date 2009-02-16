@@ -1,0 +1,2205 @@
+<HTML>
+<HEAD>
+<!-- This HTML file has been created by texi2html 1.51
+     from dired-dd.texi on 24 October 2000 -->
+
+<TITLE>dired-dd, aka Dired-DragDrop, Mouse interface for dired / dired-x</TITLE>
+</HEAD>
+<BODY>
+<H1>dired-dd / aka Dired-DragDrop (0.9.1.15)</H1>
+<H2>A mouse interface minor mode for dired / dired-x</H2>
+<ADDRESS>Seiichi Namba (C) <CODE>1997,1998,1999 S.Namba &#60;<A HREF="mailto:sn@asahi-net.email.ne.jp">sn@asahi-net.email.ne.jp</A>&#62;</CODE></ADDRESS>
+<P>
+<P><HR><P>
+
+
+<H1><A NAME="SEC1" HREF="dired-dd_toc.html#TOC1">Overview</A></H1>
+
+<P>
+<STRONG>Dired-dd</STRONG> (aka <STRONG>Dired-DragDrop</STRONG>)
+is a minor mode enabling mouse interface 
+for <CODE>dired</CODE> / <CODE>dired-x</CODE>.
+
+</P>
+<P>
+It provides facilities in <CODE>dired</CODE>:<BR>
+
+</P>
+
+<UL>
+<LI>
+
+Mark files / directories in a dired buffer (mouse-1 drag)
+<LI>
+
+Drag files / directories and drop into dired buffer, for copy/move/link etc. (mouse-2 drag)
+<LI>
+
+Open file (or execute defined function) by dragging into non-dired buffer, or via menu (mouse-2 drag)
+<LI>
+
+Execute external command related to file extension (M-mouse-2 click or double-click mouse-1)
+<LI>
+
+Raise a miscellaneous file handling menu (mouse-3 click)
+<LI>
+
+Caveat: No inter-application drag and drop supported yet (or forever ?)
+<LI>
+
+Caveat: Works only on FSF emacs (19.28, 19.34, 20.2, 20.3) and mule (2.3, 3.0, 4.0), but not on XEmacs.
+</UL>
+
+<P>
+wherein,<BR>
+
+</P>
+
+<UL>
+<LI>
+
+Drop target window may exist in different emacs's frame
+(<EM>inter-frame</EM> drag &#38; drop supported).
+<LI>
+
+Surprisingly enough, <CODE>ange-ftp</CODE> works -- It means that you can
+<STRONG>FTP</STRONG> via drag drop (except <TT>`Copy Recursive'</TT> in menu entry).
+<LI>
+
+<CODE>find-dired, find-grep-dired, locate-dired</CODE> or all other dired-related-stuff-compatible
+</UL>
+
+<P>
+<BR>
+<CODE>locate-dired</CODE> can be located in <TT>`spinout'</TT> directory of
+dired-dd distribution.  The <TT>`spinout'</TT> directory contains other
+assorted stuffs including a patch for <TT>`archie.el'</TT>, elisp codes for
+URL-to-ange-ftp conversion, Netscape bookmark stealer, and others that
+work well with <CODE>dired-dd</CODE>.
+
+</P>
+<P>
+Now <CODE>dired-dd</CODE> is distributed under GPL (version 2). See section <A HREF="dired-dd.html#SEC8">COPYING</A>.
+
+</P>
+
+
+
+<H1><A NAME="SEC2" HREF="dired-dd_toc.html#TOC2">Installation</A></H1>
+<P>
+<A NAME="IDX1"></A>
+
+</P>
+
+
+
+<H2><A NAME="SEC3" HREF="dired-dd_toc.html#TOC3">System Requirement</A></H2>
+<P>
+<A NAME="IDX2"></A>
+
+</P>
+<P>
+<CODE>dired-dd</CODE> was written and tested on mule-2.3 (both of official
+emacs-19.28, and unofficial emacs-19.34 based versions) and emacs-20.2
+and 20.3.  It works fine on the 19.x and 20.x emacsen, but some
+behaviours (eg. menu appearance) are not exactly the same.  Emacs-18
+(Nemacs) is not supported at all.  Perhaps <CODE>dired-dd</CODE> won't work in
+XEmacs, in which <CODE>dired</CODE> is totally different from FSF emacsen.  It
+has not been tested on Windows version of emacs / mule.
+
+</P>
+<P>
+<CODE>dired-dd</CODE> uses <CODE>dired-x</CODE> features intensively and
+extensively.  See section <A HREF="dired-dd.html#SEC4">Installing <CODE>dired-dd</CODE></A> for minimum setup of
+<CODE>dired-x</CODE> just for <CODE>dired-dd</CODE>, or further refer to
+<CODE>dired-x</CODE> info file (<KBD>M-x info RET</KBD> and search for
+<TT>`Dired-X'</TT>) for datailed information on setup and customization of
+<CODE>dired-x</CODE>.  <CODE>dired-x</CODE> is included in a standard emacs
+distribution, so you shouldn't have to FTP it.
+
+</P>
+
+
+
+<H2><A NAME="SEC4" HREF="dired-dd_toc.html#TOC4">Installing <CODE>dired-dd</CODE></A></H2>
+<P>
+<A NAME="IDX3"></A>
+<A NAME="IDX4"></A>
+<A NAME="IDX5"></A>
+
+</P>
+
+
+<H3><A NAME="SEC5" HREF="dired-dd_toc.html#TOC5">Copying files</A></H3>
+
+<P>
+Currently, <CODE>dired-dd</CODE> is composed of
+<TT>`dired-dd.el'</TT> and <TT>`dired-dd-b3-menu.el'</TT>.
+Byte-compile these two files
+and copy derived
+<TT>`dired-dd.elc'</TT> and<BR>
+<TT>`dired-dd-b3-menu.elc'</TT>
+into your emacs's load path<BR>
+(<TT>`/usr/local/share/emacs/site-lisp/'</TT>, <TT>`~/elisp'</TT> or wherever appropriate).
+Byte-compiling of <TT>`dired-dd.el'</TT> and <TT>`dired-dd-b3-menu.el'</TT> is
+strongly recommended.
+
+</P>
+<P>
+This two-step file installation can be done by attached <TT>`Makefile'</TT>.
+
+</P>
+<P>
+In this <TT>`Makefile'</TT>, the default <CODE>emacs</CODE> and <CODE>elispdir</CODE>
+are defined as:
+
+</P>
+
+<PRE>
+emacs=/usr/local/emacs-20.2/bin/emacs
+elispdir=~/elisp
+</PRE>
+
+<P>
+Thus, if your emacs is <TT>`/gnu/bin/emacs'</TT> and your
+lisp directory is <TT>`/gnu/lib/emacs/site-lisp'</TT>,
+invoke <TT>`make'</TT> with overriding the defaults above:
+
+</P>
+
+<PRE>
+$ make emacs=/gnu/bin/emacs compile
+$ make emacs=/gnu/bin/emacs install elispdir=/gnu/lib/emacs/site-lisp
+</PRE>
+
+
+
+<H3><A NAME="SEC6" HREF="dired-dd_toc.html#TOC6">Modifying your <TT>`~/.emacs'</TT></A></H3>
+
+<P>
+Include add-hook codes below in your <TT>`~/.emacs'</TT>:
+
+</P>
+
+<PRE>
+  ;;(setq dired-dd-mode-as-default nil)
+  (add-hook
+   'dired-load-hook
+   (function
+    (lambda ()
+      (load "dired-x")
+      ;; Set dired-x variables here.
+      ;; To and flo...
+      (if window-system (require 'dired-dd)))))
+</PRE>
+
+<P>
+In dired-load-hook, you can customize various
+features including <CODE>dired-x</CODE>
+(see section `Installation' in <CITE>dired-x info</CITE>).
+
+</P>
+<P>
+<CODE>dired-dd-mode</CODE> is implemented as a minor mode for <CODE>dired-mode</CODE>.
+If you do not want to turn on <CODE>dired-dd-mode</CODE> automatically
+upon entering <CODE>dired-mode</CODE>, remove "<CODE>;;</CODE>" before
+<CODE>(setq dired-dd-mode-as-default nil)</CODE> in the example above.
+
+</P>
+<P>
+If you set <CODE>dired-dd-mode-as-default</CODE> to nil, you have to
+turn on <CODE>dired-dd-mode</CODE> with manual operation
+(see section <A HREF="dired-dd.html#SEC9">Dired-dd minor mode</A>).
+
+</P>
+
+
+<H3><A NAME="SEC7" HREF="dired-dd_toc.html#TOC7">Printing Info (optional)</A></H3>
+
+<P>
+PostScript formatted version of this info is included under the
+distribution directory.  If you want hardcopy, issue shell
+command such as <CODE>lpr -Pps dired-dd.ps</CODE>.
+
+</P>
+<P>
+Of course, <TT>`dired-dd.info'</TT>, and perhaps <TT>`dired-dd_toc.html'</TT>
+and <TT>`dired-dd.html'</TT> can be found in the same directory.  Use your
+favorite WWW browser to read the html version.  For
+<TT>`dired-dd.info'</TT>, use <CODE>dired</CODE> <TT>`I'</TT> command, or
+<CODE>dired-dd</CODE> menu raised by <KBD>mouse-3</KBD> (or install it in your info
+directory).
+
+</P>
+<P>
+The <TT>`dired-dd.ps'</TT> was formatted with <TT>`dvi2ps'</TT> as can be seen
+in the <TT>`Makefile'</TT>, with PostScript version of <TT>`cm'</TT> fonts.  If
+you do not have PostScript <TT>`cm'</TT> fonts, or want to print it with
+genuine <TT>`pk'</TT> fonts for some reason, run <TT>`texi2dvi'</TT> locally.
+Texinfo version used for drafting this info seems to be 2.145, according
+to <TT>`texi2dvi'</TT> output (maybe it is old ?).
+
+</P>
+
+
+
+<H2><A NAME="SEC8" HREF="dired-dd_toc.html#TOC8">COPYING</A></H2>
+<P>
+<A NAME="IDX6"></A>
+
+</P>
+<P>
+Since version 0.9.1.6, <CODE>dired-dd</CODE> is distributed under GPL (version 2).
+
+</P>
+<P>
+The older versions might include different copying notice (even if I believe
+they were also `Free Software' as well), but forget all about those obsolete
+versions.
+
+</P>
+<P>
+I take GPL because I think it is the best way to distribute my work on elisp
+for `free', and express my respect to all the emacs related works ever
+been achieved.
+
+</P>
+<P>
+The files under `spinout' directory may not all have the GPL copying notice
+in order to save storage space, but consider them protected
+under GPL as well.
+
+</P>
+<P>
+I cite the copying notice at the top of this texi/info file hereunder,
+for it may not be seen via info browser.
+
+</P>
+
+<PRE>
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+</PRE>
+
+
+
+<H1><A NAME="SEC9" HREF="dired-dd_toc.html#TOC9">Dired-dd minor mode</A></H1>
+<P>
+<A NAME="IDX7"></A>
+<A NAME="IDX8"></A>
+
+</P>
+<P>
+<CODE>dired-dd-mode</CODE> is implemented as a normal minor mode for
+<CODE>dired-mode</CODE>.  <KBD>M-x dired-dd-mode RET</KBD> toggles on / off state
+<CODE>dired-dd-mode</CODE>.  While <CODE>dired-dd-mode</CODE> is turned on, string
+"DragDrop" appears in modeline.
+
+</P>
+<P>
+Further, issuing command <KBD>C-u M-x dired-dd-mode RET</KBD>
+(with positive numeric argument) forces to turn
+on <CODE>dired-dd-mode</CODE>, while <KBD>M- - M-x dired-dd-mode RET</KBD>
+(with negative numeric argument) turns it off.
+
+</P>
+<P>
+You will notice that some of the mouse commands, for example
+<KBD>M-drag-mouse-1</KBD> <CODE>(mouse-drag-secondary)</CODE>, are totally disabled
+in <CODE>dired-dd-mode</CODE>.  Turn off <CODE>dired-dd-mode</CODE> manually, if you
+want to use such commands on <CODE>dired</CODE> buffer.
+
+</P>
+<P>
+Variable <CODE>dired-dd-mode-as-default</CODE> controls whether
+<CODE>dired-dd-mode</CODE> is automatically enabled or not (see section <A HREF="dired-dd.html#SEC29">Turning on / off <CODE>dired-dd-mode</CODE> as default minor mode</A>) upon entering <CODE>dired-mode</CODE>.
+
+</P>
+<P>
+It is possible to turn on <CODE>dired-dd-mode</CODE> within a non-<CODE>dired</CODE>
+buffer, but that is totally useless.
+
+</P>
+
+
+
+<H1><A NAME="SEC10" HREF="dired-dd_toc.html#TOC10">Mouse Button 1</A></H1>
+<P>
+<A NAME="IDX9"></A>
+<A NAME="IDX10"></A>
+<A NAME="IDX11"></A>
+
+</P>
+<P>
+Dragging Mouse button 1 marks files or directories with <CODE>*</CODE>.  This
+mouse command is almost compatible to ordinary <CODE>dired</CODE> command
+<KBD>m</KBD>.
+
+</P>
+<P>
+Double click of mouse Button 1 <EM>opens</EM> file(s) or directory(s)
+objects by an external application (shell command) or emacs.  The
+<EM>opening</EM> method is automatically selected.  The criteria for the
+<EM>opening</EM> method selection is whether any shell command is
+registered for the <EM>extension</EM> part of the file name of the
+objects.
+
+</P>
+<P>
+The core part of the dragging is handled by function
+<CODE>dired-dd-drag-region</CODE>, which is bound to <KBD>down-mouse-1</KBD>.
+<KBD>double-mouse-1</KBD> eventually executes
+<CODE>dired-dd-find-file-or-exec</CODE>.
+
+</P>
+
+<P>
+Caveat:<BR>
+In <CODE>dired-dd</CODE>, a single function may have multiple mouse bindings
+for some technical reason.  So, hereafter in this document, the
+convention of normal emacs info, in which user command is often
+designated such as
+
+</P>
+
+<PRE>
+M-down-mouse-1 (mouse-drag-secondary)
+</PRE>
+
+<P>
+may not be followed in relevant sections below.
+
+</P>
+
+
+
+<H2><A NAME="SEC11" HREF="dired-dd_toc.html#TOC11">Drag</A></H2>
+<P>
+<A NAME="IDX12"></A>
+<A NAME="IDX13"></A>
+
+</P>
+<P>
+Dragging region by mouse button 1 marks or unmarks file(s) or directory(s)
+with a mark <CODE>*</CODE> (toggles marking status).
+Moving the mouse horizontally a bit marks or unmarks a single file.
+Dragged region is copied to the kill ring as a side effect.
+Secondary selection handling with <KBD>M-mouse-1</KBD> and <KBD>M-mouse-2</KBD>
+is totally disabled.
+
+</P>
+<P>
+The mark <CODE>*</CODE> put by dragging of mouse button 1 is identical to the
+normal mark <CODE>*</CODE> put by normal <CODE>dired</CODE> keyboard command
+(e.g. <KBD>m</KBD> <CODE>(dired-mark)</CODE>).  All of the normal <CODE>dired</CODE>
+keyboard commands, and menu bar or popup menu (in emacs-20.xx) commands
+can properly interpret the mark <CODE>*</CODE> put by Mouse Button 1.  All of
+the commands invoked by mouse buttons 2 and 3 work on files and/or
+directories marked with this mark <CODE>*</CODE> (if any marked file exists).
+
+</P>
+<P>
+Pressing <KBD>Meta</KBD> key while dragging with mouse button 1 <EM>flags</EM>
+files or directories with <CODE>D</CODE> (delete) flag instead of mark
+<CODE>*</CODE>.  You can delete the files flagged with <CODE>D</CODE> by hitting
+<KBD>x</KBD> <CODE>(dired-do-flagged-delete)</CODE>.  The only menu entry that
+works on <CODE>D</CODE> flagged files is <TT>`Delete Flagged'</TT> entry found in
+the menu raised by mouse button 3, which is equivalent to <KBD>x</KBD>
+<CODE>(dired-do-flagged-delete)</CODE>.  The other commands invoked from mouse
+buttons 2 and 3 do not affect <CODE>D</CODE> <EM>flagged</EM> files, but
+<CODE>*</CODE> <EM>marked</EM> files.
+
+</P>
+
+
+
+<H2><A NAME="SEC12" HREF="dired-dd_toc.html#TOC12">Double click</A></H2>
+<P>
+<A NAME="IDX14"></A>
+<A NAME="IDX15"></A>
+
+</P>
+<P>
+Double clicking mouse button 1 provides a generic file <EM>opening</EM>
+facility.  The file is opend with an external application (shell
+command) predefined in association with the <EM>extension</EM> part of the
+file name, or if no such application is defined, <KBD>double-mouse-1</KBD>
+falls back to a mere file opening operation using emacs buffer.
+
+</P>
+<P>
+The opening target is marked with <CODE>*</CODE>, or the double-
+clicked file (or directory) if no file (or directory) is marked
+in the <CODE>dired-dd</CODE> buffer.
+
+</P>
+<P>
+<KBD>Double-mouse-1</KBD> eventually calls a function
+<CODE>dired-dd-find-file-or-exec</CODE>.  This function first tries to invoke
+a shell command (application) relevant to the extension of the file name
+asynchronously.  If it can't find such a shell command, the function
+<CODE>dired-dd-find-file-or-exec</CODE> just opens marked (or clicked) file or
+directory using the selected window displaying the current <CODE>dired</CODE>
+buffer.
+
+</P>
+<P>
+The relationship between filename extensions and their respective
+handling command (application) should be stored in a <CODE>dired-x</CODE>
+variable <CODE>dired-guess-shell-alist-user</CODE> (or
+<CODE>dired-guess-shell-alist-default</CODE>).  This feature relies on
+<CODE>dired-x</CODE>.  <KBD>C-h v dired-guess-shell-alist-user RET</KBD> shows you
+how to combine a command to a certain file extension (<TT>`*.jpeg'</TT> =&#62;
+execute <TT>`xv'</TT>, etc), and the current relationship setup in the
+variable.  See section `Shell Command Guessing' in <CITE>dired-x info</CITE>.
+
+</P>
+<P>
+Rough and ready interactive command <CODE>dired-dd-register-shell-alist</CODE>
+is provided to add entry in <CODE>dired-guess-shell-alist-user</CODE>.
+However, the command <CODE>dired-dd-register-shell-alist</CODE> is not
+automatically called when there is no shell command is registered in
+<CODE>dired-guess-shell-alist-user</CODE>.  Further, no automatic saving
+facility (for <CODE>custom-file</CODE>) is provided in current
+<CODE>dired-dd</CODE>.  Adding setup codes for
+<CODE>dired-guess-shell-alist-user</CODE> in your <TT>`~/.emacs'</TT> is the most
+handy and safe way to support new shell command for certain file
+extension.
+
+</P>
+<P>
+The invoked shell command output is collected in buffer <TT>`*dired-dd-proc*'</TT>.
+All the processes invoked by <CODE>dired-dd-exec-command-directly</CODE> share
+this buffer.  Until all the processes sharing the buffer exit,
+string `run' is shown in the mode line of the buffer <TT>`*dired-dd-proc*'</TT>.
+
+</P>
+<P>
+After all the processes have exited, the mode line shows `exit'.  The
+buffer <TT>`*dired-dd-proc*'</TT> exists just for collecting stdout/stderr
+output from the invoked command(s).  Killing the buffer
+<TT>`*dired-dd-proc*'</TT> does no harm (perhaps) to invoked command(s).  No
+fancy job control interface is implemented.
+
+</P>
+<P>
+As described above, double clicking mouse button 1 automatically selects
+file <EM>opening</EM> method, which works fine in most cases.  However, no
+matter how your <CODE>dired-guess-shell-alist-user</CODE> definition is
+designed carefully, there should be such situation that you have to
+force either opening-by-emacs or open-by-external-application.
+
+</P>
+<P>
+For instance, think about the case you have registered a shell script to
+pass a marked HTML file to Netscape in
+<CODE>dired-guess-shell-alist-user</CODE>, but you have to edit it in
+HTML-helper mode in emacs.
+
+</P>
+<P>
+Use <KBD>mouse-2</KBD> (<CODE>dired-dd-find-file</CODE>) to force opening a file
+(or directory) with emacs, or <KBD>M-mouse-2</KBD>
+(<CODE>dired-dd-exec-command-directly</CODE>) to force execution of the
+registered command explicitly (see section <A HREF="dired-dd.html#SEC19">Click (Single)</A>).
+
+</P>
+
+
+<H1><A NAME="SEC13" HREF="dired-dd_toc.html#TOC13">Mouse Button 2</A></H1>
+<P>
+<A NAME="IDX16"></A>
+<A NAME="IDX17"></A>
+<A NAME="IDX18"></A>
+<A NAME="IDX19"></A>
+<A NAME="IDX20"></A>
+
+</P>
+
+<P>
+Mouse button 2 is the most important part of <CODE>dired-dd</CODE>.  It
+handles <EM>Drag and Drop</EM>.  Further, single clicking of Mouse button
+2 opens files / directories, as well as executes command related to the
+file extension.
+
+</P>
+<P>
+Users are strongly advised to create a directory or two accommodating
+dummy files to try drag-and-drop operations and features of
+<CODE>dired-dd</CODE>.  There is "NO WARRANTY" for <CODE>dired-dd</CODE>
+(see section <A HREF="dired-dd.html#SEC8">COPYING</A>).
+
+</P>
+<P>
+Function <CODE>dired-dd-drag-drop</CODE> takes charge in <EM>Drag and Drop</EM>
+part of mouse button 2, and is bound to multiple mouse events such
+as <KBD>down-mouse-2</KBD>, <KBD>C-down-mouse-2</KBD>, <KBD>M-down-mouse-2</KBD>.
+
+</P>
+
+
+
+<H2><A NAME="SEC14" HREF="dired-dd_toc.html#TOC14">Drag</A></H2>
+
+
+
+<H3><A NAME="SEC15" HREF="dired-dd_toc.html#TOC15">Drag-and-drop object and target</A></H3>
+
+<P>
+With mouse button 2, you can drag marked (or on point) files or
+directories, and drop them somewhere.  You can drop the object into
+another <CODE>dired</CODE> buffer, or into directory line in the same
+<CODE>dired</CODE> buffer.  All of these drop targets are <TT>`directory'</TT>
+objects.
+
+</P>
+<P>
+A `drop target' may be not only a `directory object', but also a
+`non-directory object'.  For example, see what happens when you drop a
+file or directory into non-<CODE>dired</CODE> buffer.
+
+</P>
+<P>
+The target <CODE>dired</CODE> or non-<CODE>dired</CODE> buffer, or target directory
+line in a <CODE>dired</CODE> buffer can be located anywhere in emacs.  For
+example, `source' <CODE>dired</CODE> buffer and target <CODE>dired</CODE> buffer may
+be identical. Or, target <CODE>dired</CODE> buffer, or target directory line
+may be displayed in a window different from the `source' <CODE>dired</CODE>
+window.  The target <CODE>dired</CODE> window can be accommodated in a
+different emacs frame.
+
+</P>
+<P>
+On drag and drop into a directory object (a <CODE>dired</CODE> buffer or
+directory line in a <CODE>dired</CODE> buffer), a menu is popped up to ask
+file operation method for the drag drop.  The menu also includes several
+entries which are thought to be convenient but may not be relevant
+directly to drag and drop operation.
+
+</P>
+<P>
+The job selected from the popup menu is immediately executed (copy,
+move, link etc.)  if the target is explicit, while minibuffer prompt is
+raised if the target (normally it is a directory) is ambiguous.
+
+</P>
+<P>
+The same menu is popped upon horizontal drag.  This means that you made
+drag &#38; drop into the same directory, if the dragged object is file(s).
+In this case, the destination of copy/move/link etc. is asked by
+minibuffer interface.
+
+</P>
+<P>
+If the horizontally dragged object is a directory, note that the target
+directory is not the same as the default directory of the <CODE>dired</CODE>
+buffer (refer to subsection "Where is my file ?" below).
+
+</P>
+<P>
+Also See section <A HREF="dired-dd.html#SEC22">The Popup Menu</A> for the menu raised by mouse button 2.
+
+</P>
+
+
+<H3><A NAME="SEC16" HREF="dired-dd_toc.html#TOC16">Non-<CODE>dired</CODE> targets.</A></H3>
+<P>
+<A NAME="IDX21"></A>
+
+</P>
+<P>
+Drag and drop into non-directory object (other non-<CODE>dired</CODE> buffer),
+the file or directory object is just opened using the window into which
+it dropped (or defined function is executed. See below).  This is an
+emulation of a drag and drop operation, which can be commonly found in
+various file managers and editing applications (eg. <TT>`Word'</TT> and
+<TT>`Explorer'</TT>, <CODE>Offix</CODE> <TT>`Files'</TT> and <TT>`Editor'</TT> or
+<TT>`Trash'</TT> and so on).
+
+</P>
+<P>
+The behaviour of on drag-and-dropping files into non-directory object
+(other non-<CODE>dired</CODE> buffer) can be customized with variable
+<CODE>dired-dd-non-dired-drop-handlers</CODE>.  See section <A HREF="dired-dd.html#SEC34">Customizing behavior on dropping into non-dired buffer</A> for detailed informations.
+
+</P>
+<P>
+On dropping onto non-<CODE>dired</CODE> buffer located in another frame, files
+or directories are opened using multiple windows.
+
+</P>
+<P>
+Further, from version 0.9.1.7, the object can be dropped on root window.
+Before 0.9.1.7, dropping object on root window was treated with message
+"No emacs frame over there", but now the object (file or directory) is
+opened by function <CODE>find-file-other-frame</CODE>.  The dropped file or
+directory is opened using an independent frame, which is newly created,
+or just raised (this behaviour may differ depending upon the window
+manager in use) if it already exists.  If variable
+<CODE>dired-dd-iconify-control-on-root-drop</CODE> (default: nil) is non-nil,
+the relevant frame is iconified or deiconified depending on its iconic
+status.  This iconify control may not work nicely (or be totally
+ignored) in some version of emacs, or with some window manager.
+
+</P>
+<P>
+As a handler routine for the dropping onto non-<CODE>dired</CODE> target, an
+emacs command (function) <CODE>dired-find-file-other-frame</CODE> is provided.
+This emacs command can be called from keyboard.  Possible settings (not
+well tested) in <TT>`./emacs'</TT>:
+
+</P>
+
+<PRE>
+  (define-key dired-mode-map "\e\C-o" 'dired-find-file-other-frame)
+  (autoload 'dired-find-file-other-frame "dired-dd" nil t)
+</PRE>
+
+<P>
+Unfortunately, inter-application drag-and-drop is not supported yet (or
+forever) in <CODE>dired-dd</CODE>.  It seems that there are known some emacsen
+which can handle inter-application drag-and-drop, but the authour may be
+too busy to support them as a <CODE>dired-dd</CODE> platform, or build
+primitive functions for inter-application drag-and-drop disabled normal
+emacs.
+
+</P>
+
+
+<H3><A NAME="SEC17" HREF="dired-dd_toc.html#TOC17">Quick drag and drop with modifier keys</A></H3>
+
+<P>
+Dragging with <KBD>Control/Meta/Shift</KBD> key is supported.  These modifier
+keys are detected at the very timing of releasing mouse button (as in
+<TT>`XV'</TT>'s Visual Schunauzer).  Thus, in order to select file operation
+method, you may start drag with <KBD>down-mouse-2</KBD>, then press
+<KBD>Control/Meta/Shift</KBD> before releasing it, even if you rebind
+<KBD>C-/M-/S-down-mouse-2</KBD> to other functions.
+
+</P>
+<P>
+Each modifier specifies file (or directory) operation for the current
+drag and drop as follows:
+
+</P>
+<DL COMPACT>
+
+<DT><SAMP>`<KBD>Control</KBD>'</SAMP>
+<DD>
+<SAMP>`C'</SAMP>opy file
+<DT><SAMP>`<KBD>Meta</KBD>'</SAMP>
+<DD>
+<SAMP>`M'</SAMP>ove (rename) file
+<DT><SAMP>`<KBD>Shift</KBD>'</SAMP>
+<DD>
+(maybe <SAMP>`S'</SAMP>ymbolic ?) Link file
+</DL>
+
+<P>
+In linking file / directory with <KBD>Shift</KBD> modifier, the link method
+is determined by variable <CODE>dired-dd-default-link-method</CODE>
+(see section <A HREF="dired-dd.html#SEC33">File linking method</A>).
+
+</P>
+
+
+<H3><A NAME="SEC18" HREF="dired-dd_toc.html#TOC18">Where is my file ?</A></H3>
+
+<P>
+Be carefull when you drop a file or directory into in a <CODE>dired</CODE>
+buffer.  If a file or directory is dropped into an ordinary file line,
+into the first header line, or into <TT>`.'</TT> line, it is
+copied/moved/linked into the directory corresponding to the target
+<CODE>dired</CODE> buffer's default directory as you may expect.  However,
+dropping a file or directory into a directory line in a <CODE>dired</CODE>
+buffer means that you selected the directory (line) as the destination
+directory.  This is rational feature of <CODE>dired-dd</CODE>, but the file or
+directory may be copied/moved/linked to unintended place due to this
+feature, if you do not care much about the target line.  Especially when
+you drop with the modifier keys, no menu is raised, nor destination is
+displayed in the echo area of emacs, so please pay a special attention
+on drop-target when you quick-drop with the modifier key.
+
+</P>
+
+
+
+<H2><A NAME="SEC19" HREF="dired-dd_toc.html#TOC19">Click (Single)</A></H2>
+
+<P>
+Clicking <KBD>mouse-2</KBD> opens, or executes shell commands on file (or
+directory).  A mere click opens file using the currently selected
+window.
+
+</P>
+
+<UL>
+<LI>
+
+<KBD>mouse-2</KBD> (<CODE>dired-dd-find-file</CODE>)<BR>
+
+<KBD>mouse-2</KBD> (<CODE>dired-dd-find-file</CODE>) openes only clicked file (or
+directory) despite of existence of any marked file (or directory) in the
+<CODE>dired</CODE> buffer.  Further, <KBD>mouse-2</KBD>
+(<CODE>dired-dd-find-file-other-window</CODE>) openes a file (or directory)
+using the window displaying the <CODE>dired</CODE> buffer, and this operation
+is incompatible to original <CODE>dired</CODE>'s <KBD>mouse-2</KBD> command
+(<CODE>dired-mouse-find-file-other-window</CODE>).  This windowing behaviour
+can be customized (see section <A HREF="dired-dd.html#SEC30">Find file method</A>).<BR>
+
+</UL>
+
+<P>
+Further several modifiers are supported for a click of <KBD>mouse-2</KBD>:
+
+</P>
+
+<UL>
+<LI>
+
+<KBD>C-S-mouse-2</KBD> (<CODE>dired-dd-find-file-other-window</CODE>)<BR>
+
+Opens a file (or directory) using other window.  Always only the clicked
+file (or directory) is opend using other window, even if any marked file
+(or directory) existed in the <CODE>dired</CODE> buffer.<BR>
+
+From version 0.9.1.10, an alternative function (emacs command)
+<CODE>dired-dd-find-marked-files</CODE> is provided is implemented. This
+function can alternatively be bound to, for example, <CODE>C-S-mouse-2</CODE>
+with including a line
+
+
+<PRE>
+(define-key dired-dd-mode-map [C-S-mouse-2] 'dired-dd-find-marked-files)
+</PRE>
+
+in your <CODE>dired-dd-load-hook</CODE>
+definition
+(I think this binding is not what you want in most situations, though).<BR>
+
+<LI>
+
+<KBD>M-mouse-2</KBD> (<CODE>dired-dd-exec-command-directly</CODE>)<BR>
+
+<KBD>M-mouse-2</KBD> executes a shell command related the file extension.
+The function <CODE>dired-dd-exec-command-directly</CODE> bound to this mouse
+event asynchronously invokes a shell command (application) related to
+the filename extension of the marked or clicked file (or directory).
+Command output is collected in buffer <TT>`*dired-dd-proc*'</TT>.  All the
+process invoked by <CODE>dired-dd-exec-command-directly</CODE> shares this
+buffer.  Until all the process sharing the buffer are terminated, string
+`run' is shown in mode line of the buffer <TT>`*dired-dd-proc*'</TT>.
+
+<BR>
+After all the process are exited, the mode line will show `exit'.  The
+buffer <TT>`*dired-dd-proc*'</TT> exists just for collect stdout/stderr
+output from the invoked command.  Killing the buffer
+<TT>`*dired-dd-proc*'</TT> does no harm (perhaps) for invoked command.  No
+fancy job control interface is implemented.
+
+<BR>
+As for the relationship between the filename extension and the related
+shell command, See section <A HREF="dired-dd.html#SEC12">Double click</A>.
+
+<BR>
+If you do not want to execute the command asynchronously for particular
+reason, use next command.  <BR>
+
+<LI>
+
+<KBD>C-M-S-mouse-2</KBD> (<CODE>dired-dd-exec-command-query</CODE>)<BR>
+
+Execute command with minibuffer prompt.  This command is almost
+compatible with <CODE>dired</CODE> keyboard command <KBD>!</KBD>
+(<CODE>dired-do-shell-command</CODE>).  If you append "&#38;" at the end of
+command line, the command is invoked asynchronously, but you have to
+rename <TT>`*Shell Command Output*'</TT> buffer to invoke multiple commands
+asynchronously.  See See section <A HREF="dired-dd.html#SEC12">Double click</A> for
+<CODE>dired-x</CODE> variable <CODE>dired-guess-shell-alist-user</CODE>.
+</UL>
+
+
+
+<H1><A NAME="SEC20" HREF="dired-dd_toc.html#TOC20">Mouse Button 3</A></H1>
+<P>
+<A NAME="IDX22"></A>
+<A NAME="IDX23"></A>
+
+</P>
+
+<P>
+Mouse Button 3 raises a menu facilitating miscellaneous file operations.
+This menu features various shell commands which are not available
+directly from original <CODE>dired</CODE>'s menu-bar, or popup menu.
+
+</P>
+
+
+
+<H2><A NAME="SEC21" HREF="dired-dd_toc.html#TOC21">Click (Single)</A></H2>
+
+<P>
+Clicking mouse Button 3 raises a full menu (not so `full' as
+<CODE>dired</CODE> menu bar, but good enough for daily use, I suppose) to ask
+a handling method (delete/copy/move... etc) for marked (or on point)
+files delete/copy/move... etc.
+
+</P>
+<P>
+Probably at the time of public release of <CODE>dired-dd</CODE>, various of
+shell commands will be bound which are not available direct from
+original <CODE>dired</CODE> menu bar or key binding.  The menu raised by mouse
+button 3 can be customized (see section <A HREF="dired-dd.html#SEC39">Menu raised by Button 3</A>).
+
+</P>
+<P>
+Consider the default menu raised by mouse button 3 as just a
+customizable file operation menu.  Also See section <A HREF="dired-dd.html#SEC22">The Popup Menu</A> for the
+menu raised by mouse button 3.
+
+</P>
+<P>
+In Emacs-19.xx, <KBD>S-mouse-3</KBD> raises the original <CODE>dired</CODE>
+menu-bar as popup menu, which is a full-featured one.  You can use
+<KBD>C-mouse-3</KBD> menu as it is in emacs-20.
+
+</P>
+
+
+
+<H1><A NAME="SEC22" HREF="dired-dd_toc.html#TOC22">The Popup Menu</A></H1>
+<P>
+<A NAME="IDX24"></A>
+<A NAME="IDX25"></A>
+<A NAME="IDX26"></A>
+<A NAME="IDX27"></A>
+<A NAME="IDX28"></A>
+
+</P>
+<P>
+This chapter deals with some caveats on the popup menus raised by mouse
+buttons 2 and 3.
+
+</P>
+
+
+
+<H2><A NAME="SEC23" HREF="dired-dd_toc.html#TOC23"><TT>`Copy Recursive'</TT> entry</A></H2>
+
+<P>
+Most of the entries in the menu raised by <KBD>mouse-2</KBD> call ordinary
+<CODE>dired</CODE> commands having <CODE>dired-</CODE> or <CODE>dired-do-</CODE> prefix in
+their function name.  Thus, almost all of these `dired-compatible'
+commands will work almost the same as you expect from normal
+<CODE>dired</CODE> operations.  At the same time, as a matter of course, the
+same limitation of the <CODE>dired</CODE> command is also applied: For
+example, neither recursive copy of directory tree, nor moving directory
+tree across different file systems is possible.
+
+</P>
+<P>
+One exception is <TT>`Copy Recursive'</TT> entry (new from version 0.9) in
+the menu raised by <KBD>mouse-2</KBD> and <KBD>mouse-3</KBD>.  This menu entry is
+bound to functions <TT>`dired-dd-copy-recursive'</TT> (in case of
+<KBD>mouse-2</KBD>), and <TT>`dired-dd-do-copy-recursive'</TT> (in case of
+<KBD>mouse-3</KBD>).
+
+</P>
+<P>
+In the <TT>`Copy Recursive'</TT> facility,
+control returns to emacs faster than
+normal C (<TT>`dired-do-copy'</TT>) or <TT>`"Copy"'</TT> menu item, so it has
+a merit to use even for plain files (not for directory tree),
+especially when they are huge in size.
+
+</P>
+<P>
+Downside of the <TT>`Copy Recursive'</TT> facility is 
+that the target dired buffer may not be updated correctly.
+Try hitting key <KBD>g</KBD> (<TT>`revert-buffer'</TT>)
+after <TT>`"Copy Recursive"'</TT> to update the target <TT>`dired'</TT> buffer.
+
+</P>
+<P>
+These <TT>`Copy Recursive'</TT> functions eventually call a
+sub-shell command defined in a variable
+<CODE>dired-dd-copy-recursive-command</CODE>, whose default value is <SAMP>`cp
+-a'</SAMP>, assuming it being GNU <TT>`cp'</TT> command.
+
+</P>
+<P>
+If you do not have <TT>`cp'</TT> command which can be invoked as <TT>`cp -a
+file targetdir'</TT>, install GNU fileutil, or write an equivalent script
+using <TT>`tar'</TT>, <TT>`cpio'</TT> etc.
+
+</P>
+<P>
+The menu entry <TT>`Copy Recursive'</TT> can copy files / directories fast
+across different file systems recursively, but do not work over FTP
+directory.
+
+</P>
+<P>
+Command <CODE>dired-dd-do-copy-recursive-regexp</CODE> is also provided in
+<CODE>dired-dd</CODE>.  The command <CODE>dired-dd-do-copy-recursive</CODE>, as well
+as <CODE>dired-dd-do-copy-recursive-regexp</CODE> can be bound to a key
+similarly as in the case of standard <CODE>dired-do-xxx</CODE>, or
+<CODE>dired-do-xxx-regexp</CODE> commands in <CODE>dired</CODE>, for example:
+
+</P>
+
+<PRE>
+(define-key dired-dd-mode-map "\eC" 'dired-dd-do-copy-recursive)
+(define-key dired-dd-mode-map "%c" 'dired-dd-do-copy-recursive-regexp)
+</PRE>
+
+<P>
+or
+
+<PRE>
+(define-key dired-dd-mode-map "%R" 'dired-dd-do-copy-recursive-regexp)
+</PRE>
+
+<P>
+These key bindings are not defined as a default in <CODE>dired-dd</CODE>
+because I do not think they are good ones.  Choose any preferred key
+bindings if you want to use these commands from keyboard as well.
+
+</P>
+<P>
+<TT>`Move Recursive'</TT> is not supported in <CODE>dire-dd</CODE> yet.  If you do
+not like to keep old directory after you have <TT>`copied recursive'</TT>,
+just erase it (the menu raised by <KBD>mouse-3</KBD> has <TT>`Delete
+Recursive'</TT>).
+
+</P>
+<P>
+The menu raised by <KBD>mouse-3</KBD> has some more `dired-incompatible'
+commands.  They are all conceived to provide convenience, but the
+in-compatibleness may irritate users. Just consider them as an example
+of customizable menu entry (see section <A HREF="dired-dd.html#SEC39">Menu raised by Button 3</A>).
+
+</P>
+
+
+<H2><A NAME="SEC24" HREF="dired-dd_toc.html#TOC24"><TT>`Exec Related CMD'</TT> entry</A></H2>
+
+<P>
+From version 0.9.1.3, <TT>`Exec Related CMD'</TT> entry in mouse-2 menu
+invokes shell command asynchronously.  This menu item is compatible to
+<KBD>M-mouse-2</KBD> (<CODE>dired-dd-exec-command-directly</CODE>).  See section <A HREF="dired-dd.html#SEC19">Click (Single)</A>.
+
+</P>
+
+
+
+<H2><A NAME="SEC25" HREF="dired-dd_toc.html#TOC25"><TT>`Launch a Terminal'</TT> entry</A></H2>
+<P>
+<A NAME="IDX29"></A>
+
+</P>
+<P>
+From version 0.9.1.5, <TT>`Launch a Terminal'</TT> entry is the top item in
+the menu raised by mouse-3 no matter how the real emacs user hates it
+(or not). The <TT>`Refresh Listing'</TT> entry is moved down to the bottom
+accordingly.
+
+</P>
+<P>
+This menu item runs shell command stored in variable
+<CODE>dired-dd-terminal-command</CODE>, whose default value is <TT>`xterm'</TT>,
+or probably <TT>`kterm'</TT> depending upon environment variable
+<TT>`LANG'</TT>. Set your favorite terminal emulator name in
+<CODE>dired-dd-terminal-command</CODE>.  Options may be included in
+<CODE>dired-dd-terminal-command</CODE>, for example:
+
+</P>
+
+<PRE>
+(setq dired-dd-terminal-command "rxvt -fn vga")
+</PRE>
+
+<P>
+As in the case of <CODE>dired-guess-shell-alist-user</CODE>,
+<CODE>dired-dd-terminal-command</CODE> may include <CODE>exec</CODE> at the top of
+its string value (e.g. <CODE>"exec rxvt -fn vga"</CODE> for the example above)
+to save memory, but this may not work in Emacs-19.xx (see section <A HREF="dired-dd.html#SEC45">Bug, Caveats</A>).
+
+</P>
+
+
+
+<H1><A NAME="SEC26" HREF="dired-dd_toc.html#TOC26">Copying filename by mouse</A></H1>
+<P>
+<A NAME="IDX30"></A>
+<A NAME="IDX31"></A>
+<A NAME="IDX32"></A>
+<A NAME="IDX33"></A>
+
+</P>
+
+<P>
+Mouse bindings below are enabled in <CODE>dired-dd</CODE> minor mode:<BR>
+
+</P>
+
+<UL>
+
+<LI>
+
+<KBD>C-M-mouse-1</KBD> <CODE>(dired-dd-copy-filename-as-kill)</CODE><BR>
+
+Works as <CODE>dired</CODE> keyboard command
+<KBD>w</KBD> <CODE>(dired-copy-filename-as-kill)</CODE> with nil prefix-arg.<BR>
+
+<LI>
+
+<KBD>C-M-mouse-2</KBD> <CODE>(dired-dd-copy-filename-as-kill-full)</CODE><BR>
+
+Works as <CODE>dired</CODE> keyboard command
+
+<KBD>w</KBD> <CODE>(dired-copy-filename-as-kill)</CODE> with <CODE>0</CODE> prefix-arg.<BR>
+
+<LI>
+
+<KBD>C-M-mouse-3</KBD> <CODE>(dired-dd-unmark-all-marks)</CODE><BR>
+Unmarks all file and directories.
+Works as <CODE>dired</CODE> keyboard command
+<KBD>*-!</KBD> <CODE>(dired-unmark-all-marks)</CODE> in emacs-20.xx, or
+<KBD>M-DEL</KBD> <CODE>(dired-unmark-all-files)</CODE> <KBD>RET</KBD> in emacs-19.xx.
+
+</UL>
+
+<P>
+These bindings may be convenient in exchanging file name with
+<TT>`xterm'</TT>, or <TT>`*shell*'</TT> buffer.
+
+</P>
+<P>
+Further trivial functions may be bound to other mouse / key events.  Try
+<KBD>C-h m (describe-mode)</KBD> or <KBD>C-h b (describe-bindings)</KBD> in a
+<CODE>dired-dd</CODE> enabled buffer.
+
+</P>
+
+
+
+<H1><A NAME="SEC27" HREF="dired-dd_toc.html#TOC27">Customizing</A></H1>
+<P>
+<A NAME="IDX34"></A>
+
+</P>
+<P>
+This chapter deals with customizing of various <CODE>dired-dd</CODE> features.
+
+</P>
+
+
+
+<H2><A NAME="SEC28" HREF="dired-dd_toc.html#TOC28">Variables</A></H2>
+
+<P>
+These variables controls various features of <CODE>dired-dd</CODE>:<BR>
+
+</P>
+
+<UL>
+<LI><CODE>dired-dd-version</CODE>
+
+<LI><CODE>dired-dd-mode-hook</CODE>
+
+<LI><CODE>dired-dd-awakening</CODE>
+
+<LI><CODE>dired-dd-mode-as-default</CODE>
+
+<LI><CODE>dired-dd-copy-recursive-command</CODE>
+
+<LI><CODE>dired-dd-x-pointer-shape</CODE>
+
+<LI><CODE>dired-dd-old-x-pointer-shape</CODE>
+
+<LI><CODE>dired-dd-no-x-pointer-animation</CODE>
+
+<LI><CODE>dired-dd-x-pointer-list</CODE>
+
+<LI><CODE>dired-dd-find-multiple-file</CODE>
+
+<LI><CODE>dired-dd-find-file-method</CODE>
+
+<LI><CODE>dired-dd-iconify-control-on-root-drop</CODE>
+
+<LI><CODE>dired-dd-b2-menu</CODE>
+
+<LI><CODE>dired-dd-default-link-method</CODE>
+
+<LI><CODE>dired-dd-audio-inline-sound</CODE>
+
+<LI><CODE>dired-dd-non-dired-drop-handlers</CODE>
+
+<LI><CODE>dired-dd-play-audio</CODE>
+
+<LI><CODE>dired-dd-audio-directory</CODE>
+
+<LI><CODE>dired-dd-audio-wav-player</CODE>
+
+<LI><CODE>dired-dd-audio-au-player</CODE>
+
+<LI><CODE>dired-dd-audio-file-alist</CODE>
+
+<LI><CODE>dired-dd-use-modeline-binding-global</CODE>
+
+<LI><CODE>dired-dd-b3-keymap</CODE>
+
+</UL>
+
+<P>
+The names are almost self-explanatory.  Refer to the documentation
+string of the variables for detail (or see section <A HREF="dired-dd.html#SEC48">Variable Index</A>, for
+important variables are described in various places in this document)
+Hereafter, variables of reasonable importance are explained.
+
+</P>
+
+
+
+<H2><A NAME="SEC29" HREF="dired-dd_toc.html#TOC29">Turning on / off <CODE>dired-dd-mode</CODE> as default minor mode</A></H2>
+<P>
+<A NAME="IDX35"></A>
+
+</P>
+<P>
+Variable <CODE>dired-dd-mode-as-default</CODE> determines if
+<CODE>dired-dd-mode</CODE> should be automatically enabled or not when you
+fired up <CODE>dired-mode</CODE> with <KBD>C-x d</KBD>, <KBD>C-x C-f</KBD>, etc.
+Actually, <CODE>dired-dd-mode-as-default</CODE> determines whether to add
+function <CODE>dired-dd-mode-enable</CODE> to <CODE>dired-mode-hook</CODE> or not.
+
+</P>
+<P>
+Default value of <CODE>dired-dd-mode-as-default</CODE> is t.
+
+</P>
+<P>
+This variable <CODE>dired-dd-mode-as-default</CODE> should be set before
+actual loading of <TT>`dired-dd.elc'</TT> (if compiled) with expression such
+as <CODE>(require 'dired-dd)</CODE> or <CODE>(load "dired-dd")</CODE>.
+See section <A HREF="dired-dd.html#SEC2">Installation</A>, and See section <A HREF="dired-dd.html#SEC9">Dired-dd minor mode</A>.
+
+</P>
+<P>
+On running emacs, you can turn off <CODE>dired-dd-mode</CODE> for forthcoming
+every <CODE>dired-mode</CODE> by evaluating
+
+</P>
+
+<PRE>
+    (remove-hook 'dired-mode-hook 'dired-dd-mode-enable)
+</PRE>
+
+<P>
+or, turn it on again as default minor mode for <CODE>dired-mode</CODE> by
+evaluating
+
+</P>
+
+<PRE>
+    (add-hook 'dired-mode-hook 'dired-dd-mode-enable)
+</PRE>
+
+<P>
+in <TT>`*scratch*'</TT> buffer, or <KBD>M-:</KBD> (<KBD>ESC-ESC</KBD> in emacs-19.xx).
+
+</P>
+
+
+
+<H2><A NAME="SEC30" HREF="dired-dd_toc.html#TOC30">Find file method</A></H2>
+
+
+
+<H3><A NAME="SEC31" HREF="dired-dd_toc.html#TOC31"><CODE>dired-dd-find-multiple-file</CODE></A></H3>
+<P>
+<A NAME="IDX36"></A>
+
+</P>
+<P>
+In the default setting, if no suitable external shell command is
+registered in association with the filename extention,
+<KBD>double-mouse-1</KBD> (<CODE>dired-dd-find-file-or-exec</CODE>) <EM>opens</EM>
+just one clicked file or directory even if any marked file (or
+directory) exists in the <CODE>dired</CODE> buffer.  If you want to open the
+marked files (not the clicked one), set variable
+<CODE>dired-dd-find-multiple-file</CODE> to non-nil.  This variable
+<CODE>dired-dd-find-multiple-file</CODE> only affects the <CODE>find-file</CODE>
+behaviour of <CODE>dired-dd-find-file-or-exec</CODE>, and has no effect on the
+invoking the shell command (if any command is registered).  If a shell
+command is registered, <KBD>double-mouse-1</KBD>
+(<CODE>dired-dd-find-file-or-exec</CODE>) always invokes the registered shell
+command over marked files.  Also refer to the document string of
+<CODE>dired-dd-find-multiple-file</CODE> with <KBD>C-h v
+dired-dd-find-multiple-file RET</KBD>.
+
+</P>
+
+
+<H3><A NAME="SEC32" HREF="dired-dd_toc.html#TOC32"><CODE>dired-dd-find-file-method</CODE></A></H3>
+<P>
+<A NAME="IDX37"></A>
+
+</P>
+<P>
+You may want to setq <CODE>dired-dd-find-file-method</CODE> to
+<CODE>'dired-find-file-other-window</CODE>, which emulates original
+<CODE>dired</CODE>'s <KBD>mouse-2</KBD> binding (to
+<CODE>dired-mouse-find-file-other-window</CODE>).
+
+</P>
+
+
+<H2><A NAME="SEC33" HREF="dired-dd_toc.html#TOC33">File linking method</A></H2>
+<P>
+<A NAME="IDX38"></A>
+<A NAME="IDX39"></A>
+
+</P>
+<P>
+The default value of variable <CODE>dired-dd-default-link-method</CODE> is
+<CODE>relsymlink</CODE>.  According to this default, the object dragged and
+dropped by <KBD>S-drag-mouse-2</KBD> is linked relatively to the source path
+of the object.  Valid value is one of <CODE>symlink</CODE>, <CODE>hardlink</CODE>,
+or <CODE>relsymlink</CODE>.  For instance, if you want to link file(s) with
+plain symbolic link, include
+
+</P>
+
+<PRE>
+        (setq dired-dd-default-link-method 'symlink)
+</PRE>
+
+<P>
+in your <TT>`~/.emacs'</TT>.
+
+</P>
+<P>
+The <CODE>dired-dd-default-symlink-method</CODE> existed in older versions was
+renamed to <CODE>dired-dd-default-link-method</CODE>, and is not used anymore.
+If you have <CODE>dired-dd-default-symlink-method</CODE> in your
+<TT>`~/.emacs'</TT>, rename it as well accordingly.  Sorry for the
+inconvenience.
+
+</P>
+
+
+<H2><A NAME="SEC34" HREF="dired-dd_toc.html#TOC34">Customizing behavior on dropping into non-dired buffer</A></H2>
+<P>
+<A NAME="IDX40"></A>
+
+</P>
+<P>
+In older versions of <CODE>dired-dd</CODE>, a drag-and-dropped file (or
+directory) is just opend using target window if it is dropped into
+non-directory buffer, but, from version 0.9.1.11, the behavior invoked
+with such drag-and-drop operation can be customized.
+
+</P>
+<P>
+User can define a prefered handler function to deal with the
+drag-and-drop operation into non-directory buffer, and the handler
+function can be registered in a variable
+<CODE>dired-dd-non-dired-drop-handlers</CODE> (nil as default) in a list form.
+
+</P>
+<P>
+Refer to <TT>`dired-dd-mew.el'</TT> included in <CODE>dired-dd</CODE>
+distribution.  <TT>`Dired-dd-mew.el'</TT> contains an example of the handler
+function and registering code.  Also refer to
+<TT>`dired-dd-insert-file.el'</TT>, and <TT>`dired-dd-insert-fname.el'</TT>,
+which are yet other examples of the handler function.
+<BR>
+<TT>`Dired-dd-mew.el'</TT> enables drag-and-dropping MIME attachment file(s)
+into Mew's draft buffer.  <TT>`Dired-dd-insert-file.el'</TT> and
+<TT>`dired-dd-insert-fname.el'</TT> enable insert content, or filename of
+dropped file into a non-dired buffer respectively.
+
+</P>
+<P>
+The handler functions registered in
+<CODE>dired-dd-non-dired-drop-handlers</CODE> are called in the order of the
+list until some of them succeeds from a function
+<CODE>dired-dd-exec-non-dired-drop-handlers</CODE>, which is invokd from a
+function <CODE>dired-dd-drop-from-to</CODE> (a core part of drag-and-drop in
+<CODE>dired-dd</CODE>).
+
+</P>
+<P>
+The handler function to be registered in
+<CODE>dired-dd-non-dired-drop-handlers</CODE>
+must accept one arg
+<CODE>ARGLIST</CODE>, whose format is:
+
+</P>
+
+<PRE>
+  (FILENAME-LIST WINDOW MODIFIERS POINT)
+</PRE>
+
+<P>
+wherein
+
+</P>
+
+<UL>
+<LI>FILENAME-LIST: a list of dropped filenames (in full path description)
+
+<LI>WINDOW:        target window (probably useless)
+
+<LI>MODIFIERS:     modifier key list at the relevant drag-and-drop operation
+
+<LI>POINT:         buffer position corresponding to point where file is dropped.
+
+</UL>
+
+<P>
+The handler function can assume that current window/buffer is already
+switched to the target of the relevant drag-and-drop when it is called.
+It is responsibility of the handler function to examine whether the
+current window/buffer is suitable for its own job.  The examination
+should be strict as possible, because it is not predictable that the
+user registers what sort of handler function in what order.
+
+</P>
+<P>
+The handler function must return non-nil if its operation was successful,
+otherwise nil.
+
+</P>
+<P>
+If the parameters included in the <CODE>ARGLIST</CODE> is not enough, programmers can
+access variables such as <CODE>modifiers</CODE>, <CODE>event</CODE> <CODE>start-window</CODE>
+etc., which are defined in upper functions.  Refer to the upper functions
+<CODE>dired-dd-drag-drop</CODE> and  <CODE>dired-dd-drop-from-to</CODE> in
+<TT>`dired-dd.el'</TT>, for the meaning of those parameters.
+
+</P>
+<P>
+I guess we might be allowed to indulge ourselves in being lisp programmers,
+in writing this sort of function for limited purpose.
+
+</P>
+
+
+
+<H2><A NAME="SEC35" HREF="dired-dd_toc.html#TOC35">Sound</A></H2>
+<P>
+<A NAME="IDX41"></A>
+<A NAME="IDX42"></A>
+<A NAME="IDX43"></A>
+<A NAME="IDX44"></A>
+<A NAME="IDX45"></A>
+<A NAME="IDX46"></A>
+
+</P>
+<P>
+Experimental code for playing sound upon drag and drop by <KBD>mouse-2</KBD>
+is included, but this facility is disabled as a default.  If you want to
+play sound, set up these variables appropriately to match your
+environment:<BR>
+
+</P>
+
+<UL>
+<LI><CODE>dired-dd-play-audio</CODE>
+
+<LI><CODE>dired-dd-audio-directory</CODE>
+
+<LI><CODE>dired-dd-audio-wav-player</CODE>
+
+<LI><CODE>dired-dd-audio-au-player</CODE>
+
+<LI><CODE>dired-dd-audio-file-alist</CODE>
+
+</UL>
+
+<P>
+See the document strings of these variables.  In future version, this
+sound facility may be removed (or not, I don't know).
+
+</P>
+
+
+
+<H2><A NAME="SEC36" HREF="dired-dd_toc.html#TOC36">Pointer animation</A></H2>
+<P>
+<A NAME="IDX47"></A>
+<A NAME="IDX48"></A>
+<A NAME="IDX49"></A>
+<A NAME="IDX50"></A>
+
+</P>
+<P>
+Silly animation with X pointer is enabled by default (probably, if your
+X display, or network between your X display and remote emacs is fast
+enough).  To turn off the animation, set
+<CODE>dired-dd-no-x-pointer-animation</CODE> to <CODE>t</CODE>.  If the pointer
+animation is disabled, the pointer shape (number) stored in variable
+<CODE>dired-dd-x-pointer-shape</CODE> is used while dragging.
+
+</P>
+<P>
+If you want to change the animation frames, modify variable
+<CODE>dired-dd-x-pointer-list</CODE> which contains pointer shape as list.
+
+</P>
+<P>
+The pointer number is defined in <TT>`$lisp/term/x-win.el'</TT>.  To get the
+name of the x-pointer variables, <KBD>M-x apropos ^x-pointer- RET</KBD> will
+work.  You can examine the shape of a x-pointer with an expression such
+as:
+
+<PRE>
+        (let ((x-pointer-shape x-pointer-right-ptr))
+          (set-mouse-color nil))
+</PRE>
+
+<P>
+Evaluate above expression in <TT>`*scratch*'</TT> buffer with <KBD>C-j</KBD>,
+or <KBD>M-:</KBD> (<KBD>ESC-ESC</KBD> in emacs-19.xx).
+
+</P>
+
+
+
+<H2><A NAME="SEC37" HREF="dired-dd_toc.html#TOC37">Insignia</A></H2>
+<P>
+<A NAME="IDX51"></A>
+<A NAME="IDX52"></A>
+<A NAME="IDX53"></A>
+<A NAME="IDX54"></A>
+
+</P>
+<P>
+Further setting variable <CODE>dired-dd-awakening</CODE> to non-nil (default:
+nil) enables display of <CODE>dired-dd</CODE> insignia upon every wake up of
+<CODE>dired-dd-mode</CODE>.  <KBD>M-x dired-dd-version RET</KBD>, or the last entry
+"About dired-dd" in the menu raised by button 3 may display it as
+well, in full format.
+
+</P>
+<P>
+The entity of the <CODE>dired-dd</CODE> insignia is
+<CODE>dired-dd-the-ball-of-fire</CODE>.  Code such as:
+
+</P>
+
+<PRE>
+(autoload 'dired-dd-the-ball-of-fire "dire-dd" nil t)
+(add-hook 'find-file-hooks 'dired-dd-the-ball-of-fire)
+</PRE>
+
+<P>
+will show you the road to awakening everywhere in emacs when you find
+new file.
+
+</P>
+<P>
+The insignia may not be displayed if your X display or network between X
+display and remote machine running emacs is too slow.  Sorry.
+
+</P>
+
+
+
+<H2><A NAME="SEC38" HREF="dired-dd_toc.html#TOC38">Menu raised by Button 2</A></H2>
+<P>
+<A NAME="IDX55"></A>
+
+</P>
+<P>
+It may not be such a good idea to try to customize the menu raised by
+Button 2.  Currently variable <CODE>dired-dd-b2-menu</CODE>, and its handler
+routine are very nasty.  Hack the source code, if you really want to
+modify <KBD>mouse-2</KBD> menu, but I might change the structure of
+<CODE>dired-dd-b2-menu</CODE> (to normal keymap ?) totally in future version.
+
+</P>
+
+
+
+<H2><A NAME="SEC39" HREF="dired-dd_toc.html#TOC39">Menu raised by Button 3</A></H2>
+<P>
+<A NAME="IDX56"></A>
+
+</P>
+<P>
+You can customize the menu raised by button 3 with modifying variable
+<CODE>dired-dd-b3-keymap</CODE>.
+
+</P>
+<P>
+The variable <CODE>dired-dd-b3-keymap</CODE> is structured as a emacs keymap,
+so you can use <CODE>define-key</CODE> / <CODE>define-key-after</CODE> to customize
+the menu as normal keymap.
+
+</P>
+<P>
+In <CODE>dired-dd</CODE>, the use of keymap is expanded (which may be an
+`abuse').  You can define not only a normal menu keymap entry:
+
+</P>
+
+<PRE>
+   (define-key-after (lookup-key dired-dd-b3-keymap [file])
+     [open2] '("Open2" . find-file) 'o-other-win)
+</PRE>
+
+<P>
+but also even an eval'able form (<CODE>'(dired-view-file)</CODE>):
+
+</P>
+
+<PRE>
+   (define-key-after (lookup-key dired-dd-b3-keymap [file])
+     [view2] '("View2" . (dired-view-file)) 'o-other-win)
+</PRE>
+
+<P>
+Note that the second example above contains a non-command object as
+`definition' (<CODE>'(dired-view-file)</CODE>).
+
+</P>
+<P>
+In <CODE>dired-dd</CODE>, if a key definition in the <CODE>dired-dd-b3-keymap</CODE>
+is a symbol (<CODE>'find-file</CODE>, in the first example above), the symbol
+is called as command with passing marked filename(s) as a 1st argument
+(repeatedly), while if the key definition is not a symbol (sexp
+<CODE>'(dired-view-file)</CODE>, in the second example above), it is just
+evaluated once.
+
+</P>
+<P>
+Both the bindings above can only be handled by special function
+<CODE>dired-dd-x-popup-menu-out-of-keymap</CODE> (and its upper function),
+which acts similarly to <CODE>x-popup-menu</CODE> when <CODE>x-popup-menu</CODE> is
+fed with non-keymap list as its 2nd argment.
+
+</P>
+<P>
+Of course, you can undefine the unnecessary menu entry:<BR>
+
+</P>
+
+<PRE>
+(define-key dired-dd-b3-keymap [arc lha-x] 'undefined)
+(define-key dired-dd-b3-keymap [arc lha-v] 'undefined)
+</PRE>
+
+<P>
+Updated <CODE>dired-dd-b3-keymap</CODE> can be inspected by evaluating
+
+</P>
+
+<PRE>
+(x-popup-menu t dired-dd-b3-keymap)
+</PRE>
+
+<P>
+or
+
+<PRE>
+(dired-dd-x-popup-menu-out-of-keymap t dired-dd-b3-keymap)
+</PRE>
+
+<P>
+in <TT>`*scratch*'</TT> buffer.
+
+</P>
+<P>
+Do not bind the variable <CODE>dired-dd-b3-keymap</CODE> directly to 
+normal mouse / key event.  That is useless.
+
+</P>
+<P>
+Menu raised by button 3 may be too tall for your note pc.
+For example for 640x480 pc screen, include
+
+</P>
+
+<PRE>
+mule*popup.font: -*-lucidatypewriter-medium-r-*-*-10-*-*-*-*-*-*-*
+emacs*popup.font: -*-lucidatypewriter-medium-r-*-*-10-*-*-*-*-*-*-*
+</PRE>
+
+<P>
+in your <TT>`~/.Xdefaults'</TT> or <TT>`~/.Xresources'</TT>.
+
+</P>
+
+
+
+<H2><A NAME="SEC40" HREF="dired-dd_toc.html#TOC40">Load hook</A></H2>
+<P>
+<A NAME="IDX57"></A>
+
+</P>
+<P>
+It is advisable to use <CODE>dired-dd-load-hook</CODE> to change mouse (key)
+binding.  For example, if you prefer to bind the original <CODE>dired</CODE>
+menu-bar menu to <KBD>mouse-3</KBD>, include binding code in the add-hook
+codes below:
+
+</P>
+
+<PRE>
+  (add-hook
+   'dired-dd-load-hook
+   (function
+    (lambda ()
+      (define-key dired-dd-mode-map [mouse-3] 'dired-dd-popmenu-map-func)
+      (define-key dired-dd-mode-map [S-mouse-3]
+                                 'dired-dd-no-destination-handling))))
+</PRE>
+
+<P>
+This example makes sense only in Emacs-19, but you can see how to
+change bindings.
+
+</P>
+
+
+
+<H1><A NAME="SEC41" HREF="dired-dd_toc.html#TOC41">Tips</A></H1>
+<P>
+<A NAME="IDX58"></A>
+
+</P>
+<P>
+This chapter deals with miscellaneous tips on using <TT>`dired-dd'</TT>.
+
+</P>
+
+
+
+<H2><A NAME="SEC42" HREF="dired-dd_toc.html#TOC42">Using dired-dd in multiple window / frame environment</A></H2>
+<P>
+<A NAME="IDX59"></A>
+
+</P>
+<P>
+<EM>dired-dd</EM> is very useful when you are browsing through directory
+trees.  I know that keyboard is faster than bothering to move over to
+mouse, but sometimes I feel lazy and wish I could use mouse for browsing
+through file system.
+
+</P>
+<P>
+On using <CODE>dired-dd</CODE>, my recommendation is to split an emacs frame
+into several windows horizontally and/or vertically, or further into
+several frames, select one of them as browsing window (frame), and the
+other for <CODE>dired</CODE> window (frame).  And, open file with drag and
+drop from <CODE>dired</CODE> window (frame) to browsing window (frame).
+
+</P>
+<P>
+I prefer to use a window manager, but you can use emacs even without
+window manager at all.  Once I tried starting only emacs from .xinitrc
+on a 1600x1200 sized <CODE>X</CODE>'s root window without any window manager,
+and split it up to 5 to 6 windows for <CODE>dired</CODE> and browsing buffers.
+In such situation, <CODE>dired-dd</CODE> works very nicely; <TT>`mldrag.el'</TT>
+helped me a good deal in adjusting window configurations, and with
+<TT>`windows.el'</TT>, I could even handle multiple frames without window
+manager (see section <A HREF="dired-dd.html#SEC43">Other programs going well with dired-dd</A>) at all.
+
+</P>
+<P>
+I found that it is convenient if a command to kill or bury buffer
+is bound to certain mouse event when you are
+browsing through many files and directories.  Or,
+sometimes after root-drop, you may want to delete many frames, and
+<CODE>C-x 5 0</CODE> is really annoying if there are too may frames to be killed.
+
+</P>
+<P>
+Setting variable
+<CODE>dired-dd-use-modeline-binding-global</CODE> to non-nil enables these
+mouse bindings:
+
+</P>
+
+<PRE>
+      (define-key global-map [mode-line C-mouse-3] 'mouse-kill-this-buffer)
+      (define-key global-map [mode-line S-mouse-3] 'mouse-bury-buffer))
+      (define-key global-map [mode-line C-M-mouse-3] 'mouse-delete-frame)
+</PRE>
+
+<P>
+globally (<CODE>mouse-delete-frame</CODE> might be useless if you prefer your
+window manager's delete-frame command... ).  In <CODE>dired-dd-mode</CODE>,
+these bindings are enabled in its local map <CODE>dired-dd-mode-map</CODE>
+regardless of the value of <CODE>dired-dd-use-modeline-binding-global</CODE>.
+
+</P>
+<P>
+Note that even if you setq <CODE>dired-dd-use-modeline-binding-global</CODE> to
+non-nil, the bindings above are not enabled until <CODE>dired-dd</CODE> is loaded.
+If you like these mouse binding, and want to use them globally from the
+startup of emacs, include the binding codes above, and the function definitions
+such as:
+
+</P>
+
+<PRE>
+         (defun mouse-kill-this-buffer (e)
+           (interactive "@e")
+           (kill-this-buffer))
+         (defun mouse-bury-buffer (e)
+           (interactive "@e")
+           (bury-buffer))
+         (defun mouse-delete-frame (e &#38;optional arg)
+           (interactive "@e\nP")
+           (delete-frame (selected-frame) arg))
+</PRE>
+
+<P>
+in your <TT>`~/.emacs'</TT>, which is a surer solution.  See also the
+document string of <CODE>dired-dd-use-modeline-binding-global</CODE> with
+<KBD>C-h v dired-dd-use-modeline-binding-global RET</KBD>.
+
+</P>
+<P>
+The functions <CODE>mouse-kill-this-buffer</CODE>, <CODE>mouse-bury-buffer</CODE>
+and <CODE>mouse-delete-frame</CODE> are defined at the end of the
+<TT>`dired-dd.el'</TT>.
+
+</P>
+
+
+
+<H2><A NAME="SEC43" HREF="dired-dd_toc.html#TOC43">Other programs going well with dired-dd</A></H2>
+
+<P>
+This section deals with the programs going well with <CODE>dired-dd</CODE>.
+
+</P>
+<P>
+<CODE>Dired</CODE> can operate not only on local file system but also ftp
+directories.  Some <CODE>dired</CODE> related programs are known to handle
+both local and ftp directories transparently, and they are all
+compatible with <CODE>dired-dd</CODE>.<BR>
+
+</P>
+
+<UL>
+<LI>
+
+<TT>`ange-ftp.el'</TT><BR>
+
+Included in normal emacs distribution, but currently it is implemented
+in emacs so transparently that you might not be conscious about this
+program at all.
+
+So, some user may not know that he can open ftp directory in a
+<CODE>dired</CODE> buffer by issuing command such as
+
+
+<PRE>
+<KBD>C-x d</KBD> <CODE>/ftp@ftp.gnu.org:/pub/gnu/</CODE> <KBD>RET</KBD>
+</PRE>
+
+The derived <CODE>dired</CODE> buffer can be operated as normal dired buffer,
+which means <CODE>dired-dd</CODE> can be used too.  That is, you can ftp files
+with drag and drop.
+
+Find <TT>`url-to-ange.el'</TT> in <TT>`spinout'</TT> directory of
+<CODE>dired-dd</CODE> distribution, which enables translation of URL
+expression into ange-ftp expression, or opens URL location already
+existing in emacs buffer.
+
+You can also find <TT>`bookmark-thief.el'</TT> in <TT>`spinout'</TT> directory
+which enables stealing bookmarkfile of <TT>`Mozilla'</TT> (Netscape
+Navigator) and opening URL via external or internal browser, or opening
+ftp URL via ange-ftp.  <TT>`bookmark-thief.el'</TT> requires
+<TT>`browse-url.el'</TT> included in <TT>`html-helper-mode'</TT> package.<BR>
+
+<LI>
+
+<TT>`archie.el'</TT><BR>
+
+It fetches <TT>`archie'</TT> command output, and can raise
+ange-ftp-dired buffer with <KBD>d</KBD> command.
+You can find <TT>`archie.el'</TT> in various places.  Use <CODE>xarchie</CODE>,
+or your favorite WWW search engine.<BR>
+
+<LI>
+
+<TT>`locate-dired.el'</TT><BR>
+
+This handles local file system.  Find it in <TT>`spinout'</TT>
+directory of <CODE>dired-dd</CODE> distribution.  Works like <CODE>find-dired</CODE>, but
+it uses <TT>`locate'</TT> command instead of <TT>`find'</TT> in the original <CODE>find-dired</CODE>.
+<TT>`locate.el'</TT> is included in emacs-20.2, but unlike <TT>`locate.el'</TT>,
+<TT>`locate-dired.el'</TT> uses <CODE>dired-mode</CODE>, so that you can use
+<CODE>dired-dd-mode</CODE> in the output buffer.<BR>
+
+<LI>
+
+<TT>`bookmark-popmenu.el'</TT><BR>
+
+Emacs bookmark is convenient while moving around local (and maybe
+FTP) file system, but sometimes the menu-bar appears to be so far away, if
+you are in the `mouse (lazy) mode'.
+<TT>`bookmark-popmenu.el'</TT>,
+also included in <TT>`spinout'</TT> directory of <CODE>dired-dd</CODE> distribution,
+pops up emacs bookmark menu (`stolen' from <CODE>menu-bar</CODE> keymap)
+by <KBD>C-M-mouse-2</KBD>
+and its jump menu by <KBD>C-M-mouse-1</KBD>.
+
+</UL>
+
+<P>
+For window / frame handling, or scrolling through, the mouse oriented
+programs listed below are found to be very useful:
+
+</P>
+
+<UL>
+<LI>
+
+<TT>`mouse-drag.el'</TT><BR>
+
+Scrolls emacs window with dragging text area directly.
+Included in normal emacs distribution (At least emacs-20.2 have
+this.  Probably older emacs-19.xx does not).<BR>
+
+<LI>
+
+<TT>`mldrag.el'</TT><BR>
+
+Drags scroll-bar with <KBD>vertical-scroll-bar S-down-mouse-1</KBD>
+to change window width.  Included in normal emacs distribution.
+In emacs-20.2, the vertical scroll bar should be
+located to the right of a window to use <TT>`mldrag.el'</TT>
+(or you can't drag scroll bar horisontally to change the window width).<BR>
+
+<LI>
+
+<TT>`windows.el'</TT><BR>
+
+An Emacs Window Manager.
+Operates multiple emacs frames easily with keyboard command.
+You can also save or restore window / frame configuration with
+<TT>`windows.el'</TT>.  Perhaps you can find it at
+<TT>`http://www.comp.ae.keio.ac.jp/~yuuji/'</TT>
+</UL>
+
+
+
+<H2><A NAME="SEC44" HREF="dired-dd_toc.html#TOC44"><TT>`Spinout'</TT> directory</A></H2>
+
+<P>
+Up to the time of drafting this info, <TT>`Spinout'</TT> directory of
+<CODE>dired-dd</CODE> distribution contains small programs (some may be nice,
+and some may be rough and ready) conceived to use with
+<CODE>dired/dired-x/dired-dd</CODE>:<BR>
+
+</P>
+
+<UL>
+<LI>
+
+<TT>`bookmark-thief.el'</TT>
+<LI>
+
+<TT>`locate-dired.el'</TT>
+<LI>
+
+<TT>`url-to-ange.el'</TT>
+<LI>
+
+<TT>`emacs-menu-abuse.el'</TT>
+<LI>
+
+<TT>`bookmark-popmenu.el'</TT>
+</UL>
+
+<P>
+These are all small programs and no info file is provided.  Refer to the
+comment section at the top of the program files for usage.
+
+</P>
+
+
+
+<H1><A NAME="SEC45" HREF="dired-dd_toc.html#TOC45">Bug, Caveats</A></H1>
+<P>
+<A NAME="IDX60"></A>
+
+</P>
+
+<UL>
+<LI>
+
+Emacs may blows away if you push <CODE>close</CODE> button of <STRONG>yes-no</STRONG>
+dialog box.  It's not a <CODE>dired-dd</CODE> bug, but might be a serious bug
+of emacs, or window manager.  The author observed it in mule-2.3 (19.28)
+and emacs-20.2, on window managers WindowMaker, fvwm2, and AfterStep.
+It is safer not to decorate transient window or not to put <CODE>close</CODE>
+button on it, if your window manager has such capability.
+<BR>
+
+<LI>
+
+Emacs-19.xx can not correctly interpret shell variable registered in
+<CODE>dired-guess-shell-alist-user</CODE>. For example,
+
+
+<PRE>
+(setq dired-guess-shell-alist-user
+      (cons (list "\\.r[ma]$\\|\\.ram$"
+             "LD_LIBRARY_PATH=~/rvplayer5.0b2 ~/rvplayer5.0b2/rvplayer *")
+            dired-guess-shell-alist-user))
+</PRE>
+
+won't run (but runs good in emacs-20). In emacs-19, you must put
+
+
+<PRE>
+(setq dired-guess-shell-alist-user
+      (cons (list "\\.r[ma]$\\|\\.ram$"
+             "~/bin/Rvplayer *")
+            dired-guess-shell-alist-user))
+</PRE>
+
+with making the <CODE>"LD_LIBRARY_PATH=..."</CODE> part as a shell script
+<TT>`~/bin/Rvplayer'</TT>.  It seems that <TT>`='</TT> is not correctly
+interpreted.  This is not a <CODE>dired-dd</CODE> specific limitation, but
+applies also when you invoke related command with keyboard command
+<KBD>!</KBD> from <CODE>dired</CODE> buffer, FYI.
+
+<BR>
+Further, Emacs-19.xx might not correctly interpret <TT>`sh'</TT> command
+<CODE>"exec"</CODE> registered in <CODE>dired-guess-shell-alist-user</CODE>, for
+example in issuing command <KBD>M-mouse-2</KBD>
+(<CODE>dired-dd-exec-command-directly</CODE>).  It is a shame, because
+sometimes you can save memory by amount of one shell with including
+<CODE>"exec"</CODE> in <CODE>dired-guess-shell-alist-user</CODE>.
+<BR>
+
+<LI>
+
+The problem below occurs in mouse-focus type of window manager settings
+in which you can operate a window (frame, in emacs terminology) placed
+underneath some other window.  If you are using a
+click-to-focus(-and-raise-frame) type of window manager setting, the
+description below does not applied.
+<BR>
+
+In current <CODE>dired-dd</CODE> under a mouse-focus type of window manager
+setting, if a frame <CODE>A</CODE> is wrapped over a frame <CODE>B</CODE> as shown
+below, drag-and-drop from frame <CODE>B</CODE> to <CODE>A</CODE> may not work as you
+you expect always.
+
+
+<PRE>
+         +-----------+       
+         |           |     
+         |   b  +-----------+
+         |      |    |      |
+         |      | a2        |
+         |      |    |      |
+         +------|- - +  a1  |
+         B      |           |
+                +-----------+
+                A
+</PRE>
+
+That is, if you dropped object(s) from area <CODE>b</CODE> of frame <CODE>B</CODE>
+into area <CODE>a2</CODE> of frame <CODE>A</CODE> underneath which frame <CODE>B</CODE>
+exists, this drop would be still regarded as a drop into frame <CODE>B</CODE>.
+To avoid this problem, always drag object(s) from area <CODE>b</CODE> into
+area <CODE>a1</CODE> underneath which frame <CODE>B</CODE> does not exist, or, if
+you make the operation surer, simply raise frame <CODE>B</CODE> over <CODE>A</CODE>
+prior to the dragging. 
+<BR>
+
+This is one of serious bug of emacs builtin primitive function
+(special-form ?)  <CODE>track-mouse</CODE> used in function
+<CODE>dired-drag-drop</CODE>.  <CODE>Track-mouse</CODE> cannot understand over-wrap
+situation of emacs frames, and knows out-of-the-frame status only by
+detecting simply if the mouse pointer is off the frame (the outline of
+the frame).
+<BR>
+
+I just don't know whether the problem occurs in combination with every
+window manager or not.  The problem is observed in (fvwm2-2.0.46 +
+emacs-20.2 or mule-2.3 (19.28)) environment.
+</UL>
+
+
+
+<H1><A NAME="SEC46" HREF="dired-dd_toc.html#TOC46">TODO</A></H1>
+<P>
+<A NAME="IDX61"></A>
+
+</P>
+
+<UL>
+<LI>
+
+<CODE>Dired</CODE> package does not raise Yes-No dialog in overwrite-yes-or-no
+query, because dired-query does not use yes-or-no-p. 
+Should I replace it ?
+<LI>
+
+Clean up func/var names.  Be pretty-printable.
+<LI>
+
+Support <KBD>M-x</KBD> customize (and other emacs-20 stuffs).  However this support
+may be delayed, because the authour has not totally switched to emacs-20 yet.
+<LI>
+
+Clean data structure for <TT>`dired-dd-b2-menu'</TT>.
+</UL>
+
+
+
+<H1><A NAME="SEC47" HREF="dired-dd_toc.html#TOC47">Index</A></H1>
+
+
+
+<H1><A NAME="SEC48" HREF="dired-dd_toc.html#TOC48">Variable Index</A></H1>
+
+<P>
+<H2>d</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX44">dired-dd-audio-au-player</A>
+<LI><A HREF="dired-dd.html#IDX42">dired-dd-audio-directory</A>
+<LI><A HREF="dired-dd.html#IDX45">dired-dd-audio-file-alist</A>
+<LI><A HREF="dired-dd.html#IDX43">dired-dd-audio-wav-player</A>
+<LI><A HREF="dired-dd.html#IDX51">dired-dd-awakening</A>
+<LI><A HREF="dired-dd.html#IDX55">dired-dd-b2-menu</A>
+<LI><A HREF="dired-dd.html#IDX56">dired-dd-b3-keymap</A>
+<LI><A HREF="dired-dd.html#IDX28">dired-dd-copy-recursive-command</A>
+<LI><A HREF="dired-dd.html#IDX38">dired-dd-default-link-method</A>
+<LI><A HREF="dired-dd.html#IDX39">dired-dd-default-symlink-method</A>
+<LI><A HREF="dired-dd.html#IDX37">dired-dd-find-file-method</A>
+<LI><A HREF="dired-dd.html#IDX36">dired-dd-find-multiple-file</A>
+<LI><A HREF="dired-dd.html#IDX21">dired-dd-iconify-control-on-root-drop</A>
+<LI><A HREF="dired-dd.html#IDX57">dired-dd-load-hook</A>
+<LI><A HREF="dired-dd.html#IDX35">dired-dd-mode-as-default</A>
+<LI><A HREF="dired-dd.html#IDX48">dired-dd-no-x-pointer-animation</A>
+<LI><A HREF="dired-dd.html#IDX40">dired-dd-non-dired-drop-handlers</A>
+<LI><A HREF="dired-dd.html#IDX41">dired-dd-play-audio</A>
+<LI><A HREF="dired-dd.html#IDX29">dired-dd-terminal-command</A>
+<LI><A HREF="dired-dd.html#IDX59">dired-dd-use-modeline-binding-global</A>
+<LI><A HREF="dired-dd.html#IDX50">dired-dd-x-pointer-list</A>
+<LI><A HREF="dired-dd.html#IDX49">dired-dd-x-pointer-shape</A>
+</DIR>
+
+</P>
+
+
+
+<H1><A NAME="SEC49" HREF="dired-dd_toc.html#TOC49">Function Index</A></H1>
+
+<P>
+<H2>d</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX32">dired-dd-copy-filename-as-kill</A>
+<LI><A HREF="dired-dd.html#IDX31">dired-dd-copy-filename-as-kill-full</A>
+<LI><A HREF="dired-dd.html#IDX25">dired-dd-copy-recursive</A>
+<LI><A HREF="dired-dd.html#IDX26">dired-dd-do-copy-recursive</A>
+<LI><A HREF="dired-dd.html#IDX27">dired-dd-do-copy-recursive-regexp</A>
+<LI><A HREF="dired-dd.html#IDX20">dired-dd-drag-drop</A>
+<LI><A HREF="dired-dd.html#IDX11">dired-dd-drag-region</A>, <A HREF="dired-dd.html#IDX12">dired-dd-drag-region</A>
+<LI><A HREF="dired-dd.html#IDX15">dired-dd-find-file-or-exec</A>
+<LI><A HREF="dired-dd.html#IDX8">dired-dd-mode</A>
+<LI><A HREF="dired-dd.html#IDX23">dired-dd-no-destination-handling</A>
+<LI><A HREF="dired-dd.html#IDX53">dired-dd-the-ball-of-fire</A>
+<LI><A HREF="dired-dd.html#IDX33">dired-dd-unmark-all-marks</A>
+<LI><A HREF="dired-dd.html#IDX52">dired-dd-version</A>
+<LI><A HREF="dired-dd.html#IDX13">dired-do-flagged-delete</A>
+</DIR>
+
+</P>
+
+
+
+<H1><A NAME="SEC50" HREF="dired-dd_toc.html#TOC50">Concept Index</A></H1>
+
+<P>
+<H2>a</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX47">animation</A>
+</DIR>
+<H2>b</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX60">bug</A>
+<LI><A HREF="dired-dd.html#IDX3">byte-compile</A>
+</DIR>
+<H2>c</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX6">COPYING</A>
+<LI><A HREF="dired-dd.html#IDX30">copying filename by mouse</A>
+<LI><A HREF="dired-dd.html#IDX34">customizing</A>
+</DIR>
+<H2>d</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX16">drag drop into dired window</A>
+<LI><A HREF="dired-dd.html#IDX18">drag drop into other frame</A>
+<LI><A HREF="dired-dd.html#IDX17">drag drop into other non-dired window</A>
+</DIR>
+<H2>f</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX19">file copy, open, move, link,,,</A>
+</DIR>
+<H2>g</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX14">generic file opening facility</A>
+</DIR>
+<H2>i</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX22">individual file operation</A>
+<LI><A HREF="dired-dd.html#IDX54">insignia</A>
+<LI><A HREF="dired-dd.html#IDX1">installation</A>
+</DIR>
+<H2>m</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX4">make</A>
+<LI><A HREF="dired-dd.html#IDX5">Makefile</A>
+<LI><A HREF="dired-dd.html#IDX10">marking directory</A>
+<LI><A HREF="dired-dd.html#IDX9">marking file</A>
+</DIR>
+<H2>p</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX24">popup menu</A>
+</DIR>
+<H2>s</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX46">sound</A>
+<LI><A HREF="dired-dd.html#IDX2">system requirement</A>
+</DIR>
+<H2>t</H2>
+<DIR>
+<LI><A HREF="dired-dd.html#IDX58">tips</A>
+<LI><A HREF="dired-dd.html#IDX61">TODO</A>
+<LI><A HREF="dired-dd.html#IDX7">turning on and off dired-dd-mode manually</A>
+</DIR>
+
+</P>
+<P><HR><P>
+This document was generated on 24 October 2000 using the
+<A HREF="http://wwwcn.cern.ch/dci/texi2html/">texi2html</A>
+translator version 1.51.</P>
+</BODY>
+</HTML>

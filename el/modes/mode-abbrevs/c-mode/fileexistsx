@@ -1,0 +1,6 @@
+inline bool file_exists(const std::string & filename)
+{
+    /* stat returns 0 if the file exists */
+    struct stat stat_out;
+    return (stat(filename.c_str(), &stat_out) == 0);
+}

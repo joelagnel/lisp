@@ -1,0 +1,151 @@
+8
+
+dir
+43
+http://distel.googlecode.com/svn/trunk
+http://distel.googlecode.com/svn
+
+
+
+2007-09-18T04:57:57.449009Z
+43
+billclem
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+d5f8e727-742a-0410-b67d-dd739a6cc792
+
+Makefile.in
+file
+
+
+
+
+2007-09-21T09:27:33.000000Z
+aa1590f725518e7d5f511a1e54230da2
+2007-03-02T08:36:02.755384Z
+8
+lukego
+
+doc
+dir
+
+config
+dir
+
+AUTHORS
+file
+
+
+
+
+2007-09-21T09:27:33.000000Z
+2b31a1f0a69f787de6ed229974e8f1fc
+2007-02-27T13:35:36.889861Z
+2
+lukego
+
+INSTALL
+file
+
+
+
+
+2007-09-21T09:27:33.000000Z
+c6a7a92d60968296e7643bae92193b0a
+2007-02-27T13:35:36.889861Z
+2
+lukego
+
+src
+dir
+
+ChangeLog
+file
+
+
+
+
+2007-09-21T09:27:33.000000Z
+0edbe03e92174408a6e28800047609e9
+2007-09-18T04:57:07.734501Z
+41
+billclem
+
+INSTALL.WIN32
+file
+
+
+
+
+2007-09-21T09:27:33.000000Z
+a9cdb664620ad09bb2146d77fbace02f
+2007-02-27T13:35:36.889861Z
+2
+lukego
+
+README.ie-session
+file
+
+
+
+
+2007-09-21T09:27:33.000000Z
+19ba36107db66f4a4198d0b58af82d54
+2007-02-27T13:35:36.889861Z
+2
+lukego
+
+elisp
+dir
+
+NEWS
+file
+
+
+
+
+2007-09-21T09:27:33.000000Z
+b93fd9462871e81531ca3549158fce44
+2007-02-27T13:35:36.889861Z
+2
+lukego
+
+ebin
+dir
+
+README
+file
+
+
+
+
+2007-09-21T09:27:33.000000Z
+14c0428cc203e01621efbbb5026556ca
+2007-02-27T13:35:36.889861Z
+2
+lukego
+
+Makefile
+file
+
+
+
+
+2007-09-21T09:27:33.000000Z
+150a884507234328058dbfcb6f4f76ed
+2007-05-12T11:14:20.607057Z
+13
+lukego
+

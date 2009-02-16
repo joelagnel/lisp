@@ -1,0 +1,1 @@
+socketpair(<field "int NAMESPACE">, <field "int STYLE">, <field "int PROTOCOL">, <field "int FILEDES[2]">)<endpoint>

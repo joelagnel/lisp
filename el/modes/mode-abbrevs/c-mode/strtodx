@@ -1,0 +1,1 @@
+strtod(<field "const char *restrict s">, <field "char **restrict endptr">)

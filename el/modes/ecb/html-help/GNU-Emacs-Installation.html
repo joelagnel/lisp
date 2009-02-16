@@ -1,0 +1,201 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="GNU%20Emacs%20Installation">GNU Emacs Installation</a>,
+Previous:<a rel=previous accesskey=p href="XEmacs-Installation.html#XEmacs%20Installation">XEmacs Installation</a>,
+Up:<a rel=up accesskey=u href="Installation.html#Installation">Installation</a>
+<hr><br>
+
+<h4>Installation of ECB for GNU Emacs users</h4>
+
+<p>Basic requirement: ECB requires an Emacs-version &gt;= 21!
+
+<p><strong>IMPORTANT</strong>: If you are a XEmacs-user please read <a href="XEmacs-Installation.html#XEmacs%20Installation">XEmacs Installation</a> before proceeding with the following instructions!
+
+<p><strong>Using the new cedet 1.0 suite</strong>: From beginning with version
+2.01 ECB supports the next generation of the cedet-tools. But before
+the cedet 1.0 suite becomes stable this means that ECB runs correctly
+with loaded cedet 1.0 but the ECB-upgrading feature
+(see <a href="Downloading-new-versions.html#Downloading%20new%20versions">Downloading new versions</a>) does not support autom. upgrading
+to latest available cedet versions. This will be first available after
+first stable release of the new cedet-library 1.0.
+
+<p>So, if the cedet 1.0 suite is loaded then the min- and max-version of
+semantic, eieio and speedbar (mentioned in the Requirements-section of
+the file <code>README</code>) have no relevance! If the new cedet 1.0 suite
+should be used then just install and load cedet 1.0 like described in
+the cedet-installation-instructions and go one with step 3. But ensure
+you have loaded - as described in the cedet-<code>INSTALL</code>-file
+- the file <code>/path/to/cedet/common/cedet.el</code> because otherwise
+cedet is not properly installed and ECB can not savely recognize that
+the new cedet-suite is loaded and should be used.
+
+<ol type=1 start=1>
+
+</p><li>Download and unpack the ECB archive (probably you have already done
+this :-)
+
+<li>Read the file <code>README</code> in the ECB-directory and install the
+required semantic-, eieio- and speedbar-version<a rel=footnote href="#fn-1"><sup>1</sup></a>.
+
+<p><strong>Please note</strong>: ECB maybe requires a newer version of these
+libraries than shipped with (X)Emacs. You have to install exactly a
+version ECB requires and also to make sure that the correct version is
+loaded into (X)Emacs!
+
+<p>But ECB performs two autom checks:
+
+<ul>
+<li>At load-time:
+It checks if the packages semantic, eieio and speedbar are at least
+installed so ECB can be loaded. If not it offers to download and
+install them.
+
+<li>At start-time:
+It checks if the correct versions of semantic, eieio and speedbar are
+installed and gives you proper feedback. See <a href="Download-required-packages.html#Download%20required%20packages">Download required packages</a>. 
+</ul>
+
+<p>So if you are not sure if you have installed the required packages at
+all or if you have installed the correct versions of these packages
+then do not worry about this, just go on with the following
+installation steps: If ECB is missing something it will give you
+proper feedback and support not later than at load-time or start-time!
+
+</p><li>Add the new ECB-directory to your <code>load-path</code> variable.
+
+<p>You <strong>MUST</strong> add the ECB-install-directory to the
+<code>load-path</code> either by changing the <code>load-path</code> variable
+directly in your <code>.emacs</code> or <code>site-lisp/site-start.el</code> or by
+working with a file <code>subdirs.el</code><a rel=footnote href="#fn-2"><sup>2</sup></a>.
+
+<p>So for example the needed entry for your <code>.emacs</code>-file could be:
+
+<br><pre>(add-to-list 'load-path
+             "/path/to/your/ecb/installation/directory")
+</pre>
+
+<p><strong>ATTENTION</strong>:
+ECB is NOT properly installed if it's directory is not added to
+<code>load-path</code> and for example just loaded by
+
+<br><pre>(load-file "/path/to/ecb/ecb.el")
+</pre>
+
+<p>Do not do this!
+
+</p><li>Load ECB by adding code to your <code>.emacs</code>:
+
+<p>If you want to load the complete ECB at (X)Emacs-loadtime (Advantage:
+All ECB-options available after loading ECB. Disadvantage: Increasing
+loadtime<a rel=footnote href="#fn-3"><sup>3</sup></a>):
+
+<br><pre>(require 'ecb)
+</pre>
+
+<p>If you want to load the ECB first after starting it by
+<code>ecb-activate</code> (Advantage: Fast loading<a rel=footnote href="#fn-4"><sup>4</sup></a>. 
+Disadvantage: ECB- and semantic-options first available after starting
+ECB):
+
+<br><pre>(require 'ecb-autoloads)
+</pre>
+
+<p>This loads all available autoloads of ECB, e.g. <code>ecb-activate</code>,
+<code>ecb-minor-mode</code>, <code>ecb-byte-compile</code> and
+<code>ecb-show-help</code>.
+
+<p>Regardless which method you prefer: In both cases the used statement
+must be placed <strong>after</strong> the statement of step 3!
+
+</p><li>Restart (X)Emacs.
+</ol>
+
+<p>ECB is now ready for use and can be activated by calling <code>M-x
+ecb-activate</code> or <code>ecb-minor-mode</code>. Now you can either starting
+using ECB or you can do these optional installation steps:
+
+<ol type=1 start=6>
+
+</p><li>Reading the online help with <code>ecb-show-help</code>
+
+<p>Maybe you are interested to read the online-help of ECB before first
+start.
+
+</p><li>Bytecompiling ECB with <code>ecb-byte-compile</code>
+
+<p>This byte compiles ECB. You can safely ignore all messages if there
+are any. (You can also bytecompile ECB from the command-line either by
+using the <code>Makefile</code> or by using the batch-file <code>make.bat</code>;
+just read the comments in that file you choose.)
+
+</p><li>Installing the Info-help of ECB
+
+<p>The ECB distribution contains a subdirectory <code>info-help</code> which
+contains the online-help of ECB in Info-format. You can install this
+online help so it's available in the Top-directory of Info. There are
+two ways to do this:
+
+<ul>
+<li>Use "install-info" (recommended):
+
+<ol type=1 start=1>
+<li>Copy the files of the subdirectory <code>info-help</code> into the
+info-directory of Emacs
+
+<li>Install the file <code>info-help/ecb.info</code> with the command
+"install-info" (if available on your system) in the <code>dir</code>-file.
+</ol>
+
+<p>The supplied <code>Makefile</code> offers a target <code>install-help</code> which
+does both of these steps. You have just to call <code>make
+install-help</code> with the correct EMACSINFOPATH set (see the comment in
+<code>Makefile</code>). Here is an example:
+
+<br><pre>make EMACSINFOPATH=/path/to/emacs/info install-help
+</pre>
+
+</p><li>Manual Installation:
+
+<p>Copy the files of the subdirectory <code>info-help</code> into the
+info-directory of Emacs and modify the file <code>dir</code> manually. 
+</ul>
+
+<p>But it doesn't matter if you do not execute this step (8.) because the
+online help of ECB is always available though, see
+<code>ecb-show-help</code> (see <a href="Interactive-ECB-commands.html#Interactive%20ECB%20commands">Interactive ECB commands</a>).
+
+</ol>
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>The
+speedbar-version shipped with GNU Emacs &lt;= 21.3 does not satisfy the
+requirements for this feature - download a newer one!</p>
+
+<li><a name="fn-2"></a>
+<p>This works at least for
+Emacs but XEmacs may have slightly different mechanisms; see the
+XEmacs documentation</p>
+
+<li><a name="fn-3"></a>
+<p>Cause of full loading of ECB itself and also the
+packages semantic, eieio and speedbar regardless if ECB is started.</p>
+
+<li><a name="fn-4"></a>
+<p>ECB, semantic,
+eieio and speedbar are first loaded after starting ECB or with other
+words: ECB and semantic are not loaded if you do not use/need them</p>
+
+</ol><hr>
+
+</body></html>
+

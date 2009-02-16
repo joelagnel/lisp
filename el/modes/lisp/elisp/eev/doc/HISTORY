@@ -1,0 +1,100 @@
+This is the `doc/HISTORY' file of GNU eev.
+Copyright (C) 2004 Free Software Foundation, Inc.
+Copying and distribution of this file, with or without modification, are
+permitted provided the copyright notice and this notice are preserved.
+Author and version: Eduardo Ochs, 2005jan04
+Latest version: <http://angg.twu.net/eev-current/doc/HISTORY>
+      See also: <http://angg.twu.net/eev-current/README.html>
+                <http://angg.twu.net/eev-current/>
+
+
+
+A Brief History of Eev
+======================
+
+At the end of 1994 I started running Linux(*) on my computer at home.
+I figured out that the system -- rather, the whole *NIX world -- had
+two main editors: vi and Emacs. vi gave me the impression that I would
+need either a fantastic memory or fantastic hacking skills to learn
+its keys, and that most people learned it by having either the right
+books or by having friends who could teach them; I had neither of
+those things. Emacs also looked difficult, but it seemed to have
+another attitude -- like "here's all the information we have now,
+here's fifty ways of inspecting and changing the system and there's
+more around, here are all these extensions that we considered
+useful..." -- and, besides, its manuals were a joy to read, and I
+already knew a bit of Lisp. I went the Emacs way.
+
+After a few weeks of using it I had something roughly equivalent to
+this in my ".emacs" file:
+
+  (defun ee-goto-position (&optional pos-spec)
+    (cond ((null pos-spec))		; pos-spec=nil: don't move
+	  ((numberp pos-spec)		; pos-spec=number:
+	   (goto-char (point-min))	; go to the pos-spec-th line
+	   (forward-line (1- pos-spec)))
+	  ((stringp pos-spec)		; pos-spec=string: go to the
+	   (goto-char (point-min))	; first occurrence of the string
+	   (search-forward pos-spec))
+	  (t (error "This is not a valid pos-spec: %S" pos-spec))))
+
+  ;; Like find-file, but accepting a pos-spec
+  (defun find-fline (fname &optional pos-spec)
+    (find-file fname)
+    (ee-goto-position pos-spec))
+
+  ;; Like Info-goto-node, but accepting a pos-spec
+  (defun find-node (nodestr &optional pos-spec)
+    (if (Info-goto-node nodestr)
+	(ee-goto-position pos-spec)))
+
+
+  ;; Save the region in a temporary script
+  (defun ee (s e)
+    (interactive "r")
+    (write-region s e "~/ee.sh"))
+
+  ;; Same as ee, but will execute in verbose mode
+  (defun eev (s e)
+    (interactive "r")
+    (write-region (concat "set -v\n" (buffer-substring s e) "\nset+v")
+		  nil "~/ee.sh"))
+
+
+I learned that I could execute these temporary scripts in a way that
+would let them affect the enviroment of the current shell -- so that
+they could change the current directory, the shell variables, etc. It
+was with `source ~/ee.sh'. Then I learned how to run `. ~/ee.sh' with
+fewer keystrokes: `alias ee=". ~/ee.sh"', and then type just `ee'
+would do the job. I added that alias to my .zshrc file.
+
+By the way: zsh looked more experimental, and thus possibly more
+buggy, than the other shells, but it came with a file comparing the
+syntaxes and features of several shells and showing how to do in zsh
+everything that other shells could do. For someone like me, who didn't
+know which features to expect from a *nix shell or how to use them,
+that was just what I needed. I started using zsh and I'm using it to
+this day.
+
+
+  [Things to write:]
+I was sure everyone was using Emacs that way
+Eev almost got into Emacs in 1999/2000
+Hybrid hyperlinks (eeman)
+Stallman/users
+eeg, screen, debian-br irc
+years stopped (end of PhD) - little feedback
+  rubikitch and defadvice
+after the end of PhD - rewrite
+
+
+(*): GNU/Linux, but at that time people used to refer to those things
+by using only the name of the kernel... I installed the "Yggdrasil
+Plug&Play Linux" CD.
+
+
+
+# (find-man "bash")
+# (find-man "bash" "source filename [arguments]")
+# (find-node "(bash)C Shell Builtins" "`source'")
+

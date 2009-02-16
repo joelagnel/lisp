@@ -1,0 +1,61 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Updating%20a%20tree-buffer">Updating a tree-buffer</a>,
+Next:<a rel=next accesskey=n href="Tree-buffer-keybindings.html#Tree-buffer%20keybindings">Tree-buffer keybindings</a>,
+Previous:<a rel=previous accesskey=p href="A-new-tree-node.html#A%20new%20tree-node">A new tree-node</a>,
+Up:<a rel=up accesskey=u href="tree-buffer.html#tree-buffer">tree-buffer</a>
+<hr><br>
+
+<h4>How to update a tree-buffer-display after changes</h4>
+
+<p>When finished with adding tree-nodes to the tree-structure you mostly
+want to display the current tree and its state in the buffer/window so
+a user can see the current tree and can use it.
+
+<p>Threre are two ways to update a tree-buffer for display:
+
+<ol type=1 start=1>
+</p><li>Updating the whole tree-buffer:
+
+<p>This is the most used way to update the tree-buffer display. It's
+quite simple, just call <code>tree-buffer-update</code>. In most cases you
+want to call it without arguments.
+
+<p>If you want to display a certain expanded node and as much as possible
+subnodes of this node then pass this node-object as first argument to
+<code>tree-buffer-update</code>.
+
+<p>If you do not have the need to display a completely new tree-structure
+but you want only to display a previously cached display-state then
+pass this cached-state as second argument to
+<code>tree-buffer-update</code>. See the documentation of this function and
+also <a href="Tree-buffer-How-to.html#Tree-buffer%20How%20to">Tree-buffer How to</a> for a detailled description how to do
+this.
+
+</p><li>Updating only a single node of the tree-buffer:
+
+<p>Sometimes it can be useful to update only exactly one special node,
+e.g. when your application codes some node-state in the displayed
+node-name (e.g. ECB displays the version-control state of a file as
+part of the related node-name) then it is necessary to update only
+this node if the state has changed.
+
+<p>This can be done with the function <code>tree-buffer-update-node</code>. For
+this function the mentioning in this section can be misleading because
+this function can not only update the node-display but in general the
+slots <var>NAME</var>, <var>SHRINK-NAME</var>, <var>TYPE</var>, <var>DATA</var> and
+<var>EXPANDABLE</var>. Do <kbd>C-h f</kbd> to see the documentation of this
+function for all details!
+
+</ol>
+
+</body></html>
+

@@ -1,0 +1,455 @@
+#!/usr/bin/perl
+#
+# dirabbrev -- dynamic abbreviations for directories (paths)
+# Copyright (C) 2004 Carsten Dominik
+# Manpage with 'perldoc dirabbrev'
+
+# Version: 2.0
+
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# To obtain a copy of the GNU General Public License write to the
+# Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+# Boston, MA 02111-1307, USA.
+
+use Getopt::Std;
+
+$abbrev_file = "$ENV{HOME}/.dirabbrev";
+($shell = $ENV{SHELL})=~ s/.*\///;
+# The following line may be better, but does it work on all systems?
+# $p = getppid(); ($shell = `ps -p $p -o command`) =~ s/.*\n-?(\w+).*/$1/s;
+# print STDERR "shell is: $shell\n";
+($home = $ENV{HOME}) =~ s|/$||;
+
+# Commands to set and unset environment variables
+%setenv =   ("csh"  => "setenv %n '%d'",   "tcsh" => "setenv %n '%d'",
+             "bash" => "export %n='%d'",   "sh"   => "set %n='%d';export %n",
+             "ksh"  => "export %n='%d'");
+%unsetenv = ("csh"  => "unsetenv %n",      "tcsh" => "unsetenv %n",
+             "bash" => "unset %n",         "sh"   => "unset %n",
+             "ksh"  => "unset %n");
+%alias  =   ("csh"  => "alias %n 'cd \"%d\"'", "tcsh" => "alias %n 'cd \"%d\"'",
+             "bash" => "alias %n='cd \"%d\"'", "sh"   => "alias %n='cd \"%d\"'",
+             "ksh"  => "alias %n='cd \"%d\"'");
+%unalias =  ("csh"  => "unalias %n",       "tcsh" => "unalias %n",
+             "bash" => "unalias %n",       "sh"   => "unalias %n",
+             "ksh"  => "unalias %n");
+($me = $0)=~s/^.*\///;
+die "$me: Unsupported shell '$ENV{SHELL}'\n" unless defined $setenv{$shell};
+
+# Get the current abbreviations
+&readlist if -e $abbrev_file;
+
+getopts('sglLrRaeduvq') or &usage,exit(1);
+
+if ($opt_s) { # )))
+
+  # Store a directory abbreviation
+  ($name,$path) = (lc($ARGV[0]),($ARGV[1] or `pwd`));
+  chomp $path;
+  die "usage: $me -s name [directory]" unless $name;
+  # Ask the shell to exand initial . and ..
+  if ($path =~ /^[.~]/) {$path = `cd $path;pwd`; chomp $path}
+  $dir{lc($name)} = $path;
+  print STDERR "Storing $name -> $path\n" unless $opt_q;
+  &shell(&setenv($name)) if $opt_e;
+  &shell(&alias($name))  if $opt_a;
+  &writelist;
+
+} elsif ($opt_g) {
+
+  # Go to an abbreviated directory
+  $name = lc($ARGV[0]);
+  die "usage: $me -g name" unless $name;
+  # If name is not an abbrev yet, check if it is a unique abbrev of an abbrev.
+  unless (defined $dir{$name}) {
+    my @names = grep /^$name/, keys %dir;
+    if (@names == 1) {
+      printf STDERR "$me: $name -> %s\n",$names[0];
+      $name = $names[0];
+    }
+  }
+  die "$me: No unique abbreviation name $name\n" unless defined $dir{$name};
+  $path = $dir{$name};
+  print STDERR "Changing to $name -> $path\n" if $opt_v;
+  &shell("cd '$path'");
+
+} elsif ($opt_l or $opt_L) {
+
+  # List directory abbreviations
+  $l = &maxleng();
+  $f = sprintf("%%-%ds  %%-s\n",$l);
+  @names = sort keys %dir if $opt_l;
+  @names = sort {$dir{$a} cmp $dir{$b}} keys %dir if $opt_L;
+  foreach (@names) {printf STDERR $f,$_,home2tilde($dir{$_})}
+
+} elsif ($opt_r) {
+
+  # Remove one or more directory abbreviations
+  unless (@ARGV) {
+    $path = `pwd`; chomp $path;      # current working directory as default
+    @ARGV = grep {$dir{$_} eq $path} keys %dir;
+  }
+  $re = join("|",map {"^".$_."\$"} @ARGV);
+  $re =~ s/\*/.*/g; $re =~ s/\?/./g;     # wildcard -> regexp.
+  foreach $name (grep {/^($re)$/io} keys %dir) {
+    print STDERR "Removing $name -> $dir{$name}\n" unless $opt_q;
+    undef $dir{$name};
+    &shell(&unsetenv($name)) if $opt_e;
+    &shell(&unalias($name))  if $opt_a;
+  }
+  &writelist;
+
+} elsif ($opt_R) {
+
+  # Interactively remove abbreviations
+  $l = &maxleng();
+  $f = sprintf("remove %%-%ds -> %%s (y/n/a/q)? ",$l);
+  $re = join("|",map {"^".$_."\$"} @ARGV);
+  $re =~ s/\*/.*/g; $re =~ s/\?/./g;     # wildcard -> regexp.
+  foreach $name (sort keys %dir) {
+    next if $re && $name !~ /^($re)$/io;
+    unless ($all) {
+      printf STDERR $f,$name,home2tilde($dir{$name});
+      $rpl = <STDIN>;
+      last if $rpl =~ /^q/i;
+      $all = ($rpl =~ /^a/i);
+    }
+    if ($all || $rpl =~ /^y/i) {
+      undef $dir{$name};
+      &shell(&unsetenv($name)) if $opt_e;
+      &shell(&unalias($name))  if $opt_a;
+    }
+  }
+  &writelist;
+
+}
+
+if ($opt_d) {
+
+  # Define environment variables for the path abbreviations
+  &shell(join(";", map {&setenv($_)} keys %dir)) if $opt_e;
+  &shell(join(";", map {&alias($_)}  keys %dir)) if $opt_a;
+
+} elsif ($opt_u) {
+
+  # Undefine the environment variables for the path abbreviations
+  &shell(join(";", map {&unsetenv($_)} keys %dir)) if $opt_e;
+  &shell(join(";", map {&unalias($_)} keys %dir)) if $opt_a;
+
+}
+
+# Pass $cmd back to the shell for EVALuation
+if ($cmd) {
+  print STDERR "Executing: $cmd\n" if $opt_v;
+  print $cmd;
+}
+
+# Thats it...
+exit(0);
+
+
+# Subroutine definitions
+# ======================
+
+sub readlist {
+  # Read the abbrev file and fill the abbreviation hash
+  open ABBREV,$abbrev_file or die "Cannot open $abbrev_file\n";
+  while (<ABBREV>) {/(\S+)\s+(\S.*\S)/ and $dir{$1}=$2}
+  close ABBREV;
+}
+sub writelist {
+  # Write the current abbreviation hash to the abbrev file
+  open ABBREV,">$abbrev_file" or die "Cannot write to $abbrev_file\n";
+  foreach (keys %dir) {print ABBREV "$_ $dir{$_}\n"}
+  close ABBREV;
+}
+sub shell {
+  # Add something to the commands which will be passed back to the shell
+  if ($cmd) {$cmd .= "; $_[0]"} else {$cmd = $_[0]}
+}
+sub alias {
+  # Make a command which will define an alias for $name
+  my $name = $_[0];
+  my $fmt = $alias{$shell};
+  my $dir = $dir{$name};
+  $fmt =~ s/%n/$name/g;
+  $fmt =~ s/%d/$dir/g;
+  $fmt;
+}
+sub unalias {
+  # Make a command to remove an alias for $name
+  my $name = $_[0];
+  my $fmt = $unalias{$shell};
+  $fmt =~ s/%n/$name/g;
+  $fmt;
+}
+sub setenv {
+  # Make a command which will define an environment variable for $name
+  my $name = $_[0];
+  my $fmt = $setenv{$shell};
+  my $dir = $dir{$name};
+  $fmt =~ s/%n/$name/g;
+  $fmt =~ s/%d/$dir/g;
+  $fmt;
+}
+sub unsetenv {
+  # Make a command to remove the environment variable $name
+  my $name = $_[0];
+  my $fmt = $unsetenv{$shell};
+  $fmt =~ s/%n/$name/g;
+  $fmt;
+}
+sub home2tilde {
+  # Replace the current home directory with "~"
+  my $dir = $_[0];
+  $dir =~ s|^\Q$home/\E|~/|;
+  return $dir;
+}
+sub maxleng {
+  # Compute the length of the longest abbreviation name
+  my $l=0;
+  foreach (keys %dir) {$l = length($_) if $l < length($_)}
+  return $l;
+}
+sub usage {
+  # Print a usage message
+  print STDERR <<EOF
+    usage: $me [-sglLrRetduvq] parameters
+    Try 'perldoc $me' for the full manpage
+EOF
+}
+
+__END__
+
+TODO:
+  - Should I pass undefined abbrevs through to cd, maybe after testing
+    if they do correspond to a directory?  More general:  Is there a
+    useful and safe way  to combine the g and cd commands.  This maybe
+    not easy, because sometimes an abbreviation may also be a
+    subdirectory of the current directory, and how should the
+    algorithm know which one to pick?  And how should a fast typing
+    user be warned that there has been an ambiguity.
+  - Should I disable the abbrev of abbrev feature?
+
+=pod
+
+=head1 NAME
+
+B<dirabbrev> - dynamic abbreviations for directories (paths)
+
+=head1 SYNOPSIS
+
+ alias da 'eval `dirabbrev -e -a \!*`'; da -d
+ alias S 'da -s'
+ alias G 'da -g'
+ alias L 'da -l'
+ alias R 'da -r'
+ da -s name [directory]     # Store abbrev for directory
+ S name [directory]         # Same as previous line, uses "S"
+ L                          # List abbrevs
+ G name                     # cd (go) to dir
+ name                       # Same as previous line, using dynamic alias
+ R name [name...]           # Remove a directory abbrev
+ ls $name/*.eps             # Use environment variables
+
+=head1 DESCRIPTION
+
+B<dirabbrev> is a dynamic way to define and use abbreviations for long
+directory paths.  The user assigns a simple name to a directory.
+B<dirabbrev> then automatically defines an aliases and an environment
+variables corresponding to this name.  These can be used to quickly
+change to the abbreviated directory, and to use the abbreviations in
+any file specification in the shell.  Abbreviations are stored in a
+file and reinstalled in every new shell.
+
+B<dirabbrev> needs to be called through an alias or shell function.
+For the (t)csh, the required alias is:
+
+   # define da and immediately call it to initialize the environment.
+   alias da 'eval `dirabbrev -e -a\!*`'
+   da -d
+
+For sh/bash/ksh, you have to use a function:
+
+   # define da and immediately call it to initialize the environment.
+   function da () { eval `dirabbrev -e -a \$*`; }
+   da -d
+
+If you don't want to define environment variables for the
+abbreviations, leave out the B<-e> from the definition.  If you don't
+want to define aliases for the abbreviations, leave out the B<-a> from
+the definition.
+
+With this definition you can call B<da> with different options, like
+B<da -s name> etc.  For convenience, it is recommended to define
+additional aliases for "da -s", "da -g" etc, see above under SYNOPSIS.
+
+=head1 OPTIONS
+
+=over 5
+
+=item B<-s> name [directory]
+
+Store NAME as an abbreviation for DIRECTORY.  When DIRECTORY is
+omitted, the current working directory is used.  NAME is always
+converted to lower case.
+
+=item B<-l>
+
+List the available abbreviations, sorted alphabetically.
+
+=item B<-L>
+
+Same as B<-l>, but sorted by directory path.
+
+=item B<-g> name
+
+Use I<cd> to change to the directory associated with the abbreviation
+NAME.  Name may also be a unique abbreviation of an abbreviation.
+
+=item B<-r> [name ...]
+
+Remove the abbreviation NAME from the list.  NAME may contain an exact
+name or a wildcard expression matching names.  If NAME is omitted,
+remove all abbreviations pointing to the current directory.
+
+=item B<-R> [name ...]
+
+Run a loop over all abbreviations and ask if any should be removed.
+If arguments are given, only try abbreviations matching any of the
+given wildcard patterns.  When prompted, you can reply [y]es, [n]o,
+[a]ll, or [q]uit.
+
+=item B<-d>
+
+Define environment variables and/or aliases for all directory
+abbreviations.  Must be combined with B<-e> and/or B<-a> switches.
+
+=item B<-u>
+
+Undefine environment variables and aliases for all directory
+abbreviations.  Must be combined with B<-e> and/or B<-a> switches.
+
+=item B<-e>
+
+Automatically track all abbreviations with corresponding environment
+variables.  This means, when a new abbreviation is defined/deleted
+with B<-s>/B<-r>, the corresponding environment variable will
+automatically be defined/removed.
+
+=item B<-a>
+
+Automatically track all abbreviations with corresponding alias
+definitions.  This means, when a new abbreviation is defined/deleted
+with B<-s>/B<-r>, the corresponding alias will automatically be
+defined/removed.
+
+=item B<-v>
+
+Verbose.  Write additional messages about what is happening to STDERR.
+
+=item B<-q>
+
+Quiet. Write no messages at all.
+
+=back
+
+The options B<-s>, B<-l>, B<-g>, B<-r> are mutually exclusive.  The
+options B<-d> and B<-u> are mutually exclusive as well, but (for
+example) B<-sdev> is allowed.
+
+
+=head1 EXAMPLES
+
+The examples below assume that the aliases "S", "L", "G", and "R" have
+been defined as shown above under SYNOPSIS (recommended).  If not,
+just replace these letters with "da -s" etc.
+
+Go to a directory and store "paper" as an abbreviation for it
+
+    cd /home/dominik/tex/science/paper_vega_stars/version2
+    S paper
+
+Go to another directory and store "poster" as an abbreviation for it
+
+    cd ~/posters/workshop_copenhagen
+    S poster
+
+List the available abbreviations
+
+    L
+    > paper  /home/dominik/tex/science/paper_vega_stars/version2
+    > poster /home/dominik/posters/workshop_copenhagen
+
+Go back to the first directory.  B<dirabbrev> supports three different
+ways to do this:
+
+    G paper                          # works always
+    cd $paper                        # with environment variable tracking
+    paper                            # with alias tracking
+
+List the .eps files in the poster directory.
+
+    ls $poster/*eps
+
+Copy a file to the poster directory
+
+    cp figure2.eps $poster/
+
+Remove all abbreviations starting with "p".  Note that wildcard
+characters have to be quoted to protect them from the shell.
+
+    R p\*
+
+
+If a directory path contains space characters, environment variables
+must be enclosed in double quotes for correct interpretation in the
+shell.  For example, if I</path/to my/poster> is abbreviated as
+I<poster>, you need to type commands like this:
+
+    cd "$poster"
+    cp "$poster"/*eps .
+
+Aliases defined by B<dirabbrev> as well as B<da -g> work correctly
+also with such file names.
+
+=head1 BUGS
+
+In order to work correctly, B<dirabbrev> must know under what shell it
+is running. Currently, it obtains this information from the
+environment variable SHELL, which contains the login shell of the
+user.  This causes problems if a user with a login shell (for example
+F<tcsh>) uses temporarily a different shell (for example F<bash>).  If
+anyone knows a simple way how to determine the current shell in perl,
+let me know.
+
+=head1 AUTHOR
+
+Carsten Dominik    <dominik@science.uva.nl>
+
+This program is free software.  See the source file for the full
+copyright notice.
+
+=head1 FILES
+
+The abbreviation list is stored in the file F<~/.dirabbrev>.
+
+=head1 SEE ALSO
+
+csh(1), tcsh(1), sh(1), bash(1), ksh(1)
+
+=head1 ACKNOWLEDGMENTS
+
+The idea for this command is due to Sacha Hony who also implemented it
+as a set of shell scripts.
+
+=cut

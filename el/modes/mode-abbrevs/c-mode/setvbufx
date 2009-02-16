@@ -1,0 +1,1 @@
+setvbuf(<field "FILE *restrict stream">, <field "char *restrict buf">, <field "int mode">, <field "size_t size">)

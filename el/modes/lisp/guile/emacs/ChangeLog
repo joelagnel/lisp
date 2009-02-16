@@ -1,0 +1,310 @@
+2005-07-09  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* Makefile.am, REAME.GDS, gds-client.scm, gds-problems.txt,
+	gds-server.scm, gds-tutorial.txt, gds.el, gds.texi: Removed.
+
+2004-03-10  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* guileint: Subdirectory (with contents) removed.  This was a dead
+	end of development that only I was working on, and which is now
+	superseded by the GDS work in this directory.
+
+2004-02-25  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* gds-client.scm (handle-instruction-1): In `eval' protocol, catch
+	and report read errors nicely.
+
+	* gds.el (gds-display-buffers): Don't select the GDS window.
+
+2004-02-22  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* Makefile.am (EXTRA_DIST): Distribute new files.
+
+	* gds-tutorial.txt, gds-problems.txt: New files.
+
+2004-02-21  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* gds.el: Add requirements: cl, comint, info.
+	(gds-guile-program): New.
+	(gds-start): When starting or restarting, kill captive if it
+	exists.  Use gds-guile-program instead of just "guile".
+	(gds-mode): Use widget minor mode.
+	(gds-client-ref): New optional client arg.
+	(gds-update-buffers): Don't call widget-setup.
+	(gds-heading-face): New.
+	(gds-insert-interaction): Various prettifications.
+	(gds-heading-insert): New.
+	(gds-choose-client): Check that numbers in client and gds-client
+	are still valid.
+	(gds-eval-expression, gds-apropos): Remove text properties from
+	expression to evaluate.
+	(gds-mode-map): Don't set widget-mode-map as parent.
+	(gds-start-captive): Use gds-guile-program instead of just
+	"guile".
+
+	* gds-client.scm (install-breakpoints): Bugfix: avoid null lists
+	in traversal.
+	(eval-thread, gds-eval): Where expression has multiple parts,
+	modify output to say which part is being evaluated.
+
+2004-02-08  Mikael Djurfeldt  <djurfeldt@nada.kth.se>
+
+	* Makefile.am (TAGS_FILES): Use this variable instead of
+	ETAGS_ARGS so that TAGS can be built using separate build
+	directory.
+
+2004-01-28  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* gds.el (gds-handle-client-input): Handle new `thread-status'
+	protocol.
+	(gds-display-slow-eval): New.
+	(gds-client-ref): Bugfix: buf -> (cdr buf).
+	(gds-display-buffers): Bugfix: minimum overlay end value is 1, not
+	0.
+	(gds-evals-in-progress): New.
+	(gds-results): New.
+	(gds-insert-interaction): Show evaluations in progress (with
+	button to interrupt them) and results of last help or evaluation.
+	(gds-interrupt-eval): New.
+	(gds-debug-trap-hooks, gds-up, gds-down): New.
+	(gds-eval-region, gds-eval-expression): Include abbreviated code
+	in eval correlator.
+	(gds-abbreviated-length, gds-abbreviated): New.
+	(gds-mode-map): New keys for gds-debug-trap-hooks, gds-up,
+	gds-down.
+	(gds-debug-menu): New menu entries for gds-up, gds-down.
+	
+	* gds-client.scm (gds-connect): Enable trapping for gds-eval
+	stacks.
+	(ui-read-thread-proc): Write 'running status earlier.
+	(stack->emacs-readable): Limit stack length to 'depth debug
+	option.
+	(handle-instruction): Update format of eval correlator.
+	(handle-instruction-1): Resolve module names from root module
+	instead of from current module.
+	(resolve-module-from-root): New.
+	(handle-instruction-1): New protocol `interrupt-eval'.
+	(eval-thread-table): New.
+	(eval-thread): Add thread to eval-thread-table; write new protocol
+	to frontend to communicate eval thread status; update for new
+	correlator format; bind correlator local before entering loop2.
+	(gds-eval): Use start-stack 'gds-eval-stack to rebase stack.
+	
+	* gds.el (gds-start, gds-start-captive): Do
+	`process-kill-without-query' as soon as processes started, ...
+	(gds-shutdown, gds-kill-captive): ... instead of here.
+	(gds-display-results): More clearly show unspecified results; show
+	results in interaction view instead of in separate window.
+	(gds-send): Add sent protocol to transcript.
+
+2004-01-26  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* gds.el (gds-request-focus, gds-quit): Simplify.  Old algorithm
+	left in as a big comment.
+	(gds-focus-in-function, gds-focus-in, gds-focus-out-function,
+	gds-focus-out): New.
+
+	* gds-client.scm (ui-read-thread-proc): Fix `with-mutex' syntax
+	error.
+
+2004-01-25  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* gds.el (gds-handle-client-input, gds-async-break,
+	gds-select-stack-frame, gds-query-modules, gds-go, gds-next,
+	gds-evaluate, gds-step-in, gds-step-out, gds-trace-finish,
+	gds-frame-info, gds-frame-args, gds-set-module-breakpoint,
+	gds-read-client, gds-choose-client): Change gds-focus-client to
+	gds-client.
+	(gds-choose-client): Set local value of gds-client to determined
+	client.
+	(gds-menu): Use gds-client rather than gds-focus-client.
+	(gds-client-ref): New.
+	(gds-client-blocked): Rewrite using gds-client-ref.
+	(gds-display-buffers): Take `client' arg instead of global
+	`gds-focus-client'.
+	(gds-request-focus): Call gds-display-buffers with explicit arg.
+
+2004-01-20  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* gds.el: Changes throughout because of (i) change of gds-send
+	args, (ii) introduction of evaluation correlator.
+
+	* gds-client.scm: Extensive changes to implement eval threads, and
+	to tidy up and organize the rest of the code.
+
+2003-12-06  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* gds.texi: New.
+
+	* Makefile.am (info_TEXINFOS): Added.
+
+2003-11-27  Neil Jerram  <neil@ossau.uklinux.net>
+
+	Initial support for setting source breakpoints...
+	
+	* gds.el (gds-handle-client-input): Handle new `breakpoint-set'
+	protocol.
+	(gds-breakpoint-face): New.
+	(gds-new-breakpoint-before-string): New.
+	(gds-new-breakpoint-after-string): New.
+	(gds-active-breakpoint-before-string): New.
+	(gds-active-breakpoint-after-string): New.
+	(gds-source-breakpoint-pos): New.
+	(gds-source-breakpoint-overlay-at): New.
+	(gds-set-source-breakpoint): New.
+	(gds-delete-source-breakpoint): New.
+	(gds-region-breakpoint-info): New.
+	(gds-eval-region): Include bpinfo in `eval' protocol.
+	(scheme-mode-map): New keys for setting and deleting breakpoints.
+	(gds-breakpoint-menu): New.
+	(gds-menu): Include `gds-breakpoint-menu'.
+
+	* gds-client.scm (handle-instruction-1): Handle bpinfo protocol
+	field and pass to `gds-eval'.
+	(install-breakpoints): New.
+	(gds-eval): Call `install-breakpoints'.
+
+2003-11-19  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* gds-client.scm (start-async-gds-thread): Changes to fix
+	interaction between async and debugger threads.
+	(gds-connect): Don't send module list immediately after initial
+	connection.
+
+	* gds.el (gds-immediate-display): Removed.
+
+2003-11-19  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* gds.el (gds-update-buffers): Rewrite to only show one view at a
+	time.
+	(gds-display-buffers): Remove separate stack buffer display code.
+	(gds-switch-to-view), gds-view-interaction, gds-view-stack,
+	gds-view-breakpoints, gds-view-browser, gds-view-messages,
+	gds-view-menu): New.
+	(gds-maybe-skip-region): Removed.
+	(gds-maybe-delete-region): Removed.
+	(gds-display-types): Removed.
+	(gds-display-type-regexp): Removed.
+	(gds-displayed-modules): Removed.
+
+2003-11-19  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* gds.el (gds-views, gds-promote-view, gds-add-view,
+	gds-delete-view, gds-switch-to-view): New.
+	(gds-handle-client-input): Use gds-promote-view.
+	(gds-update-buffers): Remove unnecessary client arg.
+	(gds-module-notify, gds-handle-client-input): Update callers
+	accordingly.
+	(gds-insert-messages): New.
+	(gds-insert-interaction): New (using code from
+	gds-update-buffers).
+	(gds-update-buffers): Use gds-insert-interaction.
+
+2003-11-17  Rob Browning  <rlb@defaultvalue.org>
+
+	* .cvsignore: new file.
+
+2003-11-11  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* gds.el: New.  (Or rather, first mention in this ChangeLog.)
+
+	* Makefile.am, README.GDS: New.
+
+	* gds-client.scm, gds-server.scm: New (moved here from
+	ice-9/debugger/ui-{client,server}.scm).
+
+2003-08-20  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* guileint: New subdirectory.
+
+	* README: Mention it.
+
+2001-11-19  Thien-Thi Nguyen  <ttn@giblet.glug.org>
+
+	* README: Use less forking for indexing command.
+	Update index.
+
+	* gud-guile.el: New file.
+
+	* update-changelog.el:
+	When run as a batch program, invoke `(ucl-update "ChangeLog")'
+	instead of `(ucl-update-all)'.
+
+	(ucl-outdir): Delete this var.
+	(ucl-update): Arg now specifies change log file
+	instead of cvs module directory.
+	Make interactive.
+	(ucl-update-all): Delete this func.
+
+	* update-changelog.el: New file.
+
+	* patch.el (patch-send):
+	Renamed from `patch-submit'.
+	Gadzooks what kind of world is this?
+
+2001-10-25  Thien-Thi Nguyen  <ttn@giblet.glug.org>
+
+	* README, patch.el:
+	New file.
+
+2001-10-25  Thien-Thi Nguyen  <ttn@glug.org>
+
+	* patch.el, README: New files.
+
+2001-06-21  Neil Jerram  <neil@ossau.uklinux.net>
+
+	* guile.el (guile-channel-file): Signal an error if unable to find
+	channel.scm.
+	Change "gulie" typos to "guile".
+
+2001-05-06  Keisuke Nishida  <kxn30@po.cwru.edu>
+
+	* guile.el (guile:eval): Propagate user interrupt.
+	(keywordp): Define it if not defined yet.
+	(guile-use-module): New macro.
+	(guile-process-import-module): Renamed from guile-process-use-module.
+
+	* guile-emacs.scm (guile-emacs-apropos, guile-emacs-describe):
+	New procedures.
+
+	* guile-scheme.el (guile-scheme-mode-map): Use
+	`shared-lisp-mode-map' as the parent keymap if
+	`lisp-mode-shared-map' is not defined.
+	(guile-scheme-module): New variable.
+	(guile-scheme-set-module): Set module only when necessary.
+	(guile-scheme-eval-print-last-sexp): Insert newline after eval.
+	(guile-scheme-complete-table): New variable.
+	(guile-scheme-input-symbol): New function.
+	(guile-scheme-apropos, guile-scheme-describe,
+	guile-scheme-kill-process): New commands.
+
+2001-04-25  Keisuke Nishida  <kxn30@po.cwru.edu>
+
+	* guile.el, guile-scheme.el, guile-emacs.scm: New files.
+
+2001-03-13  Martin Grabmueller  <mgrabmue@cs.tu-berlin.de>
+
+	* guile-c.el (guile-c-edit-docstring): Set fill-column to 63, so
+	that fill-paragraph'ed docstrings fit nicely when indented.
+
+2001-03-13  Keisuke Nishida  <kxn30@po.cwru.edu>
+
+	* guile-c.el (guile-c-window-configuration): New variable.
+	(guile-c-edit-docstring, guile-c-edit-finish):
+	Save/restore window-configuration.
+
+2001-03-12  Keisuke Nishida  <kxn30@po.cwru.edu>
+
+	* guile-c.el (guile-c-deprecate-region): New command.
+
+2001-03-11  Keisuke Nishida  <kxn30@po.cwru.edu>
+
+	* guile-c.el: New file.
+
+2000-05-28  Mikael Djurfeldt  <mdj@thalamus.nada.kth.se>
+
+	* ppexpand.el: New file.
+
+2000-01-18  Mikael Djurfeldt  <mdj@mdj.nada.kth.se>
+
+	* multistring.el: New file.

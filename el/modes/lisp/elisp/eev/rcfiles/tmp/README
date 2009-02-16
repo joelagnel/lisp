@@ -1,0 +1,11 @@
+This is the `rcfiles/tmp/README' file of GNU eev.
+
+This directory is used by the installation process of eev to store
+backups of rcfiles (a copy of ~/.bashrc becomes .bashrc.old here, for
+example), to store the patched rcfiles (~/.bashrc -> .bashrc.new, etc)
+and to store the shell scripts that do the actual installation and
+uninstallation of these patched files (do_install.sh and
+do_uninstall.sh).
+
+  Eduardo Ochs
+  2005jan07

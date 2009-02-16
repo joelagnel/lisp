@@ -1,0 +1,1536 @@
+<html lang="en">
+<head>
+<title>TRAMP User Manual</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="TRAMP User Manual">
+<meta name=generator content="makeinfo 4.0f">
+<link href="http://texinfo.org/" rel=generator-home>
+</head>
+<body>
+<h1>TRAMP User Manual</h1>
+<p><hr>
+Node:<a name="Top">Top</a>,
+Next:<a rel=next href="#Copying">Copying</a>,
+Previous:<a rel=previous href="#dir">(dir)</a>,
+Up:<a rel=up href="#dir">(dir)</a>
+<br>
+
+<h2><small>TRAMP</small> User Manual</h1>
+
+This project kindly hosted by <A href="http://sourceforge.net">
+<IMG src="http://sourceforge.net/sflogo.php?group_id=34545"
+     width="88" height="31" border="0" alt="SourceForge Logo"></A>
+
+<p><small>TRAMP</small> stands for `Transparent Remote (file) Access, Multiple
+Protocol'.  This package provides remote file editing, similar to
+<cite>ange-ftp</cite> and <cite>EFS</cite>.
+
+<p>The difference is that ange-ftp uses FTP to transfer files between the
+local and the remote host, whereas <small>TRAMP</small> uses a combination of
+<code>rsh</code> and <code>rcp</code> or other work-alike programs, such as
+<code>ssh</code>/<code>scp</code>.
+
+<p>This is version $Revision: 2.11 $ of the <small>TRAMP</small> manual, last updated on
+Sunday, 20 January, 2002.
+
+<p>You can find the latest version of this document on the web at
+<a href="http://tramp.sourceforge.net/">http://tramp.sourceforge.net/</a>.
+
+<p>This manual is also available as a <a href="tramp_ja.html">Japanese translation</a>.
+
+<p>The latest release of <small>TRAMP</small> is available for
+<a href="http://tramp.sourceforge.net/download">download</a>, or you may see <a href="#Obtaining%20%3csmall%3eTRAMP%3c%2fsmall%3e">Obtaining <small>TRAMP</small></a> for more details,
+including the CVS server details.
+
+<p><small>TRAMP</small> also has a <a href="http://sourceforge.net/projects/tramp/">SourceForge Project Page</a>.
+
+<p>There is a mailing list for <small>TRAMP</small>, available at
+<a href="mailto:tramp-devel@lists.sourceforge.net">tramp-devel@lists.sourceforge.net</a>, and archived at
+<a href="http://www.mail-archive.com/emacs-rcp@ls6.cs.uni-dortmund.de/">http://www.mail-archive.com/emacs-rcp@ls6.cs.uni-dortmund.de/</a> as
+well as the usual SourceForge archives.
+
+<ul>
+<li><a href="#Copying">Copying</a>:                      <small>TRAMP</small> Copying conditions. 
+<li><a href="#Overview">Overview</a>:                     What <small>TRAMP</small> can and cannot do.
+
+<p>For the end user:
+</p><li><a href="#Obtaining%20%3csmall%3eTRAMP%3c%2fsmall%3e">Obtaining <small>TRAMP</small></a>:           How to obtain <small>TRAMP</small>. 
+<li><a href="#History">History</a>:                      History of <small>TRAMP</small>
+<li><a href="#Installation">Installation</a>:                 Installing <small>TRAMP</small> with your (X)Emacs. 
+<li><a href="#Configuration">Configuration</a>:                Configuring <small>TRAMP</small> for use. 
+<li><a href="#Usage">Usage</a>:                        An overview of the operation of <small>TRAMP</small>. 
+<li><a href="#Bug%20Reports">Bug Reports</a>:                  Reporting Bugs and Problems
+<li><a href="#Frequently%20Asked%20Questions">Frequently Asked Questions</a>:   Questions and answers from the mailing list.
+
+<p>For the developer:
+</p><li><a href="#Version%20Control">Version Control</a>:              The inner workings of remote version control. 
+<li><a href="#Files%20directories%20and%20paths">Files directories and paths</a>:   How file names, directories and paths are mangled and managed. 
+<li><a href="#Issues">Issues</a>:
+
+<p>--- The Detailed Node Listing ---
+
+<p>Configuring <small>TRAMP</small> for use
+
+</p><li><a href="#Connection%20types">Connection types</a>:             Types of connections made to remote machines. 
+<li><a href="#Inline%20methods">Inline methods</a>:               Inline methods. 
+<li><a href="#External%20transfer%20methods">External transfer methods</a>:    External transfer methods. 
+<li><a href="#Multi-hop%20Methods">Multi-hop Methods</a>:            Connecting to a remote host using multiple hops. 
+<li><a href="#Default%20Method">Default Method</a>:               Selecting a default method. 
+<li><a href="#Customizing%20Methods">Customizing Methods</a>:          Using Non-Standard Methods. 
+<li><a href="#Remote%20Programs">Remote Programs</a>:              How <small>TRAMP</small> finds and uses programs on the remote machine. 
+<li><a href="#Remote%20shell%20setup">Remote shell setup</a>:
+
+<p>Using <small>TRAMP</small>
+
+</p><li><a href="#Filename%20Syntax">Filename Syntax</a>:              <small>TRAMP</small> filename conventions. 
+<li><a href="#Multi-hop%20filename%20syntax">Multi-hop filename syntax</a>:    Multi-hop filename conventions
+<li><a href="#Dired">Dired</a>:                        Dired and filename completion.
+
+<p>The inner workings of remote version control
+
+</p><li><a href="#Version%20Controlled%20Files">Version Controlled Files</a>:     Determining if a file is under version control. 
+<li><a href="#Remote%20Commands">Remote Commands</a>:              Executing the version control commands on the remote machine. 
+<li><a href="#Changed%20workfiles">Changed workfiles</a>:            Detecting if the working file has changed. 
+<li><a href="#Checking%20out%20files">Checking out files</a>:           Bringing the workfile out of the repository. 
+<li><a href="#Miscellaneous%20Version%20Control">Miscellaneous Version Control</a>:   Things related to Version Control that don't fit elsewhere
+
+<p>Things related to Version Control that don't fit elsewhere
+
+</p><li><a href="#Remote%20File%20Ownership">Remote File Ownership</a>:        How VC determines who owns a workfile. 
+<li><a href="#Back-end%20Versions">Back-end Versions</a>:            How VC determines what release your RCS is.
+
+<p>How file names, directories and paths are mangled and managed.
+
+</p><li><a href="#Path%20deconstruction">Path deconstruction</a>:          Breaking a path into it's components.
+
+</ul>
+
+<p><hr>
+Node:<a name="Copying">Copying</a>,
+Next:<a rel=next href="#Overview">Overview</a>,
+Previous:<a rel=previous href="#Top">Top</a>,
+Up:<a rel=up href="#Top">Top</a>
+<br>
+
+<h2><small>TRAMP</small> Copying conditions</h1>
+
+<p>Copyright (C) 1998, 1999, 2000 Free Software Foundation, Inc.
+
+<p>tramp.el is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2, or (at your option) any later
+version.
+
+<p>tramp.el is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+more details.
+
+<p>You should have received a copy of the GNU General Public License along
+with GNU Emacs; see the file COPYING. If not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+USA.
+
+<p><hr>
+Node:<a name="Overview">Overview</a>,
+Next:<a rel=next href="#Obtaining%20%3csmall%3eTRAMP%3c%2fsmall%3e">Obtaining <small>TRAMP</small></a>,
+Previous:<a rel=previous href="#Copying">Copying</a>,
+Up:<a rel=up href="#Top">Top</a>
+<br>
+
+<h2>An overview of <small>TRAMP</small></h1>
+
+<p>After the installation of <small>TRAMP</small> into your Emacs, you will be able to
+access files on remote machines as though they were local. Access to the
+remote file system for editing files, version control, and
+<code>dired</code> are transparently enabled.
+
+<p>Your access to the remote machine can be with the <code>rsh</code>,
+<code>rlogin</code>, <code>telnet</code> programs or with any similar
+connection method. This connection must pass ASCII successfully to be
+usable but need not be 8-bit clean.
+
+<p>The package provides support for <code>ssh</code> connections out of the
+box, one of the more common uses of the package. This allows relatively
+secure access to machines, especially if <code>ftp</code> access is
+disabled.
+
+<p>The majority of activity carried out by <small>TRAMP</small> requires only that the
+remote login is possible and is carried out at the terminal. In order to
+access remote files <small>TRAMP</small> needs to transfer their content to the local
+machine temporarily.
+
+<p><small>TRAMP</small> can transfer files between the machines in a variety of ways. The
+details are easy to select, depending on your needs and the machines in
+question.
+
+<p>The fastest transfer methods rely on a remote file transfer package such
+as <code>rcp</code>, <code>scp</code> or <code>rsync</code>. The use of these
+methods is only possible if the file copy command does not ask for a
+password for the remote machine.
+
+<p>If the remote copy methods are not suitable for you, <small>TRAMP</small> also
+supports the use of encoded transfers directly through the shell. This
+requires that the <code>mimencode</code> or <code>uuencode</code> tools are
+available on the remote machine.
+
+<p>Within these limitations, <small>TRAMP</small> is quite powerful. It is worth noting
+that, as of the time of writing, it is far from a polished end-user
+product. For a while yet you should expect to run into rough edges and
+problems with the code now and then.
+
+<p>It is finished enough that the developers use it for day to day work but
+the installation and setup can be a little difficult to master, as can
+the terminology.
+
+<p><small>TRAMP</small> is still under active development and any problems you encounter,
+trivial or major, should be reported to the <small>TRAMP</small> developers. 
+See <a href="#Bug%20Reports">Bug Reports</a>.
+
+<h5>Behind the scenes</h4>
+
+<p>This section tries to explain what goes on behind the scenes when you
+access a remote file through <small>TRAMP</small>.
+
+<p>Suppose you type <kbd>C-x C-f</kbd> and enter part of an <small>TRAMP</small> file name,
+then hit <kbd>&lt;TAB&gt;</kbd> for completion.  Suppose further that this is
+the first time that <small>TRAMP</small> is invoked for the host in question.  Here's
+what happens:
+
+<ul>
+<li><small>TRAMP</small> discovers that it needs a connection to the host. So it invokes
+<code>telnet HOST</code> or <code>rsh HOST -l USER</code> or a similar tool to
+connect to the remote host. Communication with this process happens
+through an Emacs buffer, that is, the output from the remote end goes
+into a buffer.
+
+<li>The remote host may prompt for a login name (for <code>telnet</code>).  The
+login name is given in the file name, so <small>TRAMP</small> sends the login name and
+a newline.
+
+<li>The remote host may prompt for a password or pass phrase (for
+<code>rsh</code> or for <code>telnet</code> after sending the login name). 
+<small>TRAMP</small> displays the prompt in the minibuffer, asking you for the
+password or pass phrase.
+
+<p>You enter the password or pass phrase.  <small>TRAMP</small> sends it to the remote
+host, followed by a newline.
+
+</p><li><small>TRAMP</small> now waits for the shell prompt or for a message that the login
+failed.
+
+<p>If <small>TRAMP</small> sees neither of them after a certain period of time (a minute,
+say), then it issues an error message saying that it couldn't find the
+remote shell prompt and shows you what the remote host has sent.
+
+<p>If <small>TRAMP</small> sees a `login failed' message, it tells you so, aborts the
+login attempt and allows you to try again.
+
+</p><li>Suppose that the login was successful and <small>TRAMP</small> sees the shell prompt
+from the remote host.  Now <small>TRAMP</small> invokes <code>/bin/sh</code> because
+Bourne shells and C shells have different command
+syntaxes.<a rel=footnote href="#fn-1"><sup>1</sup></a>
+
+<p>After the Bourne shell has come up, <small>TRAMP</small> sends a few commands to
+ensure a good working environment.  It turns off echoing, it sets the
+shell prompt, and a few other things.
+
+</p><li>Now the remote shell is up and it good working order.  Remember, what
+was supposed to happen is that <small>TRAMP</small> tries to find out what files exist
+on the remote host so that it can do filename completion.
+
+<p>So, <small>TRAMP</small> basically issues <code>cd</code> and <code>ls</code> commands and
+also sometimes <code>echo</code> with globbing.  Another command that is
+often used is <code>test</code> to find out whether a file is writable or a
+directory or the like.  The output of each command is parsed for the
+necessary operation.
+
+</p><li>Suppose you are finished with filename completion, have entered <kbd>C-x
+C-f</kbd>, a full file name and hit <kbd>&lt;RET&gt;</kbd>.  Now comes the time to
+transfer the file contents from the remote host to the local host so
+that you can edit them.
+
+<p>See above for an explanation of how <small>TRAMP</small> transfers the file contents.
+
+<p>For inline transfers, <small>TRAMP</small> issues a command like <code>mimencode -b
+/path/to/remote/file</code>, waits until the output has accumulated in the
+buffer that's used for communication, then decodes that output to
+produce the file contents.
+
+<p>For out-of-band transfers, <small>TRAMP</small> issues a command like <code>rcp
+user@host:/path/to/remote/file /tmp/tramp.4711</code> and then reads the local
+temporary file <code>/tmp/tramp.4711</code> into a buffer and deletes the
+temporary file.
+
+</p><li>You now edit the buffer contents, blithely unaware of what has happened
+behind the scenes.  (Unless you have read this section, that is.)  When
+you are finished, you type <kbd>C-x C-s</kbd> to save the buffer.
+
+<li>Again, <small>TRAMP</small> transfers the file contents to the remote host either
+inline or out-of-band.  This is the reverse of what happens when reading
+the file.
+
+</ul>
+
+<p>I hope this has provided you with a basic overview of what happens
+behind the scenes when you open a file with <small>TRAMP</small>.
+
+<p><hr>
+Node:<a name="Obtaining%20%3csmall%3eTRAMP%3c%2fsmall%3e">Obtaining <small>TRAMP</small></a>,
+Next:<a rel=next href="#History">History</a>,
+Previous:<a rel=previous href="#Overview">Overview</a>,
+Up:<a rel=up href="#Top">Top</a>
+<br>
+
+<h2>Obtaining <small>TRAMP</small>.</h1>
+
+<p><small>TRAMP</small> is freely available on the Internet and the latest release may be
+downloaded from
+<a href="ftp://ls6-ftp.cs.uni-dortmund.de/pub/src/emacs/tramp.tar.gz">ftp://ls6-ftp.cs.uni-dortmund.de/pub/src/emacs/tramp.tar.gz</a>. This
+release includes the full documentation and code for <small>TRAMP</small>, suitable
+for installation.
+
+<p>For the especially brave, <small>TRAMP</small> is available from CVS. The CVS version
+is the latest version of the code and may contain incomplete features or
+new issues. Use these versions at your own risk.
+
+<p>Instructions for obtaining the latest development version of <small>TRAMP</small>
+from CVS can be found by going to the SourceForge project page at
+<a href="http://sourceforge.net/projects/tramp/">http://sourceforge.net/projects/tramp/</a> and then clicking on the
+CVS link in the navigation bar at the top.  Or follow the example
+session below:
+
+<br><pre>] <strong>cd ~/lisp</strong>
+] <strong>cvs -d:pserver:anonymous@cvs.tramp.sourceforge.net:/cvsroot/tramp login</strong>
+(Logging in to anonymous@cvs.tramp.sourceforge.net)
+CVS password: <strong>(just hit RET here)</strong>
+<small>...</small>
+
+] <strong>cvs -z3 -d:pserver:anonymous@cvs.tramp.sourceforge.net:/cvsroot/tramp co tramp</strong>
+</pre>
+
+<p>You should now have a directory <code>~/lisp/tramp</code> containing the latest
+version of <small>TRAMP</small>. You can fetch the latest updates from the repository
+by issuing the command:
+
+<br><pre>] <strong>cd ~/lisp/tramp</strong>
+] <strong>cvs update -d</strong>
+</pre>
+
+<p><hr>
+Node:<a name="History">History</a>,
+Next:<a rel=next href="#Installation">Installation</a>,
+Previous:<a rel=previous href="#Obtaining%20%3csmall%3eTRAMP%3c%2fsmall%3e">Obtaining <small>TRAMP</small></a>,
+Up:<a rel=up href="#Top">Top</a>
+<br>
+
+<h2>History of <small>TRAMP</small></h1>
+
+<p>Development was started end of November 1998.  The package was called
+`rssh.el', back then.  It only provided one method to access a file,
+using <code>ssh</code> to log in to a remote host and using <code>scp</code>
+to transfer the file contents.  After a while, the name was changed to
+`rcp.el', and now it's <small>TRAMP</small>.  Along the way, many more methods for
+getting a remote shell and for transferring the file contents were
+added.  Support for VC was added.
+
+<p>The most recent addition of a major feature was the multi-hop methods
+added in April 2000.
+
+<p><hr>
+Node:<a name="Installation">Installation</a>,
+Next:<a rel=next href="#Configuration">Configuration</a>,
+Previous:<a rel=previous href="#History">History</a>,
+Up:<a rel=up href="#Top">Top</a>
+<br>
+
+<h2>Installing <small>TRAMP</small> into Emacs or XEmacs</h1>
+
+<p>Installing <small>TRAMP</small> into your Emacs or XEmacs is a relatively easy
+process, at least compared to rebuilding your machine from scratch. ;)
+
+<p>Seriously though, the installation should be a fairly simple matter.
+
+<p>The easiest way to proceed is as follows:
+
+<ul>
+<li>Choose a directory, say <code>~/emacs/</code>.  Change into that directory and
+unpack the tarball.  This will give you a directory
+<code>~/emacs/tramp/</code> which contains subdirectories <code>lisp</code> for the
+Lisp code and <code>texi</code> for the documentation.
+
+<li>Optionally byte-compile all files in the Lisp directory,
+<code>~/emacs/tramp/lisp/</code>, by issuing a command like the following from
+that directory:
+<br><pre>make EMACS=emacs all            # for Emacs users
+make EMACS=xemacs all           # for XEmacs users
+</pre>
+
+<li>Tell Emacs about the new Lisp directory and the <small>TRAMP</small> package, with
+the following lines in <code>~/.emacs</code>:
+<br><pre>(add-to-list 'load-path "~/emacs/tramp/lisp/")
+(require 'tramp)
+</pre>
+
+<li>To be able to read the Info documentation, create a file
+<code>~/emacs/tramp/texi/dir</code> using for example the
+<code>install-info</code> command, and add the directory to the search path
+for Info.
+
+<p>CCC Todo: explain how to use the <code>install-info</code> command.  This
+works differently in Debian than on other systems.  How does one create
+a <code>dir</code> file using <code>install-info</code> on Debian?
+
+<p>If the environment variable <code>INFOPATH</code> is set, add the directory
+<code>~/emacs/tramp/texi/</code> to it.  Else, add the directory to
+<code>Info-default-directory-list</code>, as follows:
+<br><pre>(add-to-list 'Info-default-directory-list "~/emacs/tramp/texi/")
+</pre>
+XEmacs 21 users should use <code>Info-directory-list</code> rather than
+<code>Info-default-directory-list</code>.
+
+</ul>
+
+<p>For XEmacs users, the package <code>fsf-compat</code> must be installed. 
+For details on package installation, see <a href="xemacs.html#Packages">Packages</a>. 
+(If the previous link doesn't work, try the XEmacs documentation at
+<a href="http://www.xemacs.org/Documentation/packageGuide.html">the XEmacs site</a>.)
+
+<p><hr>
+Node:<a name="Configuration">Configuration</a>,
+Next:<a rel=next href="#Usage">Usage</a>,
+Previous:<a rel=previous href="#Installation">Installation</a>,
+Up:<a rel=up href="#Top">Top</a>
+<br>
+
+<h2>Configuring <small>TRAMP</small> for use</h1>
+
+<p><small>TRAMP</small> is (normally) fully functional when it is initially
+installed. It is initially configured to use the <code>rsh</code> and
+<code>rcp</code> programs to connect to the remote host.
+
+<p>On some hosts, there are problems with opening a connection.  These are
+related to the behavior of the remote shell.  See See <a href="#Remote%20shell%20setup">Remote shell setup</a>, for details on this.
+
+<p>If you do not wish to use these commands to connect to the remote host,
+you should change the default connection and transfer method that <small>TRAMP</small>
+uses. There are several different methods that <small>TRAMP</small> can use to
+connect to remote machines and transfer files (see <a href="#Connection%20types">Connection types</a>).
+
+<ul>
+<li><a href="#Connection%20types">Connection types</a>:             Types of connections made to remote machines. 
+<li><a href="#Inline%20methods">Inline methods</a>:               Inline methods. 
+<li><a href="#External%20transfer%20methods">External transfer methods</a>:    External transfer methods. 
+<li><a href="#Multi-hop%20Methods">Multi-hop Methods</a>:            Connecting to a remote host using multiple hops. 
+<li><a href="#Default%20Method">Default Method</a>:               Selecting a default method. 
+<li><a href="#Customizing%20Methods">Customizing Methods</a>:          Using Non-Standard Methods. 
+<li><a href="#Remote%20Programs">Remote Programs</a>:              How <small>TRAMP</small> finds and uses programs on the remote machine. 
+<li><a href="#Remote%20shell%20setup">Remote shell setup</a>: 
+</ul>
+
+<p><hr>
+Node:<a name="Connection%20types">Connection types</a>,
+Next:<a rel=next href="#Inline%20methods">Inline methods</a>,
+Previous:<a rel=previous href="#Configuration">Configuration</a>,
+Up:<a rel=up href="#Configuration">Configuration</a>
+<br>
+
+<h3>Types of connections made to remote machines.</h2>
+
+<p>There are two basic types of transfer methods, each with it's own
+advantages and limitations. Both types of connection make use of a
+remote shell access program such as <code>rsh</code>, <code>ssh</code> or
+<code>telnet</code> to connect to the remote machine.
+
+<p>This connection is used to perform many of the operations that <small>TRAMP</small>
+requires to make the remote file system transparently accessible from
+the local machine. It is only when visiting files that the methods
+differ.
+
+<p>Loading or saving a remote file requires that the content of the file be
+transfered between the two machines. The content of the file can be
+transfered over the same connection used to log in to the remote machine
+or the file can be transfered through another connection using a remote
+copy program such as <code>rcp</code>, <code>scp</code> or <code>rsync</code>. 
+The former are called <dfn>inline methods</dfn>, the latter are called
+<dfn>external transfer methods</dfn>.
+
+<p>The performance of the external transfer methods is generally better
+than that of the inline methods.  This is caused by the need to encode
+and decode the data when transferring inline.
+
+<p>The one exception to this rule are the <code>scp</code> based transfer
+methods.  While these methods do see better performance when actually
+transferring files, the overhead of the cryptographic negotiation at
+startup may drown out the improvement in file transfer times.
+
+<p>External transfer methods do require that the remote copy command is not
+interactive -- that is, the command does not prompt you for a password. 
+If you cannot perform remote copies without a password, you will need to
+use an inline transfer method to work with <small>TRAMP</small>.
+
+<p>A variant of the inline methods are the <dfn>multi-hop methods</dfn>. 
+These methods allow you to connect a remote host using a number `hops',
+each of which connects to a different host.  This is useful if you are
+in a secured network where you need to go through a bastion host to
+connect to the outside world.
+
+<p><hr>
+Node:<a name="Inline%20methods">Inline methods</a>,
+Next:<a rel=next href="#External%20transfer%20methods">External transfer methods</a>,
+Previous:<a rel=previous href="#Connection%20types">Connection types</a>,
+Up:<a rel=up href="#Configuration">Configuration</a>
+<br>
+
+<h3>Inline methods</h2>
+
+<p>The inline methods in <small>TRAMP</small> are quite powerful and can work in
+situations where you cannot use an external transfer program to connect. 
+Inline methods are the only methods that work when connecting to the
+remote machine via telnet.  (There are also strange inline methods which
+allow you to transfer files between <em>user identities</em> rather than
+hosts, see below.)
+
+<p>These methods depend on the existence of a suitable encoding and
+decoding command on remote machine. Locally, <small>TRAMP</small> may be able to use
+features of Emacs to decode and encode the files or it may require
+access to external commands to perform that task.
+
+<p><small>TRAMP</small> supports the use of <code>uuencode</code> to transfer files. This is
+<em>not</em> recommended. The <code>uuencode</code> and <code>uudecode</code>
+commands are not well standardized and may not function correctly or at
+all on some machines, notably AIX and IRIX. These systems do not work
+with <code>uuencode</code> at all.  (But do see the note about AIX in the
+documentation for <var>tramp-methods</var>.)
+
+<p>In summary, if possible use the <code>mimencode</code> methods to transfer
+the data base64 encoded. This has the advantage of using a built-in
+command in every modern Emacs, improving performance.
+
+<ul>
+<li><code>rm</code>  --  <code>rsh</code> with <code>mimencode</code>
+
+<p>Connect to the remote host with <code>rsh</code> and use base64 encoding to
+transfer files between the machines.
+
+<p>This requires the <code>mimencode</code> command that is part of the
+<code>metamail</code> packages. This may not be installed on all remote
+machines.
+
+</p><li><code>sm</code>  --  <code>ssh</code> with <code>mimencode</code>
+
+<p>Connect to the remote host with <code>ssh</code> and use base64 encoding to
+transfer files between the machines.
+
+<p>This is identical to the previous option except that the <code>ssh</code>
+package is used, making the connection more secure.
+
+<p>There are also two variants, <code>sm1</code> and <code>sm2</code> that use the
+<code>ssh1</code> and <code>ssh2</code> commands explicitly. If you don't know
+what these are, you do not need these options.
+
+</p><li><code>tm</code>  --  <code>telnet</code> with <code>mimencode</code>
+
+<p>Connect to the remote host with <code>telnet</code> and use base64 encoding
+to transfer files between the machines.
+
+<p>This requires the <code>mimencode</code> command that is part of the
+<code>metamail</code> packages.
+
+</p><li><code>ru</code>  --  <code>rsh</code> with <code>uuencode</code>
+
+<p>Connect to the remote host with <code>rsh</code> and use the
+<code>uuencode</code> and <code>uudecode</code> commands to transfer files
+between the machines.
+
+</p><li><code>su</code>  --  <code>ssh</code> with <code>uuencode</code>
+
+<p>Connect to the remote host with <code>ssh</code> and use the
+<code>uuencode</code> and <code>uudecode</code> commands to transfer files
+between the machines.
+
+<p>As with the <code>ssh</code> and base64 option above, this provides the
+<code>su1</code> and <code>su2</code> methods to explicitly select an ssh
+version.
+
+<p>Note that this method does not invoke the <code>su</code> program, see
+below for methods which use that.
+
+</p><li><code>tu</code>  --  <code>telnet</code> with <code>uuencode</code>
+
+<p>Connect to the remote host with <code>telnet</code> and use the
+<code>uuencode</code> and <code>uudecode</code> commands to transfer files
+between the machines.
+
+</p><li><code>sum</code> -- <code>su</code> with <code>mimencode</code>
+
+<p>This method does not connect to a remote host at all, rather it uses the
+<code>su</code> program to allow you to edit files as another user.  Uses
+base64 encoding to transfer the file contents.
+
+</p><li><code>suu</code> -- <code>su</code> with <code>uuencode</code>
+
+<p>Like <code>sum</code>, this uses the <code>su</code> program to allow you to
+edit files on the local host as another user.  Uses <code>uuencode</code>
+and <code>uudecode</code> to transfer the file contents.
+
+</p><li><code>sudm</code> -- <code>sudo</code> with <code>mimencode</code>
+
+<p>This is similar to the <code>sum</code> method, but it uses <code>sudo</code>
+rather than <code>su</code> to become a different user.
+
+<p>Note that <code>sudo</code> must be configured to allow you to start a
+shell as the user.  It would be nice if it was sufficient if
+<code>ls</code> and <code>mimencode</code> were allowed, but that is not easy
+to implement, so I haven't got around to it, yet.
+
+</p><li><code>sudu</code> -- <code>sudo</code> with <code>uuencode</code>
+
+<p>This is similar to the <code>suu</code> method, but it uses <code>sudo</code>
+rather than <code>su</code> to become a different user.
+
+</p><li><code>smx</code> -- <code>ssh</code> with <code>mimencode</code>
+
+<p>As you expect, this is similar to <code>sm</code>, only a little
+different.  Whereas <code>sm</code> opens a normal interactive shell on
+the remote host, this option uses <code>ssh -t -t HOST -l USER
+/bin/sh</code> tp open a connection.  This is useful for users where the
+normal login shell is set up to ask them a number of questions when
+logging in.  This procedure avoids these questions, and just gives
+<small>TRAMP</small> a more-or-less `standard' login shell to work with.
+
+<p>This is also useful for Windows users where <code>ssh</code>, when
+invoked from an Emacs buffer, tells them that it is not allocating a
+pseudo tty.  When this happens, the login shell is wont to not print
+any shell prompt, which confuses <small>TRAMP</small> mightily.
+
+</ul>
+
+<p><hr>
+Node:<a name="External%20transfer%20methods">External transfer methods</a>,
+Next:<a rel=next href="#Multi-hop%20Methods">Multi-hop Methods</a>,
+Previous:<a rel=previous href="#Inline%20methods">Inline methods</a>,
+Up:<a rel=up href="#Configuration">Configuration</a>
+<br>
+
+<h3>External transfer methods</h2>
+
+<p>The external transfer methods operate through multiple channels, using
+the remote shell connection for many actions while delegating file
+transfers to an external transfer utility.
+
+<p>This saves the overhead of encoding and decoding that multiplexing the
+transfer through the one connection has with the inline methods.
+
+<p>If you want to use an external transfer method you <em>must</em> be able
+to execute the transfer utility to copy files to and from the remote
+machine without any interaction.
+
+<p>This means that you will need to use <code>ssh-agent</code> if you use the
+<code>scp</code> program for transfers, or maybe your version of
+<code>scp</code> accepts a password on the command line.<a rel=footnote href="#fn-2"><sup>2</sup></a>
+If you use <code>rsync</code> via <code>ssh</code> then the same rule must
+apply to that connection.
+
+<p>If you cannot get <code>scp</code> to run without asking for a password but
+would still like to use <code>ssh</code> to secure your connection, have a
+look at the <code>ssh</code> based inline methods.
+
+<ul>
+<li><code>rcp</code>  --  <code>rsh</code> and <code>rcp</code>
+
+<p>This method uses the <code>rsh</code> and <code>rcp</code> commands to connect
+to the remote machine and transfer files. This is probably the fastest
+connection method available.
+
+</p><li><code>scp</code>  --  <code>ssh</code> and <code>scp</code>
+
+<p>Using <code>ssh</code> to connect to the remote host and <code>scp</code> to
+transfer files between the machines is the best method for securely
+connecting to a remote machine and accessing files.
+
+<p>The performance of this option is also quite good. It may be slower than
+the inline methods when you often open and close small files however. 
+The cost of the cryptographic handshake at the start of an <code>scp</code>
+session can begin to absorb the advantage that the lack of encoding and
+decoding presents.
+
+</p><li><code>rsync</code>  --  <code>ssh</code> and <code>rsync</code>
+
+<p>Using the <code>ssh</code> command to connect securely to the remote
+machine and the <code>rsync</code> command to transfer files is almost
+identical to the <code>scp</code> method.
+
+<p>While <code>rsync</code> performs much better than <code>scp</code> when
+transferring files that exist on both hosts, this advantage is lost if
+the file exists only on one side of the connection.
+
+<p>The <code>rsync</code> based method may be considerably faster than the
+<code>rcp</code> based methods when writing to the remote system. Reading
+files to the local machine is no faster than with a direct copy.
+
+</p><li><code>scpx</code> -- <code>ssh</code> and <code>scp</code>
+
+<p>As you expect, this is similar to <code>scp</code>, only a little
+different.  Whereas <code>scp</code> opens a normal interactive shell on the
+remote host, this option uses <code>ssh -t -t HOST -l USER /bin/sh</code> to
+open a connection.  This is useful for users where the normal login
+shell is set up to ask them a number of questions when logging in.  This
+procedure avoids these questions, and just gives <small>TRAMP</small> a more-or-less
+`standard' login shell to work with.
+
+<p>This is also useful for Windows users where <code>ssh</code>, when
+invoked from an Emacs buffer, tells them that it is not allocating a
+pseudo tty.  When this happens, the login shell is wont to not print
+any shell prompt, which confuses <small>TRAMP</small> mightily.
+
+</ul>
+
+<p><hr>
+Node:<a name="Multi-hop%20Methods">Multi-hop Methods</a>,
+Next:<a rel=next href="#Default%20Method">Default Method</a>,
+Previous:<a rel=previous href="#External%20transfer%20methods">External transfer methods</a>,
+Up:<a rel=up href="#Configuration">Configuration</a>
+<br>
+
+<h3>Connecting to a remote host using multiple hops</h2>
+
+<p>Sometimes, the methods described before are not sufficient.  Sometimes,
+it is not possible to connect to a remote host using a simple command. 
+For example, if you are in a secured network, you might have to log in
+to a `bastion host' first before you can connect to the outside world. 
+Of course, the target host may also require a bastion host.  The format
+of multi-hop filenames is slightly different than the format of normal
+<small>TRAMP</small> methods.
+
+<p>A multi-hop file name specifies a method, a number of hops, and a path
+name on the remote system.  The method specifies how the file is
+transferred through the inline connection.  The following two multi-hop
+methods are available:
+
+<ul>
+<li><code>multi</code> -- base64 encoding with <code>mimencode</code>
+
+<p>The file is transferred through the connection in base64 encoding.  Uses
+the <code>mimencode</code> program for doing encoding and decoding, but
+uses an Emacs internal implementation on the local host if available.
+
+</p><li><code>multiu</code> -- use commands <code>uuencode</code> and <code>uudecode</code>
+
+<p>The file is transferred through the connection in `uu' encoding.  Uses
+the <code>uuencode</code> and <code>uudecode</code> programs for encoding and
+decoding, but uses a Lisp implementation for decoding on the local host
+if available.
+
+</ul>
+
+<p>Each hop consists of a <dfn>hop method</dfn> specification, a user name and a
+host name.  The following hop methods are (currently) available:
+
+<ul>
+<li><code>telnet</code>
+
+<p>Uses the well-known <code>telnet</code> program to connect to the host. 
+Whereas user name and host name are supplied in the file name, the
+user is queried for the password.
+
+</p><li><code>rsh</code>
+
+<p>This uses <code>rsh</code> to connect to the host.  You do not need to
+enter a password unless <code>rsh</code> explicitly asks for it.
+
+</p><li><code>ssh</code>
+
+<p>This uses <code>ssh</code> to connect to the host.  You might have to enter
+a password or a pass phrase.
+
+</p><li><code>su</code>
+
+<p>This method does not actually contact a different host, but it allows
+you to become a different user on the host you're currently on.  This
+might be useful if you want to edit files as root, but the remote host
+does not allow remote root logins.  In this case you can use
+<code>telnet</code>, <code>rsh</code> or <code>ssh</code> to connect to the
+remote host as a non-root user, then use an <code>su</code> hop to become
+root.  But <code>su</code> need not be the last hop in a sequence, you could
+also use it somewhere in the middle, if the need arises.
+
+<p>Even though you <em>must</em> specify both user and host with a
+<code>su</code> hop, the host name is ignored and only the user name is
+used.
+
+</p><li><code>sudo</code>
+
+<p>This is similar to the <code>su</code> hop, except that it uses
+<code>sudo</code> rather than <code>su</code> to become a different user.
+
+</ul>
+
+<p>Some people might wish to use port forwarding with <code>ssh</code> or maybe
+they have to use a nonstandard port.  This can be accomplished by
+putting a stanza in <code>~/.ssh/config</code> for the account which specifies
+a different port number for a certain host name.  But it can also be
+accomplished within Tramp, by adding a multi-hop method.  For example:
+
+<br><pre>(add-to-list 'tramp-multi-connection-function-alist
+             '("sshf" tramp-multi-connect-rlogin "ssh %h -l %u -p 4400%n"))
+</pre>
+
+<p>Now you can use a <code>sshf</code> hop which connects to port 4400 instead of
+the standard port.
+
+<p><hr>
+Node:<a name="Default%20Method">Default Method</a>,
+Next:<a rel=next href="#Customizing%20Methods">Customizing Methods</a>,
+Previous:<a rel=previous href="#Multi-hop%20Methods">Multi-hop Methods</a>,
+Up:<a rel=up href="#Configuration">Configuration</a>
+<br>
+
+<h3>Selecting a default method</h2>
+
+<p>When you select an appropriate transfer method for your typical usage
+you should set the variable <var>tramp-default-method</var> to reflect that
+choice. This variable controls which method will be used when a method
+is not specified in the <small>TRAMP</small> file path.  For example:
+
+<br><pre>(setq tramp-default-method "scp")
+</pre>
+
+<p>External transfer methods are normally preferable to inline transfer
+methods, giving better performance. They may not be useful if you use
+many remote machines where you cannot log in without a password.
+
+<p>See <a href="#Inline%20methods">Inline methods</a>. 
+See <a href="#External%20transfer%20methods">External transfer methods</a>. 
+See <a href="#Multi-hop%20Methods">Multi-hop Methods</a>.
+
+<p>Another consideration with the selection of transfer methods is the
+environment you will use them in and, especially when used over the
+Internet, the security implications of your preferred method.
+
+<p>The <code>rsh</code> and <code>telnet</code> methods send your password as
+plain text as you log in to the remote machine, as well as transferring
+the files in such a way that the content can easily be read from other
+machines.
+
+<p>If you need to connect to remote systems that are accessible from the
+Internet, you should give serious thought to using <code>ssh</code> based
+methods to connect. These provide a much higher level of security,
+making it a non-trivial exercise for someone to obtain your password or
+read the content of the files you are editing.
+
+<p><hr>
+Node:<a name="Customizing%20Methods">Customizing Methods</a>,
+Next:<a rel=next href="#Remote%20Programs">Remote Programs</a>,
+Previous:<a rel=previous href="#Default%20Method">Default Method</a>,
+Up:<a rel=up href="#Configuration">Configuration</a>
+<br>
+
+<h3>Using Non-Standard Methods</h2>
+
+<p>There is a variable <code>tramp-methods</code> which you can change if the
+predefined methods don't seem right.
+
+<p>For the time being, I'll refer you to the Lisp documentation of that
+variable, accessible with <kbd>C-h v tramp-methods &lt;RET&gt;</kbd>.
+
+<p><hr>
+Node:<a name="Remote%20Programs">Remote Programs</a>,
+Next:<a rel=next href="#Remote%20shell%20setup">Remote shell setup</a>,
+Previous:<a rel=previous href="#Customizing%20Methods">Customizing Methods</a>,
+Up:<a rel=up href="#Configuration">Configuration</a>
+<br>
+
+<h3>How <small>TRAMP</small> finds and uses programs on the remote machine.</h2>
+
+<p><small>TRAMP</small> depends on a number of programs on the remote host in order to
+function, including <code>ls</code>, <code>test</code>, <code>find</code> and
+<code>cat</code>.
+
+<p>In addition to these required tools, there are various tools that may be
+required based on the connection method. See <a href="#Inline%20methods">Inline methods</a> and
+<a href="#External%20transfer%20methods">External transfer methods</a> for details on these.
+
+<p>Certain other tools, such as <code>perl</code> (or <code>perl5</code>) and
+<code>grep</code> will be used if they can be found. When they are
+available, they are used to improve the performance and accuracy of
+remote file access.
+
+<p>When <small>TRAMP</small> connects to the remote machine, it searches for the
+programs that it can use. The variable <var>tramp-remote-path</var> controls
+the directories searched on the remote machine.
+
+<p>By default, this is set to a reasonable set of defaults for most
+machines. It is possible, however, that your local (or remote ;) system
+administrator has put the tools you want in some obscure local
+directory.
+
+<p>In this case, you can still use them with <small>TRAMP</small>. You simply need to
+add code to your <code>.emacs</code> to add the directory to the remote path. 
+This will then be searched by <small>TRAMP</small> when you connect and the software
+found.
+
+<p>To add a directory to the remote search path, you could use code such
+as:
+
+<br><pre>(require 'tramp)                <i>; <small>TRAMP</small> must be loaded before this</i>
+                                <i>; happens.</i>
+
+<i>; We have <code>perl</code> in "/usr/local/perl"</i>
+(add-to-list 'tramp-remote-path "/usr/local/perl")
+</pre>
+
+<p><hr>
+Node:<a name="Remote%20shell%20setup">Remote shell setup</a>,
+Previous:<a rel=previous href="#Remote%20Programs">Remote Programs</a>,
+Up:<a rel=up href="#Configuration">Configuration</a>
+<br>
+
+<h3>Remote shell setup hints</h2>
+
+<p>As explained in the <a href="#Overview">Overview</a> section, <small>TRAMP</small> connects to the
+remote host and talks to the shell it finds there.  Of course, when you
+log in, the shell executes its init files.  Suppose your init file
+requires you to enter the birthdate of your mother; clearly <small>TRAMP</small>
+does not know this and hence fails to log you in to that host.
+
+<p>There are different possible strategies for pursuing this problem.  One
+strategy is to enable <small>TRAMP</small> to deal with all possible situations. 
+This is a losing battle, since it is not possible to deal with
+<em>all</em> situations.  The other strategy is to require you to set up
+the remote host such that it behaves like <small>TRAMP</small> expect.  This might
+be inconvenient because you have to invest a lot of effort into shell
+setup before you can begin to use <small>TRAMP</small>.
+
+<p>The package, therefore, pursues a combined approach.  It tries to figure
+out some of the more common setups, and only requires you to avoid
+really exotic stuff.  For example, it looks through a list of
+directories to find some programs on the remote host.  And also, it
+knows that it is not obvious how to check whether a file exist, and
+therefore it tries different possibilities.  (On some hosts and shells,
+the command <code>test -e</code> does the trick, on some hosts the shell
+builtin doesn't work but the program <code>/usr/bin/test -e</code> or
+<code>/bin/test -e</code> works.  And on still other hosts, <code>ls -d</code> is
+the right way to do this.)
+
+<p>Below you find a discussion of a few things that <small>TRAMP</small> does not deal
+with, and that you therefore have to set up correctly.
+
+<ul>
+<li><code>shell-prompt-pattern</code>
+
+<p>After logging in to the remote host, <small>TRAMP</small> has to wait for the remote
+shell startup to finish before it can send commands to the remote
+shell.  The strategy here is to wait for the shell prompt.  In order to
+recognize the shell prompt, the variable <code>shell-prompt-pattern</code> has
+to be set correctly to recognize the shell prompt on the remote host.
+
+</p><li><code>tset</code> and other questions
+
+<p>Some people invoke the <code>tset</code> program from their shell startup
+scripts which asks the user about the terminal type of the shell.  Maybe
+some shells ask other questions when they are started.  <small>TRAMP</small> does
+not know how to answer these questions.  (A facility for enabling
+<small>TRAMP</small> to answer these questions is planned for some future version,
+but don't hold your breath.)
+
+<p>Therefore, you should take care that the shell does not ask any
+questions when invoked from <small>TRAMP</small>.  You can do this by checking the
+<code>TERM</code> environment variable, it will be set to <code>dumb</code> when
+connecting.
+
+<p>The variable <code>tramp-terminal-type</code> can be used to change this value
+<code>dumb</code>.
+
+</ul>
+
+<p><hr>
+Node:<a name="Usage">Usage</a>,
+Next:<a rel=next href="#Bug%20Reports">Bug Reports</a>,
+Previous:<a rel=previous href="#Configuration">Configuration</a>,
+Up:<a rel=up href="#Top">Top</a>
+<br>
+
+<h2>Using <small>TRAMP</small></h1>
+
+<p>Once you have installed <small>TRAMP</small> it will operate fairly transparently. You
+will be able to access files on any remote machine that you can log in
+to as though they were local.
+
+<p>Files are specified to <small>TRAMP</small> using a formalized syntax specifying the
+details of the system to connect to. This is similar to the syntax used
+by the <code>EFS</code> and <code>ange-ftp</code> packages.
+
+<ul>
+<li><a href="#Filename%20Syntax">Filename Syntax</a>:              <small>TRAMP</small> filename conventions. 
+<li><a href="#Multi-hop%20filename%20syntax">Multi-hop filename syntax</a>:    Multi-hop filename conventions
+<li><a href="#Dired">Dired</a>:                        Dired and filename completion. 
+</ul>
+
+<p><hr>
+Node:<a name="Filename%20Syntax">Filename Syntax</a>,
+Next:<a rel=next href="#Multi-hop%20filename%20syntax">Multi-hop filename syntax</a>,
+Previous:<a rel=previous href="#Usage">Usage</a>,
+Up:<a rel=up href="#Usage">Usage</a>
+<br>
+
+<h3><small>TRAMP</small> filename conventions</h2>
+
+<p>To access the file &lt;path&gt; on the remote machine &lt;machine&gt; you would
+specify the filename <code>/[&lt;machine&gt;]&lt;path&gt;</code>.  (The square brackets
+are part of the file name.)  This will connect to &lt;machine&gt; and transfer
+the file using the default method.  See <a href="#Default%20Method">Default Method</a>.
+
+<p>Some examples of <small>TRAMP</small> filenames are:
+
+<dl>
+<dt><code>/[melancholia].emacs</code>
+<dd>Edit the file <code>.emacs</code> in your home directory on the machine
+<code>melancholia</code>.
+
+<br><dt><code>/[melancholia.danann.net].emacs</code>
+<dd>This edits the same file, using the fully qualified domain name of
+the machine.
+
+<br><dt><code>/[melancholia]~/.emacs</code>
+<dd>This also edits the same file -- the <code>~</code> is expanded to your
+home directory on the remote machine, just like it is locally.
+
+<br><dt><code>/[melancholia]~daniel/.emacs</code>
+<dd>This edits the file <code>.emacs</code> in the home directory of the user
+<code>daniel</code> on the machine <code>melancholia</code>. The <code>~&lt;user&gt;</code>
+construct is expanded to the home directory of that user on the remote
+machine.
+
+<br><dt><code>/[melancholia]/etc/squid.conf</code>
+<dd>This edits the file <code>/etc/squid.conf</code> on the machine
+<code>melancholia</code>.
+
+</dl>
+
+<p>Unless you specify a different name to use, <small>TRAMP</small> will use the current
+local user name as the remote user name to log in with. If you need to
+log in as a different user, you can specify the user name as part of the
+filename.
+
+<p>To log in to the remote machine as a specific user, you use the syntax
+<code>/[&lt;user&gt;@&lt;machine&gt;]/path/to.file</code>.  That means that connecting to
+<code>melancholia</code> as <code>daniel</code> and editing <code>.emacs</code> in your
+home directory you would specify <code>/[daniel@melancholia].emacs</code>.
+
+<p>It is also possible to specify other file transfer methods
+(see <a href="#Default%20Method">Default Method</a>) as part of the filename.  This is done by
+replacing the initial <code>/[</code> with <code>/[&lt;method&gt;/</code>.  (Note the
+trailing slash!)  The user, machine and file specification remain the
+same.
+
+<p>So, to connect to the machine <code>melancholia</code> as <code>daniel</code>, using
+the <code>su</code> method to transfer files, and edit <code>.emacs</code> in my
+home directory I would specify the filename
+<code>/[su/daniel@melancholia].emacs</code>.
+
+<p><hr>
+Node:<a name="Multi-hop%20filename%20syntax">Multi-hop filename syntax</a>,
+Next:<a rel=next href="#Dired">Dired</a>,
+Previous:<a rel=previous href="#Filename%20Syntax">Filename Syntax</a>,
+Up:<a rel=up href="#Usage">Usage</a>
+<br>
+
+<h3>Multi-hop filename conventions</h2>
+
+<p>The syntax of multi-hop file names is necessarily slightly different
+than the syntax of other <small>TRAMP</small> file names.  Here's an example multi-hop
+file name:
+
+<p><code>/[multi/rsh:out@gate/telnet:kai@real.host]/path/to.file</code>
+
+<p>This is quite a mouthful.  So let's go through it step by step.  The
+file name consists of three parts, separated by slashes and square
+brackets.  The first part is <code>/[multi</code>, the method specification. 
+The second part is <code>rsh:out@gate/telnet:kai@real.host</code> and
+specifies the hops.  (Yes, the second part may contain even more
+slashes, so that's why this file name has more than two colons in it.) 
+The final part is <code>/path/to.file</code> and specifies the file name on
+the remote host.
+
+<p>The first part and the final part should be clear.  <a href="#Multi-hop%20Methods">Multi-hop Methods</a>, for a list of alternatives for the method specification.
+
+<p>The second part can be subdivided again into components, so-called hops. 
+In the above file name, there are two hops, <code>rsh:out@gate</code> and
+<code>telnet:kai@real.host</code>.
+
+<p>Each hop can <em>again</em> be subdivided into (three) components, the
+<dfn>hop method</dfn>, the <dfn>user name</dfn> and the <dfn>host name</dfn>.  The
+meaning of the second and third component should be clear, and the hop
+method says what program to use to perform that hop.
+
+<p>The first hop, <code>rsh:out@gate</code>, says to use <code>rsh</code> to log in
+as user <code>out</code> to the host <code>gate</code>.  Starting at that host, the
+second hop, <code>telnet:kai@real.host</code>, says to use <code>telnet</code>
+to log in as user <code>kai</code> to host <code>real.host</code>.
+
+<p>See <a href="#Multi-hop%20Methods">Multi-hop Methods</a>, for a list of possible hop method values.  The
+variable <var>tramp-multi-connection-function-alist</var> contains the list of
+possible hop methods and information on how to execute them, should you
+want to add your own.
+
+<p><hr>
+Node:<a name="Dired">Dired</a>,
+Previous:<a rel=previous href="#Multi-hop%20filename%20syntax">Multi-hop filename syntax</a>,
+Up:<a rel=up href="#Usage">Usage</a>
+<br>
+
+<h3>Dired and filename completion</h2>
+
+<p><small>TRAMP</small> works transparently with dired, enabling you to use this powerful
+file management tool to manage files on any machine you have access to
+over the Internet.
+
+<p>Filename completion also works with <small>TRAMP</small> for files on remote machines
+although there is no completion for user names or machine names at this
+stage.
+
+<p>As filename completion needs to fetch the listing of files from the
+remote machine, this feature is sometimes fairly slow. As <small>TRAMP</small> does not
+yet cache the results of directory listing, there is no gain in
+performance the second time you complete filenames.
+
+<p>If you need to browse a directory tree, Dired is a better choice, at
+present, than filename completion. Dired has it's own cache mechanism
+and will only fetch the directory listing once.
+
+<p><hr>
+Node:<a name="Bug%20Reports">Bug Reports</a>,
+Next:<a rel=next href="#Frequently%20Asked%20Questions">Frequently Asked Questions</a>,
+Previous:<a rel=previous href="#Usage">Usage</a>,
+Up:<a rel=up href="#Top">Top</a>
+<br>
+
+<h2>Reporting Bugs and Problems</h1>
+
+<p>Bugs and problems with <small>TRAMP</small> are actively worked on by the development
+team. Feature requests and suggestions are also more than welcome.
+
+<p>The <small>TRAMP</small> mailing list is a great place to get information on working
+with <small>TRAMP</small>, solving problems and general discussion and advice on topics
+relating to the package.
+
+<p>The  mailing list is at <a href="mailto:tramp-devel@lists.sourceforge.net">tramp-devel@lists.sourceforge.net</a>. 
+Messages sent to this address go to all the subscribers. This is
+<em>not</em> the address to send subscription requests to.
+
+<p>For help on subscribing to the list, send mail to the administrative
+address, <a href="mailto:tramp-devel-request@lists.sourceforge.net">tramp-devel-request@lists.sourceforge.net</a>, with the
+subject <code>help</code>.
+
+<p>To report a bug in <small>TRAMP</small>, you should execute <kbd>M-x tramp-bug</kbd>. This
+will automatically generate a buffer with the details of your system and
+<small>TRAMP</small> version.
+
+<p>When submitting a bug report, please try to describe in excruciating
+detail the steps required to reproduce the problem, the setup of the
+remote machine and any special conditions that exist.
+
+<p>If you can identify a minimal test case that reproduces the problem,
+include that with your bug report. This will make it much easier for the
+development team to analyze and correct the problem.
+
+<p><hr>
+Node:<a name="Frequently%20Asked%20Questions">Frequently Asked Questions</a>,
+Next:<a rel=next href="#Version%20Control">Version Control</a>,
+Previous:<a rel=previous href="#Bug%20Reports">Bug Reports</a>,
+Up:<a rel=up href="#Top">Top</a>
+<br>
+
+<h2>Frequently Asked Questions</h1>
+
+<ul>
+<li>Where can I get the latest <small>TRAMP</small>?
+
+<p><small>TRAMP</small> is available at
+<a href="ftp://ls6-ftp.cs.uni-dortmund.de/pub/src/emacs/tramp.tar.gz">ftp://ls6-ftp.cs.uni-dortmund.de/pub/src/emacs/tramp.tar.gz</a>. 
+There is also a SourceForge project page, at
+<a href="http://sourceforge.net/projects/tramp">http://sourceforge.net/projects/tramp</a>.
+
+<li>Which systems does it work on?
+
+<p>The package has been used successfully on Emacs 20 and Emacs 21, as well
+as XEmacs 21.  XEmacs 20 is more problematic, see the notes in
+<code>tramp.el</code>.  I don't think anybody has really tried it on Emacs 19.
+
+<p>The package was intended to work on Unix, and it really expects a
+Unix-like system on the remote end, but some people seemed to have some
+success getting it to work on NT Emacs.
+
+<p>There are some informations on Tramp on NT at the following URL; many
+thanks to Joe Stoy for providing the information:
+<a href="ftp://ftp.comlab.ox.ac.uk/tmp/Joe.Stoy/">ftp://ftp.comlab.ox.ac.uk/tmp/Joe.Stoy/</a>
+
+<p>The above mostly contains patches to old ssh versions; Tom Roche has a
+Web page with instructions:
+<a href="http://www4.ncsu.edu/~tlroche/plinkTramp.html">http://www4.ncsu.edu/~tlroche/plinkTramp.html</a>
+
+<p>??? Is the XEmacs info correct?
+
+<p>??? Can somebody provide some information for getting it to work on NT
+Emacs?  I think there was some issue with <code>ssh</code>?
+
+</p><li>I can't stop EFS starting with XEmacs
+
+<p>Not all the older versions of <small>TRAMP</small> supported XEmacs correctly. The
+first thing to do is to make sure that you have the latest version of
+<small>TRAMP</small> installed.
+
+<p>If you do, please try and find out exactly the conditions required for
+the <code>EFS</code> handlers to fire. If you can, putting a breakpoint on
+<code>efs-ftp-path</code> and sending in the stack trace along with your bug
+report would make it easier for the developers to work out what is going
+wrong.
+
+</p><li>File name completion does not work with <small>TRAMP</small>
+
+<p>When you log in to the remote machine, do you see the output of
+<code>ls</code> in color? If so, this may be the cause of your problems.
+
+<p><code>ls</code> outputs <small>ANSI</small> escape sequences that your terminal
+emulator interprets to set the colors. These escape sequences will
+confuse <small>TRAMP</small> however.
+
+<p>In your <code>.bashrc</code>, <code>.profile</code> or equivalent on the remote
+machine you probably have an alias configured that adds the option
+<code>--color=yes</code> or <code>--color=auto</code>.
+
+<p>You should remove that alias and ensure that a new login <em>does not</em>
+display the output of <code>ls</code> in color. If you still cannot use
+filename completion, report a bug to the <small>TRAMP</small> developers.
+
+</p><li>File name completion does not work in large directories
+
+<p><small>TRAMP</small> uses globbing for some operations.  (Globbing means to use the
+shell to expand wildcards such as `*.c'.)  This might create long
+command lines, especially in directories with many files.  Some shell
+choke on long command lines, or don't cope well with the globbing
+itself.
+
+<p>If you have a large directory on the remote end, you may wish to execute
+a command like <code>ls -d * ..?* &gt; /dev/null</code> and see if it hangs. 
+Note that you must first start the right shell, which might be
+<code>/bin/sh</code>, <code>ksh</code> or <code>bash</code>, depending on which
+of those supports tilde expansion.
+
+</p><li>What kinds of systems does <small>TRAMP</small> work on
+
+<p><small>TRAMP</small> really expects the remote system to be a Unix-like system.  The
+local system should preferably be Unix-like, as well, but <small>TRAMP</small> might
+work on NT with some tweaking.
+
+<li>How can I get notified when <small>TRAMP</small> file transfers are complete?
+
+<p>The following snippet can be put in your <code>~/.emacs</code> file.  It makes
+Emacs beep after reading from or writing to the remote host.
+
+<br><pre>(defadvice tramp-handle-write-region
+  (after tramp-write-beep-advice activate)
+ " make tramp beep after writing a file."
+ (interactive)
+ (beep))
+(defadvice tramp-handle-do-copy-or-rename-file
+  (after tramp-copy-beep-advice activate)
+ " make tramp beep after copying a file."
+ (interactive)
+ (beep))
+(defadvice tramp-handle-insert-file-contents
+  (after tramp-copy-beep-advice activate)
+ " make tramp beep after copying a file."
+ (interactive)
+ (beep))
+</pre>
+
+</p><li>There's this <code>~/.sh_history</code> file on the remote host which
+  keeps growing and growing.  What's that?
+
+<p>Sometimes, <small>TRAMP</small> starts <code>ksh</code> on the remote host for tilde
+expansion.  Maybe <code>ksh</code> saves the history by default.  <small>TRAMP</small>
+tries to turn off saving the history, but maybe you have to help.  For
+example, you could put this in your <code>.kshrc</code>:
+
+<br><pre>if [ -f $HOME/.sh_history ] ; then
+   /bin/rm $HOME/.sh_history
+fi
+if [ "${HISTFILE-unset}" != "unset" ] ; then
+   unset HISTFILE
+fi
+if [ "${HISTSIZE-unset}" != "unset" ] ; then
+   unset HISTSIZE
+fi
+</pre>
+
+</ul>
+
+<p><hr>
+Node:<a name="Version%20Control">Version Control</a>,
+Next:<a rel=next href="#Files%20directories%20and%20paths">Files directories and paths</a>,
+Previous:<a rel=previous href="#Frequently%20Asked%20Questions">Frequently Asked Questions</a>,
+Up:<a rel=up href="#Top">Top</a>
+<br>
+
+<h2>The inner workings of remote version control</h1>
+
+<p>Unlike EFS and ange-ftp, <small>TRAMP</small> has full shell access to the remote
+machine. This makes it possible to provide version control for files
+accessed under <small>TRAMP</small>.
+
+<p>The actual version control binaries must be installed on the remote
+machine, accessible in the directories specified in
+<var>tramp-remote-path</var>.
+
+<p>This transparent integration with the version control systems is one of
+the most valuable features provided by <small>TRAMP</small>, but it is far from perfect. 
+Work is ongoing to improve the transparency of the system.
+
+<ul>
+<li><a href="#Version%20Controlled%20Files">Version Controlled Files</a>:     Determining if a file is under version control. 
+<li><a href="#Remote%20Commands">Remote Commands</a>:              Executing the version control commands on the remote machine. 
+<li><a href="#Changed%20workfiles">Changed workfiles</a>:            Detecting if the working file has changed. 
+<li><a href="#Checking%20out%20files">Checking out files</a>:           Bringing the workfile out of the repository. 
+<li><a href="#Miscellaneous%20Version%20Control">Miscellaneous Version Control</a>:   Things related to Version Control that don't fit elsewhere
+</ul>
+
+<p><hr>
+Node:<a name="Version%20Controlled%20Files">Version Controlled Files</a>,
+Next:<a rel=next href="#Remote%20Commands">Remote Commands</a>,
+Previous:<a rel=previous href="#Version%20Control">Version Control</a>,
+Up:<a rel=up href="#Version%20Control">Version Control</a>
+<br>
+
+<h3>Determining if a file is under version control</h2>
+
+<p>The VC package uses the existence of on-disk revision control master
+files to determine if a given file is under revision control. These file
+tests happen on the remote machine through the standard <small>TRAMP</small> mechanisms.
+
+<p><hr>
+Node:<a name="Remote%20Commands">Remote Commands</a>,
+Next:<a rel=next href="#Changed%20workfiles">Changed workfiles</a>,
+Previous:<a rel=previous href="#Version%20Controlled%20Files">Version Controlled Files</a>,
+Up:<a rel=up href="#Version%20Control">Version Control</a>
+<br>
+
+<h3>Executing the version control commands on the remote machine</h2>
+
+<p>There are no hooks provided by VC to allow intercepting of the version
+control command execution. The calls occur through the
+<code>call-process</code> mechanism, a function that is somewhat more
+efficient than the <code>shell-command</code> function but that does not
+provide hooks for remote execution of commands.
+
+<p>To work around this, the functions <code>vc-do-command</code> and
+<code>vc-simple-command</code> have been advised to intercept requests for
+operations on files accessed via <small>TRAMP</small>.
+
+<p>In the case of a remote file, the <code>shell-command</code> interface is
+used, with some wrapper code, to provide the same functionality on the
+remote machine as would be seen on the local machine.
+
+<p><hr>
+Node:<a name="Changed%20workfiles">Changed workfiles</a>,
+Next:<a rel=next href="#Checking%20out%20files">Checking out files</a>,
+Previous:<a rel=previous href="#Remote%20Commands">Remote Commands</a>,
+Up:<a rel=up href="#Version%20Control">Version Control</a>
+<br>
+
+<h3>Detecting if the working file has changed</h2>
+
+<p>As there is currently no way to get access to the mtime of a file on a
+remote machine in a portable way, the <code>vc-workfile-unchanged-p</code>
+function is advised to call an <small>TRAMP</small> specific function for remote files.
+
+<p>The <code>tramp-vc-workfile-unchanged-p</code> function uses the functioning VC
+diff functionality to determine if any changes have occurred between the
+workfile and the version control master.
+
+<p>This requires that a shell command be executed remotely, a process that
+is notably heavier-weight than the mtime comparison used for local
+files. Unfortunately, unless a portable solution to the issue is found,
+this will remain the cost of remote version control.
+
+<p><hr>
+Node:<a name="Checking%20out%20files">Checking out files</a>,
+Next:<a rel=next href="#Miscellaneous%20Version%20Control">Miscellaneous Version Control</a>,
+Previous:<a rel=previous href="#Changed%20workfiles">Changed workfiles</a>,
+Up:<a rel=up href="#Version%20Control">Version Control</a>
+<br>
+
+<h3>Bringing the workfile out of the repository</h2>
+
+<p>VC will, by default, check for remote files and refuse to act on them
+when checking out files from the repository. To work around this
+problem, the function <code>vc-checkout</code> knows about <small>TRAMP</small> files and
+allows version control to occur.
+
+<p><hr>
+Node:<a name="Miscellaneous%20Version%20Control">Miscellaneous Version Control</a>,
+Previous:<a rel=previous href="#Checking%20out%20files">Checking out files</a>,
+Up:<a rel=up href="#Version%20Control">Version Control</a>
+<br>
+
+<h3>Things related to Version Control that don't fit elsewhere</h2>
+
+<p>Minor implementation details, &amp;c.
+
+<ul>
+<li><a href="#Remote%20File%20Ownership">Remote File Ownership</a>:        How VC determines who owns a workfile. 
+<li><a href="#Back-end%20Versions">Back-end Versions</a>:            How VC determines what release your RCS is. 
+</ul>
+
+<p><hr>
+Node:<a name="Remote%20File%20Ownership">Remote File Ownership</a>,
+Next:<a rel=next href="#Back-end%20Versions">Back-end Versions</a>,
+Previous:<a rel=previous href="#Miscellaneous%20Version%20Control">Miscellaneous Version Control</a>,
+Up:<a rel=up href="#Miscellaneous%20Version%20Control">Miscellaneous Version Control</a>
+<br>
+
+<h4>How VC determines who owns a workfile</h3>
+
+<p>Emacs provides the <code>user-full-name</code> function to return the login name
+of the current user as well as mapping from arbitrary user id values
+back to login names. The VC code uses this functionality to map from the
+uid of the owner of a workfile to the login name in some circumstances.
+
+<p>This will not, for obvious reasons, work if the remote system has a
+different set of logins. As such, it is necessary to delegate to the
+remote machine the job of determining the login name associated with a
+uid.
+
+<p>Unfortunately, with the profusion of distributed management systems such
+as <code>NIS</code>, <code>NIS+</code> and <code>NetInfo</code>, there is no simple,
+reliable and portable method for performing this mapping.
+
+<p>Thankfully, the only place in the VC code that depends on the mapping of
+a uid to a login name is the <code>vc-file-owner</code> function. This returns
+the login of the owner of the file as a string.
+
+<p>This function has been advised to use the output of <code>ls</code> on the
+remote machine to determine the login name, delegating the problem of
+mapping the uid to the login to the remote system which should know more
+about it than I do.
+
+<p><hr>
+Node:<a name="Back-end%20Versions">Back-end Versions</a>,
+Previous:<a rel=previous href="#Remote%20File%20Ownership">Remote File Ownership</a>,
+Up:<a rel=up href="#Miscellaneous%20Version%20Control">Miscellaneous Version Control</a>
+<br>
+
+<h4>How VC determines what release your RCS is</h3>
+
+<p>VC needs to know what release your revision control binaries you are
+running as not all features VC supports are available with older
+versions of <code>rcs(1)</code>, <code>cvs(1)</code> or <code>sccs(1)</code>.
+
+<p>The default implementation of VC determines this value the first time it
+is needed and then stores the value globally to avoid the overhead of
+executing a process and parsing it's output each time the information is
+needed.
+
+<p>Unfortunately, life is not quite so easy when remote version control
+comes into the picture. Each remote machine may have a different version
+of the version control tools and, while this is painful, we need to
+ensure that unavailable features are not used remotely.
+
+<p>To resolve this issue, <small>TRAMP</small> currently takes the sledgehammer
+approach of making the release values of the revision control tools
+local to each <small>TRAMP</small> buffer, forcing VC to determine these values
+again each time a new file is visited.
+
+<p>This has, quite obviously, some performance implications. Thankfully,
+most of the common operations performed by VC do not actually require
+that the remote version be known. This makes the problem far less
+apparent.
+
+<p>Eventually these values will be captured by <small>TRAMP</small> on a system by
+system basis and the results cached to improve performance.
+
+<p><hr>
+Node:<a name="Files%20directories%20and%20paths">Files directories and paths</a>,
+Next:<a rel=next href="#Issues">Issues</a>,
+Previous:<a rel=previous href="#Version%20Control">Version Control</a>,
+Up:<a rel=up href="#Top">Top</a>
+<br>
+
+<h2>How file names, directories and paths are mangled and managed.</h1>
+
+<ul>
+<li><a href="#Path%20deconstruction">Path deconstruction</a>:          Breaking a path into it's components. 
+</ul>
+
+<p><hr>
+Node:<a name="Path%20deconstruction">Path deconstruction</a>,
+Previous:<a rel=previous href="#Files%20directories%20and%20paths">Files directories and paths</a>,
+Up:<a rel=up href="#Files%20directories%20and%20paths">Files directories and paths</a>
+<br>
+
+<h3>Breaking a path into it's components.</h2>
+
+<p><small>TRAMP</small> filenames are somewhat different, obviously, to ordinary path
+names. As such, the lisp functions <code>file-name-directory</code> and
+<code>file-name-nondirectory</code> are overridden within the <small>TRAMP</small> package.
+
+<p>Their replacements are reasonably simplistic in their approach. They
+dissect the filename, call the original handler on the remote path and
+then rebuild the <small>TRAMP</small> path with the result.
+
+<p>This allows the platform specific hacks in the original handlers to take
+effect while preserving the <small>TRAMP</small> path information.
+
+<p><hr>
+Node:<a name="Issues">Issues</a>,
+Previous:<a rel=previous href="#Files%20directories%20and%20paths">Files directories and paths</a>,
+Up:<a rel=up href="#Top">Top</a>
+<br>
+
+<h2>Debatable Issues and What Was Decided</h1>
+
+<ul>
+<li>The uuencode method does not always work.
+
+<p>Due to the design of <small>TRAMP</small>, the encoding and decoding programs need to
+read from stdin and write to stdout.  On some systems, <code>uudecode -o
+-</code> will read stdin and write the decoded file to stdout, on other
+systems <code>uudecode -p</code> does the same thing.  But some systems have
+uudecode implementations which cannot do this at all--it is not
+possible to call these uudecode implementations with suitable parameters
+so that they write to stdout.
+
+<p>Of course, this could be circumvented: the <code>begin foo 644</code> line
+could be rewritten to put in some temporary file name, then
+<code>uudecode</code> could be called, then the temp file could be printed and
+deleted.
+
+<p>But I have decided that this is too fragile to reliably work, so on some
+systems you'll have to do without the uuencode methods.
+
+</p><li><small>TRAMP</small> does not work on XEmacs 20.
+
+<p>This is because it requires the macro <code>with-timeout</code> which does not
+appear to exist in XEmacs 20.  I'm somewhat reluctant to add an
+emulation macro to <small>TRAMP</small>, but if somebody who uses XEmacs 20 steps
+forward and wishes to implement and test it, please contact me or the
+mailing list.
+
+</ul>
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>Invoking <code>/bin/sh</code> will fail if your login
+shell doesn't recognize <code>exec /bin/sh</code> as a valid command. 
+Maybe you use the Scheme shell <code>scsh</code><small>...</small></p>
+
+<li><a name="fn-2"></a>
+<p>PuTTY's
+<code>pscp</code> allows you to specify the password on the command line.</p>
+
+</ol><hr>
+
+</body></html>
+

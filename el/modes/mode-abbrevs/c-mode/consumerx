@@ -1,0 +1,6 @@
+# Consume one item
+cv.acquire()
+while not an_item_is_available():
+    cv.wait()
+get_an_available_item()
+cv.release()

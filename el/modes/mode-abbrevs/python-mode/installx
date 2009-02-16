@@ -1,0 +1,3 @@
+installed_bindir = os.path.join(prefix, "bin")
+installed_libdir = os.path.join(prefix, "lib")
+env.Alias("install", env.Install(installed_bindir, some_exe))

@@ -1,0 +1,315 @@
+#!/bin/sh
+# This is the `rcfiles/change' file of GNU eev.
+# Copyright (C) 2004 Free Software Foundation, Inc.
+#
+# This file is part of GNU eev.
+#
+# GNU eev is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2, or (at your option) any
+# later version.
+#
+# GNU eev is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with GNU eev; see the file COPYING. If not, write to the Free
+# Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+# 02111-1307, USA.
+#
+# Author:     Eduardo Ochs <edrx@mat.puc-rio.br>
+# Maintainer: Eduardo Ochs <edrx@mat.puc-rio.br>
+# Version:    2005jan07
+
+# This script is invoked by eev's makefile to do the heavy work of the
+# installation process. The Makefile defines:
+#
+#   clean:
+#           $(CHANGE) clean
+#   preinstall:
+#           $(CHANGE) preinstall
+#   uninstall:
+#           $(CHANGE) uninstall
+#   install: preinstall
+#           $(CHANGE) install
+#
+# and `clean', `preinstall', `uninstall' and `install' are functions
+# defined at the end of this file.
+# (find-eev "Makefile")
+# (find-eevrc "change.awk")
+
+# (find-bashnode "The Set Builtin" "`-e'")
+# (find-bashnode "Shell Parameter Expansion" "`${PARAMETER:=WORD}'")
+# (find-bashnode "Conditional Constructs" "`case'")
+
+set -e
+
+function absolute () { case $1 in  /*) echo $1;;  *) echo $PWD/$1;;  esac; }
+function semiabsolute () { absolute $1 | sed "s,^$HOME,~,"; }
+
+THISFILE=$(readlink -f $0)	# this script
+THISDIR=$(dirname $THISFILE)	# the directory where this script resides
+AWKSCRIPT=$THISDIR/change.awk	# the awk script is at the same dir as this one
+
+RCTMPDIR=$THISDIR/tmp
+PATCHFILE=$RCTMPDIR/.PATCH
+INSTALLSCRIPT=$RCTMPDIR/do_install.sh
+UNINSTALLSCRIPT=$RCTMPDIR/do_uninstall.sh
+
+# These are for eev_chunk_wrap
+#
+EEVRCDIR=$THISDIR                ; _EEVRCDIR=$(semiabsolute $EEVRCDIR)
+EEVDIR=$(dirname $EEVRCDIR)      ; _EEVDIR=$(semiabsolute $EEVDIR)
+EEVTMPDIR=$EEVDIR/tmp            ; _EEVTMPDIR=$(semiabsolute $EEVTMPDIR)
+
+function v () { echo $*; $*; }
+function vecho () { echo '#' $*; }
+
+
+
+
+
+#####
+#
+# Produce the "eev chunks" (the blocks with initialization code for
+# eev in rcfiles)
+#
+#####
+
+function eev_chunk_wrap () {
+  echo "$1 Beginning of the eev block:"
+  echo "$1 See: (find-eevrc \"change\" \"$2\")"
+  #
+  # this sed used to be just a simple cat (back when I didn't have the
+  # "@...@"s in the eev chunks)
+  sed -e "s,@EEVRCDIR@,$EEVRCDIR,g"   -e "s,@_EEVRCDIR@,$_EEVRCDIR,g"   \
+      -e "s,@EEVDIR@,$EEVDIR,g"       -e "s,@_EEVDIR@,$_EEVDIR,g"       \
+      -e "s,@EEVTMPDIR@,$EEVTMPDIR,g" -e "s,@_EEVTMPDIR@,$_EEVTMPDIR,g"
+  #
+  echo "$1 End of the eev block."
+}
+
+function eev_chunk_for_dotbashrc () {
+  eev_chunk_wrap '#' eev_chunk_for_dotbashrc <<'%%%'
+#
+export  EEVDIR=@_EEVDIR@
+export  EEVRCDIR=$EEVDIR/rcfiles
+source $EEVRCDIR/.bashrc      ;# (find-eevrc ".bashrc")
+source $EEVRCDIR/.bashrc-psne ;# (find-eevrc ".bashrc-psne")
+#
+%%%
+}
+
+function eev_chunk_for_dotzshrc () {
+  eev_chunk_wrap '#' eev_chunk_for_dotzshrc <<'%%%'
+#
+export  EEVDIR=@_EEVDIR@
+export  EEVRCDIR=$EEVDIR/rcfiles
+source $EEVRCDIR/.zshrc      ;# (find-eevrc ".zshrc")
+source $EEVRCDIR/.zshrc-psne ;# (find-eevrc ".zshrc-psne")
+#
+%%%
+}
+
+function eev_chunk_for_dottclshrc () {
+  eev_chunk_wrap '#' eev_chunk_for_dottclshrc <<'%%%'
+#
+proc ee {} {
+  global env
+  uplevel #0 source $env(EEVTMPDIR)/ee.tcl
+}
+#
+%%%
+}
+
+function eev_chunk_for_dotgdbinit () {
+  eev_chunk_wrap '#' eev_chunk_for_dotgdbinit <<'%%%'
+#
+# The code below will define an "ee" command for gdb, like the one for
+# the shell - use `M-x eegdb' in Emacs to save the region to a
+# temporary file, and `ee' in gdb to execute the temporary file as a
+# block of gdb commands. Note: I don't know how to set up a verbose
+# mode for gdb...
+#
+# (find-node "(gdb)Command Files" ".gdbinit")
+# (find-node "(gdb)Command Files" "`source FILENAME'")
+# (find-node "(gdb)Define" "`define COMMANDNAME'")
+define ee
+  source @_EEVDIR@/tmp/ee.gdb
+end
+#
+%%%
+}
+
+function eev_chunk_for_dotemacs () {
+  eev_chunk_wrap ';;' eev_chunk_for_dotemacs <<'%%%'
+;;
+(add-to-list 'load-path "@_EEVDIR@")
+(load-library "eev-dev.el")     ; (find-eev "eev-dev.el")
+(load-library "eev-langs.el")   ; (find-eev "eev-langs.el")
+(load-library "eev-insert.el")  ; (find-eev "eev-insert.el")
+(load-library "glyphs.el")      ; (find-eev "glyphs.el")
+(load-library "compose.el")     ; (find-eev "compose.el")
+(ee-invade-global-namespace)    ; (find-eev "eev-dev.el")
+(glyphs-set-basic)
+;;
+;; Some standard packages that are very nice to have.
+;; You may comment them out if you don't want them (of course).
+;; (find-enode "Compressed Files")
+;;   (find-efile "jka-compr.el")
+;; (find-enode "File Conveniences")
+;;   (find-efile "image-file.el")
+;;
+(require 'jka-compr)
+(if (fboundp 'auto-compression-mode) (auto-compression-mode 1))
+(if (fboundp 'auto-image-file-mode)  (auto-image-file-mode 1))
+;;
+;; I set `pop-up-windows' to nil in my environment, but that disturbs
+;; some people...
+;;   (find-elnode "Choosing Window")
+;; Also:
+;;   (find-enode "Emulation" "PC Selection mode")
+;;     (find-efile "emulation/pc-select.el")
+;;   (find-efile "hippie-exp.el")
+;
+; (setq pop-up-windows nil)
+; (if (fboundp 'pc-selection-mode) (pc-selection-mode))
+; (global-set-key [f11] 'hippie-expand)
+;
+%%%
+}
+
+function eev_chunk_for () {
+  case $1 in
+    .bashrc)  eev_chunk_for_dotbashrc;;
+    .gdbinit) eev_chunk_for_dotgdbinit;;
+    .tclshrc) eev_chunk_for_dottclshrc;;
+    .zshrc)   eev_chunk_for_dotzshrc;;
+    .emacs)   eev_chunk_for_dotemacs;;
+    default)  echo "Error: no eev_chunk_for $1"; exit 1;;
+  esac
+}
+
+
+
+
+#######
+#
+#  Create the modified rcfiles:
+#
+#            ~/.xxx       (ORIGFILE)
+#                |                    copy with "cp -a"
+#                v                    or remove if ~/.xxx doesn't exist
+#  rcfiles/tmp/.xxx.old   (OLDFILE)
+#                |                    patch using "eev_chunk_for .xxx"
+#                v                    and "run_awk_script $PATCHFILE"
+#  rcfiles/tmp/.xxx.new   (NEWFILE)
+#
+#  These functions do not change the "origfiles" - instead they create
+#  two scripts, rcfiles/tmp/do_install.sh and
+#  rcfiles/tmp/do_uninstall.sh - called the "xinstall files" below -
+#  that you can run to do that.
+#
+#######
+
+function copy_orig_to_old () {
+  ORIGFILE=$HOME/$1
+  OLDFILE=$RCTMPDIR/$1.old
+  if [ -e $ORIGFILE ]; then
+    vecho File exists: $ORIGFILE
+    v cp -av $ORIGFILE $OLDFILE
+  else
+    vecho File does not exist: $ORIGFILE
+    v rm -fv $OLDFILE
+  fi
+}
+
+function run_awk_script () {
+  awk -f $AWKSCRIPT $*
+}
+
+function patch_old_to_new () {
+  OLDFILE=$RCTMPDIR/$1.old
+  NEWFILE=$RCTMPDIR/$1.new
+  eev_chunk_for $1 > $PATCHFILE
+  vecho Creating $NEWFILE
+  if [ -e $OLDFILE ]; then
+    run_awk_script $PATCHFILE < $OLDFILE > $NEWFILE
+  else
+    cat $PATCHFILE > $NEWFILE
+  fi
+}
+
+function add_xinstall_lines_for () {
+  ORIGFILE=$HOME/$1
+  OLDFILE=$RCTMPDIR/$1.old
+  NEWFILE=$RCTMPDIR/$1.new
+  if [ -e $OLDFILE ]; then      
+    echo "cp -av $OLDFILE $ORIGFILE"                >> $UNINSTALLSCRIPT
+    if cmp $OLDFILE $NEWFILE > /dev/null; then
+      echo "# already up-to-date: $(absolute $FNAME)" >> $INSTALLSCRIPT
+    else
+      echo "cp -av $NEWFILE $ORIGFILE"                >> $INSTALLSCRIPT
+    fi
+  else
+    echo "rm -v $ORIGFILE"                          >> $UNINSTALLSCRIPT
+    echo "cp -av $NEWFILE $ORIGFILE"                  >> $INSTALLSCRIPT
+  fi
+}
+
+function create_old_and_new () {
+  copy_orig_to_old $1
+  patch_old_to_new $1
+  add_xinstall_lines_for $1
+}
+
+
+
+#####
+#
+# Top-level functions (called from "make")
+#
+#####
+
+function clean () {
+  for i in .bashrc .zshrc .tclshrc .gdbinit .emacs; do
+    v rm -fv $EEVRCDIR/$i.old $EEVRCDIR/$i.new
+  done
+  v rm -fv $UNINSTALLSCRIPT
+  v rm -fv $INSTALLSCRIPT
+  v rm -fv $PATCHFILE
+}
+
+function preinstall () {
+  mkdir -p $EEVRCDIR
+  v rm -fv $UNINSTALLSCRIPT
+  v rm -fv $INSTALLSCRIPT
+  for i in .bashrc .zshrc .tclshrc .gdbinit .emacs; do
+    create_old_and_new $i
+  done
+  rm -f $PATCHFILE
+}
+
+function uninstall () {
+  echo "# Running $UNINSTALLSCRIPT :"
+  v sh $UNINSTALLSCRIPT
+}
+
+function install () {
+  if [ ! -e $INSTALLSCRIPT ]; then
+    preinstall
+  fi
+  echo "# Running $INSTALLSCRIPT :"
+  v sh $INSTALLSCRIPT
+}
+
+
+# Execute the arguments
+$*
+
+
+# Local Variables:
+# ee-anchor-format: "\nfunction %s ()"
+# End:

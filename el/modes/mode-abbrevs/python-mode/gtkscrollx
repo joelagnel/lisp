@@ -1,0 +1,3 @@
+scrolled_win = gtk.ScrolledWindow(hadjustment=None)
+scrolled_win.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+scrolled_win.add_with_viewport(<cursor>)

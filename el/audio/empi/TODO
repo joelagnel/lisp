@@ -1,0 +1,59 @@
+TODO for EMPI			-*- text -*-
+
+ * Cache store/retrieve hooks to account for arguments in query calls.
+ * Undo support by associating every action with its reversal.
+ * Event system for EMPI.
+   To be used in association with the unified updation scheme below.
+   Opt for a timed poll only when the corresponding event is not available.
+ * Backend for a connected process.
+   Perhaps migrate xmms-shell to this backend.
+ * Use the query items that the update needs for the centralized system to
+   determine if the cache slot for that item has changed and hence call the
+   updation function. Also include mechanism to disable an action from unified
+   updation in case of repeated error.
+ * Completion support for actions in EMPI
+ * Jump to time interface, position indicator bar, stop at end of song.
+   Clear playlist, time jump, stop at end of this song.
+ * Incorporate aumix command-line
+ * Mixer frontend: maybe augment empi-volume to do:
+	(1) Support any number of vol lines
+	(2) Customize the lines present
+	(3) Make groups of lines to lock on increase
+	(4) Select a line using a keymap
+	(5) Select a group selecting a selected line while keeping track of the selected line
+	(6) Move up/down enclosing groups
+ * Backend for emulated playlist handling to a single file playing interface
+   given by an another handler.
+ * General emulation functions, like loop/repeat etc.
+   Use the empi-forward-* functions for this.
+ * A menu for EMPI facilities
+ * save-excursion for players! i.e, save current position, song (by title, or number?)
+   and push state. Pop by explicit command.
+   Issue - Behaviour when playlist changes -detectable by change in playlist id
+   Should we save the playlist also? May be this could go to a separate command.
+ * Jump to item after finishing with current item.
+ * Some mechanism to provide the user to do something at the end of current item,
+   or for that matter, when some event occurs.
+ * Generalise empi-caption to render it wherever possible.
+
+TODO for EMPL
+
+ * Caching of move actions - immediate, time-delay, or explicit start
+ * Predictive playlist change for better response
+ * Heuristic anchor point move to here -- counter intuitive ?
+ * Serialize playlist state/marks
+ * Virtual playlist - Something like virtual dired.
+		      Represent a playlist from disk. Allow all manipulation
+		      and marking activities. Only actions like play shouldn't
+		      be allowed. Either hardcode to allow for the virtual mode
+		      or establish a new dummy player for this,
+		      bind empi-current-player, empi-player-alist locally.
+ * May be use virtual playlist as a major mode for playlists.
+ * Hey, a way out for this: Separate the UI code to a separate list mode,
+ * and inherit from it. The list UI is cool enough to be generic.
+ * Use virtual playlist with empl-selection buffer.
+ * Multiple selections, with a primary selection used for actions.
+ * For all marking actions, then use the prefix arg to determine which selection
+ * to act on, defaulting to primary selection.
+ * Randomize a range of entries
+ * Play if file date later than

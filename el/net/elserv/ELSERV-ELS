@@ -1,0 +1,29 @@
+;;; -*-Emacs-Lisp-*-
+
+;; ELSERV-ELS: list of ELSERV modules to install
+
+;;; Code:
+
+(defvar elserv-modules-to-compile
+  '(elserv elserv-autoindex es-demo es-monitor remote web-custom))
+
+(defvar elserv-modules-not-to-compile nil)
+
+(mapcar (function
+	 (lambda (cell)
+	   (let ((c-module (car cell))
+		 (i-modules (cdr cell)))
+	     (if (module-installed-p c-module)
+		 (setq elserv-modules-to-compile
+		       (nconc elserv-modules-to-compile i-modules))
+	       (setq elserv-modules-not-to-compile
+		     (nconc elserv-modules-not-to-compile i-modules))))))
+	'((emacs-wiki	es-wiki)
+	  (mhc		es-mhc)
+	  ;; Add modules with dependency here.
+	  ))
+
+(setq elserv-modules (append elserv-modules-to-compile
+			     elserv-modules-not-to-compile))
+
+;;; ELSERV-ELS ends here

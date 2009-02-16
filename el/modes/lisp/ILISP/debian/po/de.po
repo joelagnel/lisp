@@ -1,0 +1,65 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans#
+#    Developers do not need to manually edit POT or PO files.
+# Erik Schanze <mail@erikschanze.de>, 2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ilisp_5.12.0+cvs.2004.03.19_templates\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-03-19 12:43-0700\n"
+"PO-Revision-Date: 2004-08-02 08:53+0200\n"
+"Last-Translator: Erik Schanze <mail@erikschanze.de>\n"
+"Language-Team: German <debian-l10n-german@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.3.1\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+
+#. Type: boolean
+#. Description
+#: ../ilisp.templates:4
+msgid "Use FSF-compliant keybindings?"
+msgstr "FSF-konforme Tastenkürzel benutzen?"
+
+#. Type: boolean
+#. Description
+#: ../ilisp.templates:4
+msgid ""
+"ILISP allows the choice of using FSF-compliant keybindings which start with "
+"a Control-C character. The older ILISP keybindings use a Control-Z character "
+"as the prefix."
+msgstr ""
+"Sie haben die Wahl zwischen FSF-konformen Tastenkürzeln, die mit STRG-c "
+"beginnen, oder den alten ILISP-Tastenkürzeln, die mit STRG-z anfangen. "
+
+#. Type: boolean
+#. Description
+#: ../ilisp.templates:4
+msgid ""
+"In general, the non-FSF compliant keybindings are easier to use: the ILISP "
+"manual in the Debian package ilisp-doc uses the non-FSF compliant "
+"keybindings and these keybindings often use fewer keystrokes."
+msgstr ""
+"Die alten ILISP-Tastenkürzel sind allgemein einfacher zu benutzen, das ILISP- "
+"Handbuch im Debian-Paket ilisp-doc verwendet diese auch und diese Tastenkürzel "
+"erfordern meist weniger Tastenanschläge."
+
+#. Type: boolean
+#. Description
+#: ../ilisp.templates:4
+msgid ""
+"If you change you mind later, you can run dpkg-reconfigure ilisp and change "
+"your keybinding selection."
+msgstr ""
+"Wenn Sie das später andern wollen, starten Sie dpkg-reconfigure ilisp und "
+"ändern die Einstellung der Tastenkürzel."
+

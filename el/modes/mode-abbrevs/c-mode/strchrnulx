@@ -1,0 +1,1 @@
+strchrnul(<field "const char *STRING">, <field "int C">)<endpoint>

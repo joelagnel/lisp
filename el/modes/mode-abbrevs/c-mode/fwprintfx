@@ -1,0 +1,1 @@
+fwprintf(<field "FILE *STREAM">, <field "const wchar_t *TEMPLATE">, <field "...">)<endpoint>

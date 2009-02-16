@@ -1,0 +1,383 @@
+Mon Oct 18 19:07:56 1993  Eero Simoncelli  (eero@tarpon.cis.upenn.edu)
+
+	* modified cl-strip-file-extension (in cl-shell.el) so that it
+	does the right thing if the full file name has "."s in it.
+
+	* Strip file extension off pathname in cl-load-file, so that
+	lucid's load function can find the binary files.
+
+Mon Jun  7 20:33:20 1993  Eero Simoncelli  (eero@tarpon.cis.upenn.edu)
+
+	* Added variable *cl-pathname-prefix-string* to allow handling
+	alternate syntax for pathname printing (bug reported by Tom Green,
+	tmgreen@athena.mit.edu for KCL).
+
+Fri Nov 13 15:03:11 1992  Eero Simoncelli  (eero at whitechapel)
+
+    	* edit-definition code in cl-lucid.el modified to tell you if the
+	symbol has no function binding.
+
+Sun Sep 27 16:45:31 1992  Eero Simoncelli  (eero at cockfosters)
+
+	* Modified cl-send-string-with-echo to narrow region before
+	inenting sexp.  Otherwise, Emacs might need to scan a large
+	portion of the buffer....
+
+Mon Aug 10 22:15:44 1992  Eero Simoncelli  (eero at oxfordcircus)
+
+	* Fixed cl-compile-form to send all compilations directly to CL
+	(no more temp files!).  If the form is not a defun (or other form
+	matching the cl-fast-compile-regexp), it is wrapped in a lambda
+	expression and passed to "compile".  Thus, cl-compile-form now
+	returns the result of the compilation!  Remaining improvement:
+	get rid of user::compile-def (since this requires gross stuff
+	to be sent to CL at startup), and just determine in Emacs what
+	kind of expression to pass to CL (see cl-buglist).
+
+Fri Jul  3 01:50:19 1992  Eero Simoncelli  (eero at victoria)
+
+	* Added new variable *cl-confirm-input*.  Modified
+	cl-shell-send-input to use it.  If it is non-nil, then typing
+	<CR> in the middle of the *lisp* buffer causes the S-expression to
+	be COPIED to the end of the buffer, but not sent to Lisp until you
+	type a second <CR>.  If it is nil, the expression is sent immediately.
+
+	* Fixed run-cl and run-obvius to read program filename with
+	completion if prefix arg is used.
+
+Thu Jul  2 01:37:44 1992  Eero Simoncelli  (eero at oxfordcircus)
+
+	* Fixed cl-arglist function to do the right thing for "defun" and
+	all other "def"-<thing> expressions.  Also for "map"-<thing>
+	expressions (like mapcar).
+
+Tue Jun  2 17:56:07 1992  Eero Simoncelli  (eero at oxfordcircus)
+
+	* Fixed minor bug in previous change: cl-get-function-name was
+	giving an error if it couldn't determine the function.
+
+Thu May 28 14:16:31 1992  Eero Simoncelli  (eero at oxfordcircus)
+
+	* source-file-editing and arglist requests now ALWAYS prompt for a
+	symbol name.  It was too magic (especially for
+	source-file-editing) to act without asking for confirmation.
+
+Wed Apr 29 12:46:27 1992  Eero Simoncelli  (eero at knightsbridge)
+
+	* Made cl-send-startup-commands interactive.
+
+Sat Mar 28 18:17:06 1992  Eero Simoncelli  (eero at newton.arc.nasa.gov)
+
+	* Fixed *cl-definition-regexp-alist* so that source file code
+	doesn't match substrings of symbol names.
+
+	* Modified meaning of the *cl-pop-up* parameter. This variable
+	can now take on values as follows:
+         t       => pop up when anything appears in the *lisp* buffer, including
+	            echoed commands to CL.
+         'output => pop up when CL outputs a prompt
+         'error  => pop up when CL outputs an error prompt
+         nil     => never pop up automatically
+
+	* Fixed cl-documentation to mention what package was looked in if
+	symbol is unbound.
+
+Wed Mar 25 18:05:18 1992  Eero Simoncelli  (eero at whitechapel)
+
+	* Fix startup procedure: emacs code only initializes when a
+	non-error prompt is output by lisp.  This prevents the mess that
+	used to happen when the user had an error in a startup file!
+
+Fri Feb 14 19:19:21 1992  Eero Simoncelli  (eero at oxfordcircus)
+
+	* Added rest of "map" functions to Jan 30 fix of cl-arglist.
+
+Wed Feb  5 15:45:25 1992  Eero Simoncelli  (eero at oxfordcircus)
+
+	* Fixed kill-ring bug in x-copy-sexp, x-replace-sexp, x-move-sexp
+	and x-move-and-replace-sexp (small modification to
+	insert-indented-sexp in misc-extensions.el).
+
+Sun Feb  2 22:21:06 1992  Eero Simoncelli  (eero at oxfordcircus)
+
+	* Added patches by Jonathan Bachrach to record source files of
+	defgeneric forms (in cl-clos.el and source-file-extensions.lisp).
+
+Thu Jan 30 19:20:46 1992  Eero Simoncelli  (eero at oxfordcircus)
+
+	* Fixed cl-arglist function to do the right thing for "apply" and
+	"funcall" expressions.  Required minor modifications to
+	cl-get-function-name (in cl-lucid.el) and cl-add-quote (in
+	cl-shell.el).
+
+Sat Jan 25 18:53:21 1992  Eero Simoncelli  (eero at oxfordcircus)
+
+	* Added sun-X-fn-key.el code to distribution.  This file provides
+	a simple mechanism for binding the function keys on a Sun4/SPARC
+	keyboard.
+
+Thu Jan  9 17:34:37 1992  Eero Simoncelli  (eero at picadilly)
+
+	* Additions to misc-extensions.el:
+	  - Modfied lisp-fill-paragraph to work on doc-strings (only when
+	    point is before beginning of string!)
+	  - Added split-window-and-switch-buffer function, with suggested
+	    binding in example.emacs.
+	  - Modified find-file-noselect (in example.emacs) to expand symlinks.
+	  - Added insert-double-quotes, grow-list-forward, and
+	    my-insert-parentheses, with suggested bindings in example.emacs.
+
+Sun Sep 15 18:42:27 1991  Eero Simoncelli  (eero at whitechapel)
+
+	* Added cl-apropos.  Bound to "C-c C-h" (help).  Changed binding
+	of cl-describe to "C-c C-i" (info).
+
+Thu Aug  8 17:36:12 1991  Eero Simoncelli  (eero at hydepark)
+
+	* Fixed cl-describe to work on the sexp at the cursor.
+
+Mon Jul  1 19:08:20 1991  Eero Simoncelli  (eero at poisson.arc.nasa.gov)
+
+	* Fixed the cl-edit-definition to handle secondary (:before,
+	:after, and :around) methods.  Changes only in cl-clos.el.
+
+Sat Apr  6 08:42:27 1991  Eero Simoncelli  (eero at aldwych)
+
+	* Added some useful mouse functions to misc-extensions.el.
+
+Mon Apr  1 23:37:29 1991  Eero Simoncelli  (eero at oxfordcircus)
+
+	* Fixed the startup code so that hooks run for the cl-shell
+	(*lisp* buffer) mode (when the first CL prompt is received)
+	are run with the buffer set to the cl-buffer.
+
+Tue Mar 19 14:44:11 1991  Eero Simoncelli  (eero at marblearch)
+
+	* Changed the pop-up help behavior.  Doesn't use electric help
+	mode any more, which was VERY annoying.  You can still type
+	<space> to bury the buffer immediately, and I added a new key
+	binding C-cC-q to bury it at any time later.
+
+Sun Mar 17 01:12:30 1991  Eero Simoncelli  (eero at marblearch)
+
+	* misc-extensions.el: Wrote expand-symlinks to expand all symlinks
+	in a file name.  This is a useful thing to do to the
+	buffer-file-name of .lisp buffers, since Lucid does this to
+	filenames when recording source-file information.  Put an example
+	of how to use this into example.emacs.
+
+	* shell-history.el: Wrote non-matching history-yanking functions.
+	Default bindings are M-n and M-p for matching functions (both
+	directions) , C-M-y and C-M-z for non-matching functions.  The
+	non-matching functions  insert the history strings at the current
+	point, whereas the matching ones insert them at the process-mark
+	(where the user's newest input is entered).
+
+	* cl-lucid.el: added bindings "C-c <digit>" to send single
+	digits to the lisp process.  This is useful for continuations
+	from the debugger.
+
+Wed Jan 16 18:28:22 1991  Eero Simoncelli  (eero at marblearch)
+
+	* Added files cl-shell.doc (small file of documentation), and
+	example.emacs (an example .emacs file).
+
+Thu Nov 29 17:48:53 1990  Eero Simoncelli  (eero at whitechapel)
+
+	* Improved the source-pathname problem -- Emacs now asks
+	Common Lisp to expand the filename into its truename.
+
+Sun Oct 14 13:54:52 1990  Eero Simoncelli  (eero at victoria)
+
+	* Got rid of package prefixes in arglists.
+
+	* If error occurs when processing a special stream (ie during
+	arglist, macroexpansion, etc) we print the error prompt into the
+	*lisp* buffer to let the user know they are in a debug level!
+
+Tue Sep 18 14:58:57 1990  Eero Simoncelli  (eero at marblearch)
+
+	* Made file cl-clos.el.  This is loaded if you are running CLOS in
+	Lucid.  Didn't want to add another file, but had to do it to
+	prevent the CLOS stuff from screwing up FLAVORS.
+
+Fri Sep  7 18:37:05 1990  Eero Simoncelli  (eero at aldwych)
+
+    	* Changed commands using *compilation* buffer to use a buffer
+	called *CL compilation*.
+
+	* Added variable *shell-history-min-string-length* to not record
+	history if string length is too short. (e.g. t, nil, :a).
+
+Tue Aug 28 14:20:52 1990  Eero Simoncelli  (eero at newton.arc.nasa.gov)
+
+	* Added cl-send-request, which makes cl-send-help-request
+	obsolete.  This function abstracts out all requests of CL.  It
+	should be more sophisticated for lisps with multi-processing!
+
+	* Altered cl-remove-newlines to remove all excess whitespace for
+	text to be displayed in the minibuffer.  Renamed it
+	cl-shrink-whitespace.
+
+Fri Aug 24 11:15:16 1990  Eero Simoncelli  (eero at newton.arc.nasa.gov)
+
+	* Added a few key bindings to electric-help-map in cl-shell.el.  
+	Added same bindings to cl-choose-definition-map in cl-lucid.el.
+	Added file cl-shell.doc to describe the bindings.
+
+	* Made Lisp print out message when it is receiving Emacs startup
+	commands.
+
+	* Fixed print-length bug in CL formats in cl-documentation and
+	cl-edit-definition.
+
+Tue Aug 14 10:22:37 1990  Eero Simoncelli  (eero at newton.arc.nasa.gov)
+
+	* Added some code to cl-lucid to make cl-edit-definition work for
+	Lucid-4.0 CLOS definitions (i.e. classes and methods).
+
+	* Added modified compile-def definition to cl-lucid for compiling
+	Lucid-4.0 CLOS methods directly.
+
+	* Adjusted cl-send-startup-commands so as not to cause a secondary
+	error if CL has an error when starting up.  [*** This still needs to
+	be fixed to only send the startup stuff when a NON-ERROR prompt is 
+	output].
+
+	* Small modification of cl-compile-form to echo a form like
+	(compile-def '(my-defun junk ... ) :pkg 'user) into the *lisp*
+	buffer (previously did not echo the function name).
+
+Wed Aug  8 16:15:36 1990  Eero Simoncelli  (eero at newton.arc.nasa.gov)
+
+	* Added prefix arg to cl-macroexpand-1 (C-cC-m).  With prefix, 
+	inserts the lowercased macroexpansion of the current s-expression
+	AT THE POINT.
+
+Tue Jul 17 15:10:24 1990  Eero Simoncelli  (eero at newton.arc.nasa.gov)
+
+	* Fixed cl-macroexpand-1, cl-describe, and cl-arglist to call
+	write instead of pprint and to set keywords :print-level and
+	:print-length to nil.
+
+Mon Jun 18 18:38:43 1990  Eero Simoncelli  (eero at aldwych.media.mit.edu)
+
+	* Fixed cl-edit-definition bug for symbols with question marks or
+	other Emacs-lisp special characters.  It now asks CL to pass back 
+	an S-expression containing a string instead of a symbol.
+
+Fri Jun 15 19:56:10 1990  Eero Simoncelli  (eero at knightsbridge)
+
+	* Fixed strange bug in source-file-extensions.lisp that prevented 
+	redefinitions from happening.  When the advice to
+	record-source-file does not call apply-advice-continue, the defun
+	is not actually evaluated!
+
+Sun May 13 19:31:41 1990  Eero Simoncelli  (eero at picadilly.media.mit.edu)
+
+	* Fixed cl-send-string-with-echo to save history in the
+	history-ring of the *lisp* buffer (it used to save it in it's own
+	history ring!).
+
+Thu Apr 26 14:54:59 1990  Eero Simoncelli  (eero at knightsbridge)
+
+	* Added function cl-goto-lisp-buffer (suggested by Steve
+	Strassman).
+
+Wed Apr 25 14:25:48 1990  Eero Simoncelli  (eero at demille)
+
+	* Added ".hpbin" to completion-ignored-extensions in cl-lucid.el.
+
+Wed Apr 18 10:50:44 1990  Eero Simoncelli  (eero at demille)
+
+	* Got rid of calls to setf in shell-history.el, so that the
+	Emacs file cl.el is no longer required.
+
+Sun Apr  1 19:02:11 1990  Eero Simoncelli  (eero at hydepark)
+
+	* Fixed source-file-extensions.lisp so that it doesn't record
+	multiple source files.  This still needs to be fixed to handle
+	redefinition warnings properly.
+
+	* Fixed cl-pcl code to work with Victoria Day PCL.  The definition
+	of compile-function-and-methods was originally written for the
+	12/88 PCL and occasionally broke in the 5/89 version.  I have not
+	tried it in the 2/90 (Rainy Day) version!
+
+Fri Mar 30 13:29:31 1990  Eero Simoncelli  (eero at knightsbridge)
+
+	* Fixed startup sequence so that Emacs doesn't send the startup
+	commands to CL until CL comes up to top level (ie Emacs waits
+	until it sees a prompt).  This seems a little more robust, since
+	it doesn't stuff a lot of characters onto the CL input stream
+	before CL is ready to deal with them.  Still flakes out a bit
+	when there is an error during CL startup.  Maybe it should
+	send the startup commands when it sees a NON-error prompt!
+
+Thu Mar 29 20:26:44 1990  Eero Simoncelli  (eero at aldwych.media.mit.edu)
+
+	* Fixed source-file code to locally bind *print-length* -- it was
+	printing "..." when there were lots of source files for a symbol.
+
+Wed Mar 28 22:56:15 1990  Eero Simoncelli  (eero at westminster.media.mit.edu)
+
+	* Rewrote the history code to use a ring instead of a buffer.  It now
+	searches for history commands matching the current input substring.
+
+Thu Mar 22 02:08:57 1990  Eero Simoncelli  (eero at whitechapel.media.mit.edu)
+
+	* Changed some key bindings to be more consistent.  C-c followed
+	by a raw character is used for commands which change the state of
+	the CL environment.  C-c followed by a control character is used
+	for commands which are (hopefully) side-effect free such as the
+	various help commands.
+	
+	* Altered cl-eval-form in cl-lucid.el to not preserve the source
+	file since this junk was being recorded in the history.  This is
+	not the right solution, but until I solidify the treatment of
+	packages and source files, it will have to do.
+
+Mon Mar  5 18:46:31 1990  Eero Simoncelli  (eero at picadilly.media.mit.edu)
+
+	* Fixed cl-eval-region in cl-lucid.el also.
+
+Sun Mar  4 19:47:05 1990  Eero Simoncelli  (eero at knightsbridge.media.mit.edu)
+
+	* Fixed cl-eval-region to work correctly if point is before mark!
+	I hadn't noticed the bug since I rarely use cl-eval-region.
+
+Sat Mar  3 18:50:11 1990  Eero Simoncelli  (eero at demille)
+
+	* Changed cl-concatenate-stream-id to take an optional
+	close-marker parameter.  If this is t, then it concatenates
+	both a close marker and an open marker.  Otherwise, it just
+	expects the stream to terminate with a lisp prompt.  Changed
+	cl-load-required-el-code to call cl-concatenate-stream-id with
+	the new parameter set to t.
+
+	* Altered cl-parse-output to remove input-id-marker in nested
+	stream clause.
+
+Fri Mar  2 12:09:07 1990  Eero Simoncelli  (eero at picadilly.media.mit.edu)
+
+	* Added C-cp binding to set buffer package.
+
+Thu Mar  1 21:47:47 1990  Eero Simoncelli  (eero at demille)
+
+	* Fixed cl-send-string-with-echo to add a newline to the string
+	that is history-recorded.  Also fixed it in cl-lucid.  I think 
+	this fixes the missing closing paren problem.
+
+	* Fixed cl-output-filter to set buffer to the one in the selected
+	window.  This allows cl-goto-definition to work properly.
+
+	* Changed cl-goto-definition to select the window of the
+	source-file buffer (at the end of the function).
+
+Tue Feb 27 ~00:30 1990   Eero Simoncelli   (eero at knightsbridge)
+
+	* Fixed stuff in cl-shell.el so that files cl-lucid, cl-pcl,
+	cl-flavors are loaded rather than required.  This is necessary
+	(well, not for cl-lucid), since they send things to lisp at
+	startup.
+

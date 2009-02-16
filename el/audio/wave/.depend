@@ -1,0 +1,2 @@
+bsplit.o: bsplit.c
+summarize.o: summarize.c

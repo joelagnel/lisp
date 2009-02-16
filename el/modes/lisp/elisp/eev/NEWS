@@ -1,0 +1,174 @@
+This is the `NEWS' file of GNU eev.
+Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+Copying and distribution of this file, with or without modification,
+are permitted provided the copyright notice and this notice are preserved.
+Author and version: Eduardo Ochs, 2006feb01.
+Please use eev-current instead of eev-0.95.0, 0.95.0 is several months
+old and -current is almost becoming 0.95.1.
+Latest version: <http://angg.twu.net/eev-current/NEWS>
+      htmlized: <http://angg.twu.net/eev-current/NEWS.html>
+    See also:   <http://angg.twu.net/eev-current/README.html>
+                <http://angg.twu.net/eev-current/INSTALL.html>
+                <http://angg.twu.net/eev-current/EMACS.html>
+                <http://angg.twu.net/eev-current/>
+
+
+News:
+
+* Now eev has a mailing list at Savannah:
+  <http://lists.nongnu.org/mailman/listinfo/eev> (to subscribe, etc),
+  <http://lists.gnu.org/archive/html/eev> (for the archive).
+
+
+* Lots of changes in the documentation, mainly at the file `README'.
+  The concepts have become clearer.  See: (find-eev "README")
+
+
+* Installation: the installation procedure involves changing some of
+  your rcfiles (.emacs, .bashrc, .zshrc, etc), but now "make
+  preinstall" creates the modified files in a temporary directory and
+  creates scripts there to install the new versions and also to go
+  back to the previous versions. Do "make install" to install the new
+  versions and "make uninstall" to uninstall.
+
+
+* Highlighting:
+
+** F3 now highlights temporarily the bounded region.
+   See: (find-eevfile "doc/shot-f3.png")
+** M-0 M-e highlight the previous sexp instead of executing it.
+   See below for other prefix arguments affecting M-e.
+
+
+* Many kew kinds of elisp hyperlinks. Here are just a few of them:
+
+** (find-sh COMMAND)  runs COMMAND and shows its output in a buffer.
+** (find-sh0 COMMAND) runs COMMAND and shows its output in the echo
+   area.
+** (find-epp OBJECT)  pretty-prints OBJECT and shows it in a buffer.
+** (find-epp0 OBJECT) pretty-prints OBJECT in a compact way and shows
+   it in the echo area.
+** (find-efunctionpp SYMBOL) pretty-prints the internal representation
+   of the function given by SYMBOL.
+** (find-estring STRING) shows STRING in a buffer.
+** (find-eimage0 FNAME) displays the image FNAME in the current buffer,
+   "inlined" - i.e., in place of the sexp.
+
+** Background processes:
+*** (eebg-xdvi DVIFILE) starts "xdvi DVIFILE" as a background process.
+*** (eebg-gv PSORPDFFILE) starts "gv DVIFILE" as a background process.
+*** (eebg-channel-xterm CHANNEL) starts a xterm "listening on CHANNEL".
+    See: (find-eevfile "doc/shot-f9.png")
+
+
+
+* Keyboard changes:
+
+** eev doesn't change the global keymap anymore. All of eev's key
+   sequences are now in `eev-mode-map', and there's a global minor
+   mode, `eev-mode', whose only function is to make the `eev-mode-map'
+   keymap active. Loading eev.el turns on eev-mode. If you define your
+   own version of `eev-mode-map' before loading eev.el then eev.el
+   will use your map without modifying it in any way.
+
+** Keys for executing sexps (M-e and M-E):
+
+*** M-e (`eek-eval-sexp-eol') now accepts a prefix argument:
+
+**** M-0 M-e just highlights the sexp temporarily.
+**** M-1 M-e shows the text of the sexp in the echo area.
+**** M-2 M-e shows the sexp as a list object in the echo area.
+**** M-3 M-e executes the sexp without showing the result in the echo area.
+**** M-4 M-e executes the sexp with debugging on.
+**** M-5 M-e executes the sexp with `debug-on-error' on.
+**** M-8 M-e executes the sexp and pretty-prints its output in a buffer.
+**** M-9 M-e executes an `(interactive ...)' clause in a useful way.
+
+*** M-E (`eek-eval-last-sexp') acts like M-e, but without moving point to
+    end-of-line first.
+
+** Keys for getting rid of unwanted bufers (M-k and M-K):
+   M-k now runs `kill-this-buffer' instead of `kill-buffer'.
+   `kill-buffer' always asked for a confirmation, while
+   `kill-this-buffer' usually only asks when the buffer is modified
+   and is associated to a file. M-K runs `bury-buffer'.
+
+** Keys for generating temporary buffers with lists of hyperlinks:
+   M-h M-k (`find-ekey-links')      - for an Emacs key sequence
+   M-h M-f (`find-efunction-links') - for Elisp function
+   M-h M-v (`find-evariable-links') - for an Elisp variable
+   M-h M-i (`find-einfo-links')     - for Info nodes
+   M-h M-m (`find-manpage-links')   - manpage for command at point
+   M-h m   (`find-last-manpage-links') - current manpage
+   M-h f   (`find-file-links')      - for the current file
+   M-h M-d (`find-debpkg-links')    - for a Debian package
+
+** Keys for refining hyperlinks:
+   M-h 2 or M-h M-2 (`eemklinks-duplicate-this-line') and
+   M-h M-y ('eemklinks-yank-pos-spec'). These are better illustrated
+   by an example; see the documentation for the function `eesteps' for
+   how to run it.
+
+     (eesteps '(
+       (find-enode "Lisp Eval")
+       (search-forward "`defvar'")
+       "C-SPC C-SPC 8*<left>"
+       "M-w"	 
+       "M-h M-i"
+       (search-forward "find-enode")
+       "M-h M-2"
+       "M-h M-y"
+       "C-a"
+       "C-SPC C-SPC <down>"
+       "M-w"
+       "C-x b *scratch*"
+       "C-y"
+       "M-e"
+     ))
+
+
+* `eesteps': support for programming a series of Emacs actions and
+  executing them one by one; by default the key to execute the next
+  action is <f12>. See: (find-eev "eev-dev.el" "eesteps")
+
+
+* Support for running external programs and sending them input one
+  line at a time without having to switch out from Emacs. There's a
+  "commented screenshot" showing this in action:
+
+    (find-eevfile "doc/shot-f9.png")
+    <http://angg.twu.net/eev-current/doc/shot-f9.png>
+
+  and here are some links to relevant files and functions:
+
+    (find-eev "eegchannel")
+    (find-eev "eev-dev.el" "eechannel-do-this-line")
+
+
+* Support for running programs inside Emacs and sending commands to
+  them one line at a time. See:
+
+    (find-efunctiondescr 'eepitch-this-line)
+  
+
+
+
+Note: this file is incomplete - as all the documentation of eev - but
+I've been delaying the release for too long!
+
+About the htmlization of this file: I find the default colors of
+outline-mode ugly, so I changed changed them...
+  (find-eev "htmlize-eev.el" "htmlize-eev-files")
+  (require 'htmlize-eev)
+  (my-outline-colors)
+
+* Foo
+** bar
+*** plic
+**** bletch
+
+Local variables:
+mode: outline
+coding: raw-text-unix
+paragraph-separate: "[ 	]*$"
+end:

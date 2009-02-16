@@ -1,0 +1,100 @@
+
+HTMLcleaner User's Guide - HUG
+
+Emacs Lisp version of HTMLCleaner.
+
+      1. INSTALL
+      2. USAGE
+
+1. INSTALL
+
+* Naturally you need GNU Emacs installed on your system
+  We have tested it in GNU Emacs 21 for Windows and Linux.
+
+  The lisp used in XEmacs is somewhat different, so the HTMLcleaner
+  doesn't work out of the box for this hybrid of Emacs, however there
+  are programs that can convert you Emacs Lisp code into XEmacs code,
+  but that is outside the scope of this document.
+
+* You need three files: 'htmlcleaner.el', 'htmlcleaner-lib.el' og
+  'instpector.el'.
+
+* These files must all reside within your Emacs load path. If you 
+  put all three files in the directory ~/emacs/htmlcleaner/, add the 
+  following to your ~/.emacs file:
+
+  (setq load-path
+        (append (list (expand-file-name "~/emacs/htmlcleaner/"))))  
+
+* To load HTMLcleaner when starting Emacs, add the following to ~/.emacs
+  
+  (autoload 'html-cleaner "htmlcleaner" "Cleans up your crappy HTML and XML code" t)
+
+* To bind the HTMLcleaner to a shortcut, e.g. C-M-h ( that's Control Meta h ),
+  add the following to your ~/.emacs:
+  
+  (global-unset-key "\C-\M-h")
+  (global-set-key "\C-\M-h" 'html-cleaner)
+
+* You may override some of HTMLcleaners default settings, like indentation
+  case of tags, indentation of comments width of text blocks and if you would
+  like a tag check before starting the cleaner.
+
+  E.g. to wrap text at 40 characters, get lowercaes tags, two spaces indentation,
+  indented commentents and no tag checking, you would add the following lines
+  to you ~/.emacs. These lines, are not neccessary if your are happy 
+  with the default settings.
+
+  (setq element_value_width 40)
+  (setq lowercase_elements nil)
+  (setq html-cleaner-indent-level 2)
+  (setq indent-comments t)
+  (setq clouseau nil)                 ;; Inspector Clouseau from the Pink Panter
+
+* You may want to byte compile the files to make the cleaner run faster.
+  Open the files, type 'M-x', write 'byte-compile-file', enter the file path 
+  of the elisp file and hit ENTER.
+
+  Repeat the process for all the tree htmlcleaner files.
+  Emacs will now use these .elc files instead of their .el equivalents
+  when loading.
+
+2. USAGE
+
+* Every time you start Emacs, you can clean your markup
+  code with C-M-h or interactively, by first typing M-x and then
+  writing 'html-cleaner' and htting ENTER in the Emacs interaction buffer.
+
+  The HTMLcleaner is not restricted to any mode, so 
+  the shortcut works in both sgml-mode and html-mode.
+
+* If you have enable the inspector ( default ), HTMLcleaner will, if it finds
+  either a damaged tag or an unbalanced element ( e.g. a '<div>' without
+  a corresponding '</div>' ), exit and jump to the place in your code where
+  it encountered the error. Fix the error and then run HTMLcleaner
+  again to clean your code.
+
+* Note that the HTMLcleaner will use quite some time on big documents,
+  that is markup files above 250 lines. If you design pages
+  larger than this, consider the Python version of HTMLcleaner.
+
+  Another way to solve this problem, is of course working on your
+  web design. Chop your page up into multiple subpages,
+  seperate JavaScript, EcmaScript, CSS and markup by putting these
+  in seperate files, instead of having everything in the *html file.
+
+* The HTMLcleaner has the following features:
+
+  - Handles documents written after the following DTDs:
+    HTML 4.01 Strict, XHTML 1.0 Transitional, XHTML 1.0 Strict and
+    any valid XML document.
+
+  - Handles inline JavaScript/VBScript code.
+
+  - Handles comments, both around text and elements.
+  
+  - Handles empty HTML/XHTML elements ( e.g. <input ..> 
+    and empty XML elements ( e.g. <myelement /> ).
+
+  
+

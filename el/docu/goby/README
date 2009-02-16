@@ -1,0 +1,18 @@
+				 Goby
+
+			    Kazu Yamamoto
+			     kazu@Mew.org
+
+Goby is a WYSIWYG presentation tool which runs on Emacs 21.3 or later.
+
+Please refer to the following page to know how to install, use, and
+customize Goby.
+
+	http://www.mew.org/~kazu/proj/goby/
+
+A sample is provided as follows:
+
+	sample/sample.gby
+
+If Goby is installed correctly, you can see large fonts and images
+after reading it with C-xC-f.

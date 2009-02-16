@@ -1,0 +1,1 @@
+bzcat <field "filename"> | tar xvf -

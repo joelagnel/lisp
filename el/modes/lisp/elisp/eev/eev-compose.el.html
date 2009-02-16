@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eev-compose.el (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .eev-glyph-face-green {
+        /* eev-glyph-face-green */
+        color: #00ff00;
+      }
+      .eev-glyph-face-red {
+        /* eev-glyph-face-red */
+        color: #ff0000;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #ffc0cb;
+        font-weight: bold;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;;; </span><span class="comment">eev-compose.el -- typing accents and mathematical chars using a compose key.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Copyright (C) 2001,2002,2003,2004,2005 Free Software Foundation, Inc.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This file is part of GNU eev.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is free software; you can redistribute it and/or modify
+</span><span class="comment-delimiter">;; </span><span class="comment">it under the terms of the GNU General Public License as published by
+</span><span class="comment-delimiter">;; </span><span class="comment">the Free Software Foundation; either version 2, or (at your option)
+</span><span class="comment-delimiter">;; </span><span class="comment">any later version.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is distributed in the hope that it will be useful,
+</span><span class="comment-delimiter">;; </span><span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of
+</span><span class="comment-delimiter">;; </span><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU General Public License for more details.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">You should have received a copy of the GNU General Public License
+</span><span class="comment-delimiter">;; </span><span class="comment">along with GNU eev; see the file COPYING.  If not, write to the
+</span><span class="comment-delimiter">;; </span><span class="comment">Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+</span><span class="comment-delimiter">;; </span><span class="comment">Boston, MA 02111-1307, USA.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Author:     Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Maintainer: Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Version:    2005may16
+</span><span class="comment-delimiter">;; </span><span class="comment">Keywords:   i18n, mathematical chars, glyphs
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Latest version: &lt;<a href="http://angg.twu.net/eev-current/eev-compose.el">http://angg.twu.net/eev-current/eev-compose.el</a>&gt;
+</span><span class="comment-delimiter">;;       </span><span class="comment">htmlized: &lt;<a href="http://angg.twu.net/eev-current/eev-compose.el.html">http://angg.twu.net/eev-current/eev-compose.el.html</a>&gt;
+</span>
+<span class="comment-delimiter">;;; </span><span class="comment">Comment:
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">So you've been asking yourself how I (edrx) type those characters
+</span><span class="comment-delimiter">;; </span><span class="comment">like "</span><span class="eev-glyph-face-red">*</span><span class="comment">", "</span><span class="eev-glyph-face-green">&#171;</span><span class="comment">" and "</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">"...
+</span><span class="comment-delimiter">;; </span><span class="comment">Here it is:
+</span><span class="comment-delimiter">;;   </span><span class="comment">"</span><span class="eev-glyph-face-red">*</span><span class="comment">" is with C-q C-o
+</span><span class="comment-delimiter">;;   </span><span class="comment">"</span><span class="eev-glyph-face-green">&#171;</span><span class="comment">" is with M-, &lt; &lt;
+</span><span class="comment-delimiter">;;   </span><span class="comment">"</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">" is with M-, &gt; &gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">This file implements the command associated to `M-,'.
+</span><span class="comment-delimiter">;; </span><span class="comment">See: &lt;<a href="http://angg.twu.net/eev-current/eev-glyphs.el.html">http://angg.twu.net/eev-current/eev-glyphs.el.html</a>&gt;.
+</span>
+<span class="comment-delimiter">;; <a href="../compose-old.el.html">(find-angg "compose-old.el")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-es "lua5" "composes")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-es "emacs" "key_name")
+</span><span class="comment-delimiter">;; <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "Reading One Event")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; <a href="../vtutil4/isomath.el.html">(find-angg "vtutil4/isomath.el")</a></span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eev-compose-pair"><span class="function-name">eev-compose-pair</span></a> (pair) (interactive <span class="string">"sTwo-character code: "</span>)
+  (<span class="keyword">let</span> ((sublist (member pair eev-composes-all)))
+    (<span class="keyword">if</span> sublist (insert (nth 1 sublist))
+      (<span class="warning">error</span> <span class="string">"Pair \"%s\" not in composes-all"</span> pair))))
+
+(<span class="keyword">defun</span> <a name="eev-compose-two-keys"><span class="function-name">eev-compose-two-keys</span></a> () (interactive)
+  (eev-compose-pair (format <span class="string">"%c%c"</span>
+                           (read-event <span class="string">"Compose key 1: "</span> t)
+                           (read-event <span class="string">"Compose key 2: "</span> t))))
+
+<span class="comment-delimiter">;; </span><span class="comment">(if window-system
+</span><span class="comment-delimiter">;;     </span><span class="comment">(global-set-key [?\C-,] 'eev-compose-two-keys))
+</span><span class="comment-delimiter">;; </span><span class="comment">(global-set-key     [?\M-,] 'eev-compose-two-keys)
+</span>
+(<span class="keyword">defvar</span> <a name="eev-composes-accents"><span class="variable-name">eev-composes-accents</span></a> '(
+   <span class="string">"`A"</span> ?&#192;   <span class="string">"`E"</span> ?&#200;   <span class="string">"`I"</span> ?&#204;   <span class="string">"`O"</span> ?&#210;   <span class="string">"`U"</span> ?&#217;
+   <span class="string">"`a"</span> ?&#224;   <span class="string">"`e"</span> ?&#232;   <span class="string">"`i"</span> ?&#236;   <span class="string">"`o"</span> ?&#242;   <span class="string">"`u"</span> ?&#249;
+   <span class="string">"'A"</span> ?&#193;   <span class="string">"'E"</span> ?&#201;   <span class="string">"'I"</span> ?&#205;   <span class="string">"'O"</span> ?&#211;   <span class="string">"'U"</span> ?&#218;
+   <span class="string">"'a"</span> ?&#225;   <span class="string">"'e"</span> ?&#233;   <span class="string">"'i"</span> ?&#237;   <span class="string">"'o"</span> ?&#243;   <span class="string">"'u"</span> ?&#250;
+   <span class="string">"^A"</span> ?&#194;   <span class="string">"^E"</span> ?&#202;   <span class="string">"^I"</span> ?&#206;   <span class="string">"^O"</span> ?&#212;   <span class="string">"^U"</span> ?&#219;
+   <span class="string">"^a"</span> ?&#226;   <span class="string">"^e"</span> ?&#234;   <span class="string">"^i"</span> ?&#238;   <span class="string">"^o"</span> ?&#244;   <span class="string">"^u"</span> ?&#251;
+   <span class="string">"~A"</span> ?&#195;                       <span class="string">"~O"</span> ?&#213;
+   <span class="string">"~a"</span> ?&#227;                       <span class="string">"~o"</span> ?&#245;
+  <span class="string">"\"A"</span> ?&#196;  <span class="string">"\"E"</span> ?&#203;  <span class="string">"\"I"</span> ?&#207;  <span class="string">"\"O"</span> ?&#214;  <span class="string">"\"U"</span> ?&#220;
+  <span class="string">"\"a"</span> ?&#228;  <span class="string">"\"e"</span> ?&#235;  <span class="string">"\"i"</span> ?&#239;  <span class="string">"\"o"</span> ?&#246;  <span class="string">"\"u"</span> ?&#252;
+   <span class="string">"'C"</span> ?&#199;   <span class="string">"CC"</span> ?&#199;   <span class="string">"~N"</span> ?&#209;
+   <span class="string">"'c"</span> ?&#231;   <span class="string">"cc"</span> ?&#231;   <span class="string">"~n"</span> ?&#241;
+))
+(<span class="keyword">defvar</span> <a name="eev-composes-otheriso"><span class="variable-name">eev-composes-otheriso</span></a> '(
+   <span class="string">"_a"</span> ?&#170;   <span class="string">"_o"</span> ?&#186;   <span class="string">"AE"</span> ?&#198;   <span class="string">"ae"</span> ?&#230;   <span class="string">"ss"</span> ?&#223;
+   <span class="string">"!!"</span> ?&#161;   <span class="string">"??"</span> ?&#191;   <span class="string">"SS"</span> ?&#167;   <span class="string">"&lt;&lt;"</span> ?<span class="eev-glyph-face-green">&#171;</span>   <span class="string">"&gt;&gt;"</span> ?<span class="eev-glyph-face-green">&#187;</span>
+   <span class="string">"00"</span> ?&#176;   <span class="string">"11"</span> ?&#185;   <span class="string">"22"</span> ?&#178;   <span class="string">"33"</span> ?&#179;
+   <span class="string">"14"</span> ?&#188;   <span class="string">"12"</span> ?&#189;   <span class="string">"34"</span> ?&#190;
+   <span class="string">"+-"</span> ?&#177;   <span class="string">":-"</span> ?&#247;   <span class="string">"cd"</span> ?&#183;   <span class="string">"xx"</span> ?&#215;
+))
+(<span class="keyword">defvar</span> <a name="eev-composes-globalmath"><span class="variable-name">eev-composes-globalmath</span></a> nil)
+(<span class="keyword">defvar</span> <a name="eev-composes-localmath"><span class="variable-name">eev-composes-localmath</span></a> nil)
+(<span class="keyword">defvar</span> <a name="eev-composes-all"><span class="variable-name">eev-composes-all</span></a> nil)
+
+(<span class="keyword">defun</span> <a name="eev-composes-update"><span class="function-name">eev-composes-update</span></a> ()
+  (setq eev-composes-all
+        (append eev-composes-localmath eev-composes-globalmath
+                eev-composes-accents   eev-composes-otheriso)))
+(eev-composes-update)
+
+(<span class="keyword">provide</span> '<span class="constant">eev-compose</span>)
+
+<span class="comment-delimiter">;; <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "Testing Accessibility" "file-exists-p")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; <a href="../vtutil4/isomath.el.html">(find-angg "vtutil4/isomath.el")</a></span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">(if (file-exists-p "~/vtutil4/isomath.el")
+</span><span class="comment-delimiter">;;   </span><span class="comment">(load "~/vtutil4/isomath.el"))
+</span>
+
+<span class="comment-delimiter">;; </span><span class="comment">Local Variables:
+</span><span class="comment-delimiter">;; </span><span class="comment">coding:            raw-text-unix
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-anchor-format:  "</span><span class="eev-glyph-face-green">&#171;</span><span class="comment">%s</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">"
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-comment-prefix: ";;"
+</span><span class="comment-delimiter">;; </span><span class="comment">End:
+</span></pre>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+char * zErrMsg = NULL;
+if (sqlite3_exec(<field "sqlite3*">, <field "const char* sql">, <field "sqlite3_callback">, <field "NULL">, <field "&zErrMsg">)) {
+    std::cerr << "ERROR: " << zErrMsg
+              << " at " << __FILE__ << ":" << __LINE__
+              << std::endl << std::flush;
+    exit(1);
+}

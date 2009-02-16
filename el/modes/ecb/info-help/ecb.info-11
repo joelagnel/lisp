@@ -1,0 +1,1059 @@
+This is ecb.info, produced by makeinfo version 4.2 from ecb.texi.
+
+INFO-DIR-SECTION GNU Emacs Lisp
+START-INFO-DIR-ENTRY
+* ECB: (ecb).           Emacs Code Browser
+END-INFO-DIR-ENTRY
+
+
+File: ecb.info,  Node: Version-control support,  Next: Using eshell,  Prev: Remote directories,  Up: Tips and tricks
+
+Supporting Version control systems
+==================================
+
+Beginning with version 2.30 ECB supports Version-control systems (in the
+following named VC-systems). This means the special tree-buffers of ECB
+display files managed by a VC-system with an appropriate image-icon(1) in
+front of the filename.
+
+The following four options allow full control over this feature (see also
+*Note ecb-version-control:::
+
+`ecb-vc-enable-support'
+   Enable or disable this feature.
+
+`ecb-vc-supported-backends'
+   The most important option for this feature. Allows to specify how ECB
+   should test if a directory is managed by a VC-system (how to identify the
+   VC-backend of a directory) and - if yes - how it should check the VC-state
+   of a certain file. The former ones are called "identify-backend-functions"
+   and the latter ones "check-state-functions".
+
+`ecb-vc-directory-exclude-regexps'
+   Allows excluding certain directories (on a regexp-basis) from the
+   VC-support even if they are managed by a VC-system.
+
+`ecb-vc-state-mapping'
+   Defines the mapping between the state-values returned by a
+   check-state-function (a function set in `ecb-vc-supported-backends' and
+   used for getting the VC-state of a file, e.g. `vc-state') and the allowed
+   state-values ECB can understand.
+
+Probably the default settings will fit your needs but to get sure you should
+carefully read the documentation of these options!
+
+The following subsection give you important informations about
+identify-backend-functions, check-state-functions, about working with remote
+repositories.
+
+* Menu:
+
+* Identifying backends::        How ECB identifies the VC-backend of a dir
+* Checking the state::          How ECB checks the VC-state of a file
+* Remote repositories::         What you should know about this
+* Refreshing the VC-state::     How to refresh when state changed outside
+* Adding new backends::         Necessary steps for adding new backends
+* Known VC-problems::           Currently known problems of the VC-support
+
+---------- Footnotes ----------
+
+(1) Of course only when Emacs is capable to display images; otherwise a
+suitable ascii-icon will be displayed.
+
+
+File: ecb.info,  Node: Identifying backends,  Next: Checking the state,  Prev: Version-control support,  Up: Version-control support
+
+How ECB identifies the VC-backend of a dir
+------------------------------------------
+
+ECB tries all functions added as identify-backend-funtions to the option
+`ecb-vc-supported-backends' until one of them returns not `nil' but a symbol
+which identifies the backend (e.g.  `CVS'). After this check ECB stores the
+result of this check (i.e. either the identified backend or the fact that the
+directory is not managed by a VC-system) for that directory in a special
+cache, so the identify-backend-process will be performed only once per
+directory. If for a directory a VC-backend could be identified ECB stores not
+only the backend itself for that directory but also the associated
+check-state-function defined in `ecb-vc-supported-backends' (*note Checking
+the state::).
+
+You can add arbitrary functions to this options as long as they get one
+directory-argument and return either nil or a backend-symbol. Per default ECB
+offers the following functions to identify the VC-backend CVS, RCS, SCCS or
+Subversion(1):
+
+`ecb-vc-dir-managed-by-CVS DIRECTORY'
+   Return `CVS' if DIRECTORY is managed by CVS. nil if not.
+
+   This function tries to be as smart as possible: First it checks if
+   DIRECTORY is managed by CVS by checking if there is a subdir `CVS'. If no
+   then nil is returned. If yes then for GNU Emacs it takes into account the
+   value of `vc-cvs-stay-local': If t then just return `CVS'. Otherwise ECB
+   checks the root repository if it is a remote repository. If not just `CVS'
+   is returned. If a remote repository it checks if the value of
+   `vc-cvs-stay-local' is a string and matches the host of that repository.
+   If yes then just `CVS' is returned. If not then ECB checks if that host is
+   currently accessible by performing a ping. If accessible `CVS' is returned
+   otherwise nil. This has the advantage that ECB will not be blocked by
+   trying to get the state from a remote repository while the host is not
+   accessible (e.g. because the user works offline).
+
+   Special remark for XEmacs: XEmacs has a quite outdated VC-package which
+   has no option `vc-cvs-stay-local' so the user can not work with remote
+   CVS-repositories if working offline for example. So if there is no option
+   `vc-cvs-stay-local' then ECB performs always the repository check
+   mentioned above.
+
+`ecb-vc-dir-managed-by-RCS DIRECTORY'
+   Return `RCS' if DIRECTORY is managed by RCS. nil if not.
+
+`ecb-vc-dir-managed-by-SCCS DIRECTORY'
+   Return `SCCS' if DIRECTORY is managed by SCCS. nil if not.
+
+`ecb-vc-dir-managed-by-SVN DIRECTORY'
+   Return `SVN' if DIRECTORY is managed by Subversion. nil if not.  Returns
+   always nil if the library vc-svn.el can not be found.
+
+If ECB should support another VC-backend than CVS, RCS, SCCS or Subversion
+you have to write your own identify-backend-funtion for the used VC-backend
+(e.g. Clearcase)!
+
+Special remarks for XEmacs
+..........................
+
+XEmacs contains only a quite outdated VC-package, especially there is no
+backend-independent check-vc-state-function available (like `vc-state' for
+GNU Emacs). Only for CVS a check-vc-state-function is available:
+`vc-cvs-status'. Therefore ECB adds per default only support for CVS and uses
+`ecb-vc-managed-by-CVS' rsp.  `vc-cvs-status'. See also *Note Known
+VC-problems::!
+
+---------- Footnotes ----------
+
+(1) For this the most recent version of the VC-package (incl. the library
+vc-svn.el) is needed - as contained in CVS Emacs
+
+
+File: ecb.info,  Node: Checking the state,  Next: Remote repositories,  Prev: Identifying backends,  Up: Version-control support
+
+How ECB checks the VC-state of a file
+-------------------------------------
+
+After ECB has identified the VC-backend of a directory it will display the
+VC-state (e.g. up-to-date, edited, needs-mergs etc...) with a suitable
+image-icon in the tree-windows of the ECB-file-browser. To get this state for
+a certain file ECB uses that check-state-function stored in the cache for the
+directory of that file (*note Identifying backends::).
+
+You can add any arbitrary functions as check-state-function to
+`ecb-vc-supported-backends' as long as they get one filename-argument and
+return a state-symbol (e.g. `up-to-date'.  ECB can understand a certain set
+of state-values which are then mapped to suitable image-icons which will in
+turn be displayed in front of the filename in the file-browser. Because the
+values a check-state-function return can differ from that state-values ECB
+understands, ECB offers an option to define a appropriate state-mapping. The
+name of this option is `ecb-vc-state-mapping'.  See the documentation of this
+option to get a list of all state-value ECB understands.
+
+Per default ECB uses - when running under GNU Emacs - the function `vc-state'
+of the VC-package(1) to check the state for the backends CVS, RCS, SCCS and
+Subversion. So the default-value of `ecb-vc-state-mapping' contains a mapping
+between these values `ecb-vc-state' can return and that state-values ECB
+understands.
+
+If ECB should support other VC-backends than CVS, RCS, SCCS and Subversion
+(e.g. Clearcase) you should add that new backend to the VC-package (see the
+initial comments of vc.el how to do this) then ECB will automatically support
+that new backend. Alternatively it may be sufficient if you write your own
+check-state-function for this backend and add the needed mapping to
+`ecb-vc-state-mapping' if necessary.
+
+Getting heuristic state-values or real ones for CVS
+...................................................
+
+The interface of GNU Emacs' VC-package offers two different ways to get the
+VC-state of a file:
+
+ * The real, fresh and expensive approach VC has a function
+   `vc-recompute-state' which always performs a command "cvs status" to get a
+   fresh and real state for a file. As you can imagine this operation can be
+   very expensive and long lasting depending on the location of the
+   repository. But the CVS-backend of VC offers with the option
+   `vc-cvs-stay-local' a way to tell Emacs to stay local even for the sake of
+   getting a real state.
+
+ * The heuristic approach: The function `vc-state' always returns a
+   "heuristic" state which should be used when a fresh and real state is not
+   necessary.  With `vc-state' the option `vc-cvs-stay-local' will never take
+   effect.
+
+VC/CVS actually does it this way (regardless if ECB is active or not): When
+you visit a file, it always uses just the heuristic to get the state
+(comparing file times), regardless of the setting of `vc-cvs-stay-local'.
+This is because the "fresh-but-slow" state is determined by calling "cvs
+status" on the file, and this was deemed unacceptably slow if done at
+visiting time under any conditions.
+
+The state is updated by calling `vc-recompute-state' prior to
+`vc-next-action' (C-x v v) which either checks a file in or out.  IF
+`vc-cvs-stay-local' is nil, then this does in fact call "cvs status" to get
+the "fresh-but-slow-state", but if `vc-cvs-stay-local' is t, then it just
+compares the file times again.
+
+But under certain conditions (e.g. if called for files not already visited or
+for files their VC-state has been changed from outside Emacs, e.g. by
+checking in the file via command line) `vc-state' does not compute a new
+heuristic state but returns a cached one (cached by the VC-package itself not
+by ECB) which does not reflect the current VC-state. Example: if you have
+edited a file within Emacs and then checked in from outside Emacs `vc-state'
+returns a wrong state until you call `revert-buffer' for this file. Therefore
+ECB offers the check-state-function `ecb-vc-state' which does the same as
+`vc-state' but it clears the internal caches of the VC-package for that file
+before calling `vc-state'.
+
+The bottom line for you is this: If you use `ecb-vc-state' in
+`ecb-vc-supported-backends' to get the version control state, then you get
+the same policy that VC uses and you get always a "correct" heuristic state
+(as correct as possible a heuristic state can be). There should no harm if
+you use `vc-recompute-state' as a replacement function if you want to get
+fresh and real state-values, but then (a) you must make sure to set
+`vc-cvs-stay-local' to nil, and (b) fetching the state over the network under
+all conditions was deemed unacceptably slow in VC.
+
+---------- Footnotes ----------
+
+(1) The VC-package of Emacs offers a standardised and uniform interface for
+several backends; per default CVS, RCS, SCCS and Subversion are supported by
+the VC-package.
+
+
+File: ecb.info,  Node: Remote repositories,  Next: Refreshing the VC-state,  Prev: Checking the state,  Up: Version-control support
+
+Important informations about remote repositories
+------------------------------------------------
+
+At least CVS can be used in a mode called "Client/Server" which means the
+root repository is located on a remote machine. We call a repository which
+can not being mounted by the client-machine (which contains the working
+directory) a "remote repository". In most cases getting the fresh and real
+VC-state for such repositories will be unacceptable slow or often users will
+work offline means with no connection available to the remote host. To avoid
+problems like these ECB offers first an option
+`ecb-vc-directory-exclude-regexps' to exclude such directories with a remote
+repository from the VC-support of ECB and secondary the
+identify-backend-funtion `ecb-vc-dir-managed-by-CVS' behaves smart with that
+respect (*note Identifying backends::). See also
+`ecb-vc-xemacs-exclude-remote-cvs-repository'!
+
+Remote paths and the VC-support of ECB
+......................................
+
+ECB supports working with remote directories like TRAMP- or EFS-directories
+(*note Remote directories::). Do not confuse remote directories with remote
+repositories. A local directory located on your disk and set in
+`ecb-source-path' can have a remote repository if managed by a VC-system. A
+remote directory means a path in the format of TRAMP, ANGE-FTP or EFS set in
+`ecb-source-path'.  Its very likely that getting the VC-state of files
+contained in such a remote directory would be extremly expensive and
+therefore ECB would be blocked quite long even if the VC-check is performed
+stealthy (*note Stealthy background tasks::).
+
+To avoid problems with such remote directories ECB prevents per default such
+directories from being processed by the VC-support of ECB. But if a user is
+dying to having the VC-state being displayed in the tree-buffers ECB offers
+two ways to switch on the VC-support - see the option
+`ecb-vc-enable-support': This option is set per default to the value
+`unless-remote' which means remote paths will not be processed but it can be
+set to `t' which means process all directories regardless if remote or not.
+It's strongly recommended to use `unless-remote'!
+
+
+File: ecb.info,  Node: Refreshing the VC-state,  Next: Adding new backends,  Prev: Remote repositories,  Up: Version-control support
+
+How to refresh ECB-state-display when changed outside
+-----------------------------------------------------
+
+If all actions concerning version controlling of a file are performed within
+Emacs with commands offeres by VC then the displayed state for such a file in
+the tree-buffers of ECB will be always correct - in that sense that ECB will
+always display that state which the check-state-function for the file will
+return. At least with GNU Emacs for the backends CVS, RCS, SCCS and
+Subversion this will be true. With XEmacs only for CVS. For other backends
+see *Note Adding new backends::.
+
+But if the VC-state of a file will be changed outside of Emacs (unfortunately
+PCL-CVS must be called "outside" too because PCL-CVS doesn't use the
+functions of the VC-package of Emacs for checking-in or -out) then ECB can
+not automatically recognize this and therefore it can not aurtomatically
+update the displayed state-image-icon. You have to tell ECB for which files
+in the tree-buffers the VC-state should be recomputed. This can be done via
+the popup-menus of the ECB-tree-buffers - The following popup-commands are
+offered in the submenu "Version Control":
+
+ECB-directories-buffer (if sources are displayed within):
+   "Recompute state for file" and "Recompute state for dir" whereas the
+   latter one recomputes the VC-state for all files of that directory the
+   file belongs.
+
+ECB-sources-buffer
+   "Recompute state for file" and "Recompute state for dir" whereas the
+   latter one recomputes the VC-state for all files currently displayed in
+   the sources-buffer.
+
+ECB-history-buffer
+   "Recompute state for file" and "Recompute state for whole history" whereas
+   the latter one recomputes the VC-state for all file-entries currently
+   displayed in the history-buffer.
+
+*Caution*: The state will only recomputed right under all situations if you
+use either `ecb-vc-state' or `vc-recompute-state' as check-state-function in
+`ecb-vc-supported-backends' (*note Checking the state::).
+
+Of course all these commands update the VC-state in all visible tree-buffers
+the file is currently displayed (e.g. often a file is displayed in the
+sources- and the history-buffer)!
+
+For general informations about the usage of popup-menus in ECB see *Note
+Using the mouse:: (subsection "The right mouse button").
+
+In addition to these popup-commands using the POWER- rsp. Shift-click (*note
+Using the mouse::) onto a directory in the directory-window of ECB refreshes
+the VC-state-values of all files contained in this directory too.
+
+
+File: ecb.info,  Node: Adding new backends,  Next: Known VC-problems,  Prev: Refreshing the VC-state,  Up: Version-control support
+
+Necessary steps and informations for adding new backends
+--------------------------------------------------------
+
+There are mainly three necessary steps for adding a new(1) backend BE which
+should be supported by ECB:
+
+1. Adding an identify-backend-function to `ecb-vc-supported-backends' ECB
+   needs a function how to identify the new backend BE for a certain
+   directory. If there exists already a library (other then VC) supporting
+   this backend then this library propably contains already such a function
+   which can be used or can be used at least with a small elisp-wrapper. If
+   no elisp-library for backend BE exists then you have probably write the
+   full identify-backend-function for your self. This function has to be
+   added to `ecb-vc-supported-backends'.
+
+2. Adding an check-state-function to `ecb-vc-supported-backends' Associated
+   to the new identify-backend-function mentioned in step 1 a new
+   check-state-function is needed which can be used by ECB to get the
+   VC-state for a file. See *Note Checking the state:: for a description
+   about the needed interface of such a function. In combinatio with the
+   identify-backend-function from step 1 this function has to be added to
+   `ecb-vc-supported-backends'.
+
+3. Enabling automatic state-update after checkin/out
+
+   This step is not essential if you do not need the displayed VC-state
+   automatically updated after a checkin/out of a file via the commands
+   available for backend BE (e.g. clearcase.el offers for the backend
+   Clearcase elisp-commands to checkin and checkout a file which then should
+   also update the displayed state in the ECB-tree-buffers. All you need is a
+   way to tell these commands that they should clear the ECB-VC-cache for the
+   file and then restart the ECB-VC-check-mechanism.  This should be done
+   after these commands have finished their original job.
+
+   ECB enables this per default for all backends supported by the VC-package
+   with the following code. Maybe this is a good starting point.
+
+      (defvar ecb-checkedin-file nil
+        "Stored the filename of the most recent checked-in file. Is only set by the
+      after-advice of `vc-checkin' and `ecb-vc-checkin-hook' \(resets it to nil).
+      Evaluated only by `ecb-vc-checkin-hook'.
+      
+      This is the communication-channel between `vc-checkin' and
+      `ecb-vc-checkin-hook' so this hook-function gets the filename of the
+      checked-in file.")
+      
+      (defadvice vc-checkin (after ecb)
+        "Simply stores the filename of the checked-in file in `ecb-checkedin-file'
+      so it is available in the `vc-checkin-hook'."
+        (setq ecb-checkedin-file (ecb-fix-filename (ad-get-arg 0))))
+      
+      (defun ecb-vc-checkin-hook ()
+        "Ensures that the ECB-cache is reset and the entry for the most recent
+      checkedin file is cleared. Uses `ecb-checkedin-file' as last checked-in file."
+        (when ecb-checkedin-file
+          (ecb-vc-cache-remove ecb-checkedin-file)
+          (ecb-vc-reset-vc-stealthy-checks)
+          (setq ecb-checkedin-file nil)))
+
+
+---------- Footnotes ----------
+
+(1) i.e.  not already supported by the VC-package because all these backends
+are automatically supported by ECB too!
+
+
+File: ecb.info,  Node: Known VC-problems,  Prev: Adding new backends,  Up: Version-control support
+
+Currently know problems with the VC-support
+-------------------------------------------
+
+Remote repositories and XEmacs
+..............................
+
+Currently there are mostly problems related to XEmacs - cause of its outdated
+VC-package which allows no heuristic state-computation but always runs "cvs
+status" to get the VC-state for a file (done by `vc-cvs-status'). This can be
+horrible slow for remote CVS-root-repositories. Now ECB performs the VC-check
+stealthy and only in idle-time of Emacs but even so XEmacs can be blocked
+espcially if the cygwin-build of XEmacs is used: This XEmacs-version is
+substantially slower concering file-operations and has sometimes a very slow
+and delayed response-behavior for mouse- and keyboard interrupts - so even
+ECB let the user interrupt by using `input-pending-p' before getting the
+VC-state of a file XEmacs sometimes does not react to such user-interrupts
+and seems to be blocked.
+
+Current solution: ECB offers the option
+`ecb-vc-xemacs-exclude-remote-cvs-repository' which excludes remote
+repositories from being checked. This option is per default t for XEmacs.
+Whenever XEmacs syncs up its VC-package with the Emacs one this option will
+automatically take no effect.
+
+
+File: ecb.info,  Node: Using eshell,  Next: Grepping directories,  Prev: Version-control support,  Up: Tips and tricks
+
+Optimal using of eshell in ECB
+==============================
+
+ECB offers a very smart integration of the "eshell" if you are using a
+compile window (*note Temp- and compile-buffers::)(1)
+
+Here is a short summary of provided features:
+
+ * Ability to jump to the eshell buffer within the compilation window by
+   simply call `eshell' (bound to `C-c . e'). If the eshell isn't running it
+   will be started.
+
+ * Expands the compilation window when you run commands. So for example it
+   allows you to view the eshell in minimized mode and then when you run "ls"
+   the window automatically expands (but always depending on the output of
+   the command you run).
+
+ * Synchronizes the current directory of the eshell with the current buffer
+   in the current active edit-window of ECB.
+
+ * Provides smart window layout of the eshell buffer. This makes sure that
+   the eshell is taking up the exact amount of space and that nothing is
+   hidden.
+
+Here comes a detailed explanation of these features and how to use it (all
+these features are only available if you use a persistent compile-window,
+i.e. if `ecb-compile-window-height' is not nil):
+
+You do not have to learn a new command for the eshell-start - just call
+`eshell' (for convenience also bound to `C-c . e') and the eshell will
+displayed in the compile-window of ECB (if eshell is not already alive then
+it will be started automatically).
+
+ECB tries to display the contents of the eshell-buffer as best as possible,
+means ECB can autom. enlarge and shrink the compile-window so the contents of
+the eshell are fitting the window. See option
+`ecb-eshell-enlarge-when-eshell' and
+`ecb-eshell-fit-window-to-command-output'. Normally this is done autom. but
+you can also you the standard compile-window enlarging-command of ECB:
+`ecb-toggle-compile-window-height'.
+
+ECB tries also to recenter the eshell-buffer as best as possible.  Normally
+this is done autom. but you can do it on demand with the command
+`ecb-eshell-recenter'.
+
+If option `ecb-eshell-synchronize' is true then ECB always synchronizes the
+command prompt of eshell with the directory of current source-buffer of the
+current active edit-window.
+
+With the option `ecb-eshell-auto-activate' you can start eshell autom. in the
+compile-window when ECB is started but of course if a compile-window exists.
+
+---------- Footnotes ----------
+
+(1) Of course you can use eshell also if there is no compile-window. Then it
+is just displayed in the edit-area and there is no special integration.
+
+
+File: ecb.info,  Node: Grepping directories,  Next: Working with JDEE,  Prev: Using eshell,  Up: Tips and tricks
+
+Grepping directories with ECB
+=============================
+
+ECB offers in the popup-menus in the directories- and sources-tree-buffer
+commands for easy (recursive) grepping the current directory under point
+(directory-buffer) rsp. the current-directory (sources-buffer). In every case
+just the function of the options `ecb-grep-function' rsp.
+`ecb-grep-find-function' is called and the `default-directory' is tempor. set
+to the chosen directory so the grep will performed in this directory
+regardless of the `default-directory' of current buffer in the edit-window.
+
+Other smart things beyond that are not done by ECB, see also
+`ecb-grep-function'!
+
+So, how to exclude some subdirectories or files from the grep?
+
+Basically this has to be done with the "-prune" option of the find-utility:
+If the standard-grep facility of Emacs is used then this is not easy but with
+the library `igrep.el' there is a convenient way to exclude things like CVS-
+or RCS-directories from the find-call: See the variable
+`igrep-find-prune-clause' of the library `igrep.el'.
+
+
+File: ecb.info,  Node: Working with JDEE,  Next: Compile-window on demand,  Prev: Grepping directories,  Up: Tips and tricks
+
+Working best with ECB and JDEE
+==============================
+
+ECB is completely language independent, i.e. it works with any language
+supported by semantic (e.g. C, C++, Java, Elisp etc.).
+
+But there are some special integrations for the great
+Java-Development-Environment JDEE:
+
+ * Displaying contents of class under point
+
+   With the command `ecb-jde-display-class-at-point' you can display the
+   contents of the class which contains the definition of the "thing" at
+   point (which can be a method, variable etc.).
+
+ * Creating new source-files
+
+   The popup-menus in the directories- and the sources-buffer offer a command
+   "Create Source" which allows easy creating new java-sources by calling the
+   command `jde-gen-class-buffer'.
+
+ * Adding user-extensions to the popup-menus
+
+   The options `ecb-directories-menu-user-extension' and
+   `ecb-sources-menu-user-extension'(1) allow adding often used JDEE-commands
+   to the popup-menus of the directories- or sources-buffer. One example is
+   to add building the project of current directory. Here is a function which
+   could be added to `ecb-directories-menu-user-extension':
+
+      (defun ecb-dir-popup-jde-build (node)
+        "Build project in directory."
+        (let ((project-file
+      	 (expand-file-name jde-ant-buildfile (tree-node-get-data node))))
+          (jde-ant-build project-file "build")))
+
+   Of course you can add entries to the option
+   `ecb-methods-menu-user-extension' and `ecb-methods-menu-user-extension'
+   too.
+
+
+---------- Footnotes ----------
+
+(1) If you need a dynamic way of menu-extension then you should have a look
+at the options `ecb-directories-menu-user-extension-function' and
+`ecb-sources-menu-user-extension-function'.
+
+
+File: ecb.info,  Node: Compile-window on demand,  Next: Non-semantic sources,  Prev: Working with JDEE,  Up: Tips and tricks
+
+Displaying the compile-window on demand
+=======================================
+
+If you like displaying all output of compile/grep/etc. an all temp-buffers
+like *Help*-buffers in an extra compile-window (*note Temp- and
+compile-buffers::) but you dislike wasting the space of this compile-window
+if you are just editing then you can get a compile-window "on demand". Just
+do the following:
+
+1. Customize `ecb-compile-window-height' to not nil and save it for future
+   sessions. This gives you an extra compile-window at the bottom.
+
+2. Add the following to your .emacs:
+
+      (add-hook 'ecb-activate-hook
+                (lambda ()
+                  (let ((compwin-buffer (ecb-get-compile-window-buffer)))
+                  (if (not (and compwin-buffer
+                                (ecb-compilation-buffer-p compwin-buffer)))
+                      (ecb-toggle-compile-window -1)))))
+
+   This hides the extra compile-window directly after the start of ECB
+   because there is no need for a compile-window at this moment. But the
+   hiding will not be done if there is a compile-window and if a
+   "compile-buffer" in the sense of `ecb-compilation-buffer-p' is displayed
+   in this compile-window. Without this additional check the compile-window
+   would always be hidden after the ECB-start even when ECB is reactivated
+   after a deactivation by the window-manager-support of ECB (*note
+   Window-managers and ECB::); but in these cases we want to preserve the
+   state before deactivation as good as possible (see also option
+   `ecb-split-edit-window-after-start').
+
+
+This is all you have to do. Now if you run `compile' (or `grep' or other
+compile-modes) or display temp-buffers like *Help*-buffers then ECB autom.
+displays the compile-window at the bottom and display the output there.
+
+If you have finished with using the compile- or temp-output (e.g.  fixing
+errors) then you can throw away the compile-window just by
+`ecb-toggle-compile-window' - ECB will reactivate it autom.  before next
+compilation or help-buffer-display.!
+
+
+File: ecb.info,  Node: Non-semantic sources,  Next: Hide-show,  Prev: Compile-window on demand,  Up: Tips and tricks
+
+Parsing and displaying non-semantic sources
+===========================================
+
+ECB is mostly designed to display parsing information for files supported by
+semantic. But beginning with version 1.94 it also supports other parsing
+engines like imenu and etags, so also files not supported by semantic but by
+imenu/etags can be displayed in the Method-buffer of ECB. See *Note
+Definition of semantic- and non-semantic-sources:: for a description of
+"semantic-sources" and "non-semantic-sources".
+
+If support of non-semantic-sources is enabled then ECB will display the
+contents of all sources which can be displayed by speedbar too.  This comes
+from the fact that ECB uses speedbar-logic to parse sources with imenu or
+etags.
+
+In most cases imenu-parsing is preferable over etags-parsing because imenu
+operates on Emacs-buffers and needs no external tool and therefore parsing
+works also if current contents of a buffer are not saved to disk.
+
+This section describes all important aspects about parsing and displaying
+file-contents of file-types not supported by semantic but by imenu and/or
+etags.
+
+Enabling parsing and displaying of non-semantic-sources
+-------------------------------------------------------
+
+Enabling is simply done with the option `ecb-process-non-semantic-files'.
+
+ECB offers an option `ecb-non-semantic-parsing-function' to specify on a
+major-mode basis which parsing-method should be used: imenu or etags.
+Normally there should be no need to change this option but read the
+documentation of this option (*note ecb-non-semantic::) for further details.
+
+IMPORTANT:
+
+ * If imenu-parsing should be used then the option `speedbar-use-imenu-flag'
+   must be set to not `nil'!
+
+ * If some non-semantic-sources are not parsed (i.e. there is an empty
+   Methods-buffer) and you think that they should then maybe they are neither
+   supported by imenu nor by etags or you have to check the options
+   `ecb-non-semantic-parsing-function' and
+   `speedbar-dynamic-tags-function-list' and - especially for etags -
+   `speedbar-fetch-etags-parse-list', `speedbar-fetch-etags-arguments' and
+   `speedbar-fetch-etags-command'.
+
+ * Even with support for semantic-, imenu- and etags-parsing there will
+   remain some file-types rsp. `major-modes' which are not parse-able,
+   neither by semantic, imenu nor etags. This is no problem because these
+   files simply have an empty Methods-buffer. But nevertheless you will get a
+   message "Sorry, no support for a file of that extension" which comes from
+   the speedbar-library and can not switched off. Therefore if a `major-mode'
+   is known as not parse-able by semantic, imenu or etags it can be added to
+   the option `ecb-non-semantic-exclude-modes' and then it will be excluded
+   from being tried to parsed and this (annoying) message will not occur.
+
+Automatic rescanning/reparsing of non-semantic-sources
+------------------------------------------------------
+
+In contrast to semantic (see `global-semantic-auto-parse-mode') there is no
+built-in mechanism for autom. reparsing non-semantic-sources and then
+updating the contents of the Methods-buffer.
+
+For non-semantic-sources you have always at least to call
+`ecb-rebuild-methods-buffer' (bound to `C-c . r') or saving the source-file
+(if `ecb-auto-update-methods-after-save' is true) to update the
+Method-buffer(1).
+
+Depending on the parsing-mechanism the following options have to be switched
+on so ECB can rebuild the methods-buffer for non-semantic-sources:
+
+ * imenu:
+
+   The imenu-option `imenu-auto-rescan' must be enabled and
+   `imenu-auto-rescan-maxout' has to be set big enough to auto-parse big
+   files too! But this results not directly in an autom. updated
+   Method-buffer. This is first done after calling the command
+   `ecb-rebuild-methods-buffer' or saving the source-file (if
+   `ecb-auto-update-methods-after-save' is true).
+
+ * etags:
+
+   Only if `ecb-auto-save-before-etags-methods-rebuild' is switched on the
+   command `ecb-rebuild-methods-buffer' rebuilds the method-buffer with
+   current source-contents. See description of this option for an explanation.
+
+Tip: If you want to program your own real. automatic rescan/reparse/rebuild
+mechanism for non-semantic-sources you can do:
+
+Adding to `after-change-functions' a function F which either runs itself
+`ecb-rebuild-methods-buffer-for-non-semantic' or which adds only another
+function FF to an idle-timer and the function FF runs
+`ecb-rebuild-methods-buffer-for-non-semantic'. The latter approach has the
+advantage that the reparse/rebuild is not performed immediately after every
+change but first after Emacs is idle for a senseful interval (e.g. 4 seconds)
+after last change. Of course the function FF has to cancel its own idle-timer
+at the end, so the next idle-timer is first started again after the next
+change (i.e. by function F which is still contained in
+`after-change-functions'.
+
+Customizing the display of the tags
+-----------------------------------
+
+For non-semantic-sources ECB uses does no special organizing of tags in
+groups and sub-tags but it completely uses the tag-hierarchy the imenu- and
+etags-parsers of speedbar return. So the displayed tag hierarchy can only be
+customized with some options speedbar offers for this:
+
+`speedbar-tag-hierarchy-method', `speedbar-tag-group-name-minimum-length',
+`speedbar-tag-split-minimum-length' and
+`speedbar-tag-regroup-maximum-length'. See the speedbar documentation for
+details about these options.
+
+With the option `ecb-method-non-semantic-face' you can define the face used
+for displaying the tags in the Method-buffer for non-semantic-sources.
+
+`ecb-non-semantic-methods-initial-expand' can be useful too.
+
+---------- Footnotes ----------
+
+(1) Maybe future versions of ECB (> 1.94) will offer an autom. mechanism for
+this.
+
+
+File: ecb.info,  Node: Hide-show,  Next: Window-managers and ECB,  Prev: Non-semantic sources,  Up: Tips and tricks
+
+Using hide-show from the methods-buffer-menu
+============================================
+
+The popup-menu of the Methods-buffer offer two entries for either hiding or
+showing the block which is related to the selected tag (that tag for which
+the popup-menu was opened):
+
+ * "Jump to tag and hide block": Jumps to the tag and calls `hs-hide-block'
+   from the hideshow-library which is shipped with (X)Emacs. After that the
+   block is hidden, i.e. only the header-line of that tag (method, variable
+   etc.) is visible, the rest is hidden behind the "...".
+
+ * "Jump to tag and show block": Jumps to the tag and calls `hs-show-block'.
+   This shows the related hidden block if the block was hidden via
+   `hs-hide-block' or the menu-entry "Jump to tag and hide block" (s.a.).
+
+For this feature the library `hideshow.el' is used which should normally
+being included in the (X)Emacs-distribution. If this library is not loaded
+into Emacs, ECB does this automatically before the first call to one of these
+menu-entries.
+
+IMPORTANT: If in some `major-mode' hiding and showing does not work as you
+expect it to work then you must probably add an entry for this `major-mode'
+to the hideshow-variable `hs-special-modes-alist'. See the documentation of
+this variable for further details. One example of such a `major-mode' is
+`jde-mode' of the Java Development Environment JDEE; just add an entry for it
+like the already contained entries for `c++-mode' or `java-mode' and hiding
+and showing will work for you with JDEE too.
+
+
+File: ecb.info,  Node: Window-managers and ECB,  Next: Using semanticdb,  Prev: Hide-show,  Up: Tips and tricks
+
+Support of several Emacs-window-managers
+========================================
+
+There are several window-managers available which offer an easy interface to
+jump between different window-configurations within the same frame. A window
+configuration is the layout of windows and associated buffers within a frame.
+There is always at least one configuration, the current configuration. You
+can create new configurations and cycle through the layouts in either
+direction.  Window configurations are often named or numbered, and you can
+jump to and delete named rsp. numbered configurations.
+
+Without special support by ECB these window-managers would not work in
+combination with ECB!
+
+ECB currently supports the following managers:
+
+ * winring.el: Written by Barry A. Warsaw <bwarsaw@python.org>, available at
+   <http://www.python.org/emacs/>
+
+ * escreen.el: Written by Noah Friedman <friedman@splode.com>, available at
+   <http://www.splode.com/~friedman/software/emacs-lisp/>
+
+*IMPORTANT*: With one of these window-managers installed and active you can
+run applications like Gnus, VM or BBDB in the same frame as ECB! Just use
+different window-configurations (winring.el) or escreens (escreen.el) for ECB
+and the other applications. Especially with winring.el you can give every
+configuration a descriptive name like "ECB" or "Gnus"; afterwards you can
+jump to a window-configuration by name!
+
+When you go back to the ECB-window-configuration (winring.el) or the
+ECB-escreen (escreen.el) with any of the special window-manager-commands then
+the state of ECB will be restored exactly as you have left it when going to
+another window-configuration rsp.  escreen. This includes the whole splitting
+state of the edit-area and the visibilty of the ecb-windows and of the
+compile-window!
+
+The rest of this section describes how to enable the special ECB-support for
+these window-managers and how to use them.
+
+Enabling of the support
+-----------------------
+
+Every support must be enabled explicitly:
+ * winring: Call `ecb-winman-winring-enable-support'. This *MUST* be done
+   *BEFORE* the first call to any winring-command, so also before calling
+   `winring-initialize'!
+
+ * escreen: Call `ecb-winman-escreen-enable-support'. This *MUST* be done
+   *BEFORE* the first call to any escreen-command, so also before calling
+   `escreen-install'!
+
+If a window-manager-support should be enabled autom. after Emacs-start just
+put the following into your `.emacs':
+
+   (ecb-winman-winring-enable-support)
+   (winring-initialize)
+   
+   ;; or - if you like escreen more
+   
+   (ecb-winman-escreen-enable-support)
+   (escreen-install)
+
+Usage of a window-manager in combination with ECB
+-------------------------------------------------
+
+After enabling the support of one of the supported window-managers just go on
+as described in the commentary or introduction of the respective
+library-file(s) of the window-manager. Here is a short description:
+
+ * winring: First you have to define how to identify the
+   ECB-window-configuration, i.e. the configuration with activated ECB. This
+   done with the option `ecb-winman-winring-name'. There is always only one
+   window-configurations with name `ecb-winman-winring-name'!
+
+   Then run `winring-initialize'. If ECB is active then the resulting
+   window-configuration is the ECB-window-configuration.  Otherwise you can
+   create the ECB-window-configuration when you first time call
+   `winring-new-configuration' with name equal to `ecb-winman-winring-name'.
+   In general you can run all commands of the winring-library. If you jump to
+   the ECB-window-configuration then ECB will be autom. activated and if you
+   leave the ECB-window-configuration then ECB will autom. deactivated.
+
+ * escreen: First you have to define how to identify the ECB-escreen i.e.
+   that escreen with activated ECB. This done with the option
+   `ecb-winman-escreen-number'. There is always only one escreen with number
+   `ecb-winman-escreen-number'!
+
+   Then run `escreen-install' (deactivates ECB if currently running). After
+   that you can call `escreen-create-screen' and `escreen-goto-screen'(1).
+   These commands autom. activate ECB if creating or selecting the escreen
+   with number `ecb-escreen-number' (default = 1) and autom. deactivate ECB if
+   leaving the ECB-escreen.
+
+Disabling the support
+---------------------
+
+There is normally no need to do this but nevertheless it can be done by
+`ecb-winman-escreen-disable-support' rsp.
+`ecb-winman-winring-disable-support'.
+
+---------- Footnotes ----------
+
+(1) And of course all other `escreen-goto-*' commands!
+
+
+File: ecb.info,  Node: Using semanticdb,  Prev: Window-managers and ECB,  Up: Tips and tricks
+
+Using semanticdb to jump to type-tags defined in other files
+============================================================
+
+In OO-languages like CLOS, eieio and C++ there can be type-tags in the
+method-buffer which are somehow virtual because there is no definition in the
+current source-file. But such a virtual type collects all its outside defined
+members like methods in C++ which are defined in the `*.cc' file whereas the
+class-definition is defined in the associated header-file. ECB uses
+semanticdb to open the definition-file of such a tag and to jump to the
+definition of this tag. Same for parent-tags in the methods-buffer. This
+feature can only work correctly if semanticdb is well configured!
+
+Here is a C++-example:
+
+This class is defined in a file `ParentClass.h':
+
+   class ParentClass
+   {
+   protected:
+     int p;
+   };
+
+This class is defined in a file `ClassWithExternals.h'
+
+   #include "ParentClass.h"
+   
+   class ClassWithExternals : public ParentClass
+   {
+   private:
+     int i;
+   
+   public:
+     ClassWithExternals();
+     ~ClassWithExternals();
+   };
+
+Both the constructor and the destructor of the class "ClassWithExternals" are
+defined in a file `ClassWithExternals.cc':
+
+   #include "test.h"
+   
+   ClassWithExternals::ClassWithExternals(int i,
+                                          boolean b,
+                                          char c)
+   {
+     return;
+   }
+   
+   void
+   ClassWithExternals::~ClassWithExternals()
+   {
+     return;
+   }
+
+ECB displays the contents of `ClassWithExternals.cc' in its methods-buffer
+like follows:
+
+   [-] [Includes]
+    `- test.h
+   [-] ClassWithExternals
+    |  +ClassWithExternals (+i:int, +b:class boolean, +c:char):ClassWithExternals
+    `- +~ClassWithExternals ():void
+
+Both the constructor and the destructor of the class "ClassWithExternals" are
+grouped under their class-type. ECB now uses semanticdb to jump to the
+definition of class "ClassWithExternals" when you click onto the type-node
+"ClassWithExternals" in the methods-buffer.
+
+The contents of `ClassWithExternals.h' are displayed like follows:
+
+   [-] [Includes]
+    `- ParentClass.h
+   [-] ClassWithExternals:class
+    |  [-] [Parents]
+    |   `- ParentClass
+    |  [-] [Variables]
+    |   `- -i:int
+    |  +ClassWithExternals ():ClassWithExternals
+    |  +~ClassWithExternals ():void
+    `- [+] [Misc]
+
+ECB uses semanticdb to jump to the definition of the class "ParentClass" when
+you click onto the node "ParentClass".
+
+To enable this feature `global-semanticdb-minor-mode' must be enabled and
+semanticdb must be correctly configured. This means mainly that the option
+`semanticdb-project-roots' must be setup well. See the manual of semanticdb
+for further informations about this.
+
+
+File: ecb.info,  Node: Elisp programming,  Next: Conflicts and bugs,  Prev: Tips and tricks,  Up: Top
+
+Entry points for Elisp programmers
+**********************************
+
+This chapter describes how ECB can be used/programmed/driven by an
+Elisp-program. This contains:
+
+* Menu:
+
+* List of variables::           Which variables an Elisp-program can use
+* List of hooks::               All available hooks
+* tree-buffer::                 Full description of the tree-buffer-library
+* Adviced functions::           How to deal with the adviced functions
+* The layout-engine::           Programming new layouts and special windows
+
+
+File: ecb.info,  Node: List of variables,  Next: List of hooks,  Prev: Elisp programming,  Up: Elisp programming
+
+Variables for Elisp-programs
+============================
+
+Variables an Elisp-program can use beyond those ones mentioned in *Note The
+layout-engine:::
+
+ * `ecb-source-path-functions'
+
+Look at the documentation of these variables to get a description.
+
+
+File: ecb.info,  Node: List of hooks,  Next: tree-buffer,  Prev: List of variables,  Up: Elisp programming
+
+Available hooks of ECB
+======================
+
+The following hooks are available:
+
+ * `ecb-activate-before-new-frame-created-hook'
+
+ * `ecb-activate-before-layout-draw-hook'
+
+ * `ecb-activate-hook'
+
+ * `ecb-after-directory-change-hook'
+
+ * `ecb-before-activate-hook'
+
+ * `ecb-before-deactivate-hook'
+
+ * `ecb-common-tree-buffer-after-create-hook'
+
+ * `ecb-current-buffer-sync-hook'
+
+ * `ecb-deactivate-hook'
+
+ * `ecb-directories-buffer-after-create-hook'
+
+ * `ecb-hide-ecb-windows-after-hook'
+
+ * `ecb-hide-ecb-windows-before-hook'
+
+ * `ecb-history-buffer-after-create-hook'
+
+ * `ecb-methods-buffer-after-create-hook'
+
+ * `ecb-redraw-layout-after-hook'
+
+ * `ecb-redraw-layout-before-hook'
+
+ * `ecb-show-ecb-windows-after-hook'
+
+ * `ecb-show-ecb-windows-before-hook'
+
+ * `ecb-sources-buffer-after-create-hook'
+
+Look at the documentation of these hooks to get a detailed description.
+
+
+File: ecb.info,  Node: tree-buffer,  Next: Adviced functions,  Prev: List of hooks,  Up: Elisp programming
+
+The library tree-buffer.el
+==========================
+
+The library tree-buffer.el is an ECB-independent library written completely
+in emacs lisp and can be used also by other applications than ECB. But the
+main purpose of tree-buffer.el is to offer a small but powerful API to create
+new tree-buffers for ECB, add new tree-nodes to a tree-buffer and thus use
+such a tree-buffer to display arbitrary information structured by a tree.
+
+This chapter is for emacs-lisp-programmers and describes how to create a new
+tree-buffer, how to add new tree-nodes to a tree-buffer (includes removing
+and updating already existing tree-nodes) and how to use the offered
+tree-buffer- and tree-node-APIs.
+
+* Menu:
+
+* Introduction::                General description of tree-buffers
+* A new tree-buffer::           How to create a new tree-buffer
+* A new tree-node::             How to add new tree-nodes to a tree-buffer
+* Updating a tree-buffer::      How to update a tree-buffer after changes
+* Tree-buffer keybindings::     Default and customizable keybindings
+* The tree-buffer-API::         All functions for tree-buffers and -nodes
+* Do not with tree-buffer::     Things which are strictly forbidden
+* Tree-buffer How to::          Dealing with special situations
+

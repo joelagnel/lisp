@@ -1,0 +1,1 @@
+recvfrom(<field "int SOCKET">, <field "void *BUFFER">, <field "size_t SIZE">, <field "int FLAGS">, <field "struct sockaddr *ADDR">, <field "socklen_t *LENGTH-PTR">)<endpoint>

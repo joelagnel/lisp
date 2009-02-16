@@ -1,0 +1,10 @@
+{
+    int rc;
+    rc = pthread_create(<field "pthread_t * thread">, NULL, <field "void * (*start_routine)(void *)">, <field "void * arg">);
+    if (rc) {
+       fprintf(stderr, "ERROR: %d calling pthread_create() at %s:%d\n",
+               rc, __FILE__, __LINE__);
+       exit(1);
+    }
+    //pthread_detach(pthread_t th);
+}

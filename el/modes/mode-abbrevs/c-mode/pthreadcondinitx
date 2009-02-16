@@ -1,0 +1,4 @@
+if (pthread_cond_init(<field "pthread_cond_t *cond">, NULL) != 0) {
+    fprintf(stderr, "ERROR: calling pthread_cond_init()\n");
+    exit(1);
+}

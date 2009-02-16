@@ -1,0 +1,4 @@
+static PyObject * <field "name">(PyObject * self, PyObject * args)
+{
+    <endpoint>
+}

@@ -1,0 +1,1 @@
+catopen(<field "const char *CAT_NAME">, <field "int FLAG">)<endpoint>

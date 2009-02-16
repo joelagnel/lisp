@@ -1,0 +1,1 @@
+#define checkrc(rc) { int __rc__=rc; if (__rc__ != 0) { std::cerr << "ERROR: bad return code of " << __rc__ << " at " << __FILE__ << ":" << __LINE__ << std::endl << std::flush; assert(0); }}

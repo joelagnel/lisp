@@ -1,0 +1,3 @@
+
+fd = open("/dev/cdrom",<field "perm">);
+ioctl(fd);

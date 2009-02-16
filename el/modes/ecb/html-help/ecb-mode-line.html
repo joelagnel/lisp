@@ -1,0 +1,186 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="ecb-mode-line">ecb-mode-line</a>,
+Next:<a rel=next accesskey=n href="ecb-version-control.html#ecb-version-control">ecb-version-control</a>,
+Previous:<a rel=previous accesskey=p href="ecb-winman.html#ecb-winman">ecb-winman</a>,
+Up:<a rel=up accesskey=u href="Customizable-options.html#Customizable%20options">Customizable options</a>
+<hr><br>
+
+<h4>Group ecb-mode-line</h4>
+
+<p>This group contains settings for the modelines of the
+ECB-tree-buffers:
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>mode-line-data</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Data shown in the modelines of the special ECB-buffers. Everey element
+of this list is a cons-cell where the car is used to define a
+buffer-name and the cdr to define the modeline-data for that buffer. 
+For details about how to defining a buffer-name see
+<code>ecb-mode-line-prefixes</code> - its completely the same.
+
+<p>The cdr is the data for ths modeline and can either be the symbol
+<code>sel-dir</code> or <code>sel-source</code> whereas the former one displays
+the current selected directory as modeline-data and the latter one the
+current selected source-file (without path).
+
+<p>In addition to these two predefined values for every special
+ECB-buffer a plain string (which is displayed) or a function can be
+specified which gets three args (name of the buffer, current selected
+directory and current selected source-file) and must return a string
+which will be displayed in the modeline (or nil if no data should be
+displayed). Such a function can add the text-property <code>help-echo</code>
+to the result-string. Then this help-string will be displayed when the
+user moves the mouse over this section of the modeline.
+
+<p>If a special ECB-buffer should not display special data in its
+modeline then this buffer-name should either not being added to this
+option or added with "No data" (= nil as cdr).
+
+<p>The whole modeline of the special ECB-buffer consists of the prefix of
+<code>ecb-mode-line-prefixes</code> and the data of
+<code>ecb-mode-line-data</code> - eventually prepended by the window-number,
+see <code>ecb-mode-line-display-window-number</code>. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>mode-line-data-face</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Face used for the data in the mode-line. See
+<code>ecb-mode-line-data</code>. For XEmacs the face should inherit from the
+face <code>modeline</code> (see <code>set-face-parent</code>)! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>mode-line-display-window-number</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Display in the modeline of every special ECB-window the window-number. 
+The left-top-most window in a frame has the window-number 0 and all
+other windows are numbered with increasing numbers in the sequence,
+functions like <code>other-window</code> or <code>next-window</code> would walk
+through the frame.
+
+<p>This can be used to jump to windows by number with commands like:
+
+<br><pre>  (defun my-switch-to-window-number (number)
+    ``Switch to the nth window''
+    (interactive ``P'')
+    (if (integerp number)
+        (select-window (nth number (window-list)))))
+</pre>
+
+<p>Currently this feature is only available for GNU Emacs 21.X, because
+neither GNU Emacs &lt; 21 nor XEmacs can evaluate dynamically forms in
+the mode-line. 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>mode-line-prefixes</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Prefixes shown in the modelines of the special ECB-buffers. The
+displayed prefix then looks like: "[ &lt;PREFIX&gt;[: ]]", means if a
+prefix is defined for an special ECB-buffer then a single space is
+prepended and if there is additional text to display (e.g. the current
+directory in the sources buffer, see <code>ecb-mode-line-data</code>) then
+also the string ": " is appended.
+
+<p>Everey element of this list is a cons-cell where the car is used to
+define a buffer-name and the cdr to define the modeline-prefix for
+that buffer.
+
+<p>The buffer-name can either be defined as plain string or with a symbol
+which contains the buffer-name as value. The latter one is recommended
+to define a prefix for one of the builtin ECB-tree-buffers because
+then simply the related option-symbol can be used. To add a prefix for
+the builtin directories tree-buffer just set the symbol
+<code>ecb-directories-buffer-name</code> as car.
+
+<p>The cdr is the prefix for a buffer and can either be a string which
+used as it is or a function-symbol which is called with three argument
+(the buffer-name, the current selected directory and the current
+selected source-file) and must return either nil (for no prefix) or a
+string which is then used a prefix. Such a function can add the
+text-property <code>help-echo</code> to the result-string. Then this
+help-string will be displayed when the user moves the mouse over this
+section of the modeline.
+
+<p>If a special ECB-buffer should not have a prefix in its modeline then
+this buffer-name should either not being added to this option or added
+with "No prefix" (= nil as cdr). 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>mode-line-prefix-face</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Face used for the prefix in the mode-line. See
+<code>ecb-mode-line-prefixes</code>. For XEmacs the face should inherit from
+the face <code>modeline</code> (see <code>set-face-parent</code>)! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>mode-line-win-nr-face</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Face used for the window-number in the mode-line. See
+<code>ecb-mode-line-display-window-number</code>. For XEmacs the face should
+inherit from the face <code>modeline</code> (see <code>set-face-parent</code>)! 
+</td></tr>
+</table>
+
+</body></html>
+

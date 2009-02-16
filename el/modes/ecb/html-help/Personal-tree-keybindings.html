@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Personal%20tree-keybindings">Personal tree-keybindings</a>,
+Next:<a rel=next accesskey=n href="Using-popup-menus.html#Using%20popup-menus">Using popup-menus</a>,
+Previous:<a rel=previous accesskey=p href="Incremental-search.html#Incremental%20search">Incremental search</a>,
+Up:<a rel=up accesskey=u href="Using-the-keyboard.html#Using%20the%20keyboard">Using the keyboard</a>
+<hr><br>
+
+<h4>Adding personal keybindings for the tree-buffers</h4>
+
+<p>There are five hooks which can be used for adding personal keybindings
+to the ECB tree-buffers:
+
+<ul>
+<li><code>ecb-common-tree-buffer-after-create-hook</code>
+<li><code>ecb-directories-buffer-after-create-hook</code>
+<li><code>ecb-sources-buffer-after-create-hook</code>
+<li><code>ecb-methods-buffer-after-create-hook</code>
+<li><code>ecb-history-buffer-after-create-hook</code>
+</ul>
+
+<p>These hooks are called directly after tree-buffer creation so they can
+be used to add personal local keybindings<a rel=footnote href="#fn-1"><sup>1</sup></a> either to all tree-buffers
+(<code>ecb-common-tree-buffer-after-create-hook</code>) or just to a certain
+tree-buffer. Here is a list which keys MUST NOT be rebound:
+
+<ul>
+<li><kbd>RET</kbd> and all combinations with <kbd>Shift</kbd> and <kbd>Ctrl</kbd>:
+Used for selecting nodes in all tree-buffers. 
+<li><kbd>TAB</kbd>:
+Used for expanding/collapsing nodes in all tree-buffers. 
+<li><kbd>C-t</kbd>:
+Used for toggling "do not leave window after selection" in all
+tree-buffers, see command
+<code>ecb-toggle-do-not-leave-window-after-select</code>. 
+<li>All self-inserting characters:
+Used for easy and fast navigation in all tree-buffers,
+See <a href="Incremental-search.html#Incremental%20search">Incremental search</a>. 
+<li><kbd>F2</kbd>, <kbd>F3</kbd>, <kbd>F4</kbd>:
+Used for customizing ECB, adding source-path in the directories buffer. 
+</ul>
+
+<p>The following example binds <kbd>C-a</kbd> to some useful code in ALL
+tree-buffers and <kbd>C-d</kbd> to even more useful code ONLY in the
+directories buffer:
+
+<br><pre>(add-hook 'ecb-common-tree-buffer-after-create-hook
+          (lambda ()
+             (local-set-key (kbd "C-a")
+                            (lambda ()
+                               (interactive)
+                               (message "ECB is great!")))))
+
+(add-hook 'ecb-directories-buffer-after-create-hook
+          (lambda ()
+             (local-set-key (kbd "C-d")
+                            (lambda ()
+                               (interactive)
+                               (message "ECB is wonderful!")))))
+</pre>
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>To be more general:
+They can be used to run any arbitrary lisp code after a tree-buffer
+creation!</p>
+
+</ol><hr>
+
+</body></html>
+

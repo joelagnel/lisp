@@ -1,0 +1,1 @@
+strncmp(<field "const char *s1">, <field "const char *s2">, <field "size_t n">)

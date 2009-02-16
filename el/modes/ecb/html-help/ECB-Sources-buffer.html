@@ -1,0 +1,77 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="ECB%20Sources-buffer">ECB Sources-buffer</a>,
+Next:<a rel=next accesskey=n href="ECB-Methods-buffer.html#ECB%20Methods-buffer">ECB Methods-buffer</a>,
+Previous:<a rel=previous accesskey=p href="ECB-Directories-buffer.html#ECB%20Directories-buffer">ECB Directories-buffer</a>,
+Up:<a rel=up accesskey=u href="Basic-interactors.html#Basic%20interactors">Basic interactors</a>
+<hr><br>
+
+<h4>ECB Sources- and history-interactor</h4>
+
+<p>ECB offers two interactors for displaying source-file-names: The
+sources- and the history-interactor. The former one displays all
+source-file names of the currently selected directory of the
+directories-interactor (see <a href="ECB-Directories-buffer.html#ECB%20Directories-buffer">ECB Directories-buffer</a>) whereas the
+latter one displays the names of all currently loaded source-files
+regardless in which directory they reside so it works as a "history"
+of source-files.
+
+<p>Both the sources- and the history-tree-buffer are "flat"
+tree-buffers means all nodes are direct children of the invisible
+root-node and can not be expanded.
+
+<h5>Usage of the sources/history interactor</h5>
+
+<ul>
+<li>Source files can be selected by clicking with the primary mouse button
+(see <a href="Using-the-mouse.html#Using%20the%20mouse">Using the mouse</a>) or hitting RETURN (see <a href="Using-the-keyboard.html#Using%20the%20keyboard">Using the keyboard</a>) on the source row in the <dfn>ECB-Sources</dfn> or
+<dfn>ECB-History</dfn> windows. The buffer of the selected source-file will
+be displayed in an edit-window - which one depends on the setting in
+<code>ecb-mouse-click-destination</code>.
+
+<p>IMPORTANT: If you use the POWER-click (i.e. hold down the SHIFT-key
+while clicking with the primary mouse button (see <a href="Using-the-mouse.html#Using%20the%20mouse">Using the mouse</a>)
+or RETURN (see <a href="Using-the-keyboard.html#Using%20the%20keyboard">Using the keyboard</a>)) on a source row in the
+ECB-Sources or ECB-History windows then the source will not be
+displayed in an edit-window but it will be scanned in the background
+and all its contents (e.g. methods and variables) are listed in the
+<dfn>ECB Methods</dfn> window (see <a href="ECB-Methods-buffer.html#ECB%20Methods-buffer">ECB Methods-buffer</a>. So you can get an
+overlook over the source without changing the buffer in the
+edit-window.
+
+</p><li>Clicking on the source file with the secondary mouse button or
+C-RETURN (see <a href="Usage-of-ECB.html#Usage%20of%20ECB">Usage of ECB</a>) will open the source file in
+another edit window - which one depends on the setting in
+<code>ecb-mouse-click-destination</code>.
+
+<li>Right clicking on a source file (mouse-button 3) will open a popup
+menu where different operation on the item under the mouse cursor can
+be performed. This popup-menu offers operations for version-control,
+dired, grep, filtering the file-names and some file-operations like
+deleting the related file from disk.
+
+</ul>
+
+<h5>Activating/Displaying the sources/history interactor</h5>
+
+<p>Either use one of the predefined layouts which contain the sources
+(rsp. history) interactor (see <a href="Changing-the-ECB-layout.html#Changing%20the%20ECB-layout">Changing the ECB-layout</a>) (e.g. via
+<kbd>C-c . l c</kbd>) or create a new ecb-layout via the command
+<code>ecb-create-new-layout</code> and add a buffer of type "sources"
+(rsp. "history") into this new layout (see <a href="Creating-a-new-ECB-layout.html#Creating%20a%20new%20ECB-layout">Creating a new ECB-layout</a>).
+
+<h5>Customizing the sources/history interactor</h5>
+
+<p>See <a href="ecb-sources.html#ecb-sources">ecb-sources</a> and <a href="ecb-history.html#ecb-history">ecb-history</a> for a list of all options
+currently available for customizing these interactors to your needs.
+
+</body></html>
+

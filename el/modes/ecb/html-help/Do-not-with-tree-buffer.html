@@ -1,0 +1,36 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Do%20not%20with%20tree-buffer">Do not with tree-buffer</a>,
+Next:<a rel=next accesskey=n href="Tree-buffer-How-to.html#Tree-buffer%20How%20to">Tree-buffer How to</a>,
+Previous:<a rel=previous accesskey=p href="The-tree-buffer-API.html#The%20tree-buffer-API">The tree-buffer-API</a>,
+Up:<a rel=up accesskey=u href="tree-buffer.html#tree-buffer">tree-buffer</a>
+<hr><br>
+
+<h4>Things which are strictly forbidden</h4>
+
+<p>Variable <code>tree-buffers</code>: Only for internal use! It contains all
+tree-buffers of current Emacs-instance, means <strong>all</strong>
+tree-buffers of <strong>all</strong> applications which uses currently
+tree-buffers. Every application must store its own collection of
+tree-buffers in an own variable! For example: ECB stores its
+tree-buffer set in <code>ecb-tree-buffers</code>!
+
+<p>Variable <code>tree-buffer-displayed-nodes</code>: Only for internal use! 
+Contains all the current visible nodes of current tree-buffer in
+top-to-bottom order. This variable is buffer-local in each
+tree-buffer! Do not use it directly! When you want to cache the
+current display, then see <a href="Tree-buffer-How-to.html#Tree-buffer%20How%20to">Tree-buffer How to</a> how to do this.
+
+<p><strong>IMPORTANT</strong>: An application may only use the API tree-buffer.el
+provides but no internal variables - see <a href="The-tree-buffer-API.html#The%20tree-buffer-API">The tree-buffer-API</a>!
+
+</body></html>
+

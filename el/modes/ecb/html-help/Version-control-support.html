@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Version-control%20support">Version-control support</a>,
+Next:<a rel=next accesskey=n href="Using-eshell.html#Using%20eshell">Using eshell</a>,
+Previous:<a rel=previous accesskey=p href="Remote-directories.html#Remote%20directories">Remote directories</a>,
+Up:<a rel=up accesskey=u href="Tips-and-tricks.html#Tips%20and%20tricks">Tips and tricks</a>
+<hr><br>
+
+<h3>Supporting Version control systems</h3>
+
+<p>Beginning with version 2.30 ECB supports Version-control systems (in
+the following named VC-systems). This means the special tree-buffers
+of ECB display files managed by a VC-system with an appropriate
+image-icon<a rel=footnote href="#fn-1"><sup>1</sup></a> in front
+of the filename.
+
+<p>The following four options allow full control over this feature (see
+also <a href="ecb-version-control.html#ecb-version-control">ecb-version-control</a>:
+
+<dl>
+<dt><code>ecb-vc-enable-support</code>
+<dd>Enable or disable this feature. 
+<br><dt><code>ecb-vc-supported-backends</code>
+<dd>The most important option for this feature. Allows to specify how ECB
+should test if a directory is managed by a VC-system (how to identify
+the VC-backend of a directory) and - if yes - how it should check the
+VC-state of a certain file. The former ones are called
+<dfn>identify-backend-functions</dfn> and the latter ones
+<dfn>check-state-functions</dfn>. 
+<br><dt><code>ecb-vc-directory-exclude-regexps</code>
+<dd>Allows excluding certain directories (on a regexp-basis) from the
+VC-support even if they are managed by a VC-system. 
+<br><dt><code>ecb-vc-state-mapping</code>
+<dd>Defines the mapping between the state-values returned by a
+check-state-function (a function set in
+<code>ecb-vc-supported-backends</code> and used for getting the VC-state of
+a file, e.g. <code>vc-state</code>) and the allowed state-values ECB can
+understand. 
+</dl>
+
+<p>Probably the default settings will fit your needs but to get sure you
+should carefully read the documentation of these options!
+
+<p>The following subsection give you important informations about
+identify-backend-functions, check-state-functions, about working with
+remote repositories.
+
+<ul>
+<li><a accesskey=1 href="Identifying-backends.html#Identifying%20backends">Identifying backends</a>:         How ECB identifies the VC-backend of a dir
+<li><a accesskey=2 href="Checking-the-state.html#Checking%20the%20state">Checking the state</a>:           How ECB checks the VC-state of a file
+<li><a accesskey=3 href="Remote-repositories.html#Remote%20repositories">Remote repositories</a>:          What you should know about this
+<li><a accesskey=4 href="Refreshing-the-VC-state.html#Refreshing%20the%20VC-state">Refreshing the VC-state</a>:      How to refresh when state changed outside
+<li><a accesskey=5 href="Adding-new-backends.html#Adding%20new%20backends">Adding new backends</a>:          Necessary steps for adding new backends
+<li><a accesskey=6 href="Known-VC-problems.html#Known%20VC-problems">Known VC-problems</a>:            Currently known problems of the VC-support
+</ul>
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>Of course only when Emacs is capable to display
+images; otherwise a suitable ascii-icon will be displayed.</p>
+
+</ol><hr>
+
+</body></html>
+

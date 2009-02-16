@@ -1,0 +1,30 @@
+inline long long csnum(const char * num)
+{
+    int lastIdx = strlen(num) - 1;
+    char lastChar = num[lastIdx];
+    unsigned long long multiplier = 1;
+    unsigned long long kb_1 = (unsigned long long)1024;
+    char * num2 = strdup(num);
+    if ((lastChar == 'k') || (lastChar == 'K')) {
+        multiplier = kb_1;
+    }
+    else if ((lastChar == 'm') || (lastChar == 'M')) {
+        multiplier = kb_1*kb_1;
+    }
+    else if ((lastChar == 'g') || (lastChar == 'G')) {
+        multiplier = kb_1*kb_1*kb_1;
+    }
+    else if ((lastChar == 't') || (lastChar == 'T')) {
+        multiplier = kb_1*kb_1*kb_1*kb_1;
+    }
+    else if ((lastChar == 'p') || (lastChar == 'P')) {
+        multiplier = kb_1*kb_1*kb_1*kb_1*kb_1;
+    }
+
+    if (multiplier != 1) {
+        num2[lastIdx] = 0;
+    }
+    long long n = strtoll(num2, NULL, 10);
+    free(num2);
+    return n * multiplier;
+}

@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Redrawing%20the%20ECB-layout">Redrawing the ECB-layout</a>,
+Next:<a rel=next accesskey=n href="Changing-window-sizes.html#Changing%20window%20sizes">Changing window sizes</a>,
+Previous:<a rel=previous accesskey=p href="Changing-the-ECB-layout.html#Changing%20the%20ECB-layout">Changing the ECB-layout</a>,
+Up:<a rel=up accesskey=u href="The-ECB-layout.html#The%20ECB-layout">The ECB-layout</a>
+<hr><br>
+
+<h4>Redrawing the ECB-layout</h4>
+
+<p>If you have unintentionally destroyed the ECB-layout, you can always
+restore the layout with calling <code>ecb-redraw-layout</code>. This is even
+true, if you get messages like "wrong-type-argument window-live-p
+#&lt;window 222&gt;".
+
+<p>If the variable <code>ecb-redraw-layout-quickly</code> is not nil then the redraw
+is done by the <code>ecb-redraw-layout-quickly</code> function, otherwise by
+<code>ecb-redraw-layout-full</code>. But it's strongly recommended to use the
+quick redraw only if you have really slow machines where a full redraw
+takes several seconds because the quick redraw is not really safe and
+may have some drawbacks! On normal machines the full redraw should be
+done in &lt;&lt; 1s!
+
+<p>Please read the documentation of the command <code>ecb-redraw-layout</code>!
+
+<p>See also the hooks <code>ecb-redraw-layout-after-hook</code> and
+<code>ecb-redraw-layout-before-hook</code>!
+
+</body></html>
+

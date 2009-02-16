@@ -1,0 +1,1899 @@
+\input texinfo.tex      @c -*-texinfo-*-
+@c This file is in English
+@setfilename dired-dd.info
+@settitle dired-dd, aka Dired-DragDrop, Mouse interface for dired / dired-x
+@ifinfo
+
+    A minor mode enabling mouse interface for dired / dired-x
+
+    This texinfo is developed using texinfo.tex and texi*.el
+    included in  Mule 2.3(19.28) / emacs-20.2
+
+    Copyright 1997,1998,1999 S.Namba <sn@@asahi-net.email.ne.jp>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+@end ifinfo
+@c @paragraphindent 0 : how can I make this work all over
+@c @smallbook
+@titlepage
+@sp 12
+@center
+@title dired-dd / aka Dired-DragDrop (0.9.1.15)
+@c (require 'ep)
+@c (ep-file-mtime "dired-dd.el")
+@subtitle A mouse interface minor mode for dired / dired-x
+@sp
+@author Seiichi Namba @copyright{} @code{1997,1998,1999 S.Namba <sn@@asahi-net.email.ne.jp>}
+
+@code{dired-dd.el Version 0.9.1.16 on Tue Jan  5 12:32:37 1999}
+@end titlepage
+@c
+@c Defining TOP
+@c
+@node Top, Overview, (dir), (dir)
+@ifinfo
+
+dired-dd / aka Dired-DragDrop
+*****************************
+
+This file is updated from @file{dired-dd.texi}.
+
+@end ifinfo
+@menu
+* Overview::                    
+* Installation::                
+* Dired-dd minor mode::         
+* Mouse Button 1::              
+* Mouse Button 2::              
+* Mouse Button 3::              
+* The Popup Menu::              
+* Copying filename by mouse::   
+* Customizing::                 
+* Tips::                        
+* Bug::                         
+* TODO::                        
+* Index::                       
+* Variable Index::              
+* Function Index::              
+* Concept Index::               
+@end menu
+
+
+
+@node Overview, Installation, Top, Top
+@chapter Overview
+
+@noindent
+@strong{Dired-dd} (aka @strong{Dired-DragDrop})
+is a minor mode enabling mouse interface 
+for @code{dired} / @code{dired-x}.
+
+@noindent
+It provides facilities in @code{dired}:@*
+
+@itemize @bullet
+@item
+Mark files / directories in a dired buffer (mouse-1 drag)
+@item
+Drag files / directories and drop into dired buffer, for copy/move/link etc. (mouse-2 drag)
+@item
+Open file (or execute defined function) by dragging into non-dired buffer, or via menu (mouse-2 drag)
+@item
+Execute external command related to file extension (M-mouse-2 click or double-click mouse-1)
+@item
+Raise a miscellaneous file handling menu (mouse-3 click)
+@item
+Caveat: No inter-application drag and drop supported yet (or forever ?)
+@item
+Caveat: Works only on FSF emacs (19.28, 19.34, 20.2, 20.3) and mule (2.3, 3.0, 4.0), but not on XEmacs.
+@end itemize
+
+@noindent
+wherein,@*
+
+@itemize @bullet
+@item
+Drop target window may exist in different emacs's frame
+(@emph{inter-frame} drag & drop supported).
+@item
+Surprisingly enough, @code{ange-ftp} works -- It means that you can
+@strong{FTP} via drag drop (except @file{Copy Recursive} in menu entry).
+@item
+@code{find-dired, find-grep-dired, locate-dired} or all other dired-related-stuff-compatible
+@end itemize
+
+@*
+@code{locate-dired} can be located in @file{spinout} directory of
+dired-dd distribution.  The @file{spinout} directory contains other
+assorted stuffs including a patch for @file{archie.el}, elisp codes for
+URL-to-ange-ftp conversion, Netscape bookmark stealer, and others that
+work well with @code{dired-dd}.
+
+@noindent
+Now @code{dired-dd} is distributed under GPL (version 2). @xref{COPYING}.
+
+
+@node Installation, Dired-dd minor mode, Overview, Top
+@chapter Installation
+@cindex installation
+
+@menu
+* System Requirement::          
+* Installing dired-dd::         
+* COPYING::                     
+@end menu
+
+@node System Requirement, Installing dired-dd, Installation, Installation
+@comment  node-name,  next,  previous,  up
+@section System Requirement
+@cindex system requirement
+
+@noindent
+@code{dired-dd} was written and tested on mule-2.3 (both of official
+emacs-19.28, and unofficial emacs-19.34 based versions) and emacs-20.2
+and 20.3.  It works fine on the 19.x and 20.x emacsen, but some
+behaviours (eg. menu appearance) are not exactly the same.  Emacs-18
+(Nemacs) is not supported at all.  Perhaps @code{dired-dd} won't work in
+XEmacs, in which @code{dired} is totally different from FSF emacsen.  It
+has not been tested on Windows version of emacs / mule.
+
+@noindent
+@code{dired-dd} uses @code{dired-x} features intensively and
+extensively.  @xref{Installing dired-dd} for minimum setup of
+@code{dired-x} just for @code{dired-dd}, or further refer to
+@code{dired-x} info file (@kbd{M-x info RET} and search for
+@file{Dired-X}) for datailed information on setup and customization of
+@code{dired-x}.  @code{dired-x} is included in a standard emacs
+distribution, so you shouldn't have to FTP it.
+
+
+@node Installing dired-dd, COPYING, System Requirement, Installation
+@comment node-name,  next,  previous,  up
+@section Installing @code{dired-dd}
+@cindex byte-compile
+@cindex make
+@cindex Makefile
+
+@subsection Copying files
+
+@noindent
+Currently, @code{dired-dd} is composed of
+@file{dired-dd.el} and @file{dired-dd-b3-menu.el}.
+Byte-compile these two files
+and copy derived
+@file{dired-dd.elc} and@*
+@file{dired-dd-b3-menu.elc}
+into your emacs's load path@*
+(@file{/usr/local/share/emacs/site-lisp/}, @file{~/elisp} or wherever appropriate).
+Byte-compiling of @file{dired-dd.el} and @file{dired-dd-b3-menu.el} is
+strongly recommended.
+
+@noindent
+This two-step file installation can be done by attached @file{Makefile}.
+
+@noindent
+In this @file{Makefile}, the default @code{emacs} and @code{elispdir}
+are defined as:
+
+@example
+emacs=/usr/local/emacs-20.2/bin/emacs
+elispdir=~/elisp
+@end example
+
+@noindent
+Thus, if your emacs is @file{/gnu/bin/emacs} and your
+lisp directory is @file{/gnu/lib/emacs/site-lisp},
+invoke @file{make} with overriding the defaults above:
+
+@example
+$ make emacs=/gnu/bin/emacs compile
+$ make emacs=/gnu/bin/emacs install elispdir=/gnu/lib/emacs/site-lisp
+@end example
+
+
+@subsection Modifying your @file{~/.emacs}
+
+@noindent
+Include add-hook codes below in your @file{~/.emacs}:
+
+@lisp
+  ;;(setq dired-dd-mode-as-default nil)
+  (add-hook
+   'dired-load-hook
+   (function
+    (lambda ()
+      (load "dired-x")
+      ;; Set dired-x variables here.
+      ;; To and flo...
+      (if window-system (require 'dired-dd)))))
+@end lisp
+
+@noindent
+In dired-load-hook, you can customize various
+features including @code{dired-x}
+(@pxref{Installation, , , dired-x, dired-x info}).
+
+@noindent
+@code{dired-dd-mode} is implemented as a minor mode for @code{dired-mode}.
+If you do not want to turn on @code{dired-dd-mode} automatically
+upon entering @code{dired-mode}, remove "@code{;;}" before
+@code{(setq dired-dd-mode-as-default nil)} in the example above.
+
+@noindent
+If you set @code{dired-dd-mode-as-default} to nil, you have to
+turn on @code{dired-dd-mode} with manual operation
+(@pxref{Dired-dd minor mode}).
+
+@subsection Printing Info (optional)
+
+@noindent
+PostScript formatted version of this info is included under the
+distribution directory.  If you want hardcopy, issue shell
+command such as @code{lpr -Pps dired-dd.ps}.
+
+@noindent
+Of course, @file{dired-dd.info}, and perhaps @file{dired-dd_toc.html}
+and @file{dired-dd.html} can be found in the same directory.  Use your
+favorite WWW browser to read the html version.  For
+@file{dired-dd.info}, use @code{dired} @file{I} command, or
+@code{dired-dd} menu raised by @kbd{mouse-3} (or install it in your info
+directory).
+
+@noindent
+The @file{dired-dd.ps} was formatted with @file{dvi2ps} as can be seen
+in the @file{Makefile}, with PostScript version of @file{cm} fonts.  If
+you do not have PostScript @file{cm} fonts, or want to print it with
+genuine @file{pk} fonts for some reason, run @file{texi2dvi} locally.
+Texinfo version used for drafting this info seems to be 2.145, according
+to @file{texi2dvi} output (maybe it is old ?).
+
+
+@node COPYING,  , Installing dired-dd, Installation
+@comment  node-name,  next,  previous,  up
+@section COPYING
+@cindex COPYING
+
+@noindent
+Since version 0.9.1.6, @code{dired-dd} is distributed under GPL (version 2).
+
+@noindent
+The older versions might include different copying notice (even if I believe
+they were also `Free Software' as well), but forget all about those obsolete
+versions.
+
+@noindent
+I take GPL because I think it is the best way to distribute my work on elisp
+for `free', and express my respect to all the emacs related works ever
+been achieved.
+
+@noindent
+The files under `spinout' directory may not all have the GPL copying notice
+in order to save storage space, but consider them protected
+under GPL as well.
+
+@noindent
+I cite the copying notice at the top of this texi/info file hereunder,
+for it may not be seen via info browser.
+
+@example
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+@end example
+
+
+@node Dired-dd minor mode, Mouse Button 1, Installation, Top
+@chapter Dired-dd minor mode
+@cindex turning on and off dired-dd-mode manually
+@findex dired-dd-mode
+
+@noindent
+@code{dired-dd-mode} is implemented as a normal minor mode for
+@code{dired-mode}.  @kbd{M-x dired-dd-mode RET} toggles on / off state
+@code{dired-dd-mode}.  While @code{dired-dd-mode} is turned on, string
+``DragDrop'' appears in modeline.
+
+@noindent
+Further, issuing command @kbd{C-u M-x dired-dd-mode RET}
+(with positive numeric argument) forces to turn
+on @code{dired-dd-mode}, while @kbd{M- - M-x dired-dd-mode RET}
+(with negative numeric argument) turns it off.
+
+@noindent
+You will notice that some of the mouse commands, for example
+@kbd{M-drag-mouse-1} @code{(mouse-drag-secondary)}, are totally disabled
+in @code{dired-dd-mode}.  Turn off @code{dired-dd-mode} manually, if you
+want to use such commands on @code{dired} buffer.
+
+@noindent
+Variable @code{dired-dd-mode-as-default} controls whether
+@code{dired-dd-mode} is automatically enabled or not (@pxref{Minor Mode
+Control}) upon entering @code{dired-mode}.
+
+@noindent
+It is possible to turn on @code{dired-dd-mode} within a non-@code{dired}
+buffer, but that is totally useless.
+
+
+
+@node Mouse Button 1, Mouse Button 2, Dired-dd minor mode, Top
+@chapter Mouse Button 1 
+@cindex marking file
+@cindex marking directory
+@findex dired-dd-drag-region
+
+@noindent
+Dragging Mouse button 1 marks files or directories with @code{*}.  This
+mouse command is almost compatible to ordinary @code{dired} command
+@kbd{m}.
+
+@noindent
+Double click of mouse Button 1 @emph{opens} file(s) or directory(s)
+objects by an external application (shell command) or emacs.  The
+@emph{opening} method is automatically selected.  The criteria for the
+@emph{opening} method selection is whether any shell command is
+registered for the @emph{extension} part of the file name of the
+objects.
+
+@noindent
+The core part of the dragging is handled by function
+@code{dired-dd-drag-region}, which is bound to @kbd{down-mouse-1}.
+@kbd{double-mouse-1} eventually executes
+@code{dired-dd-find-file-or-exec}.
+
+
+@noindent
+Caveat:@*
+@noindent
+In @code{dired-dd}, a single function may have multiple mouse bindings
+for some technical reason.  So, hereafter in this document, the
+convention of normal emacs info, in which user command is often
+designated such as
+
+@example
+M-down-mouse-1 (mouse-drag-secondary)
+@end example
+
+@noindent
+may not be followed in relevant sections below.
+
+
+@menu
+* Drag Mouse Button 1::         
+* Double click Mouse Button 1::  
+@end menu
+
+@node Drag Mouse Button 1, Double click Mouse Button 1, Mouse Button 1, Mouse Button 1
+@section Drag
+@findex dired-dd-drag-region
+@findex dired-do-flagged-delete
+
+@noindent
+Dragging region by mouse button 1 marks or unmarks file(s) or directory(s)
+with a mark @code{*} (toggles marking status).
+Moving the mouse horizontally a bit marks or unmarks a single file.
+Dragged region is copied to the kill ring as a side effect.
+Secondary selection handling with @kbd{M-mouse-1} and @kbd{M-mouse-2}
+is totally disabled.
+
+@noindent
+The mark @code{*} put by dragging of mouse button 1 is identical to the
+normal mark @code{*} put by normal @code{dired} keyboard command
+(e.g. @kbd{m} @code{(dired-mark)}).  All of the normal @code{dired}
+keyboard commands, and menu bar or popup menu (in emacs-20.xx) commands
+can properly interpret the mark @code{*} put by Mouse Button 1.  All of
+the commands invoked by mouse buttons 2 and 3 work on files and/or
+directories marked with this mark @code{*} (if any marked file exists).
+
+@noindent
+Pressing @kbd{Meta} key while dragging with mouse button 1 @emph{flags}
+files or directories with @code{D} (delete) flag instead of mark
+@code{*}.  You can delete the files flagged with @code{D} by hitting
+@kbd{x} @code{(dired-do-flagged-delete)}.  The only menu entry that
+works on @code{D} flagged files is @file{Delete Flagged} entry found in
+the menu raised by mouse button 3, which is equivalent to @kbd{x}
+@code{(dired-do-flagged-delete)}.  The other commands invoked from mouse
+buttons 2 and 3 do not affect @code{D} @emph{flagged} files, but
+@code{*} @emph{marked} files.
+
+
+@node Double click Mouse Button 1,  , Drag Mouse Button 1, Mouse Button 1
+@section Double click
+@cindex generic file opening facility
+@findex dired-dd-find-file-or-exec
+
+@noindent
+Double clicking mouse button 1 provides a generic file @emph{opening}
+facility.  The file is opend with an external application (shell
+command) predefined in association with the @emph{extension} part of the
+file name, or if no such application is defined, @kbd{double-mouse-1}
+falls back to a mere file opening operation using emacs buffer.
+
+@noindent
+The opening target is marked with @code{*}, or the double-
+clicked file (or directory) if no file (or directory) is marked
+in the @code{dired-dd} buffer.
+
+@noindent
+@kbd{Double-mouse-1} eventually calls a function
+@code{dired-dd-find-file-or-exec}.  This function first tries to invoke
+a shell command (application) relevant to the extension of the file name
+asynchronously.  If it can't find such a shell command, the function
+@code{dired-dd-find-file-or-exec} just opens marked (or clicked) file or
+directory using the selected window displaying the current @code{dired}
+buffer.
+
+@noindent
+The relationship between filename extensions and their respective
+handling command (application) should be stored in a @code{dired-x}
+variable @code{dired-guess-shell-alist-user} (or
+@code{dired-guess-shell-alist-default}).  This feature relies on
+@code{dired-x}.  @kbd{C-h v dired-guess-shell-alist-user RET} shows you
+how to combine a command to a certain file extension (@file{*.jpeg} =>
+execute @file{xv}, etc), and the current relationship setup in the
+variable.  @xref{Shell Command Guessing, , , dired-x, dired-x info}.
+
+@noindent
+Rough and ready interactive command @code{dired-dd-register-shell-alist}
+is provided to add entry in @code{dired-guess-shell-alist-user}.
+However, the command @code{dired-dd-register-shell-alist} is not
+automatically called when there is no shell command is registered in
+@code{dired-guess-shell-alist-user}.  Further, no automatic saving
+facility (for @code{custom-file}) is provided in current
+@code{dired-dd}.  Adding setup codes for
+@code{dired-guess-shell-alist-user} in your @file{~/.emacs} is the most
+handy and safe way to support new shell command for certain file
+extension.
+
+@noindent
+The invoked shell command output is collected in buffer @file{*dired-dd-proc*}.
+All the processes invoked by @code{dired-dd-exec-command-directly} share
+this buffer.  Until all the processes sharing the buffer exit,
+string `run' is shown in the mode line of the buffer @file{*dired-dd-proc*}.
+
+@noindent
+After all the processes have exited, the mode line shows `exit'.  The
+buffer @file{*dired-dd-proc*} exists just for collecting stdout/stderr
+output from the invoked command(s).  Killing the buffer
+@file{*dired-dd-proc*} does no harm (perhaps) to invoked command(s).  No
+fancy job control interface is implemented.
+
+@noindent
+As described above, double clicking mouse button 1 automatically selects
+file @emph{opening} method, which works fine in most cases.  However, no
+matter how your @code{dired-guess-shell-alist-user} definition is
+designed carefully, there should be such situation that you have to
+force either opening-by-emacs or open-by-external-application.
+
+@noindent
+For instance, think about the case you have registered a shell script to
+pass a marked HTML file to Netscape in
+@code{dired-guess-shell-alist-user}, but you have to edit it in
+HTML-helper mode in emacs.
+
+@noindent
+Use @kbd{mouse-2} (@code{dired-dd-find-file}) to force opening a file
+(or directory) with emacs, or @kbd{M-mouse-2}
+(@code{dired-dd-exec-command-directly}) to force execution of the
+registered command explicitly (@pxref{Click (Single) Mouse Button 2}).
+
+@node Mouse Button 2, Mouse Button 3, Mouse Button 1, Top
+@chapter Mouse Button 2
+@cindex drag drop into dired window
+@cindex drag drop into other non-dired window
+@cindex drag drop into other frame
+@cindex file copy, open, move, link,,,
+@findex dired-dd-drag-drop
+
+
+@noindent
+Mouse button 2 is the most important part of @code{dired-dd}.  It
+handles @emph{Drag and Drop}.  Further, single clicking of Mouse button
+2 opens files / directories, as well as executes command related to the
+file extension.
+
+@noindent
+Users are strongly advised to create a directory or two accommodating
+dummy files to try drag-and-drop operations and features of
+@code{dired-dd}.  There is ``NO WARRANTY'' for @code{dired-dd}
+(@pxref{COPYING}).
+
+@noindent
+Function @code{dired-dd-drag-drop} takes charge in @emph{Drag and Drop}
+part of mouse button 2, and is bound to multiple mouse events such
+as @kbd{down-mouse-2}, @kbd{C-down-mouse-2}, @kbd{M-down-mouse-2}.
+
+
+@menu
+* Drag Mouse Button 2::         
+* Click (Single) Mouse Button 2::  
+@end menu
+
+@node Drag Mouse Button 2, Click (Single) Mouse Button 2, Mouse Button 2, Mouse Button 2
+@section Drag
+
+@subsection Drag-and-drop object and target
+
+@noindent
+With mouse button 2, you can drag marked (or on point) files or
+directories, and drop them somewhere.  You can drop the object into
+another @code{dired} buffer, or into directory line in the same
+@code{dired} buffer.  All of these drop targets are @file{directory}
+objects.
+
+@noindent
+A `drop target' may be not only a `directory object', but also a
+`non-directory object'.  For example, see what happens when you drop a
+file or directory into non-@code{dired} buffer.
+
+@noindent
+The target @code{dired} or non-@code{dired} buffer, or target directory
+line in a @code{dired} buffer can be located anywhere in emacs.  For
+example, `source' @code{dired} buffer and target @code{dired} buffer may
+be identical. Or, target @code{dired} buffer, or target directory line
+may be displayed in a window different from the `source' @code{dired}
+window.  The target @code{dired} window can be accommodated in a
+different emacs frame.
+
+@noindent
+On drag and drop into a directory object (a @code{dired} buffer or
+directory line in a @code{dired} buffer), a menu is popped up to ask
+file operation method for the drag drop.  The menu also includes several
+entries which are thought to be convenient but may not be relevant
+directly to drag and drop operation.
+
+@noindent
+The job selected from the popup menu is immediately executed (copy,
+move, link etc.)  if the target is explicit, while minibuffer prompt is
+raised if the target (normally it is a directory) is ambiguous.
+
+@noindent
+The same menu is popped upon horizontal drag.  This means that you made
+drag & drop into the same directory, if the dragged object is file(s).
+In this case, the destination of copy/move/link etc. is asked by
+minibuffer interface.
+
+@noindent
+If the horizontally dragged object is a directory, note that the target
+directory is not the same as the default directory of the @code{dired}
+buffer (refer to subsection ``Where is my file ?'' below).
+
+@noindent
+Also @xref{The Popup Menu} for the menu raised by mouse button 2.
+
+@subsection Non-@code{dired} targets.
+@vindex dired-dd-iconify-control-on-root-drop
+
+@noindent
+Drag and drop into non-directory object (other non-@code{dired} buffer),
+the file or directory object is just opened using the window into which
+it dropped (or defined function is executed. See below).  This is an
+emulation of a drag and drop operation, which can be commonly found in
+various file managers and editing applications (eg. @file{Word} and
+@file{Explorer}, @code{Offix} @file{Files} and @file{Editor} or
+@file{Trash} and so on).
+
+@noindent
+The behaviour of on drag-and-dropping files into non-directory object
+(other non-@code{dired} buffer) can be customized with variable
+@code{dired-dd-non-dired-drop-handlers}.  @xref{Customizing behavior on
+dropping into non-dired buffer} for detailed informations.
+
+@noindent
+On dropping onto non-@code{dired} buffer located in another frame, files
+or directories are opened using multiple windows.
+
+@noindent
+Further, from version 0.9.1.7, the object can be dropped on root window.
+Before 0.9.1.7, dropping object on root window was treated with message
+``No emacs frame over there'', but now the object (file or directory) is
+opened by function @code{find-file-other-frame}.  The dropped file or
+directory is opened using an independent frame, which is newly created,
+or just raised (this behaviour may differ depending upon the window
+manager in use) if it already exists.  If variable
+@code{dired-dd-iconify-control-on-root-drop} (default: nil) is non-nil,
+the relevant frame is iconified or deiconified depending on its iconic
+status.  This iconify control may not work nicely (or be totally
+ignored) in some version of emacs, or with some window manager.
+
+@noindent
+As a handler routine for the dropping onto non-@code{dired} target, an
+emacs command (function) @code{dired-find-file-other-frame} is provided.
+This emacs command can be called from keyboard.  Possible settings (not
+well tested) in @file{./emacs}:
+
+@lisp
+  (define-key dired-mode-map "\e\C-o" 'dired-find-file-other-frame)
+  (autoload 'dired-find-file-other-frame "dired-dd" nil t)
+@end lisp
+
+@noindent
+Unfortunately, inter-application drag-and-drop is not supported yet (or
+forever) in @code{dired-dd}.  It seems that there are known some emacsen
+which can handle inter-application drag-and-drop, but the authour may be
+too busy to support them as a @code{dired-dd} platform, or build
+primitive functions for inter-application drag-and-drop disabled normal
+emacs.
+
+@subsection Quick drag and drop with modifier keys
+
+@noindent
+Dragging with @kbd{Control/Meta/Shift} key is supported.  These modifier
+keys are detected at the very timing of releasing mouse button (as in
+@file{XV}'s Visual Schunauzer).  Thus, in order to select file operation
+method, you may start drag with @kbd{down-mouse-2}, then press
+@kbd{Control/Meta/Shift} before releasing it, even if you rebind
+@kbd{C-/M-/S-down-mouse-2} to other functions.
+
+@noindent
+Each modifier specifies file (or directory) operation for the current
+drag and drop as follows:
+
+@table @samp
+@item @kbd{Control}
+@samp{C}opy file
+@item @kbd{Meta}
+@samp{M}ove (rename) file
+@item @kbd{Shift}
+(maybe @samp{S}ymbolic ?) Link file
+@end table
+
+@noindent
+In linking file / directory with @kbd{Shift} modifier, the link method
+is determined by variable @code{dired-dd-default-link-method}
+(@pxref{File linking method}).
+
+@subsection Where is my file ?
+
+@noindent
+Be carefull when you drop a file or directory into in a @code{dired}
+buffer.  If a file or directory is dropped into an ordinary file line,
+into the first header line, or into @file{.} line, it is
+copied/moved/linked into the directory corresponding to the target
+@code{dired} buffer's default directory as you may expect.  However,
+dropping a file or directory into a directory line in a @code{dired}
+buffer means that you selected the directory (line) as the destination
+directory.  This is rational feature of @code{dired-dd}, but the file or
+directory may be copied/moved/linked to unintended place due to this
+feature, if you do not care much about the target line.  Especially when
+you drop with the modifier keys, no menu is raised, nor destination is
+displayed in the echo area of emacs, so please pay a special attention
+on drop-target when you quick-drop with the modifier key.
+
+
+@node Click (Single) Mouse Button 2,  , Drag Mouse Button 2, Mouse Button 2
+@section Click (Single)
+
+@noindent
+Clicking @kbd{mouse-2} opens, or executes shell commands on file (or
+directory).  A mere click opens file using the currently selected
+window.
+
+@itemize @bullet
+@item
+@kbd{mouse-2} (@code{dired-dd-find-file})@*
+
+@noindent
+@kbd{mouse-2} (@code{dired-dd-find-file}) openes only clicked file (or
+directory) despite of existence of any marked file (or directory) in the
+@code{dired} buffer.  Further, @kbd{mouse-2}
+(@code{dired-dd-find-file-other-window}) openes a file (or directory)
+using the window displaying the @code{dired} buffer, and this operation
+is incompatible to original @code{dired}'s @kbd{mouse-2} command
+(@code{dired-mouse-find-file-other-window}).  This windowing behaviour
+can be customized (@pxref{Find file method}).@*
+
+@end itemize
+
+@noindent
+Further several modifiers are supported for a click of @kbd{mouse-2}:
+
+@itemize @bullet
+@item
+@kbd{C-S-mouse-2} (@code{dired-dd-find-file-other-window})@*
+
+@noindent
+Opens a file (or directory) using other window.  Always only the clicked
+file (or directory) is opend using other window, even if any marked file
+(or directory) existed in the @code{dired} buffer.@*
+
+
+@noindent
+From version 0.9.1.10, an alternative function (emacs command)
+@code{dired-dd-find-marked-files} is provided is implemented. This
+function can alternatively be bound to, for example, @code{C-S-mouse-2}
+with including a line
+
+@lisp
+(define-key dired-dd-mode-map [C-S-mouse-2] 'dired-dd-find-marked-files)
+@end lisp
+
+in your @code{dired-dd-load-hook}
+definition
+(I think this binding is not what you want in most situations, though).@*
+
+
+@c @item
+@c @kbd{M-mouse-2} (@code{dired-dd-find-file-other-frame})@*
+@c 
+@c @noindent
+@c From version 0.9.10, @kbd{M-mouse-2} opens marked files or directories
+@c using other frame.  Bound to function
+@c @code{dired-dd-find-file-other-frame}.
+@c         This function @code{dired-dd-find-file-other-frame}
+@c         calls new (unofficial) dired compatible function
+@c 	@code{dired-find-file-other-frame}.  
+@c 	The @code{dired-find-file-other-frame} can be called from keyboard.
+@c 	Possible ~/.emacs settings (not well tested):
+@c 
+@c @example
+@c 	  (define-key dired-mode-map "\e\C-o" 'dired-find-file-other-frame)
+@c 	  (autoload 'dired-find-file-other-frame "dired-dd" nil t)
+@c @end example
+
+@item
+@kbd{M-mouse-2} (@code{dired-dd-exec-command-directly})@*
+
+@noindent
+@kbd{M-mouse-2} executes a shell command related the file extension.
+The function @code{dired-dd-exec-command-directly} bound to this mouse
+event asynchronously invokes a shell command (application) related to
+the filename extension of the marked or clicked file (or directory).
+Command output is collected in buffer @file{*dired-dd-proc*}.  All the
+process invoked by @code{dired-dd-exec-command-directly} shares this
+buffer.  Until all the process sharing the buffer are terminated, string
+`run' is shown in mode line of the buffer @file{*dired-dd-proc*}.
+
+@*
+@noindent
+After all the process are exited, the mode line will show `exit'.  The
+buffer @file{*dired-dd-proc*} exists just for collect stdout/stderr
+output from the invoked command.  Killing the buffer
+@file{*dired-dd-proc*} does no harm (perhaps) for invoked command.  No
+fancy job control interface is implemented.
+
+@*
+@noindent
+As for the relationship between the filename extension and the related
+shell command, @xref{Double click Mouse Button 1}.
+
+@*
+@noindent
+If you do not want to execute the command asynchronously for particular
+reason, use next command.  @*
+
+
+
+@item
+@kbd{C-M-S-mouse-2} (@code{dired-dd-exec-command-query})@*
+
+@noindent
+Execute command with minibuffer prompt.  This command is almost
+compatible with @code{dired} keyboard command @kbd{!}
+(@code{dired-do-shell-command}).  If you append ``&'' at the end of
+command line, the command is invoked asynchronously, but you have to
+rename @file{*Shell Command Output*} buffer to invoke multiple commands
+asynchronously.  See @xref{Double click Mouse Button 1} for
+@code{dired-x} variable @code{dired-guess-shell-alist-user}.
+@end itemize
+
+
+@node Mouse Button 3, The Popup Menu, Mouse Button 2, Top
+@chapter Mouse Button 3
+@cindex individual file operation
+@findex dired-dd-no-destination-handling
+
+
+@noindent
+Mouse Button 3 raises a menu facilitating miscellaneous file operations.
+This menu features various shell commands which are not available
+directly from original @code{dired}'s menu-bar, or popup menu.
+
+@menu
+* Click (Single) Mouse Button 3::  
+@end menu
+
+@node Click (Single) Mouse Button 3,  , Mouse Button 3, Mouse Button 3
+@section Click (Single)
+
+@noindent
+Clicking mouse Button 3 raises a full menu (not so `full' as
+@code{dired} menu bar, but good enough for daily use, I suppose) to ask
+a handling method (delete/copy/move... etc) for marked (or on point)
+files delete/copy/move... etc.
+
+@noindent
+Probably at the time of public release of @code{dired-dd}, various of
+shell commands will be bound which are not available direct from
+original @code{dired} menu bar or key binding.  The menu raised by mouse
+button 3 can be customized (@pxref{Menu raised by Button 3}).
+
+@noindent
+Consider the default menu raised by mouse button 3 as just a
+customizable file operation menu.  Also @xref{The Popup Menu} for the
+menu raised by mouse button 3.
+
+@noindent
+In Emacs-19.xx, @kbd{S-mouse-3} raises the original @code{dired}
+menu-bar as popup menu, which is a full-featured one.  You can use
+@kbd{C-mouse-3} menu as it is in emacs-20.
+
+
+
+
+@node The Popup Menu, Copying filename by mouse, Mouse Button 3, Top
+@comment  node-name,  next,  previous,  up
+@chapter The Popup Menu
+@cindex popup menu
+@findex dired-dd-copy-recursive
+@findex dired-dd-do-copy-recursive
+@findex dired-dd-do-copy-recursive-regexp
+@vindex dired-dd-copy-recursive-command
+
+@noindent
+This chapter deals with some caveats on the popup menus raised by mouse
+buttons 2 and 3.
+
+@menu
+* Copy Recursive entry::        
+* Exec Related CMD entry::      
+* Launch a Terminal entry::     
+@end menu
+
+@node Copy Recursive entry, Exec Related CMD entry, The Popup Menu, The Popup Menu
+@comment  node-name,  next,  previous,  up
+@section @file{Copy Recursive} entry
+
+@noindent
+Most of the entries in the menu raised by @kbd{mouse-2} call ordinary
+@code{dired} commands having @code{dired-} or @code{dired-do-} prefix in
+their function name.  Thus, almost all of these `dired-compatible'
+commands will work almost the same as you expect from normal
+@code{dired} operations.  At the same time, as a matter of course, the
+same limitation of the @code{dired} command is also applied: For
+example, neither recursive copy of directory tree, nor moving directory
+tree across different file systems is possible.
+
+@noindent
+One exception is @file{Copy Recursive} entry (new from version 0.9) in
+the menu raised by @kbd{mouse-2} and @kbd{mouse-3}.  This menu entry is
+bound to functions @file{dired-dd-copy-recursive} (in case of
+@kbd{mouse-2}), and @file{dired-dd-do-copy-recursive} (in case of
+@kbd{mouse-3}).
+
+@noindent
+In the @file{Copy Recursive} facility,
+control returns to emacs faster than
+normal C (@file{dired-do-copy}) or @file{"Copy"} menu item, so it has
+a merit to use even for plain files (not for directory tree),
+especially when they are huge in size.
+
+@noindent
+Downside of the @file{Copy Recursive} facility is 
+that the target dired buffer may not be updated correctly.
+Try hitting key @kbd{g} (@file{revert-buffer})
+after @file{"Copy Recursive"} to update the target @file{dired} buffer.
+
+@noindent
+These @file{Copy Recursive} functions eventually call a
+sub-shell command defined in a variable
+@code{dired-dd-copy-recursive-command}, whose default value is @samp{cp
+-a}, assuming it being GNU @file{cp} command.
+
+@noindent
+If you do not have @file{cp} command which can be invoked as @file{cp -a
+file targetdir}, install GNU fileutil, or write an equivalent script
+using @file{tar}, @file{cpio} etc.
+
+@noindent
+The menu entry @file{Copy Recursive} can copy files / directories fast
+across different file systems recursively, but do not work over FTP
+directory.
+
+@noindent
+Command @code{dired-dd-do-copy-recursive-regexp} is also provided in
+@code{dired-dd}.  The command @code{dired-dd-do-copy-recursive}, as well
+as @code{dired-dd-do-copy-recursive-regexp} can be bound to a key
+similarly as in the case of standard @code{dired-do-xxx}, or
+@code{dired-do-xxx-regexp} commands in @code{dired}, for example:
+
+@lisp
+(define-key dired-dd-mode-map "\eC" 'dired-dd-do-copy-recursive)
+(define-key dired-dd-mode-map "%c" 'dired-dd-do-copy-recursive-regexp)
+@end lisp
+@noindent
+or
+@lisp
+(define-key dired-dd-mode-map "%R" 'dired-dd-do-copy-recursive-regexp)
+@end lisp
+
+@noindent
+These key bindings are not defined as a default in @code{dired-dd}
+because I do not think they are good ones.  Choose any preferred key
+bindings if you want to use these commands from keyboard as well.
+
+@noindent
+@file{Move Recursive} is not supported in @code{dire-dd} yet.  If you do
+not like to keep old directory after you have @file{copied recursive},
+just erase it (the menu raised by @kbd{mouse-3} has @file{Delete
+Recursive}).
+
+@noindent
+The menu raised by @kbd{mouse-3} has some more `dired-incompatible'
+commands.  They are all conceived to provide convenience, but the
+in-compatibleness may irritate users. Just consider them as an example
+of customizable menu entry (@pxref{Menu raised by Button 3}).
+
+@node Exec Related CMD entry, Launch a Terminal entry, Copy Recursive entry, The Popup Menu
+@comment  node-name,  next,  previous,  up
+@section @file{Exec Related CMD} entry
+
+@noindent
+From version 0.9.1.3, @file{Exec Related CMD} entry in mouse-2 menu
+invokes shell command asynchronously.  This menu item is compatible to
+@kbd{M-mouse-2} (@code{dired-dd-exec-command-directly}).  @xref{Click
+(Single) Mouse Button 2}.
+
+
+@node Launch a Terminal entry,  , Exec Related CMD entry, The Popup Menu
+@comment  node-name,  next,  previous,  up
+@section @file{Launch a Terminal} entry
+@vindex dired-dd-terminal-command
+
+@noindent
+From version 0.9.1.5, @file{Launch a Terminal} entry is the top item in
+the menu raised by mouse-3 no matter how the real emacs user hates it
+(or not). The @file{Refresh Listing} entry is moved down to the bottom
+accordingly.
+
+@noindent
+This menu item runs shell command stored in variable
+@code{dired-dd-terminal-command}, whose default value is @file{xterm},
+or probably @file{kterm} depending upon environment variable
+@file{LANG}. Set your favorite terminal emulator name in
+@code{dired-dd-terminal-command}.  Options may be included in
+@code{dired-dd-terminal-command}, for example:
+
+@lisp
+(setq dired-dd-terminal-command "rxvt -fn vga")
+@end lisp
+
+@noindent
+As in the case of @code{dired-guess-shell-alist-user},
+@code{dired-dd-terminal-command} may include @code{exec} at the top of
+its string value (e.g. @code{"exec rxvt -fn vga"} for the example above)
+to save memory, but this may not work in Emacs-19.xx (@pxref{Bug}).
+
+
+
+@node Copying filename by mouse, Customizing, The Popup Menu, Top
+@chapter Copying filename by mouse
+@cindex copying filename by mouse
+@findex dired-dd-copy-filename-as-kill-full
+@findex dired-dd-copy-filename-as-kill
+@findex dired-dd-unmark-all-marks
+
+
+@noindent
+Mouse bindings below are enabled in @code{dired-dd} minor mode:@*
+
+@itemize @bullet
+
+@item
+@kbd{C-M-mouse-1} @code{(dired-dd-copy-filename-as-kill)}@*
+
+Works as @code{dired} keyboard command
+@kbd{w} @code{(dired-copy-filename-as-kill)} with nil prefix-arg.@*
+
+@item
+@kbd{C-M-mouse-2} @code{(dired-dd-copy-filename-as-kill-full)}@*
+
+Works as @code{dired} keyboard command
+
+@kbd{w} @code{(dired-copy-filename-as-kill)} with @code{0} prefix-arg.@*
+
+@item
+@kbd{C-M-mouse-3} @code{(dired-dd-unmark-all-marks)}@*
+Unmarks all file and directories.
+Works as @code{dired} keyboard command
+@kbd{*-!} @code{(dired-unmark-all-marks)} in emacs-20.xx, or
+@kbd{M-DEL} @code{(dired-unmark-all-files)} @kbd{RET} in emacs-19.xx.
+
+@end itemize
+
+@noindent
+These bindings may be convenient in exchanging file name with
+@file{xterm}, or @file{*shell*} buffer.
+
+@noindent
+Further trivial functions may be bound to other mouse / key events.  Try
+@kbd{C-h m (describe-mode)} or @kbd{C-h b (describe-bindings)} in a
+@code{dired-dd} enabled buffer.
+
+
+
+
+@node Customizing, Tips, Copying filename by mouse, Top
+@chapter Customizing
+@cindex customizing
+
+@noindent
+This chapter deals with customizing of various @code{dired-dd} features.
+
+@menu
+* Variables::                   
+* Minor Mode Control::          
+* Find file method::            
+* File linking method::         
+* Customizing behavior on dropping into non-dired buffer::  
+* Sound::                       
+* Pointer animation::           
+* Insignia::                    
+* Menu raised by Button 2::     
+* Menu raised by Button 3::     
+* Load hook::                   
+@end menu
+
+@node Variables, Minor Mode Control, Customizing, Customizing
+@section Variables
+
+@noindent
+These variables controls various features of @code{dired-dd}:@*
+
+@itemize @bullet
+@item @code{dired-dd-version}
+@item @code{dired-dd-mode-hook}
+@item @code{dired-dd-awakening}
+@item @code{dired-dd-mode-as-default}
+@item @code{dired-dd-copy-recursive-command}
+@item @code{dired-dd-x-pointer-shape}
+@item @code{dired-dd-old-x-pointer-shape}
+@item @code{dired-dd-no-x-pointer-animation}
+@item @code{dired-dd-x-pointer-list}
+@item @code{dired-dd-find-multiple-file}
+@item @code{dired-dd-find-file-method}
+@item @code{dired-dd-iconify-control-on-root-drop}
+@item @code{dired-dd-b2-menu}
+@item @code{dired-dd-default-link-method}
+@item @code{dired-dd-audio-inline-sound}
+@item @code{dired-dd-non-dired-drop-handlers}
+@item @code{dired-dd-play-audio}
+@item @code{dired-dd-audio-directory}
+@item @code{dired-dd-audio-wav-player}
+@item @code{dired-dd-audio-au-player}
+@item @code{dired-dd-audio-file-alist}
+@item @code{dired-dd-use-modeline-binding-global}
+@item @code{dired-dd-b3-keymap}
+@end itemize
+
+@noindent
+The names are almost self-explanatory.  Refer to the documentation
+string of the variables for detail (or @pxref{Variable Index}, for
+important variables are described in various places in this document)
+Hereafter, variables of reasonable importance are explained.
+
+
+@node Minor Mode Control, Find file method, Variables, Customizing
+@section Turning on / off @code{dired-dd-mode} as default minor mode
+@vindex dired-dd-mode-as-default
+
+@noindent
+Variable @code{dired-dd-mode-as-default} determines if
+@code{dired-dd-mode} should be automatically enabled or not when you
+fired up @code{dired-mode} with @kbd{C-x d}, @kbd{C-x C-f}, etc.
+Actually, @code{dired-dd-mode-as-default} determines whether to add
+function @code{dired-dd-mode-enable} to @code{dired-mode-hook} or not.
+
+@noindent
+Default value of @code{dired-dd-mode-as-default} is t.
+
+@noindent
+This variable @code{dired-dd-mode-as-default} should be set before
+actual loading of @file{dired-dd.elc} (if compiled) with expression such
+as @code{(require 'dired-dd)} or @code{(load "dired-dd")}.
+@xref{Installation}, and @xref{Dired-dd minor mode}.
+
+@noindent
+On running emacs, you can turn off @code{dired-dd-mode} for forthcoming
+every @code{dired-mode} by evaluating
+
+@lisp
+    (remove-hook 'dired-mode-hook 'dired-dd-mode-enable)
+@end lisp
+
+@noindent
+or, turn it on again as default minor mode for @code{dired-mode} by
+evaluating
+
+@lisp
+    (add-hook 'dired-mode-hook 'dired-dd-mode-enable)
+@end lisp
+
+@noindent
+in @file{*scratch*} buffer, or @kbd{M-:} (@kbd{ESC-ESC} in emacs-19.xx).
+
+
+@node Find file method, File linking method, Minor Mode Control, Customizing
+@section Find file method
+
+@subsection @code{dired-dd-find-multiple-file}
+@vindex dired-dd-find-multiple-file
+
+@noindent
+In the default setting, if no suitable external shell command is
+registered in association with the filename extention,
+@kbd{double-mouse-1} (@code{dired-dd-find-file-or-exec}) @emph{opens}
+just one clicked file or directory even if any marked file (or
+directory) exists in the @code{dired} buffer.  If you want to open the
+marked files (not the clicked one), set variable
+@code{dired-dd-find-multiple-file} to non-nil.  This variable
+@code{dired-dd-find-multiple-file} only affects the @code{find-file}
+behaviour of @code{dired-dd-find-file-or-exec}, and has no effect on the
+invoking the shell command (if any command is registered).  If a shell
+command is registered, @kbd{double-mouse-1}
+(@code{dired-dd-find-file-or-exec}) always invokes the registered shell
+command over marked files.  Also refer to the document string of
+@code{dired-dd-find-multiple-file} with @kbd{C-h v
+dired-dd-find-multiple-file RET}.
+
+@subsection @code{dired-dd-find-file-method}
+@vindex dired-dd-find-file-method
+
+@noindent
+You may want to setq @code{dired-dd-find-file-method} to
+@code{'dired-find-file-other-window}, which emulates original
+@code{dired}'s @kbd{mouse-2} binding (to
+@code{dired-mouse-find-file-other-window}).
+
+@node File linking method, Customizing behavior on dropping into non-dired buffer, Find file method, Customizing
+@section File linking method
+@vindex dired-dd-default-link-method
+@vindex dired-dd-default-symlink-method
+
+@noindent
+The default value of variable @code{dired-dd-default-link-method} is
+@code{relsymlink}.  According to this default, the object dragged and
+dropped by @kbd{S-drag-mouse-2} is linked relatively to the source path
+of the object.  Valid value is one of @code{symlink}, @code{hardlink},
+or @code{relsymlink}.  For instance, if you want to link file(s) with
+plain symbolic link, include
+
+@lisp
+        (setq dired-dd-default-link-method 'symlink)
+@end lisp
+
+@noindent
+in your @file{~/.emacs}.
+
+@noindent
+The @code{dired-dd-default-symlink-method} existed in older versions was
+renamed to @code{dired-dd-default-link-method}, and is not used anymore.
+If you have @code{dired-dd-default-symlink-method} in your
+@file{~/.emacs}, rename it as well accordingly.  Sorry for the
+inconvenience.
+
+@node Customizing behavior on dropping into non-dired buffer, Sound, File linking method, Customizing
+@section  Customizing behavior on dropping into non-dired buffer
+@vindex dired-dd-non-dired-drop-handlers
+
+@noindent
+In older versions of @code{dired-dd}, a drag-and-dropped file (or
+directory) is just opend using target window if it is dropped into
+non-directory buffer, but, from version 0.9.1.11, the behavior invoked
+with such drag-and-drop operation can be customized.
+
+@noindent
+User can define a prefered handler function to deal with the
+drag-and-drop operation into non-directory buffer, and the handler
+function can be registered in a variable
+@code{dired-dd-non-dired-drop-handlers} (nil as default) in a list form.
+
+@noindent
+Refer to @file{dired-dd-mew.el} included in @code{dired-dd}
+distribution.  @file{Dired-dd-mew.el} contains an example of the handler
+function and registering code.  Also refer to
+@file{dired-dd-insert-file.el}, and @file{dired-dd-insert-fname.el},
+which are yet other examples of the handler function.
+@*
+@file{Dired-dd-mew.el} enables drag-and-dropping MIME attachment file(s)
+into Mew's draft buffer.  @file{Dired-dd-insert-file.el} and
+@file{dired-dd-insert-fname.el} enable insert content, or filename of
+dropped file into a non-dired buffer respectively.
+
+@noindent
+The handler functions registered in
+@code{dired-dd-non-dired-drop-handlers} are called in the order of the
+list until some of them succeeds from a function
+@code{dired-dd-exec-non-dired-drop-handlers}, which is invokd from a
+function @code{dired-dd-drop-from-to} (a core part of drag-and-drop in
+@code{dired-dd}).
+
+@noindent
+The handler function to be registered in
+@code{dired-dd-non-dired-drop-handlers}
+must accept one arg
+@code{ARGLIST}, whose format is:
+
+@lisp
+  (FILENAME-LIST WINDOW MODIFIERS POINT)
+@end lisp
+
+@noindent
+wherein
+
+@itemize @bullet
+@item FILENAME-LIST: a list of dropped filenames (in full path description)
+@item WINDOW:        target window (probably useless)
+@item MODIFIERS:     modifier key list at the relevant drag-and-drop operation
+@item POINT:         buffer position corresponding to point where file is dropped.
+@end itemize
+
+@noindent
+The handler function can assume that current window/buffer is already
+switched to the target of the relevant drag-and-drop when it is called.
+It is responsibility of the handler function to examine whether the
+current window/buffer is suitable for its own job.  The examination
+should be strict as possible, because it is not predictable that the
+user registers what sort of handler function in what order.
+
+@noindent
+The handler function must return non-nil if its operation was successful,
+otherwise nil.
+
+@noindent
+If the parameters included in the @code{ARGLIST} is not enough, programmers can
+access variables such as @code{modifiers}, @code{event} @code{start-window}
+etc., which are defined in upper functions.  Refer to the upper functions
+@code{dired-dd-drag-drop} and  @code{dired-dd-drop-from-to} in
+@file{dired-dd.el}, for the meaning of those parameters.
+
+@noindent
+I guess we might be allowed to indulge ourselves in being lisp programmers,
+in writing this sort of function for limited purpose.
+
+
+@node Sound, Pointer animation, Customizing behavior on dropping into non-dired buffer, Customizing
+@section Sound
+@vindex dired-dd-play-audio
+@vindex dired-dd-audio-directory
+@vindex dired-dd-audio-wav-player
+@vindex dired-dd-audio-au-player
+@vindex dired-dd-audio-file-alist
+@cindex sound
+
+@noindent
+Experimental code for playing sound upon drag and drop by @kbd{mouse-2}
+is included, but this facility is disabled as a default.  If you want to
+play sound, set up these variables appropriately to match your
+environment:@*
+
+@itemize @bullet
+@item @code{dired-dd-play-audio}
+@item @code{dired-dd-audio-directory}
+@item @code{dired-dd-audio-wav-player}
+@item @code{dired-dd-audio-au-player}
+@item @code{dired-dd-audio-file-alist}
+@end itemize
+
+@noindent
+See the document strings of these variables.  In future version, this
+sound facility may be removed (or not, I don't know).
+
+
+@node Pointer animation, Insignia, Sound, Customizing
+@section Pointer animation
+@cindex animation
+@vindex dired-dd-no-x-pointer-animation
+@vindex dired-dd-x-pointer-shape
+@vindex dired-dd-x-pointer-list
+
+@noindent
+Silly animation with X pointer is enabled by default (probably, if your
+X display, or network between your X display and remote emacs is fast
+enough).  To turn off the animation, set
+@code{dired-dd-no-x-pointer-animation} to @code{t}.  If the pointer
+animation is disabled, the pointer shape (number) stored in variable
+@code{dired-dd-x-pointer-shape} is used while dragging.
+
+@noindent
+If you want to change the animation frames, modify variable
+@code{dired-dd-x-pointer-list} which contains pointer shape as list.
+
+@noindent
+The pointer number is defined in @file{$lisp/term/x-win.el}.  To get the
+name of the x-pointer variables, @kbd{M-x apropos ^x-pointer- RET} will
+work.  You can examine the shape of a x-pointer with an expression such
+as:
+@lisp
+        (let ((x-pointer-shape x-pointer-right-ptr))
+          (set-mouse-color nil))
+@end lisp
+@noindent
+Evaluate above expression in @file{*scratch*} buffer with @kbd{C-j},
+or @kbd{M-:} (@kbd{ESC-ESC} in emacs-19.xx).
+
+
+@node Insignia, Menu raised by Button 2, Pointer animation, Customizing
+@section Insignia
+@vindex dired-dd-awakening
+@findex dired-dd-version
+@findex dired-dd-the-ball-of-fire
+@cindex insignia
+
+@noindent
+Further setting variable @code{dired-dd-awakening} to non-nil (default:
+nil) enables display of @code{dired-dd} insignia upon every wake up of
+@code{dired-dd-mode}.  @kbd{M-x dired-dd-version RET}, or the last entry
+``About dired-dd'' in the menu raised by button 3 may display it as
+well, in full format.
+
+@noindent
+The entity of the @code{dired-dd} insignia is
+@code{dired-dd-the-ball-of-fire}.  Code such as:
+
+@lisp
+(autoload 'dired-dd-the-ball-of-fire "dire-dd" nil t)
+(add-hook 'find-file-hooks 'dired-dd-the-ball-of-fire)
+@end lisp
+
+@noindent
+will show you the road to awakening everywhere in emacs when you find
+new file.
+
+@noindent
+The insignia may not be displayed if your X display or network between X
+display and remote machine running emacs is too slow.  Sorry.
+
+
+@node Menu raised by Button 2, Menu raised by Button 3, Insignia, Customizing
+@section Menu raised by Button 2
+@vindex dired-dd-b2-menu
+
+@noindent
+It may not be such a good idea to try to customize the menu raised by
+Button 2.  Currently variable @code{dired-dd-b2-menu}, and its handler
+routine are very nasty.  Hack the source code, if you really want to
+modify @kbd{mouse-2} menu, but I might change the structure of
+@code{dired-dd-b2-menu} (to normal keymap ?) totally in future version.
+
+
+@node Menu raised by Button 3, Load hook, Menu raised by Button 2, Customizing
+@section Menu raised by Button 3
+@vindex dired-dd-b3-keymap
+
+@noindent
+You can customize the menu raised by button 3 with modifying variable
+@code{dired-dd-b3-keymap}.
+
+@noindent
+The variable @code{dired-dd-b3-keymap} is structured as a emacs keymap,
+so you can use @code{define-key} / @code{define-key-after} to customize
+the menu as normal keymap.
+
+@noindent
+In @code{dired-dd}, the use of keymap is expanded (which may be an
+`abuse').  You can define not only a normal menu keymap entry:
+
+@lisp
+   (define-key-after (lookup-key dired-dd-b3-keymap [file])
+     [open2] '("Open2" . find-file) 'o-other-win)
+@end lisp
+
+@noindent
+but also even an eval'able form (@code{'(dired-view-file)}):
+
+@lisp
+   (define-key-after (lookup-key dired-dd-b3-keymap [file])
+     [view2] '("View2" . (dired-view-file)) 'o-other-win)
+@end lisp
+
+@noindent
+Note that the second example above contains a non-command object as
+`definition' (@code{'(dired-view-file)}).
+
+@noindent
+In @code{dired-dd}, if a key definition in the @code{dired-dd-b3-keymap}
+is a symbol (@code{'find-file}, in the first example above), the symbol
+is called as command with passing marked filename(s) as a 1st argument
+(repeatedly), while if the key definition is not a symbol (sexp
+@code{'(dired-view-file)}, in the second example above), it is just
+evaluated once.
+
+@noindent
+Both the bindings above can only be handled by special function
+@code{dired-dd-x-popup-menu-out-of-keymap} (and its upper function),
+which acts similarly to @code{x-popup-menu} when @code{x-popup-menu} is
+fed with non-keymap list as its 2nd argment.
+
+@noindent
+Of course, you can undefine the unnecessary menu entry:@*
+
+@lisp
+(define-key dired-dd-b3-keymap [arc lha-x] 'undefined)
+(define-key dired-dd-b3-keymap [arc lha-v] 'undefined)
+@end lisp
+
+@noindent
+Updated @code{dired-dd-b3-keymap} can be inspected by evaluating
+
+@lisp
+(x-popup-menu t dired-dd-b3-keymap)
+@end lisp
+@noindent
+or
+@lisp
+(dired-dd-x-popup-menu-out-of-keymap t dired-dd-b3-keymap)
+@end lisp
+
+@noindent
+in @file{*scratch*} buffer.
+
+@noindent
+Do not bind the variable @code{dired-dd-b3-keymap} directly to 
+normal mouse / key event.  That is useless.
+
+@noindent
+Menu raised by button 3 may be too tall for your note pc.
+For example for 640x480 pc screen, include
+
+@example
+mule*popup.font: -*-lucidatypewriter-medium-r-*-*-10-*-*-*-*-*-*-*
+emacs*popup.font: -*-lucidatypewriter-medium-r-*-*-10-*-*-*-*-*-*-*
+@end example
+
+@noindent
+in your @file{~/.Xdefaults} or @file{~/.Xresources}.
+
+
+@node Load hook,  , Menu raised by Button 3, Customizing
+@section Load hook
+@vindex dired-dd-load-hook
+
+@noindent
+It is advisable to use @code{dired-dd-load-hook} to change mouse (key)
+binding.  For example, if you prefer to bind the original @code{dired}
+menu-bar menu to @kbd{mouse-3}, include binding code in the add-hook
+codes below:
+
+@lisp
+  (add-hook
+   'dired-dd-load-hook
+   (function
+    (lambda ()
+      (define-key dired-dd-mode-map [mouse-3] 'dired-dd-popmenu-map-func)
+      (define-key dired-dd-mode-map [S-mouse-3]
+                                 'dired-dd-no-destination-handling))))
+@end lisp
+
+@noindent
+This example makes sense only in Emacs-19, but you can see how to
+change bindings.
+
+
+
+@node Tips, Bug, Customizing, Top
+@chapter Tips
+@cindex tips
+
+@noindent
+This chapter deals with miscellaneous tips on using @file{dired-dd}.
+
+@menu
+* Using dired-dd::              
+* Other programs going well with dired-dd::  
+* Spinout directory::           
+@end menu
+
+@node Using dired-dd, Other programs going well with dired-dd, Tips, Tips
+@section Using dired-dd in multiple window / frame environment
+@vindex dired-dd-use-modeline-binding-global
+
+@noindent
+@emph{dired-dd} is very useful when you are browsing through directory
+trees.  I know that keyboard is faster than bothering to move over to
+mouse, but sometimes I feel lazy and wish I could use mouse for browsing
+through file system.
+
+@noindent
+On using @code{dired-dd}, my recommendation is to split an emacs frame
+into several windows horizontally and/or vertically, or further into
+several frames, select one of them as browsing window (frame), and the
+other for @code{dired} window (frame).  And, open file with drag and
+drop from @code{dired} window (frame) to browsing window (frame).
+
+@noindent
+I prefer to use a window manager, but you can use emacs even without
+window manager at all.  Once I tried starting only emacs from .xinitrc
+on a 1600x1200 sized @code{X}'s root window without any window manager,
+and split it up to 5 to 6 windows for @code{dired} and browsing buffers.
+In such situation, @code{dired-dd} works very nicely; @file{mldrag.el}
+helped me a good deal in adjusting window configurations, and with
+@file{windows.el}, I could even handle multiple frames without window
+manager (@pxref{Other programs going well with dired-dd}) at all.
+
+@noindent
+I found that it is convenient if a command to kill or bury buffer
+is bound to certain mouse event when you are
+browsing through many files and directories.  Or,
+sometimes after root-drop, you may want to delete many frames, and
+@code{C-x 5 0} is really annoying if there are too may frames to be killed.
+
+@noindent
+Setting variable
+@code{dired-dd-use-modeline-binding-global} to non-nil enables these
+mouse bindings:
+
+@lisp
+      (define-key global-map [mode-line C-mouse-3] 'mouse-kill-this-buffer)
+      (define-key global-map [mode-line S-mouse-3] 'mouse-bury-buffer))
+      (define-key global-map [mode-line C-M-mouse-3] 'mouse-delete-frame)
+@end lisp
+
+@noindent
+globally (@code{mouse-delete-frame} might be useless if you prefer your
+window manager's delete-frame command... ).  In @code{dired-dd-mode},
+these bindings are enabled in its local map @code{dired-dd-mode-map}
+regardless of the value of @code{dired-dd-use-modeline-binding-global}.
+
+@noindent
+Note that even if you setq @code{dired-dd-use-modeline-binding-global} to
+non-nil, the bindings above are not enabled until @code{dired-dd} is loaded.
+If you like these mouse binding, and want to use them globally from the
+startup of emacs, include the binding codes above, and the function definitions
+such as:
+
+@lisp
+         (defun mouse-kill-this-buffer (e)
+           (interactive "@@e")
+           (kill-this-buffer))
+         (defun mouse-bury-buffer (e)
+           (interactive "@@e")
+           (bury-buffer))
+         (defun mouse-delete-frame (e &optional arg)
+           (interactive "@@e\nP")
+           (delete-frame (selected-frame) arg))
+@end lisp
+
+@noindent
+in your @file{~/.emacs}, which is a surer solution.  See also the
+document string of @code{dired-dd-use-modeline-binding-global} with
+@kbd{C-h v dired-dd-use-modeline-binding-global RET}.
+
+@noindent
+The functions @code{mouse-kill-this-buffer}, @code{mouse-bury-buffer}
+and @code{mouse-delete-frame} are defined at the end of the
+@file{dired-dd.el}.
+
+
+@node Other programs going well with dired-dd, Spinout directory, Using dired-dd, Tips
+@section Other programs going well with dired-dd
+
+@noindent
+This section deals with the programs going well with @code{dired-dd}.
+
+@noindent
+@code{Dired} can operate not only on local file system but also ftp
+directories.  Some @code{dired} related programs are known to handle
+both local and ftp directories transparently, and they are all
+compatible with @code{dired-dd}.@*
+
+@itemize @bullet
+@item
+@file{ange-ftp.el}@*
+
+@noindent
+Included in normal emacs distribution, but currently it is implemented
+in emacs so transparently that you might not be conscious about this
+program at all.
+
+@noindent
+So, some user may not know that he can open ftp directory in a
+@code{dired} buffer by issuing command such as
+
+@example
+@kbd{C-x d} @code{/ftp@@ftp.gnu.org:/pub/gnu/} @kbd{RET}
+@end example
+
+@noindent
+The derived @code{dired} buffer can be operated as normal dired buffer,
+which means @code{dired-dd} can be used too.  That is, you can ftp files
+with drag and drop.
+
+@noindent
+Find @file{url-to-ange.el} in @file{spinout} directory of
+@code{dired-dd} distribution, which enables translation of URL
+expression into ange-ftp expression, or opens URL location already
+existing in emacs buffer.
+
+@noindent
+You can also find @file{bookmark-thief.el} in @file{spinout} directory
+which enables stealing bookmarkfile of @file{Mozilla} (Netscape
+Navigator) and opening URL via external or internal browser, or opening
+ftp URL via ange-ftp.  @file{bookmark-thief.el} requires
+@file{browse-url.el} included in @file{html-helper-mode} package.@*
+
+@item
+@file{archie.el}@*
+
+It fetches @file{archie} command output, and can raise
+ange-ftp-dired buffer with @kbd{d} command.
+You can find @file{archie.el} in various places.  Use @code{xarchie},
+or your favorite WWW search engine.@*
+
+@item
+@file{locate-dired.el}@*
+
+This handles local file system.  Find it in @file{spinout}
+directory of @code{dired-dd} distribution.  Works like @code{find-dired}, but
+it uses @file{locate} command instead of @file{find} in the original @code{find-dired}.
+@file{locate.el} is included in emacs-20.2, but unlike @file{locate.el},
+@file{locate-dired.el} uses @code{dired-mode}, so that you can use
+@code{dired-dd-mode} in the output buffer.@*
+
+@item
+@file{bookmark-popmenu.el}@*
+
+Emacs bookmark is convenient while moving around local (and maybe
+FTP) file system, but sometimes the menu-bar appears to be so far away, if
+you are in the `mouse (lazy) mode'.
+@file{bookmark-popmenu.el},
+also included in @file{spinout} directory of @code{dired-dd} distribution,
+pops up emacs bookmark menu (`stolen' from @code{menu-bar} keymap)
+by @kbd{C-M-mouse-2}
+and its jump menu by @kbd{C-M-mouse-1}.
+
+@end itemize
+
+@noindent
+For window / frame handling, or scrolling through, the mouse oriented
+programs listed below are found to be very useful:
+
+@itemize @bullet
+@item
+@file{mouse-drag.el}@*
+
+Scrolls emacs window with dragging text area directly.
+Included in normal emacs distribution (At least emacs-20.2 have
+this.  Probably older emacs-19.xx does not).@*
+
+@item
+@file{mldrag.el}@*
+
+Drags scroll-bar with @kbd{vertical-scroll-bar S-down-mouse-1}
+to change window width.  Included in normal emacs distribution.
+In emacs-20.2, the vertical scroll bar should be
+located to the right of a window to use @file{mldrag.el}
+(or you can't drag scroll bar horisontally to change the window width).@*
+
+@item
+@file{windows.el}@*
+
+An Emacs Window Manager.
+Operates multiple emacs frames easily with keyboard command.
+You can also save or restore window / frame configuration with
+@file{windows.el}.  Perhaps you can find it at
+@file{http://www.comp.ae.keio.ac.jp/~yuuji/}
+@end itemize
+
+
+@node Spinout directory,  , Other programs going well with dired-dd, Tips
+@section @file{Spinout} directory 
+
+@noindent
+Up to the time of drafting this info, @file{Spinout} directory of
+@code{dired-dd} distribution contains small programs (some may be nice,
+and some may be rough and ready) conceived to use with
+@code{dired/dired-x/dired-dd}:@*
+
+@itemize @bullet
+@item
+@file{bookmark-thief.el}
+@item
+@file{locate-dired.el}
+@item
+@file{url-to-ange.el}
+@item
+@file{emacs-menu-abuse.el}
+@item
+@file{bookmark-popmenu.el}
+@end itemize
+
+@noindent
+These are all small programs and no info file is provided.  Refer to the
+comment section at the top of the program files for usage.
+
+
+
+@node Bug, TODO, Tips, Top
+@chapter Bug, Caveats
+@cindex bug
+
+@itemize @bullet
+@item
+Emacs may blows away if you push @code{close} button of @strong{yes-no}
+dialog box.  It's not a @code{dired-dd} bug, but might be a serious bug
+of emacs, or window manager.  The author observed it in mule-2.3 (19.28)
+and emacs-20.2, on window managers WindowMaker, fvwm2, and AfterStep.
+It is safer not to decorate transient window or not to put @code{close}
+button on it, if your window manager has such capability.
+@*
+
+@item
+Emacs-19.xx can not correctly interpret shell variable registered in
+@code{dired-guess-shell-alist-user}. For example,
+
+@lisp
+(setq dired-guess-shell-alist-user
+      (cons (list "\\.r[ma]$\\|\\.ram$"
+             "LD_LIBRARY_PATH=~/rvplayer5.0b2 ~/rvplayer5.0b2/rvplayer *")
+            dired-guess-shell-alist-user))
+@end lisp
+
+@noindent
+won't run (but runs good in emacs-20). In emacs-19, you must put
+
+@lisp
+(setq dired-guess-shell-alist-user
+      (cons (list "\\.r[ma]$\\|\\.ram$"
+             "~/bin/Rvplayer *")
+            dired-guess-shell-alist-user))
+@end lisp
+
+@noindent
+with making the @code{"LD_LIBRARY_PATH=..."} part as a shell script
+@file{~/bin/Rvplayer}.  It seems that @file{=} is not correctly
+interpreted.  This is not a @code{dired-dd} specific limitation, but
+applies also when you invoke related command with keyboard command
+@kbd{!} from @code{dired} buffer, FYI.
+
+@*
+@noindent
+Further, Emacs-19.xx might not correctly interpret @file{sh} command
+@code{"exec"} registered in @code{dired-guess-shell-alist-user}, for
+example in issuing command @kbd{M-mouse-2}
+(@code{dired-dd-exec-command-directly}).  It is a shame, because
+sometimes you can save memory by amount of one shell with including
+@code{"exec"} in @code{dired-guess-shell-alist-user}.
+@*
+
+@item
+@noindent
+The problem below occurs in mouse-focus type of window manager settings
+in which you can operate a window (frame, in emacs terminology) placed
+underneath some other window.  If you are using a
+click-to-focus(-and-raise-frame) type of window manager setting, the
+description below does not applied.
+@*
+
+@noindent
+In current @code{dired-dd} under a mouse-focus type of window manager
+setting, if a frame @code{A} is wrapped over a frame @code{B} as shown
+below, drag-and-drop from frame @code{B} to @code{A} may not work as you
+you expect always.
+
+@example
+         +-----------+       
+         |           |     
+         |   b  +-----------+
+         |      |    |      |
+         |      | a2        |
+         |      |    |      |
+         +------|- - +  a1  |
+         B      |           |
+                +-----------+
+                A
+@end example
+
+@noindent
+That is, if you dropped object(s) from area @code{b} of frame @code{B}
+into area @code{a2} of frame @code{A} underneath which frame @code{B}
+exists, this drop would be still regarded as a drop into frame @code{B}.
+To avoid this problem, always drag object(s) from area @code{b} into
+area @code{a1} underneath which frame @code{B} does not exist, or, if
+you make the operation surer, simply raise frame @code{B} over @code{A}
+prior to the dragging. 
+@*
+
+@noindent
+This is one of serious bug of emacs builtin primitive function
+(special-form ?)  @code{track-mouse} used in function
+@code{dired-drag-drop}.  @code{Track-mouse} cannot understand over-wrap
+situation of emacs frames, and knows out-of-the-frame status only by
+detecting simply if the mouse pointer is off the frame (the outline of
+the frame).
+@*
+
+@noindent
+I just don't know whether the problem occurs in combination with every
+window manager or not.  The problem is observed in (fvwm2-2.0.46 +
+emacs-20.2 or mule-2.3 (19.28)) environment.
+@end itemize
+
+
+@node TODO, Index, Bug, Top
+@chapter TODO
+@cindex TODO
+
+@itemize @bullet
+@item
+@code{Dired} package does not raise Yes-No dialog in overwrite-yes-or-no
+query, because dired-query does not use yes-or-no-p. 
+Should I replace it ?
+@item
+Clean up func/var names.  Be pretty-printable.
+@item
+Support @kbd{M-x} customize (and other emacs-20 stuffs).  However this support
+may be delayed, because the authour has not totally switched to emacs-20 yet.
+@item
+Clean data structure for @file{dired-dd-b2-menu}.
+@end itemize
+
+@page
+
+
+@c
+@c Indexes
+@c
+@node Index, Variable Index, TODO, Top
+@chapter Index
+
+@menu
+* Variable Index::      Variable Index
+* Function Index::      Function Index
+* Concept Index::       Concept  Index
+@end menu
+
+
+
+@node Variable Index, Function Index, Index, Top
+@unnumbered Variable Index
+
+@printindex vr
+
+
+
+@node Function Index, Concept Index, Variable Index, Top
+@unnumbered Function Index
+
+@printindex fn
+
+
+
+@node Concept Index,  , Function Index, Top
+@unnumbered Concept Index
+
+@printindex cp
+
+@c @summarycontents
+@contents
+@bye
+
+@c compile-command: "make -k dired-dd.ps" : Now unused.
+
+@c local variables:
+@c mode: auto-fill
+@c fill-column: 72
+@c end:

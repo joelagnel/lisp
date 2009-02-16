@@ -1,0 +1,17 @@
+package <field "package">;
+
+import dcmpi.*;
+
+public class <field "classname"> extends DCFilter {
+    public int init() {
+        return 0;
+    }
+
+    public int process() {
+        return 0;
+    }
+
+    public int fini() {
+        return 0;
+    }
+}

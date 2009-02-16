@@ -1,0 +1,56 @@
+--* Outline *--
+
+* Browsing
+** use ECB for code browsing 
+*** MVC hierarchy
+*** Show methods
+** Skip to stashed TT file 
+** Perldoc navigation
+** jump to source of the method
+** list of methods
+** list of stashed variables
+
+* References
+** Call chain
+** Move to forwarded action (at point OR given function)
+** 
+
+
+* Online Documentation
+** Eldoc feature (minibuffer documentation string)
+** Show prototype of methods (read from doc)
+
+* Templates
+** insert-model
+*** ask for model parameters, have schema loaders
+** insert-view
+** insert-controller
+** msf-abbreviated templates
+
+* View/TT
+** Autocomplete stashed values
+** Comments
+** Standard TT templates (FOREACH, WHILE etc.)
+
+
+* Model/schema
+** virtual-dired of sql file 
+** load-sql
+*** ask for the file
+
+
+* loaded-mode features
+** Req  params values
+** args and their values
+
+* Server Management
+** start-server
+** stop-server
+*** ask for port
+** start-server-repeat
+** Scan for app.pm and restart server when changed
+** list-servers
+
+
+* Planet
+** View planet entries and RSS feeds

@@ -1,0 +1,1907 @@
+2002-10-07  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-delete-recursive): 
+	(mapc (lambda (f) (dired-clean-up-after-deletion f)) fn-list)
+	added after apply() for call-process().  Thus, now 
+	dired-dd-delete-recursive() asks if the relevant buffer should
+	be killed (I don't know how the query is raised
+	within dired-clean-up-after-deletion(), though).
+
+2002-09-06  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* locate-dired.el (locate-dired): 
+	Use dired-shell-stuff-it().
+	Multiple args can be input with separating by C-q C-j.
+	dired-split() is used to split args into a list.
+
+	(locate-dired): Now the command line is something like:
+
+  /:	
+  locate Donat | tr '\n' '\0' | xargs -0 ls -ald
+  -rw-r--r--    1 sn       root      3560680 Dec 20  2001 /usr/local/tmp/mp3/Gilberto/Joao Donato Songbook 3 - 01 - Minha Saudade - Gilberto Gil.mp3
+                                         :
+	
+	But, -0 is supported by non-FSF xargs ?
+
+	(locate-find-file): Similar Changes.
+
+2002-06-20  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-delete-recursive-options): 
+	Changed to default to '("-rf").	
+
+2002-04-12  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-unmark-in-region):
+	Conceived to call on S-C, or M-C-down-mouse-1 etc.
+	Not yet called from dired-dd-drag-region().
+
+2002-01-28  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-version => 0.9.1.28 (uploaded 0.9.1.27)
+
+2002-01-16  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-drop-on-root-window): 
+	find-file-other-frame() does not raise new frame when the file
+	is already displayed in an existing frame.  So, changed to force
+	(dired-dd-switch-frame (make-frame)), then (find-file fn).
+	Thus, files dropped on root window is always opened in a newly
+	created emacs frame.
+
+2002-01-15  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-version => 0.9.1.27 (uploaded 0.9.1.26)
+
+2002-01-15  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-toggle-mark): 
+	Clear mark only when the mark at BOL is identical to CURRENT
+	`dired-marker-char'.  Thus, [drag-mouse-1] and [M-drag-mouse-1]
+	mark a file with the relevant mark if the file is already marked
+	with a different mark as well. Now you need not clear "*" with
+	[drag-mouse-1] before marking with "D" by [M-drag-mouse-1]: You
+	can use just [M-drag-mouse-1] no matter what mark is on it.
+	[M-drag-mouse-1] clears "D" only when it is marked with"D".
+
+2002-01-10  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-version => 0.9.1.26 (uploaded 0.9.1.25)
+
+	* dired-dd-home.html (Caveat): Supported emacs-versions fixed
+	(now includes 20.7, 21.1).
+
+2002-01-07  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-w3m.el (dired-dd-w3m-new-session): New user option.
+	Defaults t, which makes files dropped 
+	into *w3m* buffer are opened as new-session of emacs-w3m.
+	Seems like this user option  should be in dired-dd.el,
+	but, dired-dd-w3m.el is in "non-dired-drop" directory, and
+	not installed by "make install".
+
+	(dired-dd-w3m-drop-handler):
+	Use nrevers()+mapc() to handle all the marked files.
+	Call w3m() (not w3m-goto-url).
+
+	* dired-dd-b3-menu.el (dired-dd-w3m-open-local): nrevers()
+	the fn-list, and use w3m() (not w3m-goto-url).
+	Checks (boundp 'dired-dd-w3m-new-session) and use it if non-nil.
+	
+2002-01-02  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-w3m.el: The copyright year changed to 2001.
+	Changed require() to autoload() to load w3m.
+
+	* dired-dd-version => 0.9.1.25 (uploaded 0.9.1.24)
+
+2002-01-01  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-w3m.el (dired-dd-w3m-drop-handler): 
+	A new non-dired-drop-handler for `w3m', the web browser
+	(http://emacs-w3m.namazu.org/).
+	Drop any file to *w3m* buffer makes w3m to render it (if
+	it is an html).	
+
+	* Makefile (NONDIREDHANDLERS): Added dired-dd-w3m.el.
+
+2001-11-25  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-version => 0.9.1.24 (uploaded 0.9.1.23)
+
+2001-11-25  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-copy-recursive): Supported
+	copying-recursive between remote-ftp directory.
+	The a support-function and variables below are created:
+
+	(dired-dd-remote-copy-recursive-command): New, "rcp"
+	(dired-dd-remote-copy-recursive-options) : New, defaults ("-rp")
+
+	(dired-dd-convert-fname-ange-2-rcp): Just removes "/" top.
+	If ":" is not included, the PATH argument is returned as it is.
+
+2001-11-24  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-delete-recursive): 
+
+	Support ange-ftp'ed directory. Now you can remove directories
+	recursively even in /you@otherhost:/home/ via [mouse-3] menu.
+
+2001-11-14  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-b3-menu.el (dired-dd-b3-keymap):
+	Now "w3m-open-local" item in the big menu.
+	Requires emacs-w3m from
+		http://emacs-w3m.namazu.org/
+	which works far better than `w3'.
+	
+	(dired-dd-w3m-open-local): The corresponding handler.
+	(autoload 'w3m-goto-url "w3m" nil t)
+	is done in this file, but Should it be done by user ?
+	
+	* emacs-21.1 has a serious bug that it scrolls window
+	and place the cursor on completely wrong position when
+	[mouse-1] (mouse-set-point), if the bottom line in the
+	window is clicked.  I reported the bug to
+		bug-gnu-emacs@gnu.org
+	as <200110300954.f9U9swY22302@goro.asahi-net.or.jp>.
+	I reported another bug by
+	<200110311331.f9VDVjY73866@goro.asahi-net.or.jp>.
+	
+2001-08-21  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-version => 0.9.1.23 (uploaded 0.9.1.22)
+
+2001-08-11  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-purge-async-symbol):
+	Purge ampersand at the end of string CMD, and return it.
+	CMD returned as it is if it does not contain the target.
+
+	(dired-dd-exec-async-shell-command):
+	Calls dired-dd-purge-async-symbol(), since it can't fire up
+	the command if cmd contains "&".
+
+	! (dired-do-shell-command) works even if "&" is appended,
+	but dired-dd commands doesn't.  Why ?
+
+2001-06-21  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-version => 0.9.1.22 (uploaded 0.9.1.21)
+
+	* dired-dd.el (dired-dd-drag-region):
+	(goto-char start-point) added before (goto-char end-point)
+	in within-window case.
+
+2001-06-10  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-move-to-xy-in-window):
+	coordinates-in-window-p() (in dired-dd-drag-drop()) in emacs-21
+	(21.0.103) seems to return cons of float in some occasions.
+	round() is braced to make goalx and goaly since the return value
+	of coordinates-in-window-p() is passed as it is to this function.
+
+2001-04-13  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-switch-frame): 
+
+	I don't know why, but this workaround is needed since around
+	the last month, for fvwm2-2.3.32 (CVS version).
+
+      ;; Workaround for fvwm2-2.3.3x (with mouse focus policy).
+      ;; Seems like we should be off focus, then focus to the `xy'.
+      (apply 'set-mouse-pixel-position goal '(-5 -5))
+      (apply 'set-mouse-pixel-position goal xy)
+
+2001-04-08  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-version => 0.9.1.21 (uploaded 0.9.1.20)
+	* Makefile (BASEN, OLD): Updated accordingly.
+
+2001-04-07  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+	
+	* Makefile (DOC, FORMATTED):
+	dired-dd.ps removed from the archive.
+
+	* Found that `delete-recursive' menu item has the same problem as
+	`dired-dd-copy-recursive' below. Function `dired-dd-shell-rm-R' is
+	deprecated, and `dired-dd-delete-recursive' is newly introduced.
+	The new `dired-dd-delete-recursive' execute command without
+	`shell-file-name'.
+	
+	The b3-menu still has a bunch of `shell-command', but it seems like
+	we have to fix `delete-recursive' at least (for symmetric beauty).
+
+	* dired-dd.el:
+	(dired-dd-shell-rm-R): Deprecated.  Instead, introduced:
+	(dired-dd-delete-recursive): Works in background.
+	(dired-dd-delete-recursive-command):
+	(dired-dd-delete-recursive-options):
+	(dired-dd-drop-from-to): Fixed accordingly.
+	
+	* dired-dd-b3-menu.el
+	(dired-dd-b3-keymap): Fixed accordingly.
+	
+	(dired-dd-shell-rm-R-command): Deprecated.
+	(dired-dd-shell-rm-R):  Deprecated.
+	
+	* dired-dd.el (require): cl.
+
+2001-04-06  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-copy-recursive):
+	Modified not to use dired-shell-stuff-it().
+	`file-name-coding-system' or `pathname-coding-system'
+	should be setup correctly (in emacs-19/20/21).
+
+	* dired-dd.el (dired-dd-copy-recursive-command): Now this should
+	be just a command name string, and the option should be defined in
+	(dired-dd-copy-recursive-options): which defaults '("-a").
+
+2001-03-24  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el, dired-dd-b3-menu.el:
+	Added "*" at the top of user option variables.
+
+2001-03-17  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Makefile (EL): Dropped dired-dd-watch.el.
+
+2001-03-16  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-view-file): New.
+	Bound to [C-mouse-2]. In emacs-21, dired-view-file() is convenient
+	for browsing through a jpeg directory, and thought there should be
+	mouse version of that in dired-dd.
+
+	* dired-dd-version => "0.9.1.20".
+
+2001-01-13  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* After all, found that emacs-{20,21} has autorevert.el, but, 
+	it seemed not to have the dired-dd-watch.el's various features.
+
+	* Found that sometimes inter-frame dragdrop in emacs-version ->
+	"21.0.95.1" does not work. Must debug the return value of
+	track-mouse.
+
+2000-12-28  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-b3-menu.el (require): Added. Ignore w3 relevant warnings.
+
+(eval-when-compile
+  (require 'dired) ;; probably only this is necessary to make working elc.
+  (require 'dired-aux))	
+
+	* Makefile (install): 
+	install: $(ELC)
+	The $(ELC) dependency lacked.  Added.  Nobody noticed for years.
+	
+	* dired-dd.el: Found that key binding section for
+	(dired-dd-exec-non-dired-drop-kbd-*):
+	is not compatible among emacs-19/20 in byte-compiled form.
+	I've been using byte-compiled dired-dd*.elc with mule-2.3@19.28,
+	over years, but `dired-dd' is not `binary-compatible' anymore
+	with the [?|] sort of key sequence notations.  I left a comment:
+
+;; Keybindings:
+;; Guess some of "|" key-system is unbound in `dired' mode.
+;; The [?|] sort of notations seem to byte-compiles into incompatible
+;; form depending upon emacs versions --- means that `dired-dd' is not
+;; `binary-compatible' anymore... Thu Dec 28 12:20:49 2000
+
+	* Accordingly 00install.all.sh for authour's special is created
+	(Very rough. Do not trust):
+
+#!/bin/ksh
+# all arg is passed to make(1)'s options
+eltop=$HOME/elisp
+make="make"
+set -x
+
+# 19.28 mule
+[ -d $eltop/19.28 ] &&
+${make} "$@" emacs=/usr/local/bin/mule elispdir=$eltop/19.28 elcclean install
+
+# 19.34 mule
+[ -d $eltop/19.34 ] &&
+${make} "$@" emacs=/usr/local/emacs-19.34/bin/mule elispdir=$eltop/19.34 elcclean install
+
+# 20.7 emacs
+[ -d $eltop/20.7 ] &&
+${make} "$@" emacs=/usr/local/emacs-20.7/bin/emacs elispdir=$eltop/20.7 elcclean install
+
+2000-12-18  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el
+	(dired-dd-exec-non-dired-drop-kbd): 
+	(dired-dd-exec-non-dired-drop-kbd-C): 
+	(dired-dd-exec-non-dired-drop-kbd-C-M): 
+	
+	DragDrop into non-dired buffers via keyboard.
+	This facility was a one of a few exceptions which
+	can not be executed via keyboard operation.
+	
+	NEWS, (or further to documents) should be
+	updated.
+
+2000-12-14  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-watch.el (dired-dd-start-watch-timer): 
+	Arg test is changed to support pure numeric arg is set
+	to watch interval:
+
+  (cond (arg
+	 (cond ((numberp arg) (setq dired-dd-watch-interval arg))
+	       (t (setq dired-dd-watch-current-only nil)))))
+
+2000-12-13  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-watch.el
+	(dired-dd-change-listed-timer-interval): 
+	(dired-dd-change-watch-timer-interval):
+	Changed to pass their "P" arg to dired-dd-set-watch-interval().
+	
+	(dired-dd-set-watch-interval): 
+	Accordingly changed to accept "P" arg, and use its numeric
+	value as new interval if it is non-nil, otherwise invokes minibuffer
+	interface.
+	
+2000-12-11  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+
+	* dired-dd-watch.el: It seems that
+	`dired-dd-watch-revert-buffer-ls-program' does not make sense
+	in emacs-20.7, which has `file-name-coding-system'. 
+	
+	Seems like:
+	(setq file-name-coding-system 'sjis) enables full feature of
+	dired/dired-dd for sjis fname containing directory.
+
+	* Maybe `dired-dd-watch-revert-buffer-ls-program' is required
+	to watch a directory in mule-2.3 (it needs (load "ls-lisp") to
+	access sjis fnames).
+
+	... But process-coding-system is the another problem.
+
+2000-12-09  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-bogo-profile): 
+	`tem' was not defined in top let().  Added.
+
+2000-11-24  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-watch.el (dired-dd-watch-read-interval):
+	Changed read-from-minibuffer() to
+	read-string().	
+
+	       ;; (read-from-minibuffer "Interval: " default)
+	       (read-string
+		(format "Interval (just RET inputs %s sec): " default)
+		nil nil default)
+
+2000-11-15  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-mpg123.el: 
+	
+	Comments on INSTALL changed to load from mpg123-load-hook.
+	
+	Reason is that THIS FILE SHOULD INCLUDE (require 'mpg123) statement:
+	In other words:
+	
+	  1) Load mpg123 only when it's necessary.
+	  2) Each load-hook program should belong to the main package.
+	     The loading order is significant and sometimes causes trouble
+	     especially when user's load-hook modifies keymap or functions.
+
+	My case was dired-dd-mpg123.el is loaded before
+	~/elisp/mpg123-init.el, which eventually fails to modify
+	mpg123-mode-map via mpg123-load-hook, because the hook is
+	already eval'ed on loading dired-dd-mpg123.el (mpg123 is require'd
+	there).
+
+	Guess the INSTALL comment section of
+	other non-dired-drop handler programs should be	changed
+	(Or just leave them for users ?).
+	
+	I guess it it is rare that dired user does not loads up dired,
+	but they may not want to load other applications for today.
+	
+	So, I guess I should change the INSTALL comment section of
+	dired-dd-lm.el, dired-dd-mew.el, and dired-dd-timidity.el
+	at least (I do not support dired-dd-mime.el).
+	
+	* lm.el (lm-framework-cmd): 
+	Changed from defconst() to defvar().
+	Sometimes I want to use uuenview without -b option (for
+	uuencode).
+
+2000-11-14  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Makefile (NONDIREDHANDLERS): 
+	* dired-dd-mpg123.el (dired-dd-mpg123-drop-handler): 
+	
+	Handler for mpg123 is added.
+	To get mpg123.el, see
+	http://www.comp.ae.keio.ac.jp/~yuuji/software/
+	
+	* dired-do-emacs-command.el
+
+	Two commands:
+	(dired-do-emacs-command): User interface, bound to \
+	(dired-do-emacs-fun-one): Almost subroutine
+
+;; Example:
+;; On "index.html" line in `dired' buffer, hit
+;;    \ w3-open-local RET
+;; opens the HTML file with `w3-open-local' command, or
+;; on "Hammerklavier.mp3", "ringo.m3u", or on directory "mp3files" line,
+;;    \ mpg123
+;; fires up mpg123 over the
+	
+	But, how should I include this prog ?
+	In spinout ?
+
+2000-11-11  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-watch.el (dired-dd-start-watch-timer): 
+	If called in already-watched buffer, the watch is canceled:
+
+   ((assoc (current-buffer) dired-dd-watch-timer-buffers)
+    ;;(error "Buffer \"%s\" is already watched" (current-buffer))
+    (dired-dd-cancel-watch-timer)
+    (message "Canceled watch timer for buffer \"%s\"" (current-buffer)))
+
+	* dired-dd-watch.el
+	(dired-dd-watch-revert-buffer-interactive): 
+	
+	Provide M-C-g (dired-dd-watch-revert-buffer)
+
+2000-11-04  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Makefile (EL): 
+	ls-japan.el added in the distribution.
+	dired-dd-popup-shell-alist.el is dropped.
+
+	* dired-dd.el:
+	dired-dd-popup-shell-alist.el is merged.
+	Now dired-dd-popup-shell-alist-menu() is bound to
+	S-down-mouse-3, and C-M-down-mouse-2.
+		
+	Old binding
+	C-M-down-mouse-2 (dired-dd-copy-filename-as-kill-full)
+	is changed to	
+	C-M-mouse-2 (dired-dd-copy-filename-as-kill-full)
+	and dired-dd-copy-filename-as-kill-full() is modified to
+	code eating mouse-up event.  How come did I code like that ?
+	These two still have the old implementation:
+
+    (define-key map [C-M-down-mouse-1] 'dired-dd-copy-filename-as-kill)
+    (define-key map [C-M-down-mouse-3] 'dired-dd-unmark-all-marks)
+
+	* dired-dd.el:
+	(dired-dd-drop-from-to): 
+	(dired-dd-b2-menu):
+	Now "Delete Recursive" is also in B2 menu.
+
+	(dired-dd-b2-menu):
+	Some unquoted element such as `dired-keep-marker-relsymlink' etc.
+	are changed to quoted.  They are all eval'd at the building 
+	dired-dd-b2-menu in old versions, which was not correct.
+
+	(dired-dd-drop-from-to): 
+	`samedir' check in cases:
+	(eq handler 'dired-dd-shell-rm-R) ; the newone
+	(eq handler 'exec-direct)
+	(eq handler 'dired-do-delete)
+	is changed to (eq from to).
+
+2000-11-03  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-popup-shell-alist.el
+	(dired-dd-build-shell-alist-keymap): 
+	Macro description format changed to work also in emacs-19.28.
+	
+	(dired-dd-popup-shell-alist-rebuild-b2-menu):
+	Tried to add
+	"Select CMD" -> dired-dd-popup-shell-alist-menu
+	to dired-dd-b2-menu.  The code woks decently if the drop was
+	`within-the-single-dir' type, but not enabled (braced with cond()).
+	See the comment, which describes how dired-dd-popup-shell-alist.el
+	should be merged into dired-dd.el.	
+
+	* dired-dd-watch.el
+	Now fully compatible to non-dired buffers.
+	Does not require dired-dd, and works on standard "emacs -q", by
+	just loading.	
+
+	(dired-dd-watch-menu-bar-keymap): 
+	Has binding after "Revert Buffer" in systems' menu-bar.
+
+	(dired-dd-watch-about):
+	The menu-bar submenu has an item to raise "About" dialog.
+	Not bound in the B3 menu (annoying).
+
+	(dired-dd-watch-revert-buffer): dired-dd-watch-revert-buffer is found
+	in dired-dd.el, so renamed to this.
+	
+	(dired-dd-watch-revert-buffer-hook): The hook run at the end of it.
+	(dired-dd-watch-revert-buffer-ls-program): I have
+	(setq dired-dd-revert-buffer-ls-program "ls-euc") in my ~/.emacs
+	to see SJIS .mp3 name.
+
+2000-10-31  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-watch.el
+	(dired-dd-watch-turn-off-decoration): New variable 
+	(dired-dd-revert-buffer): substitutes revert-buffer()
+	(dired-dd-watch-being-decorated): Variable, just reserved. Unused yet.
+
+	(dired-dd-watch-hilit19-enabled-p): Predicate, defsubst()'ed
+	(dired-dd-watch-font-lock-enabled-p): Predicate, defsubst()'ed
+
+	dired-dd-revert-buffer() 
+	turns off decoration by hilit19, or font-lock.
+	if dired-dd-watch-turn-off-decoration is non-nil.
+
+	hilit19 is recovered after canceling, but font-lock is just forced off.
+	The variable dired-dd-watch-being-decorated is conceived to 
+	record the decoration status, and restore the status on timer cancellation,
+	but this feature is not yet implemented.
+
+	* dired-dd-watch.el
+	Now keyboard commands can be used:
+	
+  (define-key dired-mode-map "`" nil)
+  (define-key dired-mode-map "`w" 'dired-dd-start-watch-timer)
+  (define-key dired-mode-map "`c" 'dired-dd-cancel-watch-timer)
+  (define-key dired-mode-map "`i" 'dired-dd-change-watch-timer-interval)
+  (define-key dired-mode-map "`l" 'dired-dd-watch-list-timer)
+  ;; --
+  (define-key dired-mode-map "`t" 'dired-dd-toggle-watch-current-only)
+  (define-key dired-mode-map "`a" 'dired-dd-cancel-all-watch-timer)
+
+	The mouse binding onto dired-dd-b3-keymap is not done when that
+	map is not valid.  Thus, this program (should) run without
+	dired-dd, I hope.  dired-dd/dired-dd-b3-menu is not require()'ed.
+
+2000-10-29  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-watch.el (dired-dd-change-watch-timer-interval): 
+	Created as generic interval changer.
+	Now the submenu item "Set watch interval" also call this.
+
+	* dired-dd.el (dired-dd-bogo-profile): 
+	Took care of overflow in usec part.
+	My private program lkk-bogo.el in other directory also fixed.	
+
+	* dired-dd-watch.el (dired-dd-watch-check-revert-time): 
+	The failsafe for too short watch timer interval.  Called from
+	the starter dired-dd-start-watch-timer().  However,
+	even with this, watching too big dired buffer may make emacs
+	too busy.
+
+2000-10-28  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-watch.el (dired-dd-watch-read-interval): 
+	Read-input module, used by dired-dd-set-watch-interval-menu() and
+	dired-dd-set-watch-interval().
+
+	* dired-dd-watch.el (dired-dd-watch-interval):
+	Made buffer-local.
+
+	* dired-dd-watch.el (dired-dd-watch-menu-mode-map):
+	New commands added. dired-dd-change-listed-timer-interval()
+	and dired-dd-cancel-listed-timer(). Bindings are:
+	
+"g" dired-dd-watch-list-timer
+"i" dired-dd-change-listed-timer-interval
+"c" dired-dd-cancel-listed-timer
+
+	* dired-dd-watch.el (dired-dd-watch-get-listed-buffer):
+	Modular parts for dired-dd-watch-menu-mode.
+
+	dired-dd-change-listed-timer-interval(), and
+	and dired-dd-cancel-listed-timer() are sort of kb macro sort of
+	implementations.  Changing interval is done by canceling it,
+	changing interval, then restarting timer.
+
+	dired-dd-start-watch-timer()
+	dired-dd-cancel-watch-timer()
+	dired-dd-cancel-all-watch-timer()
+	are all aware of *dired-dd-watch* buffer, and they updates the
+	listing if that buffer exists.
+	
+2000-10-27  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-watch.el
+	(dired-dd-watch-menu-mode-map): 
+	(dired-dd-watch-menu-mode): 
+	(dired-dd-list-watch-timer): 
+
+	Created. The dired-dd-list-watch-timer() can be used like
+	standard C-x C-b (list-buffers) command to list dired buffers
+	dired-dd-watch-timer is running.
+
+	Some hacks are included to make the phoney buffer list work
+	in emacs-19.28/19.34/20.7.
+
+	* dired-dd-popup-shell-alist.el (dired-dd-popup-shell-alist-menu): 
+	Added
+	
+     (message (dired-dd-trunc-fn-list
+	       "Select handler for %s" flist (window-width)))
+	
+	after setq() on `guess' is succeeded.
+
+
+	(dired-dd-popup-shell-alist-menu): 
+	I don't know why selecting no item in the submenu won't drops into
+	[S-mouse-3] (plain click) binding, while 
+	dired-get-marked-files() above drops into it ?
+
+Fri Oct 27 02:19:28 2000  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-watch.el (dired-dd-set-watch-interval): 
+	Added. Also its submenu entry.
+
+	* Added failsafe code to take care of accidental nil value of
+	dired-dd-set-watch-interval.	
+
+	dired-dd-watch-interval:
+	dired-dd-revert-timer-interval renamed to dired-dd-watch-interval.
+
+	mule-2.3(19.28) is used today.  Timer.el does not seem so reliable.
+	Sometimes weird error occurs ("buffer xxx has no process" sort of).
+
+2000-10-26  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-watch.el
+	The old dired-dd-revert-timer.el is renamed to
+	dired-dd-watch.el. Most of nomenclature is changed with
+
+	(query-replace "-revert" "-watch" nil)
+	(query-replace "timer-watch-current-only" "watch-current-only" nil)
+
+	Now most of the facilities can be called from the [watch] submenu.
+
+	(dired-dd-toggle-watch-current-only):
+	Controls `dired-dd-watch-current-only'. Enlisted in the submenu.
+
+	Current submenu apperance:
+	"Watch This Dir"
+		"Watch listing"
+		"Watch from everywhere" ; Not "Watch all" sort of.
+		"Cancel Watch"
+		"--" (nil))
+		"Toggle everywhere flag"
+		"Cancel all watch timers"
+
+	All works only for current dired buffer, so
+	"Watch from everywhere" can not be like "Watch all" sort of.
+	
+2000-10-25  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+	
+	* dired-dd-timer-revert.el: Created.
+
+	Reverts dired listing by timer.
+	Convenient when watching a directoy, in which incoming MP3 is growing.
+	Perhaps we need corresponding item in B3 menu.	
+
+	Commands included:
+	(dired-dd-start-revert-timer):  Timer starter, for dired mode only.
+	(dired-dd-cancel-revert-timer): Timer canceler
+	(dired-dd-timer-revert-buffer): The main handler
+	(dired-dd-cancel-all-revert-timer): Canceler for all jobs
+	All has binding in dired-dd-b3-keymap as "Watch This Dir" submenu.
+	
+	Variables:
+	dired-dd-revert-timer-interval: Defaults 5 sec
+	dired-dd-revert-timer-buffers:  Controller list
+	dired-dd-timer-revert-current-only: Defaults t
+	
+	dired-dd-timer-revert-buffer() scans the list
+	`dired-dd-revert-timer-buffers', which has list of an element
+	(cons BUFFER TIMER-OBJECT), and do reverts buffer only
+	when current buffer is where the dired-dd-start-revert-timer()
+	is called when `dired-dd-timer-revert-current-only' is non-nil.
+	This is default.	
+	
+	Or, it does revert all the valid registered buffers
+	when `dired-dd-timer-revert-current-only' is nil.
+
+	`dired-dd-timer-revert-current-only' value can be controlled
+	by ARG to dired-dd-start-revert-timer() (only forcing it to nil
+	can be done.  No fiddle if the ARG is nil.
+
+	So watching too may dired buffers may ruin
+	performance of emacs.  If buffer is already killed,
+	corresponding element is deleted in the list.
+
+	dired-dd-start-revert-timer() fires up run-at-time() for
+	dired-dd-timer-revert-buffer(), and registers the current buffer
+	and the return value from the run-at-time() in the form of
+	(cons BUFFER TIMER-OBJECT) in `dired-dd-revert-timer-buffers'.
+
+	dired-dd-cancel-revert-timer() does cancel-timer(), and delete()'s
+	the element (cons BUFFER TIMER-OBJECT) corresponding to the
+	current buffer.
+
+	* dired-dd.el (dired-dd-exec-command-directly-20): 
+	Fixed docstring for Optional ARG. It should be
+	`do-it-for-this-file', not `on-each' as said in old versions.
+	The `on-each'facility is not implemented in this command
+	(as can be seen in the 1999-01-02 note, I sort-of decided that).
+
+	So, command execution from dired-dd-popup-shell-alist.el's menu
+	should work like that:
+
+	* dired-dd-popup-shell-alist.el
+	(dired-dd-popup-shell-alist-menu): 
+	(dired-dd-build-shell-alist-keymap): 
+	Cleaned up. `arg' handling is fixed to match the feature of
+	dired-dd-exec-command-directly-20() above.
+	
+2000-10-24  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-copy-recursive): 
+	Fixed to use dired-shell-stuff-it() to quote shell meta-characters.
+	You can copy MP3's from Macintosh, whose name is full of spaces,
+	dollars, or quotations....
+
+	* dired-dd.el (dired-dd-copy-recursive): 
+	Now the call-process() executes GNU "cp -a" asynchronously with
+	flag `nil 0 nil'.
+
+	For this async execution, some fiddles are added:
+
+	Added (sit-for 0.1) in dired-dd-copy-recursive(), to make
+	/bin/ls catch the existence of the newly created file.
+
+	(dired-dd-drop-from-to):
+	revert-buffer() in `to'	buffer, and show some message suggesting
+	hitting `g' in target buffer.
+
+	(dired-dd-do-copy-recursive):
+	The same messaging, but can't call revert-buffer(): we can't tell
+	in which buffer we should do that.
+
+2000-10-23  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-popup-shell-alist.el:
+	
+	Created. Get the file's handler, and show as menu.
+	Binding hard-coded in it:
+(define-key dired-dd-mode-map [S-down-mouse-3] 'dired-dd-popup-shell-alist-menu)
+
+	This popup menu is an independent menu, and is not built in the B3
+	big menu. It may be included sub-menu (it's going to be an
+	annoying job to update the big menu on every click, though), but
+	this menu seems to be convenient in the independent form, so I
+	will claim it should have the independent mouse-binding.
+
+	The src should be merged into dired-dd.el ?
+
+	Seems like that the numeric ARG handling in a command called
+	by a mouse event in emacs-20.7 ???  
+	Currently, the arg handling part is commented out.
+
+	* dired-dd.el
+
+	(dired-dd-exec-command-directly-20): 
+	2nd optional arg GUESSED-CMD is used as pre-determined shell
+	command list, to support dired-dd-popup-shell-alist-menu() in
+	dired-dd-popup-shell-alist.el.
+
+Tue May 23 02:23:19 2000  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* 0.9.1.18 Uploaded after all.
+
+2000-05-14  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-drag-region):
+	
+	Now copy-region-as-kill() call is deprecated. Thus,
+	
+	The region swept by mouse button 1 will never be copied to
+	to kill-ring, and the kill-ring top will never be affected.
+
+2000-04-20  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-b3-menu.el (dired-dd-w3-open-local): 
+	
+	New handler to call w3-open-local().
+	All the filenames are passed to w3-open-local().
+	Just `shortnames' is used.  Any Problem ?
+
+	w3 is assumed to be setup correctly elsewhere.  No requiring code
+	included in the handler.
+
+	* The corresponding menu item "w3-open-local" is included in
+	"Man, Info, HTML", which is renamed from "Man & Info".
+	The item order in the sub keymap is also changed.
+	mandoc, w3openlocal, then info (the crappiest system is at the bottom).
+
+	* NEWS: Updated.  Forgotten 0.9.1.17 entry is made just copying
+	the corresponding description in dired-dd-home.html.
+
+2000-04-10  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-lm.el: Commentary added.
+
+	* README.non-dired-drop: Forgotten description dired-dd-lm.el is
+	added.
+	
+	* Local src updated to 0.9.1.18 (Makefile changed).
+	
+2000-04-04  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* 0.9.1.17 Uploaded.  dired-dd-lm.el/lm.el Included.
+
+2000-04-04  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Updated to 0.9.1.17.  Annoying directoy ./RCS is deleted
+	entirely.
+	
+	* dired-dd.el (dired-dd-copy-recursive):
+	
+	cp -a /xxx/yyy /tmp/yyy
+	
+	copies directory yyy as /tmp/yyy/yyy if directory /tmp/yyy/
+	already exists, and that is not what we want. `dest-path' is
+	recomputed as:
+
+  (cond
+   ;; In this case, the cp -a creates new directory named
+   ;; (file-name-nondirectory file) under `destpath' and that is not what
+   ;; we want. Tue Apr  4 19:09:36 2000
+   ((and (file-directory-p dest-path)
+	 (string= (file-name-nondirectory file)
+		  (file-name-nondirectory dest-path)))
+    (setq dest-path (file-name-directory dest-path))
+    ))
+	
+2000-04-01  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-mew.el: Fixed typo:
+	(query-replace "hanlder" "handler" nil)
+
+Tue Mar 14 12:46:06 2000  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-no-fancy-stuff):
+	Set this to non-nil disables all the fancy facilities of dired-dd.
+
+	If this is set to non-nil, also `dired-dd-inhibit-bogo-profile'
+	(see below) is set to non-nil.  Might be used on MS-WINDOZE, but
+	nobody tested that yet.
+
+	* dired-dd.el (dired-dd-inhibit-bogo-profile): 
+	New variable.
+
+	If non-nil, X server profiling is never executed.
+	`dired-dd-set-mouse-color-usec' and `dired-dd-version-circle-resolution'
+	are set to really bogus values and all the fancy stuffs are disabled
+	after all (at the end of the src page).
+
+	I don't know why, but remote emacs-20.5 barfs on XFree86 3.3.2.3
+	server's display and I should have inhibit the profiling:
+
+$ emacs 
+X protocol error: BadAccess (attempt to access private resource denied) \
+on protocol request 88
+
+$ X -version                              
+
+XFree86 Version 3.3.2.3 / X Window System
+(protocol Version 11, revision 0, vendor release 6300)
+Release Date: July 15 1998
+        If the server is older than 6-12 months, or if your card is newer
+        than the above date, look for a newer version before reporting
+        problems.  (see http://www.XFree86.Org/FAQ)
+Operating System: Linux 2.0.32 i586 [ELF] 
+
+	This occurs 2nd '(set-mouse-color nil) in dired-dd-bogo-profile's
+	while loop.  First (set-mouse-color nil) call succeeds.
+	Possibly emacs-20.5 bug. 19.28 and 19.34 mule-2.3 work nicely.
+
+2000-01-24  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-b3-menu.el (dired-dd-shell-command2,dired-dd-shell-command):
+	The process when optional arg sync non-nil was wrong.
+	-> Reversed.
+
+	Anyway, (revert-buffer) at the end of dired-dd-shell-rm-R()
+	does not work if "&".  How should I do for it ?
+	Tried change (if sync " &" "") in dired-dd-shell-command to
+	(if sync " & wait" ""),
+	but this is the same effect without "&".
+
+	start-process, and using sentinel will work surely, but I guess
+	it is over-kill for dired-dd-b3-menu.
+	
+1999-04-04  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Upload 0.9.1.16.
+
+1999-03-04  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el:
+	* dired-dd-b3-menu.el: 
+	Checked message() calls all over the files, and replaced
+	(message string-returning-sexp)
+	sort of code with
+	(message "%s" string-returning-sexp)
+	The former one barfs if string-returning-sexp returns "%"
+	containing string. Such code was not found in dired-dd-b3-menu.el,
+	though.
+
+	Found this bug when I tried to open "www.wget'ed.web.tree/%7E????/"
+	sort of directory.  In this case, message() in the middle of
+	track-mouse() in dired-dd-drag-drop() barfs.	
+
+Tue Mar  2 18:41:34 1999  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (Appendix A.): 
+	In emulating emacs-20.x's mouse-major-mode-menu in 19.xx emacs:
+	
+	(if (fboundp 'mouse-major-mode-menu)...
+	instead of
+	(if (> (string-to-int emacs-version) 19)...
+	
+	because some 19.xx (eg. mule-2.3(19.34)) has 20.x compatible
+ 	major-mode menu, and comparing major version # is not consistent.
+	
+	* bookmark-popmenu.el (my-bookmark-jump): 
+	mule-2.3(19.34)	hack. This mule uses 20.[23] compatible
+	bookmark.el.
+
+1999-02-14  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-b3-menu.el: 
+	
+	(dired-dd-do-tar-zv[tx]f):
+	
+	Supported authentic tar ("zcat * | tar vt" style). GNU tar still
+	suports this (mine is 1.12). (revert-buffer) added after zvxf.
+		
+	(dired-dd-do-unzip-l) and corresponding menu item added.
+
+	(dired-dd-shell-command): 
+	(dired-dd-shell-command2):
+	(dired-dd-shell-rm-R):
+
+	Most of unarchive, or listing commands are now called
+	asynchronously, but `rm -r' sometimes leves the process as `run'
+	on emacs-20.2.  Annoying.  Internal 'sync flag added in
+	dired-dd-shell-command(-2) to force synchronous execution.
+	
+	My personal preference is (setq dired-dd-shell-rm-R-command "rm -rvf")
+	but rational "rm -r" is the default.
+
+	Thought about support prefix ARG to force delete, but that is
+	impossible because dired-dd takes a policy to handle prefix arg
+	as number of files as following dired convention.
+
+	Found that some of commands are directly defined in the menu, and
+	some are not.  The style should be unified anyday anyway.
+
+	* dired-dd.el (dired-dd-mode-map): 
+	Added a more rational `find-other-win' mouse binding:
+	S-mouse-2 (dired-dd-find-file-other-window)
+	binding.  Old 
+	C-S-mouse-2 (dired-dd-find-file-other-window)
+	can be still used (until other purpose is found).
+	
+1999-02-01  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-b3-menu.el
+	(dired-dd-shell-command): 
+	(dired-dd-shell-command2): Invokes shell-command with '&' or '()&'
+
+1999-01-26  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-exec-non-dired-drop-handlers): 
+
+	Found fully compatible function run-hook-with-args-until-success
+	in emacs-20.  Now dired-dd-exec-non-dired-drop-handlers calls this.
+	Seems like working (but I do not trust this yet).
+
+	* dired-dd.texi (Menu raised by Button 3): 
+	define-key-after example was wrong.  Corrected.
+	
+	Before correction:
+        (define-key-after (lookup-key dired-dd-b3-keymap [file])
+          [open2] '("Open2" . find-file) [o-multi-win])
+	After:
+	(define-key-after (lookup-key dired-dd-b3-keymap [file])
+	  [open2] '("Open2" . find-file) 'o-other-win)
+
+	The last element should not have been a vector, but
+	a quoted symbol.  Also o-multi-win is changed to o-other-win,
+	to show	the definition is surely inserted in the middle of
+	the menu.
+	
+1999-01-15  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Wrote another non-dired-drop handler dired-dd-timidity.el.
+	Includes:
+	dired-dd-timidity-load-file()		: for one MIDI file (Unused)
+	dired-dd-timidity-load-file-list()	: for MIDI a bunch of files.
+	
+	Requires timidity.el included in TiMidity++:
+	http://www.goice.co.jp/member/mo/timidity/
+
+	* Now non-dired-drop handlers are in non-dired-drop directory.
+	
+1999-01-04  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Version 0.9.1.15 upload.
+	
+1999-01-03  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-b3-menu.el (dired-dd-shell-command):
+	* dired-dd-b3-menu.el (dired-dd-shell-command2):
+	Rewritten to use dired-shell-stuff-it().  Now "*" grammar
+	as in dired-guess-shell-alist-user is supported.
+	Now dired-dd-shell-command2 does not support "%s" grammar anymore.
+	Definitions such as dired-dd-groff-command etc. are entirely rewritten.
+
+1999-01-02  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+	
+	* dired-dd.el (dired-dd-exec-command-directly(-20)): 
+	Fix for filenames including whitespace or meta-characters.
+
+	* dired-dd-b3-menu.el (dired-dd-shell-command): 
+	The same fix above. Double-quote is added in `format'ed strings
+	for some shell commands (for lha, zcat, unzip etc...).
+
+	* dired-dd-exec-async-shell-command, start-process knows apply()
+	method, but due to dired-guess-shell-alist-*'s "*" substitution
+	grammar, I could not take the implementation (apply +
+	start-process method work fine without any shell-quoting) in
+	dired-dd-exec-command-directly(-20).
+	
+	I looked up, and found dired-shell-stuff-it(), and,
+	dired-shell-quote() in dired-aux.el. Test:
+	
+	(insert (dired-shell-quote "abc\"*"))
+	abc\"\*
+	(insert (dired-shell-quote "p p"))	
+	p\ p
+
+	How about that we have two marked files "p p.el" and "q q.el" (having
+	spaces in their filenames), and registered command "emacs * -nw"
+	for that extension, then
+	
+	(insert (dired-shell-stuff-it "emacs * -nw" '("p p.el" "q q.el") nil))
+	emacs p\ p.el q\ q.el -nw
+
+	Seems like working fine.
+
+	Straight-forward double-quoting method once I took in
+	dired-dd-exec-command-directly(-20) might work fine as well
+	(command line echoing does not look good, though), but, after all,
+	I used dired-shell-stuff-it() in
+	dired-dd-exec-command-directly(-20), and dired-shell-quote() in
+	dired-dd-shell-command().
+
+	* Double quote method such as
+	(defvar dired-dd-groff-command "groff -Tascii -mandoc \"%s\"")	
+	are still left.  These are called via dired-dd-shell-command2().
+	
+	* I know `on-each' invoking method is not implement in
+	dired-dd-find-file-or-exec() or dired-dd-exec-command-directly().
+	Wrong ?
+
+	* [C-M-S-mouse-2] (dired-dd-exec-command-query) uses
+	dired-do-shell-command via b3-menu, so this is fully-dired compatible.
+
+1998-12-30  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (mouse-delete-frame):
+	Added a mouse command mouse-delete-frame.
+	Sometimes after root-drop, you may want to delete many frames and
+	C-x 5 0 is really annoying if there are too may frames to be killed.
+	Bound to [mode-line C-M-mouse-3] to global-map or dired-dd-mode-map.
+	according to the value of dired-dd-use-modeline-binding-global.
+	
+	Now setting dired-dd-use-modeline-binding-global to non-nil enables:
+
+	  [mode-line C-mouse-3] (mouse-kill-this-buffer)
+	  [mode-line S-mouse-3] (mouse-bury-buffer)
+	  [mode-line C-M-mouse-3] (mouse-delete-frame)
+
+	mouse-delete-frame might be useless if you prefer to use your window
+	managers delete-frame command...
+
+	I found again that enabling these bindings only in
+	dired-dd-mode-map might be meaningless (only dired buffer can be
+	buried, killed, or its frame can be deleted...).
+
+	* dired-dd.el (dired-dd-drop-on-root-window, dired-dd-drag-drop):
+	Argument structure of dired-dd-drop-on-root-window modified.
+	dired-dd-drop-on-root-window supported arg for number of file as
+	in dired-dd-drop-from-to.  dired-dd-drag-drop passes its `arg' to
+	dired-dd-drop-on-root-window and don't pass `shortnames' like old
+	version.  dired-dd-drop-on-root-window calls
+	(dired-dd-get-marked-files nil arg t) for itself for full-path
+	names and the support for `arg'.
+	
+	The fix above is intended just to keep (cosmetic) consistency
+	with other subroutine for dired-dd-drag-drop.  For example,
+	dired-dd-drop-from-to also calls (dired-dd-get-marked-files nil
+	arg t) in it again (even if dired-dd-drag-drop makes shortnames).
+	Might be I made it inefficient ?
+
+	As a NET result, dired-dd-drop-on-root-window's operation is
+	compatible to the older version, in which `shortnames' is
+	created within dired-dd-drag-drop in reference to `arg' and
+	passed to dired-dd-drop-on-root-window, then
+	full pathname is expanded in dired-dd-drop-on-root-window.
+	
+	* Document string of dired-dd-drag-drop cleaned up. 
+	
+1998-12-23  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el: 
+	In-house version updated to 0.9.1.15.
+	Cleaned up unused (and almost forgotten) commented out codes.
+	Also cleaned up some comments does not match with current `feature's.
+	Eg.: leftover of 0.9.1.10pre's confusion concerning
+	M-mouse-2 <--> double-mouse-1.
+
+Tue Dec 22 13:32:49 1998  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+        * Fixes suggested by Yuji Yamano <yyamano@kt.rim.or.jp>:
+	
+	* Makefile: 
+	-v flag removed from cp, rm invoking lines (`install' part only).
+	
+	* dired-dd-b3-menu.el (dired-dd-terminal-command):
+        Sets dummy string if no $LANG is set (getenv => nil).
+	The reported problem was that
+	string-match barfs if bare getenv returns nil due to no $LANG is set,
+	then byte-compile (eventually mere loading either) fails.
+
+	* Slight cleanup of comments:
+	;;@(define-key... all removed (traces of old non-minor-mode version).
+	
+1998-12-15  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-insert-fname.el (dired-dd-insert-fname): 
+	(delq '(drag)... => (delq 'drag...	
+	This fix (only) will be included 0.9.1.13.
+	
+	* 0.9.1.12 Uploaded. In-house version updated to 0.9.1.13.
+	* Announce on fj: <7556q5$7c5$1@sn.asahi-net.email.ne.jp> (in Japanese).
+
+1998-12-13  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-move-to-xy-in-window): 
+	Added non-dired mode handling, to move to drop point accurately,
+	considering dired-dd-insert-fname.el and dired-dd-insert-file.el.
+
+	Keywords on for moving around among folded line:
+		vertical-motion
+		current-column
+		move-to-window-line
+		<wku32pqsf1.fsf@ba2.so-net.ne.jp> in fj.editor.mule (.e.g)
+
+	* dired-dd.el (dired-dd-drop-from-to): 
+	Plays audio if dired-dd-exec-non-dired-drop-handlers succeeds.
+
+1998-12-12  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-insert-fname.el: Another non-dired-buffer-drop handler.
+	Insert filename by Drag-and-drop in any non-dired-buffer.
+	Supports:	
+		C-drag-mouse-2: insert plain filename(s)
+		M-drag-mouse-2: insert fullpath name(s)
+
+1998-12-11  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-insert-file.el and dired-dd-mew.el are implemented with
+	a bit more strict major-mode/modifier check.  With these two,
+	you can insert file as ordinary mail text with shift-drag-mouse-2,
+	and MIME attachment file with plain drag-mouse-2.
+
+	* Probably, it is difficult to give reliableness of handler execution
+	if the number of handler functions registered is much more increased.
+	Is it mean that	this handler registration interface is badly
+	implementated ?
+	
+	* dired-dd-insert-file.el (dired-dd-insert-file): 
+	* dired-dd-mew.el (dired-dd-mew-draft-hanlder): 	
+	Inserting order nreversed.  Might be more acceptable to most of users.
+	
+	* dired-dd-mew.el (dired-dd-mew-draft-hanlder): 
+	Added modifier check (accepts only '(drag)).
+
+	* Updated to 0.9.1.12
+	
+	* dired-dd-insert-file.el (dired-dd-insert-file): 
+	Another	example of dired-dd-exec-non-dired-drop-handler.
+	It insert-file with drag-and-drop with shift-drag-mouse-2.
+	I don't know if this will be included in 0.9.1.12 release.
+	
+	* dired-dd-mew.el (dired-dd-mew-draft-hanlder): 
+	Minor fix.
+
+	* dired-dd.el (dired-dd-exec-non-dired-drop-handlers,
+	dired-dd-drop-from-to):
+	
+	`modifiers' is passed to
+	dired-dd-exec-non-dired-drop-handlers from 
+	dired-dd-drop-from-to encapsuled in ARGLIST, whose new format is
+	
+	(FILENAME-LIST WINDOW MODIFIERS POINT)
+	
+	Also Added comment that any kind of variable defined in upper
+	functions can be used additionally to the ARGLIST.
+
+	* dired-dd.texi: some correspondig fix.
+	
+1998-12-10  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+	
+	* 0.9.1.11 Uploaded.
+	
+1998-12-09  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el: 
+	An generic non-dired target buffer (window) handlers support.
+	User can define a prefered handler function for a non-dired target
+	buffer.
+	
+	The Handler functions can be registered in a new
+	variable dired-dd-non-dired-drop-handlers.
+
+	dired-dd knows (or examines) nothing about the non-dired buffer's
+	nature (major-modes etc).  It is responsibility of the handler
+	function to examine it.
+	
+	See doc string for dired-dd-non-dired-drop-handlers for detail.
+
+	New variable and functions for this facility are:
+	
+var: dired-dd-non-dired-drop-handlers
+fun: dired-dd-exec-non-dired-drop-handlers
+	dired-dd-exec-non-dired-drop-handlers is called within
+	dired-dd-drop-from-to.  
+	Dired-dd-drop-from-to is just modified at the bottom section
+	after the comment:
+      ;; Else file Open by Drop (onto other non-dired window)
+
+	* An example of the handler function is enclosed
+	is dired-dd-mew.el.
+	
+1998-09-21  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* In-my-house version updated to 0.9.1.11 (just version #).
+	* Minor fixes on dired-dd.texi.	
+
+1998-09-13  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.texi, NEWS, dired-dd-home.html: Cleanup.
+
+1998-07-04  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Ignore changelog entries hereafter (after 0.9.1.9, 
+	especially 1998-06-24 and 1998-06-30 entries).
+
+	* dired-dd.el (dired-dd-mode-map): Finally, I relocated
+	the new dired-dd-find-file-or-exec to double-mouse-1,
+	and M-mouse-2 & mouse-2 are the same old binding in 
+	official version 0.9.1.9.
+
+	* Eventual major change in 0.9.1.10 is function of double-mouse-1,
+	and some multiple find file behaviours.  Refer to NEWS and
+	dired-dd-home.html for a concise summary.
+
+;;; This is for 0.9.1.10.pre(or final)
+    (define-key map [mouse-2] 'dired-dd-find-file)                 ;; Same old
+    (define-key map [M-mouse-2] 'dired-dd-exec-command-directly)   ;; Same old
+    (define-key map [double-mouse-1] 'dired-dd-find-file-or-exec)  ;; New
+
+	* dired-dd/bookmark-popmenu.el (global-map): 
+	Changed bindig to M-S... to match dired-dd (corresponding caveat
+	section in dired-dd.texi is removed):
+	
+;;(define-key global-map [C-M-mouse-2] 'my-bookmark-menu)
+;;(define-key global-map [C-M-mouse-1] 'my-bookmark-jump)
+(define-key global-map [M-S-mouse-2] 'my-bookmark-menu)
+(define-key global-map [M-S-mouse-1] 'my-bookmark-jump)
+	
+
+1998-06-30  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Opening marked multiple files/directories are headache.
+	So I introduced
+	
+	(defvar dired-dd-find-multiple-file nil ...
+	
+	and set to nil as default.  dired-dd-find-file-or-exec is the only
+	function refers to the variable.
+
+	1) This only affects dired-dd-find-file-or-exec's find-file, but
+	does not affects (automatic) command execution.  Related command(s)
+	is executed according to the marking.
+
+	2) Dropping onto root window or other window
+	(via dired-dd-drag-drop), and dired-find-file-other-frame are not
+	affected (these always try to open marked multiple files).
+
+	3) dired-find-file-other-window is not affected too, but in this
+	case the clicked file/directory is opened despite of the status of
+	marking.
+
+Wed Jun 24 13:19:49 1998  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+      *** Now you don't have to worry about whether the file should be
+	opend with emacs, or external commands (Just like in Macintosh, or
+	Windows)!:
+
+	* [mouse-2] (dired-dd-find-file-or-exec):
+	Now [mouse-2] (click) finally calls for dired-dd-find-file-or-exec,
+	which examines related command for marked files first, then, if
+	command is found, branch to dired-dd-exec-command-directly, otherwise
+	to dired-dd-find-marked-files (this is new too) to just find the
+	marked file.
+
+      *** In case [mouse-2] (dired-dd-find-file-or-exec) won't work as
+	you expect, you can select two method below ([M-mouse-2] or
+	[doubl-mouse-1])
+
+	* [M-mouse-2] (dired-dd-find-marked-files):
+	Replaces dired-dd-find-file (originally [mouse-2] bound), which
+	just opened one clicked file even if other (and/or multiple) files
+	are marked.  Now [M-mouse-2] is bound to this dired-dd-find-marked-files.
+	Just calls for dired-do-find-marked-files.
+
+	* [double-mouse-1] (dired-dd-exec-command-directly):
+	[double-mouse-1] executes related command
+	directy (dired-dd-exec-command-directly).  Double click is not for
+	find-file anymore.
+
+      *** Further, one spinout function, which is eventually unbound:
+
+	*** The [M-mouse-2] was thought to be rebound to new command
+        dired-dd-find-file-other-frame, which is currently unbound
+	(should be bound to [M-S-mouse-2] (my bookmark-popmenu binding) ?)
+	This function calls new dired compatible function
+	dired-find-file-other-frame.  
+
+	The dired-find-file-other-frame can be called from keyboard.
+	Possible ~/.emacs settings (not well tested):
+
+	  (define-key dired-mode-map "\e\C-o" 'dired-find-file-other-frame)
+	  (autoload 'dired-find-file-other-frame "dired-dd" nil t)
+
+	* Texi/Info/NEWS/Comment_On_Top should be updated.
+
+	* dired-dd-from-to:
+	In dropping onto non-dired buffer, if the targat frame is
+	different from original dired buffer's, opening marked files
+	using multiple windows (used dired-do-find-marked-files).
+	
+
+1998-05-05  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Uploaded and froze as 0.9.1.9.
+
+1998-04-25  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-exec-async-shell-command): 
+	Fixed bug that it did not correctly invoke command
+	with suitable current directory in recursive dired listing.
+	
+	In new version,
+	just cd to default-directory with (setq default-directory cwd).
+	Comments attached to the src:
+	
+	;; Sat Apr 25 02:45:26 1998, just use default dir.
+	;; cf., In -lR recursive listing, (dired-current-directory)
+	;; may return different value from that of default-directory.
+	;; On the other hand, (dired-get-marked-files) returns relative
+	;; path from default-directory.
+
+	In other words, default-directory goes well with
+	(dired-get-marked-files) output...
+	
+	* full path expansion is the issue of executed commands. Eg,
+	my ~/bin/netscape-remote-openfile goes like:	
+#!/bin/sh
+if echo $1 | grep -v ^[/.] >/dev/null 2>&1 ; then
+   file=`pwd`/$1
+ else
+   file=$1
+fi
+exec netscape -remote "openFile($file)"
+
+wed Apr 22 15:07:39 1998  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el: 
+	(dired-dd-drop-on-root-window): 
+	Fixed bug that
+	dropping Marked multiple directories failes (opend as if it is 'New
+	File').  We had to expanded filename in
+	dired-dd-drop-on-root-window, because dired-dd-drop-on-root-window
+	is called with `shortnames', which is only file list handled in
+	dired-dd-drag-drop.  Below is comments on this fix in source:
+
+  ;; Fix on Wed Apr 22 14:53:24 1998.
+  ;; dired-dd-drag-drop does not creates fn-list (full path version),
+  ;; so we have to expand filenames, or we fail in dropping multiple marked
+  ;; files.  I do not want to modify dired-dd-drag-drop to have fn-list.
+
+Sun Feb  8 21:00:42 1998  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Minor fixes.
+	* dired-dd-version redefinition criteria:
+	  (> 1 (car dired-dd-set-mouse-color-usec))   =>
+	  (>= 1 (car dired-dd-set-mouse-color-usec))
+
+1998-02-07  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* 0.9.1.8
+	* dired-dd.el (dired-dd-audio-play): 
+	(dired-dd-toggle-mark): 
+	Changed these to defun from defsubst. Were too big.
+	
+1998-02-04  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el: (dired-dd-toggle-mark-in-region) Optional 3rd arg
+	MARK. If optional 3rd arg MARK is provided, use it as
+	dired-marker-char and then dired-dd-toggle-mark is called.
+
+	* (defconst dired-dd-non-mark): Regex part in (dired-dd-toggle-mark)
+	is split. Just for future extension or in case 
+	dired-dd-toggle-mark-in-region should be fixed. Now
+	dired-dd-toggle-mark refers dired-dd-non-mark.
+
+	* (dired-dd-drag-region): Now supports M-drag-mouse-1 to flagging
+	with "D".  M-down-mouse-1 is now bound to dired-dd-drag-region
+	(dired-dd-nop in older version).
+
+	* dired-dd-b3-keymap: `Delete Flagged' entry for the `D' flagged files.
+	This is only menu entry affecting on flag `D' and not on mark `*'.
+	Ugly implementation ?
+
+	* Seems like I have implemented most of things I thought about
+	when I started the project.  Going into 1.xx ?	
+	
+1998-02-01  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el: New function dired-dd-drop-on-root-window added.
+	In older version (before this 0.9.1.7), drop on root window
+	is treated with message "No emacs frame over there".	
+	
+	Instead, the new function dired-dd-drop-on-root-window is called
+	and object is opened find-file-other-frame.  If variable
+	dired-dd-iconify-control-on-root-drop (default: nil) is
+	non-nil, the new frame is iconified or deiconified depending on
+	the iconic status.  This may not work nicely in some emacs
+	version, or with some window manager.
+	
+1998-01-31  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* 0.9.1.7: Upload freez, Plus...
+
+	* dired-dd.el: dired-dd-find-file* echo area cleanup.
+
+	* dired-dd-the-ball-of-fire: 
+	Caught error in mule-2.3 after all.
+	This happens very rarely. I don't know why x0 and y0 becomes nil.
+	Inserted x0=y0=160 if they are nil.
+
+Signalling: (wrong-type-argument integerp nil)
+  set-mouse-pixel-position(#<frame mule[1]: *Minibuf-0* 0x81f4e00> nil nil)
+  dired-dd-the-ball-of-fire(t)             ;; dired-dd-awakening=t in my machine
+  dired-dd-mode-enable()
+  run-hooks(dired-mode-hook)
+  dired-mode("~/" "-alt")
+  dired-internal-noselect("~/" nil)
+  dired-noselect("~/" nil)
+  dired("~/" nil)
+
+	Something is wrong in `buffer switching context' in mule-2.3 ?
+	See "emacs-19 bug workaround" on 1998-01-14, Sat Jan 17. This bug
+	reminds me of
+	the issue on `buffer switching context' I saw in skk users ML.
+	
+1998-01-29  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* 0.9.1.6
+	* Now dired-dd is under GPL2.
+	* README, NEWS, COPYING, str-arg.el as spinout.
+	* Makefile: Now dired-dd_toc.html and dired-dd.html have plain
+	format (no background jpg, no fancy colored text).
+
+# Now html version on mypage stays also in plain background.
+# Making two versions is too much annoying.
+
+1998-01-27  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* INSTALL: Rough and ready version added.
+
+	* dired-dd.el (dired-dd-exec-async-shell-command-sentinel): 
+	More decent cleanup code for dired-dd-process-list.
+
+	* Unused diff part of dired-dd-home.html (unused. too big diff
+	due to dired.ps):
+<li> <A HREF="http://www.asahi-net.or.jp/~pi9s-nnb/dired-dd.diff.gz">
+    Diff from previous version:
+</A>
+ There is no diff for versions older than the previous version below.
+
+1998-01-25  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-b3-menu.el: Now dired-dd-b3-keymap has
+	"Launch a Terminal" entry at the top.  Real emacs user may not
+	like this.  "Refresh Listing" moved to the bottom.
+	
+	* Corresponding variable dired-dd-terminal-command added. Default
+	is `xterm', or probably `kterm' depending upon environment
+	variable `LANG'.
+	
+	* dired-dd.el (dired-dd-drop-from-to):
+	Fixed the bug that mark (at BOL of dired buffer) is not
+	retained in inter-frame drag & drop.
+	dired-create-files call covered with
+
+	    (save-window-excursion
+	      (select-window from)  ....)
+
+	to fake as if we were still in old `from' window.  This fake was
+	needed because of dired-file-marker (in dired.el).
+	
+	Now files are correctly marked (kept in "Move" operation) in
+	target dired window.
+
+	(dired-dd-exec-async-shell-command-sentinel): Added code for
+	cleanup already exit/signaled process.  I don't think this is
+	working well when *dired-dd-proc* buffer is killed.
+
+	* Makefile: fixed to generate dired-dd.diff.gz.
+	
+1998-01-24  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.tar.gz of 0.9.1.4 uploaded again. Local link for upload
+	was wrong.
+
+1998-01-23  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* spinout/locate-dired.el: 
+ 	locate-dired-use-other-window (default: nil) added.  
+	
+	Now window locate-dired uses current window.  If older version's
+	behavior is favored, set locate-dired-use-other-window to t.
+
+	* Makefile:
+	Added mouse-drag.el.truncate-lines.patch.diff.gz.  Also version #:
+	BASEN= dired-dd-0.9.1.5
+
+	(dired-dd-home.html, texi, and other stuffs not yet).
+	
+1998-01-22  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* 0.9.1.4
+
+	* 0.9.1.4 published on web page.
+	0.9.1.3 made public very shortly on 1/22/98, soon replaced (in hours).
+	
+	* dired-dd.el: Minor fix, provide/run-hooks order. See dired-x's
+	info: Node: Special Notes.
+
+	* Early in this morning, 0.9.1.3 and new web page made public,
+	with no announce at all.
+
+	* Renamed dired-dd-page.html to dired-dd-home.html. Corresponding
+	link fix in myelisp.html.
+
+	* Also numbering in Makefile, texi.
+
+1998-01-21  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* locate-dired.el: Mimic dired look:
+	(indent-rigidly (point) (point-max) 2)            ; Been forgotten.
+	(dired-insert-set-properties (point) (point-max)) ; mouse face.
+	(hilit-rehighlight-region)
+	
+	* Further, "^/" at the top of fname trimmed.  Ain't look nice, but
+	leaving it causes spurious errors ("/a/b/c and //a/b/c is the same
+	file" etc...).
+
+1998-01-20  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Info update.
+
+	* Updated comment section of files in $dired-dd/spinout.
+
+	* dired-dd.el: eval-and-compile. I left a comment in dired-dd.el:
+
+;; While 0.9.1.3 updating, all of a sudden, this eval-and-compile
+;; became necessary.  Without this, -batch-byte-compile'ed file (by make)
+;; barfs at dired-map-over-marks in dired-dd-get-marked-files.  I know
+;; this is a macro in dired.el, but why didn't it happen in 0.0.0.8 or in
+;; plain 0.9 ?
+	
+	* dired-dd.texi, dired-dd.el: 
+	(query-replace
+		"dired-dd-default-symlink-method"
+		"dired-dd-default-link-method" nil)
+
+Mon Jan 19 21:17:23 1998  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el:
+	Force turning off pointer animation the ball of fire (insignia),
+	if X display or network is too slow.  Corresponding Info update.
+
+1998-01-18  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd-b3-menu.el: 
+	* dired-dd.el:
+	dired-dd-x-popup-menu-out-of-keymap, and
+	dired-dd-popup-no-destination-handling-method-menu were moved to
+	dired-dd.el. Now dired-dd-b3-menu.el contains data structure and
+	necessary functions starting from dired-dd-b3-keymap.
+
+	* Copyright notice in the above 2 elip files. Almost the same
+	as in a2ps-1.39, but "non-commercial purpose" => "any purpose".
+	
+	* dired-dd.texi: BUG section.  Added description on
+	dired-guess-shell-alist-user in emacs-19. Maybe another overkill.
+
+1998-01-17  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* /home/sn/ftp/metamail-slack.3.4.bin.tgz Binary. Installed.
+	ftp from slack-3.4 dir.  This ain't got nothing to do with
+	dired-dd, but...
+	
+	In this occasion, found ftp by dired-dd's C-drag-mouse-2,
+	or drag-mouse-2 just opened file-other-window.  This phenomenon
+	won't occurred again after re-startup of Emacs-20.2.
+
+	* Any potential bug also in emacs-20.2 ?, Or my bug-workaround
+	code around dired-dd-exec-command-directly ?
+
+Sat Jan 17 14:17:40 1998  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.el (dired-dd-exec-command-directly-20): 
+	Added mouse-set-point code for emacs-19 at the top of it.
+	This emacs bug is mysterious.  Sorry for emacs-20 users, but
+	I guess mule-2.3 is still quite popular in Japan.
+
+	* This ChangeLog entry from mule-2.3.
+
+1998-01-14  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* 0.9.1.3
+
+	* dired-dd.el (dired-dd-exec-command-directly): 
+	Now dired-dd-exec-command-directly executes shell-command
+	asynchronously.  dired-dd-exec-command-directly is fset to
+	dired-dd-exec-command-directly-20, which is the entity. New
+	function to support the async execution:
+
+	dired-dd-exec-async-shell-command
+	dired-dd-exec-async-shell-command-sentinel
+
+	dired-dd-exec-command-directly-19 is a backup, which is the same as
+	0.0.0.8's dired-dd-exec-command-directly, except " &" is
+	concatenated at the end of comand line.  It can not exec multiple
+	async commands unless user rename `*Shell Command Output*' buffer.
+
+	* (dired-dd-drag-drop): Added   (if (not (eq major-mode 'dired-mode))..
+	check at the top.  This is emacs-19 bug workaround.
+	
+	If dired-dd-exec-async-shell-command-sentinel is registered with
+	set-process-sentinel, dired-dd-drag-drop is called as if it's
+	current buffer is *dired-dd-proc* (async process buffer).
+	
+1998-01-12  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* locate-dired.el:
+	
+	* New command (C-x4L: just suggested) (locate-dired-other-frame).
+	Very cheap.
+	
+	* Typo of output buffer name corrected.
+	 	
+	* (locate-dired): command line format: use `xargs'.
+	After all, should I write `async' version ?
+	You have to wait a little while if input string is ambiguous. 	
+
+	* archie.el-v3.0.diff.gz:
+	Two new commands added:
+	    o (archie-dired-other-window)
+	    F (archie-dired-other-frame) (calls other-win if on non X)
+
+	* dired-dd.el (dired-dd-bogo-perf): 
+	(garbage-collect) added at the top.
+	
+	* dired-dd-b3-menu.el (dired-dd-shell-command2): 
+	Fixed default-directory bug.
+
+1998-01-11  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* 0.9.1.2 (working version) checked in/out (stayed `locked').
+
+	* dired-dd-copy-recursive and assorted recursive copy functions.
+	dired-dd-b2-menu, dired-dd-b3-keymap, dired-dd-audio-file-alist
+	etc. are updated.  Corresponding texi update.
+
+	* dired-dd-b3-menu.el (dired-dd-b3-keymap):
+	Now du & df are not within submenu.
+
+1998-01-10  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* version # sequence is changed to 0.9.
+
+	* dired-dd.el (dired-dd-version): Calls new function
+	dired-dd-version-constants-calibration everytime.  Prints
+	dired-dd-set-mouse-color-usec with version #.
+
+	* dired-dd.el: file header cleaning up for RCS+vc
+
+	* dired-dd.el:
+	dired-dd-drop-from-to: save-excursion covers dest-path determining part.
+
+Thu Jan  8 15:25:51 1998  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* 'exec-direct added in dired-dd-b2-menu.
+ func: dired-dd-exec-command-directly: accepts event=nil (means no event check).
+ const: dired-dd-b2-menu: entry added.  also defvar => defconst.
+ func: dired-dd-drop-from-to: check for non-samedir 
+
+ func: dired-dd-drop-within-single-dir: NO modification because 
+                                       dired-dd-drop-from-to handles for all.
+
+	  ((eq 'exec-direct op-code) (dired-dd-exec-command-directly nil arg))
+
+	* dired-dd-the-ball-of-fire:
+	  adaptive diameter of the fire ball when called from dired-dd-version.
+
+1998-01-07  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* Texi/Info update going on.
+
+	* Sometimes WindowMaker-0.11.1 makes application freeze when user
+	pushes right [X] button.  In case of emacs, C-x k (kill-buffer) on
+	special-display-frame-alist also triggers the bug.  Or this may be
+	Acc-X 1.3's bug ?
+
+1998-01-05  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* First Public Release of 0.0.0.8, so local files are updated to:
+	
+	* 0.0.0.9
+	
+	Early in this morning this file was released publicly in my WWW page.
+	
+  -rw-r--r--   1 sn       root        69953 Jan  5 01:39 dired-dd-0008.tar.gz
+
+	* dired-dd-b3-menu.el: 
+	(dired-dd-version t) => (dired-dd-version nil)
+
+	* dired-dd.08.minor-mode.el => dired-dd.el (Rename)
+	dired-dd-version: slow animation.
+	dired-dd-the-ball-of-fire: removed x00 y00 clobbering. Pointer
+	returns only if arg is t.  
+	
+	Now, only dired-dd-mode-enable calls dired-dd-the-ball-of-fire
+	with arg t.
+	
+	* Makefile (TMPDIR): 
+	version # incremented.
+	
+1998-01-04  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.08.minor-mode.el (dired-dd-version): 
+
+	dired-dd-version implemented.
+
+	* dired-dd.08.minor-mode.el (dired-dd-mode): 
+	Minor mode dired-dd-mode is created.  Skelton was borrowed from
+	$lisp/view.el.  Seems like working nicely.  All key mapping code
+	target are changed from dired-mode-map to dired-dd-mode-map.
+
+	* 0.0.0.8
+	dired-dd.el => dired-dd.08.minor-mode.el
+
+1997-12-29  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* 0.0.0.7
+	
+	* Support Open/Execute by Button2.  How should I do with double
+	click button 1 ?  Shoud I remove all of them ?
+
+	* Should I use dired-dd minor mode to turn off dired-dd key
+	bindings ?
+
+	* Seems like mule-2.3 (19.28) can't generate double-drack event
+	correctly.
+
+	* Emacs-20.2 returns funny frame parameter 'top and 'left if
+	window manager is WindowMaker-0.6.3, or 0.11.1 or wm2, and window is
+	maximized vertically or horizontally.  Even negative value
+	returned from X server (or window manager) is not right, but alist
+	handling sounds buggy.
+
+emacs-20.2 (seems like bug):
+(frame-parameter (selected-frame) 'top)
+  =>(+ -5)
+(assq 'top (frame-parameters (selected-frame)) )
+  =>(top + -5)	
+
+mule-2.3 (seems correct):
+(assq 'top (frame-parameters (selected-frame)) )
+ => (top . -1)
+
+	This bug makes win:allocate-frame in windows.el won't make new
+	frame.  C-x 5 2 can split frame correctly.  Why?
+	
+1997-12-26  Seiichi Namba  <sn@asahi-net.email.ne.jp>
+
+	* dired-dd.06.draft.el: 
+
+        a2ps.gs262.dmprt -fnB * > oo.ps
+	
+Thu Dec 25 20:02:10 1997  Seiichi Namba  <sn@miles.smoke.or.jp>
+
+	* Version 0.0.0.6:
+
+	* Further split dired-dd-open-or-execute below, into four
+	functions. 
+
+	 [C-S-double-mouse-1] 'dired-dd-find-file-other-window
+	 [M-double-mouse-1] 'dired-dd-exec-command-directly
+	 [C-M-S-double-mouse-1] 'dired-dd-exec-command-query
+	 [double-mouse-1] 'dired-dd-find-file
+
+	* Found that prefix arg is not handed down to double-click functions
+	at least in mule-2.3 (19.28).
+	
+	* Version 0.0.0.6pre:
+	* Split modifier handling part from dired-drag-region, and made
+	dired-dd-open-or-execute below.
+
+(define-key dired-mode-map [C-S-double-mouse-1] 'dired-dd-open-or-execute)
+(define-key dired-mode-map [M-double-mouse-1] 'dired-dd-open-or-execute)
+(define-key dired-mode-map [C-M-S-double-mouse-1] 'dired-dd-open-or-execute)
+(define-key dired-mode-map [double-mouse-1] 'dired-dd-open-or-execute)
+(defun dired-dd-open-or-execute (event &optional arg)
+  (interactive "e\nP")
+  (mouse-minibuffer-check event)
+  (mouse-set-point event)
+  (let ((posn (event-end event))
+	(modifiers (event-modifiers event)))
+    (if (not (windowp (posn-window posn)))
+	(error "Cursor not in text area of window"))
+    (cond
+     ;; dired-dd-exec-command-query
+     ((and (member 'control modifiers)	; Control-Shift-Meta:
+	   (member 'meta modifiers)
+	   (member 'shift modifiers))
+      ;; same as original `!' command.
+      (eval;;you should learn dired-dd-b3-keymap structure:
+       (lookup-key dired-dd-b3-keymap [shellcmd])) )
+     ;; dired-dd-exec-command-directly
+     ((member 'meta modifiers)		; Meta:  Lazy. eg. Shift may allowed.
+      ;; Directly command determine from dired-guess-shell-*.
+      (let* ((fn-list (dired-get-marked-files t arg))
+	     (guessed-cmd (car (dired-guess-default fn-list))))
+	(if (null guessed-cmd)
+	    (error "No command for: %s" fn-list)
+	  (message "Asynchronously launched: \"%s\"" guessed-cmd)
+	  (if (<= (string-to-int emacs-version) 19)
+	      (dired-do-shell-command guessed-cmd arg)
+	    (dired-do-shell-command
+	     guessed-cmd arg fn-list)))))
+     ;; dired-dd-find-file
+     (t					; Shift or non-Shift case:
+      (let ((fun (if (car (member 'shift modifiers))
+		     'dired-find-file-other-window
+		   dired-dd-find-file-method)))
+	(if (<= (string-to-int emacs-version) 19)
+	    (funcall fun arg) (funcall fun))) ))))

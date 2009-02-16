@@ -1,0 +1,57 @@
+This is the README file for the examples distribution of EDB, a database
+program for GNU Emacs written by Michael Ernst <mernst@theory.lcs.mit.edu>.
+EDB is available via anonymous ftp from theory.lcs.mit.edu:/pub/emacs/edb/.
+The examples distribution is in theory.lcs.mit.edu:/pub/emacs/edb/examples.
+
+The following files are available; see the documentation for file naming
+conventions.
+
+README		This file.  This is not EDB's README file, only that for its
+		examples.
+
+forms-demo2.dat		The database supplied as "demo2" of the Forms package.
+forms-demo2.fmt
+forms-demo2.report
+
+forms-demo2-int.dat	The same database in EDB internal layout.
+
+arb-demo	An example database in "arbitrary" format; it uses functions
+arb-demo.dba	rather than rules to read and write the disk file.  It also
+arb-demo.fmt	uses an alternate format file.
+arb-demo.home-fmt
+
+arb-demo-regexp		The same database as that above, but with its layout
+arb-demo-regexp.dba	specified by a set of regular expressions.
+
+eicsw.dat	Alan Stebbens's EIC software database, which uses enumerated
+eicsw.fmt	types and the date type.
+eicsw.dba
+
+passwd.fmt	A format file for use with /etc/passwd; do db-find-file on
+		/etc/passwd and specify this file as the format file.
+
+tepdb		Michael Ernst's address database in internal file layout;
+tepdb.fmt	includes change functions, aging of data, reports, mailing
+tepdb.dba	labels, and usage instructions.
+tepdb.instr
+
+rolo-jik.dat	Jonathan Kamens's rolodex database; includes user-definable
+rolo-jik.fmt	fields and dynamic data display buffer alignment.
+rolo-jik.dba
+rolo-jik.doc
+
+intro-and-addr	Bob Chassell's introduction to EDB for the complete novice,
+		plus an address database and code for producing mailing labels.
+
+btxdb		Instructions for retrieving Thorsten Ohl's BibTeX database.
+
+edbibtex.shar	Michael Burschik's BibTeX database and sample format files.
+		Includes documentation, example databases, and more.
+
+geneal		Instructions for retrieving Michael Patton's geneal database,
+		which includes inter-record links and tagged file layout.
+
+
+More examples are needed!  Please help future users by contributing your
+databases; contact Michael Ernst <mernst@theory.lcs.mit.edu> to have them
+included.

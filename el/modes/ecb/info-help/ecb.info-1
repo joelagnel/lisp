@@ -1,0 +1,1150 @@
+This is ecb.info, produced by makeinfo version 4.2 from ecb.texi.
+
+INFO-DIR-SECTION GNU Emacs Lisp
+START-INFO-DIR-ENTRY
+* ECB: (ecb).           Emacs Code Browser
+END-INFO-DIR-ENTRY
+
+
+File: ecb.info,  Node: Top,  Next: Install and first steps,  Prev: (dir),  Up: (dir)
+
+This is the user manual for ECB version 2.32beta3.
+
+ECB stands for "Emacs Code Browser". While (X)Emacs already has good
+*editing* support for many modes, its *browsing* support is somewhat lacking.
+That's where ECB comes in: it displays a number of informational windows that
+allow for easy source code navigation and overview.
+
+The informational windows can contain:
+
+ * A directory tree,
+
+ * a list of source files in the current directory,
+
+ * a list of functions/classes/methods/... in the current file, (ECB uses the
+   Semantic Bovinator, or Imenu, or etags, for getting this list so all
+   languages supported by any of these tools are automatically supported by
+   ECB too)
+
+ * a history of recently visited files,
+
+ * the Speedbar and
+
+ * output from compilation (the "*compilation*" window) and other modes like
+   help, grep etc. or whatever a user defines to be displayed in this window.
+
+As an added bonus, ECB makes sure to keep these informational windows
+visible, even when you use `C-x 1' and similar commands.
+
+It goes without saying that you can configure the layout, ie which
+informational windows should be displayed where. ECB comes with a number of
+ready-made window layouts to choose from.
+
+*Please note*: Experienced ECB users find a complete alphabetical list of all
+commands and user-options in *Note Interactive ECB commands:: and *Note
+Customizable options::.
+
+The latest version of ECB can always be found at the URL
+<http://ecb.sourceforge.net>.
+
+To send bug reports, or participate in discussions about ECB, use the mailing
+list <ecb-list@lists.sourceforge.net> via the URL
+<http://lists.sourceforge.net/lists/listinfo/ecb-list>.
+
+*IMPORTANT*: Cause of extra appearance of SPAM in the mailing-lists,
+SourceForge has changed its policy: Now it is only possible to post to the
+mailing-list for users who have subscribed this mailing-list. So please be
+aware you will not be able to send comments, bug reports and improvement
+suggestions before you have subscribed the ECB-mailing-list. See the section
+"Mailing-list" at the ECB-website at <http://ecb.sourceforge.net> how to do
+this.
+
+* Menu:
+
+* Install and first steps::     Installing ECB and first steps
+* Overview::                    Compact introducing of basic concepts
+* Manual usage::                How to use this manual
+* ECB-interactors::             Description of all interactors of ECB
+* Activation and Deactivation:: How to start and end ECB
+* Usage of ECB::                How to use ECB
+* Customizing::                 How to customize ECB
+* Submitting problem report::   What to do when problems occur
+* Upgrading::                   Upgrading and downloading packages
+* Tips and tricks::             Useful hints and tips
+* Elisp programming::           Entry points for Elisp programmers
+* Conflicts and bugs::          Known Conflicts with other packages and bugs
+* FAQ::                         Frequently asked questions
+* Command Index::               Index for interactive commands
+* Option Index::                Index for user options
+* Concept Index::               Index for concepts and terms
+
+ --- The Detailed Node Listing ---
+
+Installation and first steps of ECB
+
+* Installation::                Installation of ECB
+* Setting up Emacs::            How to set up Emacs for file parsing with ECB
+* First steps::                 First steps after activating ECB first time
+
+Installation of ECB
+
+* XEmacs Installation::         Installation of ECB for XEmacs users
+* GNU Emacs Installation::      Installation of ECB for GNU Emacs users
+
+How to set up Emacs for file parsing with ECB
+
+* General hints::               General hints for a correct setup
+* Setting up semantic::         How to setup semantic correctly
+* Non-semantic files::          Setup for file types not supported by semantic
+
+All interactors of ECB
+
+* Basic interactors::           Description of the basic interactors
+* Add-on interactors::          Description of additional interactors
+
+The basic interactors of ECB
+
+* Tree-buffer basics::          General introduction into tree-buffers
+* Tree-buffer styles::          Displaying the trees with different styles
+* ECB Directories-buffer::      Contents of the ECB Directories-buffer
+* ECB Sources-buffer::          Contents of the ECB Sources/history-buffer
+* ECB Methods-buffer::          Contents of the ECB Methods-buffer
+
+Displaying the trees with different styles
+
+* Style basics::                Basic knowledge about the styles
+* Ascii-based styles::          How to customize the ascii-styles
+* Tree-buffers with images::    Which images are used for the tree
+* Images for Methods-buffer::   Images for the tags in the Methods-buffer
+
+Add-on interactors of ECB
+
+* Semantic analyser::           Analyses and displays semantic context
+* Symboldefinition::            Displays definition of current symbol
+
+Activation and Deactivation
+
+* Standard activation::         How to manually (de)activate ECB
+* Automatic activation::        Automatically (de)activating ECB
+
+Usage of ECB
+
+* Using the mouse::             Working with the mouse
+* Using the keyboard::          Working with the keyboard
+* The edit-area::               How to use the edit-area
+* Temp- and compile-buffers::   Displaying temp- and compilation-buffers
+* The other window::            How the ``other window'' is determined
+* The Methods buffer::          Using and customizing the Methods-buffer
+* Filtering the tree-buffers::  Applying filters to the ECB-tree-buffers
+* The ECB-layout::              Changing, customizing, redrawing, creating
+* Hiding the ECB windows::      Hiding/Showing the ECB-windows
+* Maximizing the ECB windows::  Maximizing the ECB-windows
+* Back/forward navigation::     Back- and forward navigation like a browser
+* ECB-window synchronizing::    Auto./manual synchronizing the ECB-windows
+* Stealthy background tasks::   Stealthy background-tasks of ECB
+* Interactive ECB commands::    All interactive user-commands of ECB
+
+Working with the keyboard in the ECB-windows
+
+* Navigation/Selection::        Keyboard navigation/selection in a tree-buffer
+* Incremental search::          Find nodes as fast as possible
+* Personal tree-keybindings::   Adding personal keybindings to a tree-buffer
+* Using popup-menus::           Using the popup-menus from keyboard.
+
+Using and customizing the ECB-Methods buffer
+
+* Visiting tags::               Possible actions after visiting a tag
+* Expanding::                   Explicit and automatic expanding
+* Customizing the display::     How to customize the Methods-buffer display
+* Rebuilding the Methods::      When to rebuild the Methods-buffer
+
+Applying filters to the special ECB-tree-buffers
+
+* Filtering Directories::       Applying filters to the Directories-buffer
+* Filtering Sources::           Applying filters to the Sources--buffer
+* Filtering History::           Applying filters to the History-buffer
+* Filtering Methods::           Applying filters to the Methods-buffer
+
+Changing, customizing, redrawing and creating layouts
+
+* Changing the ECB-layout::     How to change and customize the layout
+* Redrawing the ECB-layout::    How and when redrawing the layout
+* Changing window sizes::       Changing sizes of the ECB-windows
+* Fixing window sizes::         Fixing sizes of the ECB-windows
+* Creating a new ECB-layout::   Interactively creating new layouts
+
+Customizing ECB
+
+* General aspects::             General aspects for customizing ECB
+* Most important options::      Which option you must know
+* Customizable options::        All customizable options of ECB
+
+General aspects for customizing ECB
+
+* setq or customize::           Should i use setq or customize?
+* Site-wide customizing::       Site-wide customizing of ECB
+
+All customizable options of ECB
+
+* ecb-general::                 General customizing ECB
+* ecb-tree-buffer::             Customizing the general tree layout
+* ecb-directories::             Customizing the ECB-directories-tree
+* ecb-sources::                 Customizing the ECB-sources-tree
+* ecb-methods::                 Customizing the ECB-methods-tree
+* ecb-history::                 Customizing the ECB-history-tree
+* ecb-analyse::                 Customizing the ECB-analyse-interactor
+* ecb-layout::                  Customizing the ECB-layout
+* ecb-compilation::             Customizing the compile-window
+* ecb-create-layout::           Customizing options for creating layouts
+* ecb-face-options::            Customizing options for faces
+* ecb-faces::                   Customizing the faces
+* ecb-download::                Customizing how to download ECB
+* ecb-help::                    Customizing the online help of ECB
+* ecb-eshell::                  Customizing the eshell-integration
+* ecb-speedbar::                Customizing the speedbar-integration
+* ecb-non-semantic::            Customizing parsing non-semantic sources
+* ecb-winman::                  Customizing window-manager support
+* ecb-mode-line::               Customizing the tree-buffer-modelines
+* ecb-version-control::         Customizing the version-control-support
+
+Upgrading and downloading packages
+
+* Downloading new versions::    How to download newer versions of packages
+* Auto. option-upgrading::      ECB can auto. upgrade your options
+
+Automatic upgrading of options
+
+* User interface::              Options and commands you should know
+* Background information::      Maybe some interesting informations
+
+Tips and tricks
+
+* Changing faces::              Changing faces in the ECB tree-buffers
+* Small screens::               Working with small screens
+* Big screens::                 Working with big screens
+* Simulating speedbar::         Simulating speedbar without an extra frame
+* Integrating speedbar::        Integrating speedbar in the ECB-frame
+* Large directories::           Working with large directories
+* Remote directories::          Working with remote directories
+* Version-control support::     Supporting Version control systems
+* Using eshell::                Optimal using of eshell in ECB
+* Grepping directories::        Grepping directories with ECB
+* Working with JDEE::           Working best with ECB and JDEE
+* Compile-window on demand::    Displaying the compile-window on demand
+* Non-semantic sources::        Parsing and displaying non-semantic sources
+* Hide-show::                   Using hide-show from the methods-buffer-menu
+* Window-managers and ECB::     Support of several Emacs-window-managers
+* Using semanticdb::            Using semanticdb for going to external nodes
+
+Supporting Version control systems
+
+* Identifying backends::        How ECB identifies the VC-backend of a dir
+* Checking the state::          How ECB checks the VC-state of a file
+* Remote repositories::         What you should know about this
+* Refreshing the VC-state::     How to refresh when state changed outside
+* Adding new backends::         Necessary steps for adding new backends
+* Known VC-problems::           Currently known problems of the VC-support
+
+Entry points for Elisp programmers
+
+* List of variables::           Which variables an Elisp-program can use
+* List of hooks::               All available hooks
+* tree-buffer::                 Some words to the tree-buffer-library
+* Adviced functions::           How to deal with the adviced functions
+* The layout-engine::           Programming new layouts and special windows
+
+The library tree-buffer.el
+
+* Introduction::                General description of tree-buffers
+* A new tree-buffer::           How to create a new tree-buffer
+* A new tree-node::             How to add new tree-nodes to a tree-buffer
+* Updating a tree-buffer::      How to update a tree-buffer after changes
+* Tree-buffer keybindings::     Default and customizable keybindings
+* The tree-buffer-API::         All functions available for tree-buffers
+* Do not with tree-buffer::     Things which are strictly forbidden
+* Tree-buffer How to::          Dealing with special situations
+
+How to program new layouts and new special windows
+
+* Programming a new layout::    How to program a new layout
+* Programming special windows:: Aspects of programming special windows
+* Possible layout-outlines::    The wide range of possible layouts
+* The layout-engine API::       The complete layout-engine API
+
+Conflicts and bugs of ECB
+
+* Conflicts::                   Conflicts with other packages
+* Bugs::                        Known bugs
+
+
+File: ecb.info,  Node: Install and first steps,  Next: Overview,  Prev: Top,  Up: Top
+
+Installation and first steps of ECB
+***********************************
+
+This chapter describes how to install ECB and setup (X)Emacs correctly and
+what are the first steps after activation of ECB.
+
+* Menu:
+
+* Installation::                Installation of ECB
+* Setting up Emacs::            How to set up Emacs for file parsing with ECB
+* First steps::                 First steps after activating ECB first time
+
+
+File: ecb.info,  Node: Installation,  Next: Setting up Emacs,  Prev: Install and first steps,  Up: Install and first steps
+
+Installation of ECB
+===================
+
+This section describes how to install ECB.
+
+* Menu:
+
+* XEmacs Installation::         Installation of ECB for XEmacs users
+* GNU Emacs Installation::      Installation of ECB for GNU Emacs users
+
+
+File: ecb.info,  Node: XEmacs Installation,  Next: GNU Emacs Installation,  Prev: Installation,  Up: Installation
+
+Installation of ECB for XEmacs users
+------------------------------------
+
+Basic requirement: ECB requires a XEmacs-version >= 21!
+
+For XEmacs-users it is strongly recommended to use the
+package-management-system of XEmacs for first-time downloading/installing ECB
+or for upgrading to a newer version of ECB.  Here is a short guide (for
+details about the package-manager of XEmacs see the related info-manual):
+
+*Caution*: If ECB is already installed and you just want upgrading to a newer
+version then it is recommended to deactivate ECB before proceeding with the
+steps below!
+
+1. Choose a download-site
+
+   This can be done via the menu "Tools -> Packages -> Add Download Site":
+   Choose one of the listed sites. Or you can customize the option
+   `package-get-remote' by hand and save it for future sessions.
+
+2. Activate the packages list
+
+   This can be done either by the menu "Tools -> Packages -> List and
+   Install" or via the command `pui-list-packages'. After that a special
+   packages-buffer is displayed where you can interactively install or
+   upgrade packages. At the end of this buffer there is a short description
+   how to use this buffer.
+
+3. Install ECB and all required packages
+
+   Mark the package named "ecb" for install. Do this also for the required
+   packages "semantic", "eieio" and "speedbar". The package "mail-lib" is
+   needed for easy submitting of problem-reports to the ECB-maintainers and
+   the package "c-support" is needed for easy using hideshow within the
+   Methods-buffer of ECB(1).
+
+   After marking all needed packages for installation hit `x' to install them.
+
+   If you have already installed ECB and you want just upgrading to the
+   latest available version then proceed as described above - same if you
+   want to upgrade one of the required packages.
+
+4. Start ECB
+
+   Now you can immediately start ECB via the command `ecb-activate'; there is
+   no need to restart XEmacs! As an alternative you can first read the
+   online-help via `ecb-show-help'.
+
+
+If you do not like the package-manager of XEmacs but you want installing ECB
+"by hand" direct from the ECB-website then you have to follow the
+instructions for GNU Emacs, see *Note GNU Emacs Installation::.
+
+---------- Footnotes ----------
+
+(1) All required packages can simply autom. marked by hitting `r' in the
+packages buffer. But this installs a lot of packages more (e.g. the
+Newsreader Gnus) which are really not essential for ECB. Therefore it is
+recommended to mark the required packages by hand.
+
+
+File: ecb.info,  Node: GNU Emacs Installation,  Prev: XEmacs Installation,  Up: Installation
+
+Installation of ECB for GNU Emacs users
+---------------------------------------
+
+Basic requirement: ECB requires an Emacs-version >= 21!
+
+*IMPORTANT*: If you are a XEmacs-user please read *Note XEmacs Installation::
+before proceeding with the following instructions!
+
+*Using the new cedet 1.0 suite*: From beginning with version 2.01 ECB
+supports the next generation of the cedet-tools. But before the cedet 1.0
+suite becomes stable this means that ECB runs correctly with loaded cedet 1.0
+but the ECB-upgrading feature (*note Downloading new versions::) does not
+support autom. upgrading to latest available cedet versions. This will be
+first available after first stable release of the new cedet-library 1.0.
+
+So, if the cedet 1.0 suite is loaded then the min- and max-version of
+semantic, eieio and speedbar (mentioned in the Requirements-section of the
+file `README') have no relevance! If the new cedet 1.0 suite should be used
+then just install and load cedet 1.0 like described in the
+cedet-installation-instructions and go one with step 3. But ensure you have
+loaded - as described in the cedet-`INSTALL'-file - the file
+`/path/to/cedet/common/cedet.el' because otherwise cedet is not properly
+installed and ECB can not savely recognize that the new cedet-suite is loaded
+and should be used.
+
+1. Download and unpack the ECB archive (probably you have already done this
+   :-)
+
+2. Read the file `README' in the ECB-directory and install the required
+   semantic-, eieio- and speedbar-version(1).
+
+   *Please note*: ECB maybe requires a newer version of these libraries than
+   shipped with (X)Emacs. You have to install exactly a version ECB requires
+   and also to make sure that the correct version is loaded into (X)Emacs!
+
+   But ECB performs two autom checks:
+
+    - At load-time: It checks if the packages semantic, eieio and speedbar
+      are at least installed so ECB can be loaded. If not it offers to
+      download and install them.
+
+    - At start-time: It checks if the correct versions of semantic, eieio and
+      speedbar are installed and gives you proper feedback. *Note Download
+      required packages::.
+
+   So if you are not sure if you have installed the required packages at all
+   or if you have installed the correct versions of these packages then do
+   not worry about this, just go on with the following installation steps: If
+   ECB is missing something it will give you proper feedback and support not
+   later than at load-time or start-time!
+
+3. Add the new ECB-directory to your `load-path' variable.
+
+   You *MUST* add the ECB-install-directory to the `load-path' either by
+   changing the `load-path' variable directly in your `.emacs' or
+   `site-lisp/site-start.el' or by working with a file `subdirs.el'(2).
+
+   So for example the needed entry for your `.emacs'-file could be:
+
+      (add-to-list 'load-path
+                   "/path/to/your/ecb/installation/directory")
+
+   *ATTENTION*: ECB is NOT properly installed if it's directory is not added
+   to `load-path' and for example just loaded by
+
+      (load-file "/path/to/ecb/ecb.el")
+
+   Do not do this!
+
+4. Load ECB by adding code to your `.emacs':
+
+   If you want to load the complete ECB at (X)Emacs-loadtime (Advantage: All
+   ECB-options available after loading ECB. Disadvantage: Increasing
+   loadtime(3)):
+
+      (require 'ecb)
+
+   If you want to load the ECB first after starting it by `ecb-activate'
+   (Advantage: Fast loading(4).  Disadvantage: ECB- and semantic-options
+   first available after starting ECB):
+
+      (require 'ecb-autoloads)
+
+   This loads all available autoloads of ECB, e.g. `ecb-activate',
+   `ecb-minor-mode', `ecb-byte-compile' and `ecb-show-help'.
+
+   Regardless which method you prefer: In both cases the used statement must
+   be placed *after* the statement of step 3!
+
+5. Restart (X)Emacs.
+
+ECB is now ready for use and can be activated by calling `M-x ecb-activate'
+or `ecb-minor-mode'. Now you can either starting using ECB or you can do
+these optional installation steps:
+
+6. Reading the online help with `ecb-show-help'
+
+   Maybe you are interested to read the online-help of ECB before first start.
+
+7. Bytecompiling ECB with `ecb-byte-compile'
+
+   This byte compiles ECB. You can safely ignore all messages if there are
+   any. (You can also bytecompile ECB from the command-line either by using
+   the `Makefile' or by using the batch-file `make.bat'; just read the
+   comments in that file you choose.)
+
+8. Installing the Info-help of ECB
+
+   The ECB distribution contains a subdirectory `info-help' which contains
+   the online-help of ECB in Info-format. You can install this online help so
+   it's available in the Top-directory of Info. There are two ways to do this:
+
+    - Use "install-info" (recommended):
+
+      1. Copy the files of the subdirectory `info-help' into the
+         info-directory of Emacs
+
+      2. Install the file `info-help/ecb.info' with the command
+         "install-info" (if available on your system) in the `dir'-file.
+
+      The supplied `Makefile' offers a target `install-help' which does both
+      of these steps. You have just to call `make install-help' with the
+      correct EMACSINFOPATH set (see the comment in `Makefile'). Here is an
+      example:
+
+         make EMACSINFOPATH=/path/to/emacs/info install-help
+
+    - Manual Installation:
+
+      Copy the files of the subdirectory `info-help' into the info-directory
+      of Emacs and modify the file `dir' manually.
+
+   But it doesn't matter if you do not execute this step (8.) because the
+   online help of ECB is always available though, see `ecb-show-help' (*note
+   Interactive ECB commands::).
+
+
+---------- Footnotes ----------
+
+(1) The speedbar-version shipped with GNU Emacs <= 21.3 does not satisfy the
+requirements for this feature - download a newer one!
+
+(2) This works at least for Emacs but XEmacs may have slightly different
+mechanisms; see the XEmacs documentation
+
+(3) Cause of full loading of ECB itself and also the packages semantic, eieio
+and speedbar regardless if ECB is started.
+
+(4) ECB, semantic, eieio and speedbar are first loaded after starting ECB or
+with other words: ECB and semantic are not loaded if you do not use/need them
+
+
+File: ecb.info,  Node: Setting up Emacs,  Next: First steps,  Prev: Installation,  Up: Install and first steps
+
+How to set up Emacs for file parsing with ECB
+=============================================
+
+*Please note*: Normally it should not necessary for you to bother with the
+following stuff unless you have problems getting ECB working correctly for
+you.
+
+* Menu:
+
+* General hints::               General hints for a correct setup
+* Setting up semantic::         How to setup semantic correctly
+* Non-semantic files::          Setup for file types not supported by semantic
+
+
+File: ecb.info,  Node: General hints,  Next: Setting up semantic,  Prev: Setting up Emacs,  Up: Setting up Emacs
+
+General hints for a correct setup
+---------------------------------
+
+ECB is for browsing files and therefore you have to setup your
+Emacs-configuration properly so the file-parsing engines like semantic, imenu
+or etags can be activated automatically for parsing your Emacs-Lisp, C, C++
+or Java buffers(1). For this Emacs must activate the correct `major-mode' for
+the source-files and Emacs can only do this if the option `auto-mode-alist'
+is setup correctly. The correct major-modes and possible file-extensions(2)
+are:
+
+LANGUAGE         MAJOR-MODE                              EXTENSION(S)
+Emacs Lisp       `emacs-lisp-mode'                       .el
+C                `c-mode'                                .h, .c
+C++              `c++-mode'                              .h, .hxx, .hh, .HH,
+                                                         .cxx, .cpp, .cc, .CC
+Java             `java-mode' or `jde-mode' (if you use   .java
+                 JDEE)                                   
+
+Example: If you want files with extension ".cpp" being c++-parsed by semantic
+and ECB, your `auto-mode-alist' must contain an entry like:
+
+   ("\\.cpp\\'" . c++-mode)
+
+After this ECB will correctly parse your ".cpp"-sources and display all the
+parsing information in the ECB-methods buffer.
+
+---------- Footnotes ----------
+
+(1) semantic supports some more "languages" like Makefiles etc. but these are
+the most important ones.
+
+(2) Especially for C++ and C you can use any extension you want but these are
+the most common ones!
+
+
+File: ecb.info,  Node: Setting up semantic,  Next: Non-semantic files,  Prev: General hints,  Up: Setting up Emacs
+
+Setting up semantic
+-------------------
+
+To ensure ECB and semantic are working correctly for all by semantic
+supported languages you have to pay attention to the following aspects
+concerning your Emacs-setup:
+
+1. Setting up semantic itself
+
+   For all semantic-supported file-types parsing files is done completely by
+   semantic. ECB just displays the parsing results. For all needs of ECB
+   semantic is completely setup by ECB itself, i.e. ECB sets up semantic for
+   you! You have only to add the installation directory of semantic to your
+   `load-path' (in an appropriate way)!
+
+   *Please note*: If you setup semantic for yourself following the
+   recommendations in the installation instructions of semantic then you have
+   probably added code to your startup-file like:
+
+      (setq semantic-load-turn-everything-on t)
+      (require 'semantic-load)
+
+   Be aware that this also enables the minor-modes `semantic-show-dirty-mode'
+   and `semantic-show-unmatched-syntax-mode' where the former one highlights
+   all code which has to be reparsed with dark background (which results in
+   large portions of dark background ;-) and the latter one underlines all
+   syntax which can not be parsed. Especially the former one can be really
+   annoying.
+
+   To switch off these modes you can add to your startup-file:
+
+      (global-semantic-show-dirty-mode -1)
+      (global-semantic-show-unmatched-syntax-mode -1)
+
+2. Checking your hooks
+
+   If you have already checked point (1.) and if you have still problems
+   getting ECB/semantic working properly for your sources you should check
+   the related major-mode hook. Every major-mode X has a hook with name
+   "X-hook" which is evaluated after activating the major-mode (see above,
+   2.), e.g. the hook for the major-mode `c++-mode' is `c++-mode-hook'.
+
+   Semantic adds automatically during load-time a special "semantic-setup" to
+   these major-mode hooks(1) in form of a "setup-function". Example: For c
+   and c++ modes semantic adds `semantic-default-c-setup' to `c-mode-hook' and
+   `c++-mode-hook'.
+
+   If your own Emacs-setup (e.g. in `.emacs' or `site-lisp/site-start.el')
+   overwrites such a major-mode-hook then semantic can not be activated for
+   this major-mode and in consequence ECB can not work properly too!
+
+   Check if your Emacs-setup uses somewhere `setq' for adding code to a
+   major-mode-hook. *IMPORTANT*: Use `add-hook' instead of `setq'(2)!
+
+
+If your source-files are "running" with correct `major-mode' and correct
+major-mode hooks ECB and semantic will do what you expect them doing!
+
+---------- Footnotes ----------
+
+(1) Of course only for major-modes supported by semantic!
+
+(2) `setq' replaces/overwrites the current value of a hook with the new value
+whereas `add-hook' *adds* the new value to the old-value of the hook!
+
+
+File: ecb.info,  Node: Non-semantic files,  Prev: Setting up semantic,  Up: Setting up Emacs
+
+Setup for file types not supported by semantic
+----------------------------------------------
+
+From version 1.94 on ECB supports also parsing and displaying file-contents
+for file-types not supported by semantic (i.e. there is no semantic-grammar
+available for such file-types).
+
+Such non-semantic file-types can often be parsed by imenu and/or etags. Both
+of these parsing methods are now supported: ECB can display the results of
+imenu and/or etags in its Method-buffer. ECB uses for this speedbar-logic.
+Therefore the following speedbar options takes effect for this feature:
+
+ - `speedbar-dynamic-tags-function-list'
+
+ - `speedbar-tag-split-minimum-length'
+
+ - `speedbar-tag-regroup-maximum-length'
+
+ - `speedbar-tag-hierarchy-method'
+
+Normally there should be no need for you to bother with these options,
+because the default values are suitable for most situations! But if you are
+not satisfied with the parsing/display results then you can change some of
+these options.
+
+
+File: ecb.info,  Node: First steps,  Prev: Setting up Emacs,  Up: Install and first steps
+
+First steps after activating ECB first time
+===========================================
+
+This section of the ECB online-help is displayed automatically by ECB after
+activating ECB first time and describes what are the first basic steps:
+
+1. Configure where ECB can find your sources:
+
+   Call `M-x customize-option RET ecb-source-path RET'(1). This lets you
+   customize the option `ecb-source-path' with the customize-feature of
+   Emacs. This opens a customize-buffer where you can insert all the
+   directories where ECB can find your source-files. Save your changes with
+   the button "Save for future sessions" and then throw away this
+   customize-buffer either by killing it with `M-x kill-buffer' or clicking
+   at the button "Finish".
+
+2. Take a look at the most important options of ECB Call `M-x
+   ecb-customize-most-important RET' and see a list of options which you
+   should at least know that these options exist.
+
+3. Read the online-help of ECB:
+
+   The online-help of ECB is available via
+
+    - calling `M-x ecb-show-help',
+
+    - pressing `C-c . h' or
+
+    - using the menu "ECB".
+
+   (The section you are currently reading is part of the online-help of ECB)
+
+   The chapter "Tips and tricks" is also very interesting!
+
+4. Start working with ECB.
+
+---------- Footnotes ----------
+
+(1) This means first hitting the keys `M' (Meta- or Alt-key) and `x'
+simultaneously, inserting "customize-option" in the minibuffer, hitting
+RETURN, inserting "ecb-source-path" in the minibuffer and finally hitting
+RETURN again
+
+
+File: ecb.info,  Node: Overview,  Next: Manual usage,  Prev: Install and first steps,  Up: Top
+
+Overview
+********
+
+ECB is a global minor-mode which offers a couple of "ECB-windows" for
+browsing your sources comfortable with the mouse and the keyboard.  These
+"special" windows are also called "interactors" in this manual.
+
+ECB offers some basic interactors to browse your sources:
+ - ECB-Directories for browsing directories
+
+ - ECB-Sources for browsing source-files and a file-history
+
+ - ECB-Methods for browsing the contents of a source
+
+See *Note Basic interactors:: for a detailled description what these basic
+interactors offer. See *Note ECB-interactors:: for a general introduction in
+the interactor-concept of ECB.
+
+In addition to these "special" ECB-windows you have always an "edit-area"
+where you can edit your source-files. The edit-area can be divided into
+several "edit-windows" - as many as you need (*note The edit-area::). And at
+the bottom of the ECB-frame a persistent "compilation-window" (also called
+"compile-window") can be displayed (optional), where all the output of
+Emacs-compilation (compile, grep etc.) is shown (*note Temp- and
+compile-buffers::).
+
+The following "screenshot" illustrates the typical layout of the ECB-frame(1):
+
+   ------------------------------------------------------------------
+   |              |                                                 |
+   |  Directories |                                                 |
+   |              |                                                 |
+   |--------------|                                                 |
+   |              |                                                 |
+   |  Sources     |                                                 |
+   |              |                                                 |
+   |--------------|                   Edit-area                     |
+   |              |   (can be splitted in several edit-windows)     |
+   |  Methods     |                                                 |
+   |              |                                                 |
+   |--------------|                                                 |
+   |              |                                                 |
+   |  History     |                                                 |
+   |              |                                                 |
+   ------------------------------------------------------------------
+   |                                                                |
+   |            Persistent Compilation-window (optional)            |
+   |                                                                |
+   ------------------------------------------------------------------
+
+---------- Footnotes ----------
+
+(1) This is only one example of the layouts ECB offers, see *Note Changing
+the ECB-layout::
+
+
+File: ecb.info,  Node: Manual usage,  Next: ECB-interactors,  Prev: Overview,  Up: Top
+
+How to use this manual
+**********************
+
+*IMPORTANT*: You should have read the chapter *Note Overview:: before going
+on reading the current chapter.
+
+This chapter describes shortly the contents of the following chapters of this
+manual so maybe you can find faster what you are searching for.
+
+All interactors of ECB (*note ECB-interactors::)
+   Gives an introduction into the concept of interactors of ECB, what they
+   are, which different types exist, how they look, how they can be used and
+   last but not least what they do in detail, i.e. explains every interactor
+   of ECB in detail.
+
+Activation and Deactivation (*note Activation and Deactivation::)
+   Describes how to activate and deactivate ECB and which different types of
+   activation are possible.
+
+Usage of ECB (*note Usage of ECB::)
+   Describes in detail how to use ECB with mouse and keyboard, explains the
+   concept of the edit-area and the persistent compile-window, describe how
+   to change the window-layout and hide and show special windows, which
+   stealthy background-tasks ECB performs and so on...
+
+Customizing ECB (*note Customizing::)
+   Gives an overview of the most important options of ECB and tell you
+   something about do's and don'ts concerning customization of ECB. Lists all
+   options of ECB and describe exactly the purpose of them.
+
+Submitting a problem report (*note Submitting problem report::)
+   Instructions what to do if you encounters problems with ECB.
+
+Upgrading and downloading ECB (*note Upgrading::)
+   Gives an introduction into the automatic option-upgrading-feature of ECB
+   and you can download and install a newer ECB-version from within ECB.
+
+Tips and tricks (*note Tips and tricks::)
+   How to deal with special situations and circumstances, so e.g. working
+   with big and small screens, working with large directories, using the
+   builtin version-control-support of ECB, parsing non-semantic-supported
+   sources like perl, using hide-show, working best with eshell and JDEE and
+   some window-managers of Emacs (like escreen or winring) and many more...
+
+Entry points for Elisp programmers (*note Elisp programming::)
+   All informations needed by programmers when using some ECB-concepts from
+   within other elisp-libraries. This includes a full description how to use
+   the ECB-independent library tree-buffer.el. Lists also all available hooks
+   and describes with full working example how to program own layouts.
+
+Conflicts and bugs of ECB (*note Conflicts and bugs::)
+   Lists all currently known bugs and problems and gives well working
+   work-arounds.
+
+Frequently asked Questions (*note FAQ::)
+   Take a look...
+
+Command Index (*note Command Index::)
+   List of all interactive commands of ECB
+
+Option Index (*note Option Index::)
+   List of all user-customizable options of ECB
+
+Concept Index (*note Concept Index::)
+   List of all concepts introduced by ECB
+
+
+File: ecb.info,  Node: ECB-interactors,  Next: Activation and Deactivation,  Prev: Manual usage,  Up: Top
+
+All interactors of ECB
+**********************
+
+ECB displays a number of informational windows that allow for easy source
+code navigation and overview. These informational windows are called
+"interactors". Each interactor is displayed in its own special window/buffer
+which is dedicated and read-only.
+
+There are some "basic" interactors (e.g. for browsing directories and
+sources) and some "add-on" interactors for special purposes like displaying
+the definition of the current symbol under point. This chapter describes all
+interactors of ECB in detail.
+
+* Menu:
+
+* Basic interactors::           Description of the basic interactors
+* Add-on interactors::          Description of additional interactors
+
+
+File: ecb.info,  Node: Basic interactors,  Next: Add-on interactors,  Prev: ECB-interactors,  Up: ECB-interactors
+
+The basic interactors of ECB
+============================
+
+ECB offers basic interactors for browsing directory-structures, files of a
+directory and contents of source-files (e.g. methods and variables). These
+basic interactors are build from a special class of interactors, called
+"tree-buffer". See *Note Tree-buffer basics:: for more details about the
+functionality of tree-buffers. See *Note Tree-buffer styles:: to get an
+impression about the look&feel of these tree-buffers.
+
+In the following subsections these basic interactors of ECB will be explained
+in detail.
+
+* Menu:
+
+* Tree-buffer basics::          General introduction into tree-buffers
+* Tree-buffer styles::          Displaying the trees with different styles
+* ECB Directories-buffer::      Contents of the ECB Directories-buffer
+* ECB Sources-buffer::          Contents of the ECB Sources/history-buffer
+* ECB Methods-buffer::          Contents of the ECB Methods-buffer
+
+
+File: ecb.info,  Node: Tree-buffer basics,  Next: Tree-buffer styles,  Prev: Basic interactors,  Up: Basic interactors
+
+General introduction into tree-buffers
+--------------------------------------
+
+ECB displays most of its informations (e.g. about directory-structures or
+file-contents) in so called "tree-buffers" which means the display of such a
+tree-buffer is structured in a tree consisting of "tree-nodes". Every line in
+a tree-buffer displays exactly one tree-node. Each node can have any
+arbitrary number of "children"-nodes. If a tree-node has no children then it
+is called a "leaf".
+
+Each tree-buffer of ECB is displayed in an own special ECB-window/buffer
+which is read-only ie. not editable.
+
+The difference between a natural tree like a fir and an ECB-tree is that the
+root(-node) of a tree-buffer is not visible but only its children. In the
+example below the nodes parent-node-1 and parent-node-2 are the children of
+the invisible root-node.
+
+If a tree-node contains at least one child it is displayed with a special
+expand/collapse-symbol (see the example below). This symbol allows expanding
+(rsp. collapsing) the tree-node wheras expanding means to display the
+children-nodes and collapsing means to hide the childrens of a tree-node.
+
+Here is an example of a tree-buffer:
+
+   [+] parent-node-1  -------.
+   [-] parent-node-2  -------|
+       [-] expanded  --------|
+           leaf-node-1  -----|
+           leaf-node-2  -----|-----[tree-nodes]
+           leaf-node-3  -----|
+           leaf-node-4  -----|
+       [+] collapsed  -------´
+        |
+        `-----------------[expand/collapse-symbol]
+
+In most cases an action is triggered when clicking with the mouse onto a
+tree-node(1) (e.g. clicking onto "leaf-node-1" or "parent-node-1" in the
+example above). Which actions depends on the type of the tree-buffer. For
+example clicking on a tree-node in the ECB-sources-buffer (which is the name
+of a source-file) opens the relelated file in the edit-area of ECB (*note ECB
+Sources-buffer::) whereas clicking onto a node in the ECB-methods-buffer
+(which is the name of a tag in the current source-file displayed in the
+edit-area) "jumps" to the location of this tag in the source-buffer in the
+edit-area (*note ECB Methods-buffer::).
+
+Almost every interactor of ECB offers a special popup-menu when clicking with
+the right mouse-button (of course also possible via keyboard, see *Note Using
+the keyboard::) onto a tree-node (e.g. some senseful actions possible for
+directory-nodes like grepping this directory or performing version-control
+actions for this directory or something else).
+
+See *Note ECB Directories-buffer::, *Note ECB Sources-buffer::, *Note ECB
+Methods-buffer:: and *Note Add-on interactors:: for a detailed description
+which actions are triggered and which popup-menus are offered in all the
+interactors of ECB.
+
+---------- Footnotes ----------
+
+(1) Of course using the keyboard is also possible, see *Note Using the
+keyboard::.
+
+
+File: ecb.info,  Node: Tree-buffer styles,  Next: ECB Directories-buffer,  Prev: Tree-buffer basics,  Up: Basic interactors
+
+Displaying the trees with different styles
+------------------------------------------
+
+ECB offers three different styles for the tree-buffers in the ECB-windows.
+Two of the styles are ascii-based and one style uses images for drawing the
+tree-structure.
+
+* Menu:
+
+* Style basics::                Basic knowledge about the styles
+* Ascii-based styles::          How to customize the ascii-styles
+* Tree-buffers with images::    Which images are used for the tree
+* Images for Methods-buffer::   Images for the tags in the Methods-buffer
+
+
+File: ecb.info,  Node: Style basics,  Next: Ascii-based styles,  Prev: Tree-buffer styles,  Up: Tree-buffer styles
+
+Basic knowledge about the styles
+................................
+
+There are nine image-names which define the control- and guide-symbols to
+draw the tree. Here is the list of the allowed image-names and the related
+corresponding ascii-symbols:
+
+ - open ("[-]"): The control-symbol displayed for an opened tree-node which
+   has several subnodes. Clicking onto this control closes the node.
+
+ - close ("[+]"): The control-symbol displayed for a closed tree-node, i.e. an
+   expandable node with subnodes but all subnodes are hidden. Clicking onto
+   this control opened the node and displays its subnodes - if there are any.
+   If it has no subnodes the empty-symbol will be displayed.
+
+ - empty ("[x]"): The symbol displayed for an empty node. An empty node is a
+   node which could have subnodes but has currently none.
+
+ - leaf ("*"): The symbol displayed for a node which can not have any
+   subnodes so it is a "leaf" in the tree.
+
+ - guide (" |"): The symbol used for drawing vertical "guide-lines" for
+   opened nodes.  See the example below.
+
+ - no-guide ("  "): Sometimes invisible guide-lines are needed to draw the
+   tree.
+
+ - end-guide (" `"): The symbol used for the guide-line of the last subnode
+   of an opened node.
+
+ - handle ("-"): The symbol displayed before every subnode. Each handle is
+   connected to a guide-line - either a normal guide or an end-guide.
+
+ - no-handle (" "): An invisible handle.
+
+A tree will be build-up with these elements like follows:
+
+   [-] node-with-subnodes      (open)
+    |-[+] not-empty-subnode1   (guide+handle+close)
+    |-[x] empty-subnode        (guide+handle+empty)
+    `-[-] not-empty-subnode2   (end-guide+handle+open)
+       |-* leaf-1              (no-guide+no-handle+guide+handle+leaf)
+       `-* leaf-2              (no-guide+no-handle+end-guide+handle+leaf)
+
+
+File: ecb.info,  Node: Ascii-based styles,  Next: Tree-buffers with images,  Prev: Style basics,  Up: Tree-buffer styles
+
+How to customize the ascii-styles
+.................................
+
+The ECB-option `ecb-tree-buffer-style' offers two different styles completely
+drawn with ascii-controls and -guides.
+
+Ascii-style with guide-lines (value `ascii-guides')(1):
+
+   [-] ECB
+    |  [+] code-save
+    `- [-] ecb-images
+        |  [-] directories
+        |   |  [-] height-15
+        |   |   |  * close.xpm
+        |   |   |  * empty.xpm
+        |   |   |  * leaf.xpm
+        |   |   `- * open.xpm
+        |   |  [+] height-17
+        |   |  [+] height-19
+        |   `- [+] height-21
+        |  [x] history
+        |  [x] methods
+        `- [x] sources
+
+Ascii-style without guide-lines (value `ascii-no-guides') - this is the style
+used by ECB <= 1.96:
+
+   [-] ECB
+       [+] code-save
+       [-] ecb-images
+           [-] directories
+               [-] height-15
+                   * close.xpm
+                   * empty.xpm
+                   * leaf.xpm
+                   * open.xpm
+               [+] height-17
+               [+] height-19
+               [+] height-21
+           [x] history
+           [x] methods
+           [x] sources
+
+The tree-layout of both ascii-styles can be affected with the options
+`ecb-tree-indent' and `ecb-tree-expand-symbol-before' (the examples above
+have set 4 for the former and true for the latter one).  For the guide-style
+the face and color of the guide- and handle-symbols can be customized with
+the option `ecb-tree-guide-line-face' (default is the equal-named face).
+
+---------- Footnotes ----------
+
+(1) For a better look&feel of such a tree-buffer ECB displays only the last
+subnode of an opened node with a handle!
+
+
+File: ecb.info,  Node: Tree-buffers with images,  Next: Images for Methods-buffer,  Prev: Ascii-based styles,  Up: Tree-buffer styles
+
+Which images are used for the tree
+..................................
+
+Depending on the value of `ecb-tree-buffer-style' and the image-support of
+(X)Emacs, the tree-buffer try to use images instead of strings to draw a
+nice-looking tree.
+
+If images can and should be used then the option
+`ecb-tree-image-icons-directories' tells ECB where to search for suitable
+image-icons for each of the nine image-names (see above). An image is used
+for displaying a control with name "XXX" if one of the directories of
+`ecb-tree-image-icons-directories' contains an image-file with basename
+"ecb-XXX" and an extension which is supported by (X)Emacs. Currently
+supported extensions are ".xpm", ".png", ".gif", ".jpeg", ."jpg" and ".xbm".
+
+Example: To display the control with name "open" with a suitable image then
+one of the directories of `ecb-tree-image-icons-directories' must contain a
+file with name "ecb-open.xpm" or "ecb-open.png" etc. See the description of
+this option to get all important details how and in which sequence ECB
+searches the directories of `ecb-tree-image-icons-directories'.
+
+ECB comes with predefined default-images usable for every tree-buffer and
+special images for the Directories- and the Methods-tree-buffer.  They are
+defined in several different heights - so for the most senseful font-heights
+of a tree-buffer a fitting image-size should be available. The shipped images
+reside either in the subdirectory "ecb-images" of the ECB-installation or -
+if ECB is installed as regular XEmacs-package - in the ECB-etc data-directory
+(the directory returned by evaluating (locate-data-directory "ecb"). If you
+do not want to change the images then you normally have nothing to do because
+the default value of `ecb-tree-image-icons-directories' points already to the
+correct image-directories.
+
+A special remark for XEmacs:
+
+At least XEmacs 21.14 (but probably previous versions too) has a bug in its
+display-engine which prevents adjacent images to be displayed correctly. The
+effect is, that in a row of two or more adjacent images (e.g.
+end-guide+handle+open - see the tree-example above) always all images are
+masked by the last one, means only the last one is visible.  If at least one
+normal character (e.g. a space) is placed between two images then the images
+are displayed correctly. Therefore ECB has implemented the following
+work-around to get best possible results with XEmacs: open-, close-, empty-,
+leaf-, guide-, end-guide- and no-guide-images are displayed with images and
+the handle- and the no-handle-images are displayed with the corresponding
+ascii-symbols (which is "-" rsp. " "). The face (the color) of the
+handle-symbol is customizable via the option `ecb-tree-guide-line-face'.
+
+This bug is already reported to the XEmacs-team. If your XEmacs has fixed
+this bug then add the following to your `.emacs'-file (or whereever your
+emacs-setup is located):
+
+   (setq tree-buffer-enable-xemacs-image-bug-hack nil)
+
+Then ECB uses images without any special work-around with XEmacs too.  Just
+try it - if the tree-buffers look ugly then the XEmacs-bug is probably not
+fixed correctly.
+
+
+File: ecb.info,  Node: Images for Methods-buffer,  Prev: Tree-buffers with images,  Up: Tree-buffer styles
+
+Special images for the Methods-buffer
+.....................................
+
+ECB can display all the semantic-tags in the Method-buffer with special icons
+for methods, variables and classes - each of them with a different icon
+dependend of the protection of the tag. This feature can be disabled/enabled
+via the option `ecb-display-image-icons-for-semantic-tags'. All the special
+images are located in that directory where the option
+`ecb-tree-image-icons-directories' point to for methods.
+

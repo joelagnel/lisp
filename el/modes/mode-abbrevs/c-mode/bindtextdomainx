@@ -1,0 +1,1 @@
+bindtextdomain(<field "const char *DOMAINNAME">, <field "const char *DIRNAME">)<endpoint>

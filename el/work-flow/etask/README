@@ -1,0 +1,189 @@
+$Id: README,v 1.17 2004/11/01 18:59:25 rene Exp $
+
+===============================================
+EtaskMode  --  Task Management within GNU Emacs
+===============================================
+
+Development Environment: GNU Emacs 21.3, Debian/testing Linux
+distribution
+
+This file is part of EtaskMode, Test Releases `0.3.xxx'.
+
+
+
+FAILURE REPORTS
+===============
+
+If you encounter failures in this release, please report them; your
+failure reports are valuable contributions, since they allow us
+to notice and fix problems on machines we don't have, or in code we
+don't use often.
+
+
+--------------------------------------------
+Please report failures by electronic mail to
+
+<rene (dot) mas (at) chello (dot) at>
+
+
+You can use the EtaskMode command `C-c C-b'
+to submit a bug report.
+--------------------------------------------
+
+
+To enable maintainers to investigate a failure, your report should
+include all these things (items with a * are collected automatically
+if you use `C-c C-b' from within EtaskMode):
+
+ * The version number of EtaskMode (variable `etask-release').
+
+ * The version number of Emacs (variable `emacs-version').
+
+ * The files in your EtaskMode working directory.
+
+ * Your operating system type (variable `system-type').
+
+ * The features that are present in your Emacs (variable `features').
+
+ * The backtrace for the failure, if possible (do `M-x
+   toggle-debug-on-error').
+
+ + A description of what behavior you observe that you believe is
+   incorrect.
+
+ + A complete list of any modifications you have made to the EtaskMode
+   and Emacs source, if any.
+
+ + The precise commands we need to type to reproduce the bug.
+
+
+
+SETUP
+=====
+
+
+1. Install missing software components:  
+      
+
+   Emacs extensions: 
+
+     calendar, timezone, cal-iso, highlight-current-line (optionally)
+
+
+   Other tools: 
+
+     Software to generate high-quality Gantt charts from a LaTeX file,
+     e.g. LaTeX, dvips, ps2pdf, and xpdf
+
+
+   LaTeX packages: 
+
+     ae, babel, inputenc, fontenc, eurosym, amssymb, pst-all, fancyhdr
+
+
+2. Place the downloaded *.el files in your load path or add their
+   directory to the load path.
+
+   To find out what your load path is type (without quotes): `C-h v
+   load-path' 
+
+   To add, for example, the directory ``mylisp'' of your home
+   directory to the load path put the following in your ``~/.emacs'':
+   (setq load-path (cons (expand-file-name ``~/mylisp'') load-path))
+
+
+3. Load EtaskMode:
+
+   Put the following in your ``~/.emacs'': (require 'etask)
+
+   Save your ``~/.emacs'' and re-read it by typing
+   `M-x load-file RET ~/.emacs RET'
+
+
+4. Preliminary EtaskMode configuration
+
+   Type `M-x customize-group RET etask RET' to customize the main
+   group.
+
+   You should also go through the subgroups (Finetuning, Screen, and
+   LaTeX) and set your preferences -- for example, the number of
+   working hours per day, the paper size for the LaTeX outputs, and
+   many more.
+
+   If you want to change the faces used within the EtaskMode window do
+   `M-x customize-group RET etaskfaces RET'
+
+
+5. Migration from 0.1.xxx to 0.2.xxx and later releases
+
+5.1 Customization
+
+   If you have customized the following variables please delete the
+   settings from your ``~/.emacs'':
+
+   >  etask-tasks-filename
+   >  etask-reports-filename-prefix
+   >  etask-tex-filename-prefix
+   >  etask-logfile
+   >  etask-controlfile
+
+5.2 Tasks file
+
+a) Choose a <project name> for your tasks.
+
+   `M-x etask'
+
+   `M-x etask-migrate-01-02'
+
+   Enter full path name of your tasks file
+
+   Enter <project name>
+
+   `C-c a' (administration)
+
+   `1' (choose project)
+
+   `1' (choose new project name)
+
+   Enter your <project name>
+
+
+b) If you encounter problems with the automatic migration, you can do
+   the following:
+
+   Choose a <project name> for your tasks.
+
+   Rename your tasks file to "projects.<project name>" and put it in
+   the working directory (customize variable `etask-working-dir').
+
+   Change the project entries in projects.<project name> from "no
+   project" to your "<project name>".  
+   You can do this with dired: 
+   - `M-x dired' or `C-x d'
+   - Dired directory = working directory
+   - Move cursor over file projects.<project name> and do 
+     `Q no project RET <project name>'
+
+   Within EtaskMode, do `C-c a', select (1) Project, (1) New, and
+   enter your new project <project name>.
+
+   After that, you should see a chart containing the migrated tasks.
+
+
+
+TUTORIAL
+========
+
+EtaskMode is accompanied by a tutorial (etasktut.pdf).
+
+
+
+LATEST VERSION
+==============
+
+Get the latest version at
+<http://members.chello.at/rene.weichselbaum/etask.html>.
+
+
+
+End of Document

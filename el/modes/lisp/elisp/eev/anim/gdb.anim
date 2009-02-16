@@ -1,0 +1,16 @@
+
+  (find-eevanim "gdb.swf" 676 550)
+
+E-scripts that appear in the movie:   (find-eevex "anim.e" "movie2")
+Preparation:                          (find-eevex "anim.e" "movie2_A0")
+
+  (find-node "(emacs)Debuggers")
+  (find-node "(gdb)Data")
+  (find-node "(gdb)Calling")
+
+  The program that produced the animation:
+    http://www.unixuser.org/~euske/vnc2swf/rec_vncserver.html
+  Compiling vnc2swf (and some auxiliary libraries and programs):
+                                (find-eevex "anim.e" "compile-ming")
+  More about SWF:               (find-eevfile "anim/README")
+

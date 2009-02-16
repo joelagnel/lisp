@@ -1,0 +1,1 @@
+write(<cursor><field "int fd">, <field "const void *buf">, <field "size_t count">)

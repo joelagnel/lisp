@@ -1,0 +1,1 @@
+fflush(<field "FILE *stream">)

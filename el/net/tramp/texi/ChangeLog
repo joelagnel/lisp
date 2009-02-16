@@ -1,0 +1,98 @@
+2002-01-21  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp_ja.texi: Sync with tramp.texi rev 2.10.  From Yoichi
+	NAKAYAMA <yoichi@FreeBSD.org>.
+
+2002-01-20  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (External transfer methods): Document double use of
+	`-t' for the `scpx' method.  Explain why it is useful for Windows
+	users.
+	(Inline methods): Ditto for the `smx' method.
+
+2001-12-11  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (Connection types): Double-space sentence end.
+
+2001-09-20  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (Module): New filenames.  Moved to SourceForge.
+
+2001-09-07  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (Module): Repository has moved to SF.
+
+	* Makefile (Module): Install things on SourceForge.
+
+2001-08-05  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi: New default file name format.
+	* tramp_ja.texi: Ditto.
+
+2001-07-13  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (Multi-hop Methods): Say how to customize multi-hop
+	connection methods.  Provide example.
+	(Obtaining @tramp{}): Host name change.
+
+2001-03-30  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (External transfer methods): Mention possibility of
+	providing password on command line for scp.
+	(Frequently Asked Questions): Mention Tom Roche's nifty Web page
+	with instructions for NT.
+
+2001-03-26  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (Configuration): Syntax error.  Reported by Tom
+	Roche.
+	(Frequently Asked Questions): Dito.
+
+2001-03-22  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (Frequently Asked Questions): ksh init code to turn
+	off history saving.  From Ted Stern and Tom Roche.
+
+2001-03-01  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (Frequently Asked Questions): Pointer to Joe Stoy's
+	documentation for NT.
+
+2001-02-24  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (Remote shell setup): New section.  Explain that
+	people have to take care that their remote shell is setup
+	correctly, and why.
+
+2001-01-04  Yuji Yamano  <yyamano@kt.rim.or.jp>
+
+	* tramp_ja.texi: Sync with tramp.texi rev 1.38.
+
+2001-01-04  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (Top): Added detailed node listing.
+
+2000-10-01  V. Balaji  <vb@gfdl.gov>
+
+	* tramp.texi (Frequently Asked Questions): Notification when
+	transfers are complete.
+
+2000-09-22  Daniel Pittman  <daniel@rimspace.net>
+
+	* tramp.texi (Installation): Better URL for XEmacs package
+	installation instructions.
+
+2000-09-21  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (Installation): Add URL for XEmacs package
+	installation instructions.
+
+2000-09-12  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (Default Method): Add example.  Thanks to Henrik Holm
+	for suggesting this.
+
+2000-07-06  Kai Groﬂjohann  <Kai.Grossjohann@CS.Uni-Dortmund.DE>
+
+	* tramp.texi (Top): Make URLs clickable.
+

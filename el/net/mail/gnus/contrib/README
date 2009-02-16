@@ -1,0 +1,68 @@
+The files in this directory are not (yet) part of the Gnus
+distribution proper.  They may later become part of the distribution,
+or they may disappear altogether.
+
+Please note that it is not good to just add this directory to
+load-path: a number of files in this directory will become part of
+more recent Emacs versions, so that you might be running obsolete
+libraries with all kinds of ill effects.
+
+The suggested method for installation is to copy those files that you
+need to a directory which is in load-path.
+
+Here is an overview of the files:
+
+base64.el
+
+        As of Emacs 21, base64 encoding and decoding is available
+        natively.  So this file appears to be needed for Emacs 20
+        only.
+
+gpg-ring.el
+gpg.el
+
+hashcash.el
+
+md5.el
+
+	MD5 encoding is part of Emacs as of Emacs 21.2.  Hence, this
+	file is not needed for those Emacs versions.
+
+one-line-cookie.diff
+
+sendmail.el
+smtpmail.el
+
+	Copies of the corresponding files from the Emacs lisp/mail/
+	directory, to provide features (occasionally) needed by Gnus which
+	may not be provided by the versions of these files in older Emacs
+	distributions.
+
+ssl.el
+
+ucs-tables.el
+
+	This file provides improved Unicode functionality.  It defines
+	functions unify-8859-on-encoding-mode and
+	unify-8859-on-decoding-mode which unify the Latin-N charsets.
+	Without unify-8859-on-encoding-mode, composing a Latin-9 reply
+	to a Latin-1 posting, say, will produce a multipart posting (a
+	Latin-1 part and a Latin-9 part), or perhaps UTF-8.  With
+	unify-8859-on-encoding-mode, the outgoing posting can be all
+	Latin-1 or all Latin-9 in most cases.
+
+	It is harmless to turn on unify-8859-on-encoding-mode, but
+	unify-8859-on-decoding-mode may unexpectedly change files in
+	certain situations.  (If the file contains different Latin-N
+	charsets which should not be unified.)
+
+	This is part of Emacs 21.3 and later, which also turns on
+	unify-8859-on-encoding-mode by default.
+
+vcard.el
+
+xml.el
+
+	This is used for parsing RSS feeds.  Part of Emacs 21.3 and later.
+	Note that the version of this file in the Gnus contrib/ directory is
+	out of date with respect to the version in the Emacs tree.

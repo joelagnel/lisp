@@ -1,0 +1,1 @@
+os.access(<field "path">,<choose><choice "os.F_OK"><choice "os.R_OK"><choice "os.W_OK"><choice "os.X_OK"></choose>)

@@ -1,0 +1,5 @@
+gtk.threads_init()
+
+gtk.threads_enter()
+<cursor>
+gtk.threads_leave()

@@ -1,0 +1,809 @@
+This is ecb.info, produced by makeinfo version 4.2 from ecb.texi.
+
+INFO-DIR-SECTION GNU Emacs Lisp
+START-INFO-DIR-ENTRY
+* ECB: (ecb).           Emacs Code Browser
+END-INFO-DIR-ENTRY
+
+
+File: ecb.info,  Node: ecb-methods,  Next: ecb-history,  Prev: ecb-sources,  Up: Customizable options
+
+Group ecb-methods
+-----------------
+
+This group contains settings for the methods-buffer in the ECB:
+
+ - User Option: auto-expand-tag-tree
+   Expand the methods-tag-tree automatically if node invisible.
+
+   This option has only an effect if option `ecb-highlight-tag-with-point' is
+   switched on too. There are three possible choices:
+    - `nil': No auto. expanding of the method buffer.
+
+    - `expand-spec': Auto expand the method-buffer nodes if the node
+      belonging to current tag under point is invisible because its
+      parent-node is collapsed.  But expanding is only done if the type of
+      the tag under point in the edit-buffer is contained in
+      `ecb-methods-nodes-expand-spec'.
+
+    - `all': Like expand-spec but expands all tags regardless of the setting
+      in `ecb-methods-nodes-expand-spec'.
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+ - User Option: auto-expand-tag-tree-collapse-other
+   Auto. expanding the tag-tree collapses all not related nodes. There are
+   several choices:
+
+    - Only if on tag: This means collapsing all nodes which have no relevance
+      for the currently highlighted node will be collapsed, because they are
+      not necessary to make the highlighted node visible. But do this only if
+      point stays onto a tag in the selected edit-window.
+
+    - Always: Same as before but collapse also when point doesn't stays on a
+      tag (e.g. between two defuns in elisp) in the selected edit-window. This
+      means in such a situation a full collapsing of the methods-buffer.
+
+    - Never: Do not automatically collapse the methods-buffer.
+
+ - User Option: auto-update-methods-after-save
+   Automatically updating the ECB method buffer after saving a source.
+
+ - User Option: default-tag-filter
+   Default tag-filters for certain files. This option allow to define default
+   tag-filters for certain files which are applied automatically after
+   loading such a file into a buffer. The possible filters are the same as
+   offered by the command `ecb-methods-filter' and they are applied in the
+   same manner - the only difference is they are applied automatically.
+   Please be aware that symbol-filters (e.g.  protection-symbols like public
+   or private) must not be inserted with quotes whereas a filter-regexp has
+   to be inserted with surrounding double-quotes! In addition backslashes in
+   a regexp have to be doubled!
+
+   For each file-spec (a major-mode plus a file-regexp which both specify a
+   file for which filters should be applied) there can be as much filters as
+   needed - they are layered like with `ecb-methods-filter' too.
+
+   Tag-classes which are completely hidden or excluded by the option
+   `ecb-show-tags' will never being displayed in the Methods-buffer
+   regardless of the filters of this option!
+
+ - User Option: display-image-icons-for-semantic-tags
+   Display nice and pretty icons for semantic-tags in the Methods-buffer.
+   This option takes only effect if Emacs can display images and if
+   `ecb-tree-buffer-style' is set to `image'.
+
+ - User Option: exclude-parents-regexp
+   Regexps which parent classes should not be shown in the methods buffer
+   (see also `ecb-show-parents'). If nil then all parents will be shown if
+   `ecb-show-parents' is not nil.
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+ - User Option: expand-methods-switch-off-auto-expand
+   Switch off auto expanding in the ECB-method buffer. If on then auto
+   expanding is switched off after explicit expanding or collapsing by
+   `ecb-expand-methods-nodes'.
+
+   This is done with `ecb-toggle-auto-expand-tag-tree' so after the switch
+   off the auto expanding feature can again switched on quickly.
+
+   But after explicitly expanding/collapsing the methods-buffer to a certain
+   level the auto. expanding could undo this when the node belonging to
+   current tag under point in the current active edit-window is invisible
+   after `ecb-expand-methods-nodes' - then the auto.  expand feature would
+   make this node immediately visible and destroys the explicitly set
+   expand-level.
+
+ - User Option: font-lock-tags
+   Adds font-locking (means highlighting) to the ECB-method buffer.
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+ - User Option: highlight-tag-with-point
+   How to highlight the method or variable under the cursor.
+
+    - `highlight-scroll': Always scroll the method buffer, so the current
+      method of the edit-window is highlighted in the method-window.
+
+    - `highlight': Only highlight the current method of the edit window in the
+      method window if the method is visible in the method-window.
+
+    - `nil': No highlighting is done.
+
+   See also `ecb-highlight-tag-with-point-delay'.
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+ - User Option: highlight-tag-with-point-delay
+   Time Emacs must be idle before current tag is highlighted. If nil then
+   there is no delay, means current tag is highlighted immediately. A small
+   value of about 0.25 seconds saves CPU resources and you get even though
+   almost the same effect as if you set no delay.  But such a delay prevents
+   also "jumping backward/forward" during scrolling within java-classes if
+   point goes out of method-definition into class-definition. Therefore the
+   default value is a delay of 0.25 seconds.
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+ - User Option: methods-buffer-after-create-hook
+   Local hook running after the creation of the methods-buffer. Every
+   function of this hook is called once without arguments direct after
+   creating the methods-buffer of ECB and it's local key-map. So for example
+   a function could be added which performs calls of `local-set-key' to
+   define new keybindings only for the methods-buffer of ECB.
+
+ - User Option: methods-buffer-name
+   Name of the ECB methods buffer. Because it is not a normal buffer for
+   editing you should enclose the name with stars, e.g. " *ECB Methods*".
+
+   If it is necessary for you you can get emacs-lisp access to the
+   buffer-object of the ECB-methods-buffer by this name, e.g. by a call of
+   `set-buffer'.
+
+   Changes for this option at runtime will take affect only after
+   deactivating and then activating ECB again!
+
+ - User Option: methods-filter-replace-existing
+   How the methods-filter should be applied to existing filters. There are
+   three different choices:
+
+    - `never': This is the default and means that calling `ecb-methods-filter'
+      always adds the new filter on top of already existing filters. So you
+      can combine several filter to one combined like this example: 'Display
+      only all public methods having the string "test" in its name.' With
+      this setting the filters can only be cleared by calling
+      `ecb-methods-filter' and then choosing "nothing".
+
+    - `always': This means that `ecb-methods-filter' always clears a previous
+      filter before applying the new one.
+
+    - `ask': ECB asks if the new filter should replace the existing ones.
+
+ - User Option: methods-menu-sorter
+   Function which re-sorts the menu-entries of the directories buffer.
+
+   If a function then this function is called to sort the menu-entries of the
+   combined menu-entries of the user-menu-extensions of
+   `ecb-methods-menu-user-extension' and the built-in-menu
+   `ecb-methods-menu'. If nil then no special sorting will be done and the
+   user-extensions are placed in front of the built-in-entries.
+
+   For the guidelines for such a sorter-function see
+   `ecb-directories-menu-sorter'.
+
+ - User Option: methods-menu-user-extension
+   Static user extensions for the popup-menu of the methods buffer. For
+   further explanations see `ecb-directories-menu-user-extension'.
+
+   The node-argument of a menu-function contains as data the semantic-tag of
+   the method/variable/tag for which the popup-menu has been opened.
+
+   Per default the static user-extensions are added at the beginning of the
+   built-in menu-entries of `ecb-methods-menu' but the whole menu can be
+   re-arranged with `ecb-methods-menu-sorter'.
+
+ - User Option: methods-menu-user-extension-function
+   Dynamic user extensions for the popup-menu of the methods buffer. A
+   function which has to return a list in the same format like the option
+   `ecb-methods-menu-user-extension'. This function is called when the user
+   opens the popup-menu for the methods buffer. For an example how such a
+   function can be programmed see `ecb-methods-menu-editwin-entries'.
+
+   If no dynamically evaluated menu-extensions should be added to the
+   methods-buffer the function has to return nil. Therefore the default-value
+   of this option is `ignore'.
+
+   Per default the dynamic user-extensions are added in front of the static
+   extensions of `ecb-methods-menu-user-extension' but the whole menu can be
+   re-arranged with `ecb-methods-menu-sorter'.
+
+ - User Option: methods-nodes-collapse-spec
+   Semantic tag-types collapsed by `ecb-expand-methods-nodes'.  For valid
+   values of this option see `ecb-methods-nodes-expand-spec'!
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+ - User Option: methods-nodes-expand-spec
+   Semantic tag-types expanded by `ecb-expand-methods-nodes'.
+
+   The value of this option is either the symbol `all' (all tags are expanded
+   regardless of their type) or a list of symbols where each symbol is a
+   valid semantic tag-type. For a description of semantic tag types see
+   option `ecb-show-tags'.
+
+   But this option also defines if bucket-nodes in the ECB-method-buffer
+   (e.g. "[Variables]") should be expanded. Therefore valid symbols for this
+   list are also all cars of the variable returned by
+   `ecb--semantic-symbol->name-assoc-list'.
+
+   If there is a bucket-name (the node-name stripped of the settings in
+   `ecb-bucket-node-display') which is not contained as cdr in the value
+   returned by `ecb--semantic-symbol->name-assoc-list' then the symbol with
+   this bucket-name as name is also a valid symbol for this list. Example: In
+   ECB there are buckets "[Parents]". The bucket-name is "Parents" and the
+   valid symbol-name is then `Parents'.
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+ - User Option: methods-separate-prototypes
+   Separate function-prototypes from the real functions. This is for example
+   useful for C++ and C because these languages distinct between a
+   method-prototype (rsp. function-prototype for C) and the method (rsp.
+   function for C) itself. If this option is not nil then ECB separates the
+   prototypes from the real function/methods. Then with `ecb-show-tags' the
+   user can define different display-settings for each of them. If this
+   option is nil then the prototypes and the real functions are filled in the
+   same bucket and displayed plain and there is no sorting between prototypes
+   and functions possible. If this option is switched on then it is senseful
+   that `ecb-show-tags' contains for all modes which distinct between
+   prototypes and real functions/methods two entries for the tag-type
+   'function - see the documentation of this option.
+
+ - User Option: methods-show-node-info
+   When to display which node-info in the methods-buffer. Define which node
+   info should displayed after moving the mouse over a node (or after a shift
+   click onto the node) in the methods-buffer.
+
+   You can define "when" a node-info should be displayed: See
+   `ecb-directories-show-node-info' for the possible choices.
+
+   You can define what info should be displayed:
+    - name: Only the full node name is displayed.
+
+    - name+type: The full name + the type of the node (function, class,
+      variable) is displayed.
+
+   Do NOT set this option directly via setq but use always customize!
+
+ - User Option: post-process-semantic-taglist
+   Define mode-dependent post-processing for the semantic-taglist. This is an
+   alist where the car is a major-mode symbol and the cdr is a list of
+   function-symbols of functions which should be used for post-processing the
+   taglist (returned by `ecb--semantic-bovinate-toplevel') for a buffer in
+   this major-mode. The first function in the list is called with current
+   semantic taglist of current buffer and must return a valid taglist again.
+   All other functions are called with the result-taglist of its preceding
+   function and have to return a new taglist again.
+
+   For oo-programming languages where the methods of a class can be defined
+   outside the class-definition (e.g. C++, Eieio) the function
+   `ecb-group-function-tags-with-parents' can be used to get a much better
+   method-display in the methods-window of ECB, because all method
+   implementations of a class are grouped together.
+
+   Another senseful usage is to filter out certain tags, e.g. prototype tags
+   in `c-mode'. For this you can set `ecb-filter-c-prototyp-tags'.
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+ - User Option: show-only-positioned-tags
+   Show only nodes in the method-buffer which are "jump-able". If not nil
+   then ECB displays in the method-buffer only nodes which are "jump-able",
+   i.e. after selecting it by clicking or with RET then ECB jumps to the
+   corresponding location in the edit-window. Example: With CLOS or Eieio
+   source-code there can exist some position-less nodes like
+   variable-attributes in a `defclass' form which are only displayed if this
+   option is nil. Displaying such nodes can be senseful even if they can not
+   be jumped.
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+ - User Option: show-tags
+   How to show tags in the methods buffer first time after find-file.  This
+   functionality is set on a major-mode base, i.e. for every major-mode a
+   different setting can be used. The value of this option is a list of
+   cons-cells:
+
+   The car is either a major-mode symbol or the special symbol 'default which
+   means if no setting for a certain major-mode is defined then the cdr of
+   the 'default cons-cell is used. This option should always contain a
+   default-setting!
+
+   The cdr is a list where each element represents a type of tags:
+
+      (<tag type> <display type> <sort method>)
+
+   There can be more than 1 element for a certain <tag type>. This is for
+   example useful for C++ and C because these languages distinct between a
+   method-prototype (rsp. function-prototype for C) and the method (rsp.
+   function for C) itself. The default value of these option contains two
+   entries for <tag type> is `function' whereas the first one is responsible
+   for the "real" methods (rsp. functions) and the second one for the
+   prototypes. So if the methods should be flattened and the prototypes
+   collapsed the show-tags-list for C++ and C must contain two entries for
+   <tag type> `function', the first one defined as `flattened' and the second
+   one defined as `collapsed'.
+
+   The tags in the methods buffer are displayed in the order as they appear in
+   this list.
+
+  `<tag type>'
+      A Semantic tag type symbol (function, variable, rule, include etc.)  or
+      one of the following:
+
+       - `t': All tag types not specified anywhere else in the list.
+
+       - `parent': The parents of a type.
+
+  `<display type>'
+      A symbol which describes how the tags of this type shall be shown:
+
+       - `expanded': The tags are shown in an expanded node.
+
+       - `collapsed': The tags are shown in a collapsed node.
+
+       - `flattened': The tags are added to the parent node.
+
+       - `hidden': The tags are not shown.
+
+  `<sort method>'
+      A symbol describing how to sort the tags of this type:
+
+       - `name': Sort by the tag name.
+
+       - `access': Sort by tag access (public, protected, private) and then
+         by name.
+
+       - `nil': Don't sort tags. They appear in the same order as in the
+         source buffer.
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+ - User Option: tag-display-function
+   Function to use for displaying tags in the methods buffer. This
+   functionality is set on major-mode base, i.e. for every major-mode a
+   different function can be used. The value of this option is a list of
+   cons-cells:
+
+    - The car is either a major-mode symbol or the special symbol 'default
+      which means if no function for a certain major-mode is defined then the
+      cdr of the 'default cons-cell is used.
+
+    - The cdr is the function used for displaying a tag in the related
+      major-mode.
+
+   Every function is called with 3 arguments:
+
+   1. The tag
+
+   2. The parent-tag of tag (can be nil)
+
+   3. The value of `ecb-font-lock-tags'.
+
+   Every function must return the display of the tag as string, colorized if
+   the third argument is not nil.
+
+   The following functions are predefined:
+
+    * For each element E of `ecb--semantic-format-function-alist' exists a
+      function with name "ecb-<(cdr E)>". These functions are just aliase to
+      the builtin format-functions of semantic. See the docstring of these
+      functions to see what they do. Example: (semantic-name-nonterminal .
+      semantic-format-tag-name) is an element of
+      `ecb--semantic-format-function-alist'. Therefore the alias-function for
+      this element is named `ecb--semantic-format-tag-name'.
+
+    * For every cdr in `ecb--semantic-format-function-alist' with name
+      "semantic-XYZ" a function with name "ecb-XYC" is predefined. The
+      differences between the semantic- and the ECB-version are:
+
+       - The ECB-version displays for type tags only the type-name and nothing
+         else (exception: In c++-mode a template specifier is appended to the
+         type-name if a template instead a normal class).
+
+       - The ECB-version displays type-tags according to the setting in
+         `ecb-type-tag-display'. This is useful for better recognizing
+         different classes, structs etc. in the ECB-method window.
+
+      For all tags which are not types the display of the ECB-version is
+      identical to the semantic version. Example: For
+      `ecb--semantic-format-tag-name' (one of the builtin semantic
+      formatters) the pendant is `ecb-format-tag-name'.
+
+   This functionality also allows the user to display tags as UML. To enable
+   this functionality set the function for a major-mode \(e.g.  `jde-mode') to
+   `ecb--semantic-format-tag-uml-concise-prototype',
+   `ecb--semantic-format-tag-uml-prototype', or
+   `ecb--semantic-format-tag-uml-abbreviate' the ECB-versions of these
+   functions.
+
+   If the value is `nil', i.e. neither a function for a major-mode is defined
+   nor the special 'default, then `ecb--semantic-format-tag-prototype' is
+   used for displaying the tags.
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+ - User Option: tag-jump-sets-mark
+   Set the mark after jumping to a tag from the ECB-method buffer. If set the
+   user can easily jump back.
+
+ - User Option: tag-visit-post-actions
+   Actions to perform after visiting a tag from the Method-buffer. With this
+   option actions can be added which will be performed after visiting the
+   start of the tag in the source-buffer.
+
+   This functionality is set on a `major-mode' base, i.e. for every
+   `major-mode' a different setting can be used. The value of this option is
+   a list of cons-cells:
+    - The car is either a `major-mode' symbol or the special symbol 'default.
+
+    - The cdr is a list of action-functions or nil.
+
+   ECB first performs all actions defined for the special symbol 'default (if
+   any) and then all actions defined for current `major-mode' (if any).
+
+   ECB offers some predefined senseful action-functions. Currently there are:
+   `ecb-tag-visit-highlight-tag-header' `ecb-tag-visit-smart-tag-start'
+   `ecb-tag-visit-recenter' `ecb-tag-visit-recenter-top'
+   `ecb-tag-visit-goto-doc-start' `ecb-tag-visit-narrow-tag' See the
+   documentation of these function for details what they do.
+
+   But you can add any arbitrary function if the following conditions are
+   fulfilled: The function gets the semantic tag as argument, returns the
+   (new) point after finishing its job and the function must not put the
+   point outside the tag-boundaries of the tag-argument.
+
+ - User Option: type-tag-display
+   How to display semantic type-tags in the methods buffer. Normally all tag
+   displaying, colorizing and facing is done by semantic according to the
+   value returned by `ecb--semantic-format-face-alist' and the semantic
+   display-function (e.g. one from `ecb--semantic-format-tag-functions'). But
+   sometimes a finer distinction in displaying the different type specifiers
+   of type-tags can be useful. For a description when this option is
+   evaluated look at `ecb-tag-display-function'!
+
+   This functionality is set on a major-mode base, i.e. for every major-mode
+   a different setting can be used. The value of this option is a list of
+   cons-cells:
+
+    * The car is either a major-mode symbol or the special symbol 'default
+      which means if no setting for a certain major-mode is defined then the
+      cdr of the 'default cons-cell is used.
+
+    * The cdr is a list of 3-element-lists:
+
+      1. First entry is a semantic type specifier in string-form. Current
+         available type specifiers are for example "class", "interface",
+         "struct", "typedef" and "enum". In addition to these ones there is
+         also a special ECB type specifier "group" which is related to
+         grouping tags (see `ecb-post-process-semantic-taglist' and
+         `ecb-group-function-tags-with-parents'). Any arbitrary specifier can
+         be set here but if it is not "group" or not known by semantic it
+         will be useless.
+
+      2. Second entry is a flag which indicates if the type-specifier string
+         from (1.) itself should be removed (if there is any) from the
+         display.
+
+      3. Third entry is the face which is used in the ECB-method window to
+         display type-tags with this specifier. ECB has some predefined faces
+         for this (`ecb-type-tag-class-face', `ecb-type-tag-interface-face',
+         `ecb-type-tag-struct-face', `ecb-type-tag-typedef-face',
+         `ecb-type-tag-union-face', `ecb-type-tag-enum-face' and
+         `ecb-type-tag-group-face') but any arbitrary face can be set here.
+         This face is merged with the faces semantic already uses to display
+         a tag, i.e. the result is a display where all face-attributes of the
+         ECB-face take effect plus all face-attributes of the semantic-faces
+         which are not set in the ECB-face (with XEmacs this merge doesn't
+         work so here the ECB-face replaces the semantic-faces; this may be
+         fixed in future versions).
+
+   The default value is nil means there is no special ECB-displaying of
+   type-tags in addition to the displaying and colorizing semantic does. But
+   a value like the following could be a useful setting:
+
+      ((default
+         ("class" t ecb-type-tag-class-face)
+         ("group" nil ecb-type-tag-group-face))
+       (c-mode
+        ("struct" nil ecb-type-tag-struct-face)
+        ("typedef" nil ecb-type-tag-typedef-face)))
+
+   This means that in `c-mode' only "struct"s and "typedef"s are displayed
+   with special faces (the specifiers itself are not removed) and in all
+   other modes "class"s and grouping-tags (see `ecb-tag-display-function',
+   `ecb-group-function-tags-with-parents') have special faces and the "class"
+   specifier-string is removed from the display.
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+ - User Option: type-tag-expansion
+   Default expansion of semantic type-tags. Semantic groups type-tags in
+   different type-specifiers. Current available type specifiers are for
+   example "class", "interface", "struct", "typedef", "union" and "enum". In
+   addition to these ones there is also a special ECB type-specifier "group"
+   which is related to grouping tags (see
+   `ecb-post-process-semantic-taglist').
+
+   This option defines which type-specifiers should be expanded at
+   file-open-time. Any arbitrary specifier can be set here but if it is not
+   "group" or not known by semantic it will be useless.
+
+   This functionality is set on a major-mode base, i.e. for every major-mode
+   a different setting can be used. The value of this option is a list of
+   cons-cells:
+
+    * The car is either a major-mode symbol or the special symbol `default'
+      which means if no setting for a certain major-mode is defined then the
+      cdr of the `default' cons-cell is used.
+
+    * The cdr is either a list of type-specifiers which should be expanded at
+      file-open-time or the symbol `all-specifiers' (then a type-tag is
+      always expanded regardless of its type-specifier).
+
+   This options takes only effect for semantic-sources - means sources
+   supported by semantic!
+
+
+File: ecb.info,  Node: ecb-history,  Next: ecb-analyse,  Prev: ecb-methods,  Up: Customizable options
+
+Group ecb-history
+-----------------
+
+This group contains settings for the history-buffer in the ECB:
+
+ - User Option: history-buffer-after-create-hook
+   Local hook running after the creation of the history-buffer. Every
+   function of this hook is called once without arguments direct after
+   creating the history-buffer of ECB and it's local key-map. So for example
+   a function could be added which performs calls of `local-set-key' to
+   define new keybindings only for the history-buffer of ECB.
+
+ - User Option: history-buffer-name
+   Name of the ECB history buffer. Because it is not a normal buffer for
+   editing you should enclose the name with stars, e.g. "*ECB History*".
+
+   If it is necessary for you you can get emacs-lisp access to the
+   buffer-object of the ECB-history-buffer by this name, e.g. by a call of
+   `set-buffer'.
+
+   Changes for this option at runtime will take affect only after
+   deactivating and then activating ECB again!
+
+ - User Option: history-exclude-file-regexps
+   List of regexps which exclude source-files from being historized. Be aware
+   that each always full filenames (ie. incl. full path) are matched against
+   these regexps! Therefore be carefore with regexps beginning with ^!
+
+ - User Option: history-item-name
+   The name to use for items in the history buffer.
+
+ - User Option: history-menu-sorter
+   Function which re-sorts the menu-entries of the directories buffer.
+
+   If a function then this function is called to sort the menu-entries of the
+   combined menu-entries of the user-menu-extensions of
+   `ecb-history-menu-user-extension' and the built-in-menu
+   `ecb-history-menu'. If nil then no special sorting will be done and the
+   user-extensions are placed in front of the built-in-entries.
+
+   For the guidelines for such a sorter-function see
+   `ecb-directories-menu-sorter'.
+
+ - User Option: history-menu-user-extension
+   Static user extensions for the popup-menu of the history buffer. For
+   further explanations see `ecb-directories-menu-user-extension'.
+
+   The node-argument of a menu-function contains as data the filename of the
+   source for which the popup-menu has been opened.
+
+   Per default the static user-extensions are added at the beginning of the
+   built-in menu-entries of `ecb-history-menu' but the whole menu can be
+   re-arranged with `ecb-history-menu-sorter'.
+
+ - User Option: history-menu-user-extension-function
+   Dynamic user extensions for the popup-menu of the history buffer. A
+   function which has to return a list in the same format like the option
+   `ecb-history-menu-user-extension'. This function is called when the user
+   opens the popup-menu for the history buffer.
+
+   If no dynamically evaluated menu-extensions should be added to the
+   history-buffer the function has to return nil. Therefore the default-value
+   of this option is `ignore'.
+
+   Per default the dynamic user-extensions are added in front of the static
+   extensions of `ecb-history-menu-user-extension' but the whole menu can be
+   re-arranged with `ecb-history-menu-sorter'.
+
+ - User Option: history-show-node-info
+   When to display which node-info in the history-buffer. Define which node
+   info should displayed after moving the mouse over a node (or after a shift
+   click onto the node) in the history-buffer.
+
+   You can define "when" a node-info should be displayed: See
+   `ecb-directories-show-node-info' for the possible choices.
+
+   You can define what info should be displayed: See
+   `ecb-directories-show-node-info' for the possible choices.
+
+   Do NOT set this option directly via setq but use always customize!
+
+ - User Option: history-sort-ignore-case
+   Ignore case for sorting the history-entries. See also
+   `ecb-history-sort-method'.
+
+ - User Option: history-sort-method
+   Defines how the entries in the history-buffer are sorted.
+    - `name': Sorting by name (default).
+
+    - `extension': Sorting first by extension and then by name.
+
+    - `nil': No sorting, means the most recently used buffers are on the top
+      of the history and the seldom used buffers at the bottom.
+
+   See also `ecb-history-sort-ignore-case'.
+
+ - User Option: kill-buffer-clears-history
+   Define if `kill-buffer' should also clear the history. There are three
+   options:
+
+    - `auto': Removes automatically the corresponding history-entry after the
+      buffer has been killed.
+
+    - `ask': Asks, if the history-entry should be removed after the kill.
+
+    - `nil': `kill-buffer' does not affect the history (this is the default).
+
+
+File: ecb.info,  Node: ecb-analyse,  Next: ecb-layout,  Prev: ecb-history,  Up: Customizable options
+
+Group ecb-analyse
+-----------------
+
+ - User Option: analyse-bucket-element-face
+   Basic face for displaying elements of buckets in the ECB-analyse-buffer.
+   This defines the basic face for the elements of category-buckets like
+   Context, Prefix, Completions etc. in the ECB-analyse-buffer.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: analyse-bucket-node-face
+   Basic face for displaying a bucket-node in the ECB-analyse-buffer.  This
+   defines the basic face for the bucket-nodes like Context, Prefix,
+   Completions etc. in the ECB-analyse-buffer.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: analyse-buffer-after-create-hook
+   Local hook running after the creation of the analyse-buffer. Every
+   function of this hook is called once without arguments direct after
+   creating the analyse-buffer of ECB and it's local key-map. So for example
+   a function could be added which performs calls of `local-set-key' to
+   define new key-bindings only for the analyse-buffer of ECB.
+
+ - User Option: analyse-buffer-name
+   Name of the ECB analyse buffer. Because it is not a normal buffer for
+   editing you should enclose the name with stars, e.g. "*ECB Analyse*".
+
+   If it is necessary for you you can get emacs-lisp access to the
+   buffer-object of the ECB-analyse-buffer by this name, e.g. by a call of
+   `set-buffer'.
+
+   Changes for this option at runtime will take affect only after
+   deactivating and then activating ECB again!
+
+ - User Option: analyse-collapsed-buckets
+   Buckets collapsed when displaying the current semantic analysis. The
+   semantic analyse-modul offers several categories of analysis which are
+   called buckets here. These are for example:
+
+   Context: The current context, which is the current function/method,
+   variable, class etc. (what exactly depends on the programming language)
+   point is in. This means not the current
+   function/method/variable/class-name point stand on but the current
+   surrounding context. Example: If point stays somewhere within a
+   defun-definition in emacs-lisp or within a java-method then this defun
+   rsp. method is the context. In object oriented languages this can be the
+   full hierachy, i.e. not only the current method, but the current method,
+   the class of this method, the superclass of this class and so on!
+
+   Arguments: The arguments of the context if the context is a
+   function/method.
+
+   Local Variables: All accessible and bound local variables visible at
+   current point.
+
+   Prefix: The currently parsed prefix, which is mostly the current
+   identifier point stands on.
+
+   Assignee: See the semantic user-manual
+
+   Function: Current function-name point stands on.
+
+   Argument #: When point is located within a function-call then this is the
+   number of the argument point stands on.
+
+   Completions: All possible completions for current prefix (see above).
+   This is probably the most helpful bucket.
+
+   If one of these categories/buckets are not needed per default then add the
+   bucket-name (s.a.) to this option and ECB will per default collapse this
+   bucket. So most needed buckets are better visible in the analyse-buffer.
+
+ - User Option: analyse-face
+   Face used for highlighting current entry in the analyse buffer. If the
+   face `ecb-default-highlight-face' is used then the display of all
+   ECB-tree-buffers can be changed by modifying only the face
+   `ecb-default-highlight-face'.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: analyse-fontified-buckets
+   Buckets whose elements should be fontified as in the methods-buffer.  If
+   the name of a category/bucket is contained in this option then all
+   elements of this bucket will be displayed as in the methods-buffer - at
+   least if an element is a semantic-tag. This means if `ecb-font-lock-tags'
+   is not nil these elements will be fontified and also displayed with an
+   appropriate icon if possible. The default value does this only for the
+   Context-bucket because for most of the other buckets this makes not really
+   much sense.
+
+   For available buckets see `ecb-analyse-collapsed-buckets'.
+
+   For the faces used to display a bucket-node itself or bucket-elements not
+   fontified see the options `ecb-analyse-bucket-node-face' rsp.
+   `ecb-analyse-bucket-element-face'.
+
+ - User Option: analyse-gen-tag-info-fn
+   Which info should be displayed for a tag of the analyse-buffer. If nil
+   then the default information about a tag will be displayed. If a function
+   then this function gets as argument the tag for which tag-information
+   should be displayed. This function has to return a string which will be
+   then display as tag-info. This string has to be fully formatted (e.g. must
+   already include line-breaks if the tag-info should be displayed in several
+   lines).
+
+   See `ecb-analyse-show-tag-info-fn' how the tag-info is displayed.
+
+ - User Option: analyse-general-face
+   Basic face for the ECB analyse buffer. This defines the basic face the
+   whole history buffer should displayed with. If the face
+   `ecb-default-general-face' is used then the display of all
+   ECB-tree-buffers can be changed by modifying only the face
+   `ecb-default-general-face'.
+
+   Changes take first effect after finishing and reactivating ECB!
+
+ - User Option: analyse-show-node-info
+   When to display which node-info in the history-buffer. Define which node
+   info should displayed after moving the mouse over a node (or after a shift
+   click onto the node) in the history-buffer.
+
+   You can define "when" a node-info should be displayed: See
+   `ecb-directories-show-node-info' for the possible choices.
+
+   You can define what info should be displayed:
+
+    - name: The full name of the node
+
+    - full-info: All infos available to a node.
+
+   Do NOT set this option directly via setq but use always customize!
+
+ - User Option: analyse-show-tag-info-fn
+   How to display the tag-info for a tag of the analyse-buffer. The value of
+   this option is a function which will be called with the info-string
+   generated for the current tag of the analyse-buffer. This function must do
+   all things necessary for displaying this info. When this function is
+   called the window stored in `ecb-last-edit-window-with-point' is the
+   selected window!
+
+   ECB offers two builtin ways: Display the info in the echo-area (via the
+   function `message') or in a temp-buffer in the edit-area (via the function
+   `ecb-analyse-show-tag-info-in-temp-buffer'). Default is echo-area-display.
+
+   See also `ecb-analyse-gen-tag-info-fn'.
+

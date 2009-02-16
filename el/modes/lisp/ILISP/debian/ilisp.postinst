@@ -1,0 +1,84 @@
+#! /bin/sh 
+# postinst script for ilisp
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see /usr/doc/packaging-manual/
+#
+# quoting from the policy:
+#     Any necessary prompting should almost always be confined to the
+#     post-installation script, and should be protected with a conditional
+#     so that unnecessary prompting doesn't happen if a package's
+#     installation fails and the `postinst' is called with `abort-upgrade',
+#     `abort-remove' or `abort-deconfigure'.
+
+
+pkg=ilisp
+conf_file=/etc/ilisp/ilisp-keybindings.el
+
+if [ -e /usr/share/debconf/confmodule ]; then
+    . /usr/share/debconf/confmodule
+else
+    exit 1
+fi
+
+
+set_keybindings()
+{
+    db_get $pkg/fsf-compliant
+    if [ "$RET" = "true" ]; then
+	echo "(setq ilisp-*use-fsf-compliant-keybindings* t)" > $conf_file
+    else
+	echo "(setq ilisp-*use-fsf-compliant-keybindings* nil)" > $conf_file
+    fi
+}
+
+# Needed to work around version 5.12.0+cvs.2003.05.21 which
+# erroreously deleted symlinks in postrm. Thus, upgrades would not 
+# work from that version without this work-around
+ensure_symlinks()
+{
+    source=/usr/share/common-lisp/source/ilisp
+    dest=/usr/lib/ilisp
+    for i in $source/*.lisp ; do
+	b=`basename $i`
+	if [ ! -h "$dest/$b" ]; then
+	    ln -s $i $dest
+	fi
+    done
+    source=/usr/share/ilisp
+    for i in $source/*.scm ; do
+	b=`basename $i`
+	if [ ! -h "$dest/$b" ]; then
+	    ln -s $i $dest
+	fi
+    done
+}
+
+case "$1" in
+    configure)
+	set_keybindings
+	chmod 777 /usr/lib/ilisp # Required so that users can build .fasl files
+	/usr/sbin/register-common-lisp-source ilisp
+	ensure_symlinks
+	;;
+    abort-upgrade|abort-remove|abort-deconfigure)
+	;;
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 0
+    ;;
+esac
+
+#DEBHELPER#
+
+exit 0
+
+

@@ -1,0 +1,161 @@
+;;; ldap --- LDAP searching routines
+;;
+;; Copyright (c) 1997 Andrew J. Cosgriff
+;;
+;; Author: Andrew J Cosgriff <ajc@bing.wattle.id.au>
+;; Creation Date : Wed May 21 13:54:57 1997
+;; Version: 0.04
+;; Keywords: ldap, search
+;; X-RCS: !Id: ldap.el,v 1.7 1997/05/31 06:33:03 ajc Exp ajc !
+;; URI: http://bing.bofh.asn.au/sw/emacs-lisp/
+;;
+;; This is not part of GNU Emacs.
+;;
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, you can either send email to this
+;; program's author (see above or write to:
+;;
+;;              The Free Software Foundation, Inc.
+;;              675 Mass Ave.
+;;              Cambridge, MA 02139, USA.
+;;
+;; This code is available from http://bing.bofh.asn.au/sw/emacs-lisp/
+;;
+
+(require 'backquote)
+
+
+;;; Variables:
+
+(defvar ldap-host-info
+  '((deeproot
+  (comment . "Deeproot LDAP service")
+  (host . 192.168.1.5)
+  (port . 389)
+  (maxhits . "2000")
+  (base-dn . "ou=addressbook,dc=deeproot,dc=co,dc=in"))))
+
+(defvar ldap-default-host 'deeproot
+  "Default ldap host to use")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;;; Code:
+;;
+;; High-level (user/interactive) functions
+;;
+(defun ldap-mail-search (name)
+  "Do an LDAP search for NAME's email address and display in echo area.
+With prefix arg, prompt for the LDAP host to search from."
+  (interactive "sName to search for : ")
+  (let ((host (if current-prefix-arg
+		  (car (read-from-string
+			(completing-read "Host : "
+					 (mapcar
+					  (lambda (thing) (list (prin1-to-string (car thing))))
+					  ldap-host-info)
+					 nil t (prin1-to-string ldap-default-host)))))))
+    (message "Performing LDAP Search for mail address...")
+    (let ((addr (ldap-do-search "mail" name nil host)))
+      (if (null addr)
+	  (message "User not found")
+	(let ((msg ""))
+	  (mapcar
+	   (lambda (thing)
+	     (setq msg (concat msg (if (string-equal msg "") "" ", ") thing))) addr)
+	(message msg))))))
+  
+(defun insert-ldap-mail-search (name)
+  "Do an LDAP search for NAME's email address and insert in buffer.
+With prefix arg, prompt for the LDAP host to search from."
+  (interactive "sName to search for : ")
+  (let ((host (if current-prefix-arg
+		  (car (read-from-string
+			(completing-read "Host : "
+					 (mapcar
+					  (lambda (thing) (list (prin1-to-string (car thing))))
+					  ldap-host-info)
+					 nil t (prin1-to-string ldap-default-host)))))))
+    (message "Performing LDAP Search for mail address...")
+    (let ((addr (ldap-do-search "mail" name nil host)))
+      (if (null addr)
+	  (message "User not found")
+	(progn (insert
+		(if (> (length addr) 1)
+		    (completing-read "Which address ? : "
+				     (mapcar (lambda (thing) (list thing)) addr) nil t (car addr))
+		  (car addr)))
+	       (message ""))))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; lower level functions
+;;
+(defun ldap-get-host-attr (attr &optional host)
+  "Return attribute ATTR for HOST from the ldap info list"
+  (cdr (assoc attr (assoc (if host host ldap-default-host) ldap-host-info)))
+)
+
+(defun ldap-do-search (attr-wanted searchkey &optional searchkeytype ldap-host)
+  "Do an LDAP search.
+ATTR-WANTED is the attribute we want returned, eg. \"mail\".
+SEARCHKEY is pretty self-explanatory, eg. \"Andrew Cosgriff\".
+Optional args -
+ SEARCHKEYTYPE specifies the attribute type of the searchkey (if it isn't
+the person's full name (which is normall called \"cn\")
+ LDAP-HOST if you want a server other than the default.
+
+Returns a list of matching things."
+  (let ((ldap-search-buffer (get-buffer-create "*ldap-search*"))
+	(host (ldap-get-host-attr 'host ldap-host))
+	(port (ldap-get-host-attr 'port ldap-host))
+	(base-dn (ldap-get-host-attr 'base-dn ldap-host))
+	(maxhits (ldap-get-host-attr 'maxhits ldap-host))
+	(arglist) (ldap-result)
+	)
+    (save-excursion
+      (set-buffer ldap-search-buffer)
+      (delete-region (point-min) (point-max))
+      (if (not (or (equal nil host) (equal "" host)))
+	  (setq arglist (nconc arglist (list (format "-h%s" host)))))
+      (if (not (or (equal nil port) (equal "" port)))
+	  (setq arglist (nconc arglist (list (format "-p%s" port)))))
+      (if (not (or (equal nil base-dn) (equal "" base-dn)))
+	  (setq arglist (nconc arglist (list (format "-b%s" base-dn)))))
+      (if (not (or (equal nil maxhits) (equal "" maxhits)))
+	  (setq arglist (nconc arglist (list (format "-z%s" maxhits)))))
+      (setq ldap-result
+	     (eval `(call-process "ldapsearch" nil ldap-search-buffer nil
+				  ,@arglist
+				  (format
+				   "(&(objectclass=qmailUser)(%s=%s))"
+				   (if searchkeytype searchkeytype "uid")
+				   searchkey)
+				  ;;
+				  ;; Note - if using Four11, and we're
+				  ;; after a CN, telling ldapsearch
+				  ;; that we only want it to return
+				  ;; the CN results in no output.
+				  ;; Hmm.
+				  ;;
+				  attr-wanted)))
+      (if (equal 0 ldap-result)
+	  (let ((result))
+	    (goto-char (point-min))
+	    (forward-line)
+	    (while (re-search-forward (concat "^" attr-wanted "=\\(.*\\)$") nil t)
+		(setq result (nconc result (list (match-string 1)))))
+	    result)
+	nil))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+(provide 'ldap)
+;;; ldap ends here

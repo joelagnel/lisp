@@ -1,0 +1,91 @@
+Introduction to C management routines.
+$Id: README,v 1.3 1996/05/23 00:38:25 zappo Exp $
+
+			     CPARSE V 0.3
+
+The packages listed are loosly associated as C management.  By C
+management, I mean utilities which aid programmers handle all those
+really annoying tasks, which detracts from their joy of figuring out
+that really bizarre algorithm.
+
+The management routines have been broken into four code files which
+are:
+           
+cparse.el: cparse represents the main engine of all routines.  It
+           contains a parser which will convert one scope level into a
+           list of named definitions. With this ability, it also is
+           capable of "finding" any keyword by systematically
+           searching all scopes, then all header files for the desired
+           definition.  It also has an electric C PARTS mode.
+
+cpcomment.el: cpcomment represents all commenting functions.  It knows
+           how to comment c files, header files, and function parts.
+           It contains configurable routines which will automagically
+           create English text to describe names with known sylables
+           in them.  Includes the function programmer->english
+           
+cproto.el: cproto is a header file prototype managment function.  It's
+           single entry point will place variable or function
+           definitions into a header file, or update existing
+           prototypes with a single keystroke.  It will identify
+           missing comments and include statements as well.
+sformat.el: sformat is the format engine used in all text
+           configuration items.  Sformat is also used in my etalk
+           (emacs talk) package.
+
+Unfortunatly, because of the limitations of my routines, not all legal C
+syntax definitions are handled.  In addition, the auto-commentor, and
+header manage depends of careful formatting of the header files.  It
+should be a straighforward matter of converting all configuration items
+to match your preferred style, but there will be instances where
+limitation may occur.
+
+There are much more detailed instructins within each .el file, and an
+overview is in HOWTO.
+
+IF YOU THINK THIS IS NEAT!
+
+If you really really like this program, or you like it, but it doesn't
+quite handle the case you need it to, let me know.  If you have
+additions to my lists of data structures, auto-comment fields, or
+whatever, let me know that stuff too.  If it just doesn't plain work,
+GACK! Sorry.  I certainly tried to account for the commonly used
+instances.
+
+SAMPLE BINDINGS:
+
+(setq load-path (cons "~/cparse" load-path))
+
+(autoload 'cparse-listparts "cparse"
+  "List all the parts in the current buffer in another buffer." t)
+(autoload 'cparse-open-on-line "cparse" 
+  "Grab the object under the cursor and find it's definition." t)
+(autoload 'cpc-insert-function-comment "cpcomment"
+  "Starting at pnt, look for a function definition.  If the definition
+exists, parse for the name, else, fill everything in as null.  Then
+insert the variable cpc-function-comment, and fill in the %s with the
+parts determined.
+If the comment already exists, this function will try to update only
+the HISTORY part." t)
+(autoload 'cpc-insert-new-file-header "cpcomment"
+  "Insert a new comment describing this function based on the format
+in the variable cpc-file-comment.  It is a string with sformat tokens
+for major parts.  Optional HEADER is the header to use for the cpr
+token" t)
+(autoload 'cpr-store-in-header "cproto"
+  "Grab the header from current position, load in the header file, and
+make any needed substitutions to update the header file.  If the
+function is static, then create needed stuff in this c file for the
+prototype." t)
+  
+;; these are suggested bindings only.
+(defun cparse-setup-keybindings ()
+  (define-key c-mode-map "\C-cp" 'cparse-listparts)
+  (define-key c-mode-map "\C-co" 'cparse-open-on-line)
+  (define-key c-mode-map "\C-cf" 'cpc-insert-new-file-header)
+  (define-key c-mode-map "\C-c\C-h" 'cpr-store-in-header)
+  (define-key c-mode-map "\C-c\C-d" 'cpr-insert-function-comment)
+  )
+
+(add-hook 'c-mode-common-hook 'cparse-setup-keybindings)
+

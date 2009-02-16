@@ -1,0 +1,1 @@
+sendto(<field "int SOCKET">, <field "void *BUFFER. size_t SIZE">, <field "int FLAGS">, <field "struct sockaddr *ADDR">, <field "socklen_t LENGTH">)<endpoint>

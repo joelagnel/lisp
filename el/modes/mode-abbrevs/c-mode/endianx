@@ -1,0 +1,26 @@
+int IsMachineBigEndian()
+{
+    unsigned long int testWord = 1;
+    if(((unsigned char*)&testWord)[0])
+        return 0;
+    else
+        return 1;
+}
+
+#define SWAP_BYTES_NC(v,l) \
+{ \
+char *_bs,*_be; \
+char _btemp; \
+_bs = ((char*)v); _be = ((char*)v)+l-1; \
+while (_bs<_be) { \
+_btemp = *_bs; *_bs = *_be; *_be = _btemp; \
+_bs++; _be--; \
+} \
+}
+
+void SwapByteArray_NC(void *p, int elemsz, int numelem)
+{
+    int i;
+    for (i=0; i<numelem; ++i)
+        SWAP_BYTES_NC(((char *)p)+i*elemsz, elemsz);
+}

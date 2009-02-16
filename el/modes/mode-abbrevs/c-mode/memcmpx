@@ -1,0 +1,1 @@
+memcmp(<field "const void *s1">, <field "const void *s2">, <field "size_t n">)

@@ -1,0 +1,44 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Simulating%20speedbar">Simulating speedbar</a>,
+Next:<a rel=next accesskey=n href="Integrating-speedbar.html#Integrating%20speedbar">Integrating speedbar</a>,
+Previous:<a rel=previous accesskey=p href="Big-screens.html#Big%20screens">Big screens</a>,
+Up:<a rel=up accesskey=u href="Tips-and-tricks.html#Tips%20and%20tricks">Tips and tricks</a>
+<hr><br>
+
+<h3>Simulating speedbar without an extra frame</h3>
+
+<p>You can simulate a speedbar-like layout within ONE frame by doing the
+following:
+
+<ol type=1 start=1>
+</p><li>Customize <code>ecb-layout-name</code> to layout name "left9", "left12",
+"left13" or "left14" dependent to what you like.
+
+<li>Optional: Ensure that <code>ecb-compile-window-height</code> is nil.
+
+<li>Optional: Adjust the <code>ecb-windows-width</code>.
+
+<li>Optional: Customize <code>ecb-toggle-layout-sequence</code> and toggle very fast
+between several layouts by <code>ecb-toggle-layout</code>. See the doc-strings!
+
+<li>Optional: Customize <code>ecb-show-sources-in-directories-buffer</code> to
+not nil if the chosen layout (see 1. and 4.) contains a
+directories-tree-buffer.
+
+<li>Save your changes.
+</ol>
+
+<p>But not only simulating speedbar is possible but also full integrating
+it into the ECB and the ECB-frame, See <a href="Integrating-speedbar.html#Integrating%20speedbar">Integrating speedbar</a>.
+
+</body></html>
+

@@ -1,0 +1,1557 @@
+\input texinfo   @c -*-mode: texinfo; coding: euc-jp;-*-
+@c %**start of header
+@setfilename tramp_ja.info
+@settitle TRAMP User Manual
+@setchapternewpage odd
+@documentlanguage ja
+@documentencoding euc-jp
+@c %**end of header
+
+@c XXX This is a euc-jp file. I know it is better to use iso-2022-jp 
+@c XXX for htmlizing, but makeinfo doesn't work with it. 
+@c XXX I found the patch for wide-character, but it doesn't seems to 
+@c XXX work with iso-2022-jp.
+@c XXX http://www02.u-page.so-net.ne.jp/xa2/fukusaka/linux/
+
+@c XXX Notice for Japanese translation
+@c XXX I use `@ifset ja' for the contents only in Japanese version and
+@c XXX the translator's comment.
+@clear ja
+@set ja
+
+@c This is *so* much nicer :)
+@footnotestyle end
+
+@c Version values, for easy modification
+@c NOTE: The 'UPDATED' value is updated by the 'time-stamp' function.
+@c       If you change it by hand, the modifications will not stay.
+@set VERSION $Revision: 2.3 $
+@set UPDATED 2002 年 1 月 15 日 (Tue)
+@c XXX VERSION and UPDATED are Japanese manual's version and update date.
+@c XXX If we need original's one, we MUST use literal version and date
+@c XXX strings.
+
+@c Entries for @command{install-info} to use
+@direntry
+* TRAMP: (tramp).                Transparent Remote Access, Multiple Protocol
+                                 Emacs remote file access via rsh and rcp.
+@end direntry
+
+@c Macro to make formatting of the tramp program name consistent.
+@macro tramp
+@sc{tramp}
+@end macro
+
+@c Copying permissions, et al
+@ifinfo
+This file documents @tramp{}, a remote file editing package for Emacs and
+XEmacs.
+     
+Copyright @copyright{} 1999, 2000 Free Software Foundation, Inc.
+     
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+     
+@ignore 
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries a copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+   
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided also that the
+sections entitled ``Copying'' and ``GNU General Public License'' are
+included exactly as in the original, and provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+     
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation
+approved by the Free Software Foundation.
+@end ifinfo
+
+@tex
+
+@titlepage
+@title @tramp{} User Manual
+@subtitle Last updated @value{UPDATED}
+
+@author by Daniel Pittman
+@author based on documentation by Kai Gro@ss{}johann
+@page
+
+@vskip 0pt plus 1filll
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+     
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided also that the
+sections entitled ``Copying'' and ``GNU General Public License'' are
+included exactly as in the original, and provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+     
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be stated in a translation
+approved by the Free Software Foundation.
+
+@end titlepage
+@page
+
+@end tex
+
+@ifnottex
+@node Top, Copying, (dir), (dir)
+@top @tramp{} ユーザーマニュアル
+
+@html
+このプロジェクトは <A href="http://sourceforge.net">
+<IMG src="http://sourceforge.net/sflogo.php?group_id=34545"
+     width="88" height="31" border="0" alt="SourceForge Logo"></A>
+に間借りさせて頂いています。
+@end html
+
+@tramp{} は `Transparent Remote (file) Access, Multiple Protocol'
+の略称です。このパッケージは @cite{ange-ftp} や @cite{EFS} のような
+リモートファイルの編集機能を提供します。
+
+ange-ftp と異なるのはファイルの転送方法です。ange-ftp は、ローカル
+ホストとリモートホスト間のファイル転送に FTP を使用します。しかし、
+@tramp{} は @command{rsh} と @command{rcp}、あるいは他の同じような
+プログラム、例えば @command{ssh} や @command{scp}を使用します。
+
+これは @tramp{} のマニュアルのバージョン 2.10 で、最後に更新された
+のは 2001 年 12 月 11 日 (火)です。
+
+@ifset ja
+@c この部分は、オリジナル版から更新日時、バージョン文字列をコピー
+@c する必要があるので注意すること。@value{VERSION} や @value{UPDATED}
+@c を使用すると、日本語訳のバージョンや更新日に置換されてしまう。
+[訳注: 日本語訳のバージョンは @value{VERSION}で、最終更新日時は 
+@value{UPDATED} です。]
+@end ifset
+
+このドキュメントの最新バージョンは web サイト
+@uref{http://tramp.sourceforge.net/}
+にあります。
+
+@ifhtml
+このマニュアルには @uref{tramp_ja.html, 日本語訳}が存在します。
+
+@ifset ja
+[訳注: そう、あなたが読んでいる、これが日本語訳です :-)]
+@end ifset
+
+最新の @tramp{} は
+@uref{http://tramp.sourceforge.net/download} 
+にあります。詳細は @ref{Obtaining @tramp{}} を参照してください。
+CVS サーバーについての説明もあります。
+
+また、 @uref{http://sourceforge.net/projects/tramp/,
+SourceForge Project Page} にも @tramp{} の情報があります。
+@end ifhtml
+
+@tramp{}のためのメーリングリスト @email{tramp-devel@@lists.sourceforge.net}
+が存在します。アーカイブは通常の SourceForge アーカイブと同じく、
+@uref{http://www.mail-archive.com/emacs-rcp@@ls6.cs.uni-dortmund.de/}
+にあります。
+
+@end ifnottex
+
+@menu
+* Copying::                     @tramp{} の配布条件
+* Overview::                    @tramp{} で可能な事、不可能な事
+
+エンドユーザー向け:
+* Obtaining @tramp{}::          @tramp{} の入手方法
+* History::                     @tramp{} の歴史
+* Installation::                @tramp{} のインストール
+* Configuration::               @tramp{} の設定
+* Usage::                       @tramp{} の使い方
+* Bug Reports::                 バグや問題の報告
+* Frequently Asked Questions::  よくある質問とその答
+
+開発者向け:
+* Version Control::             リモートバージョンコントロールの内部動作
+* Files directories and paths:: ファイル名、ディレクトリ、パス名がどのように
+                                変換され(mangled)、管理されるか
+* Issues::			
+
+@detailmenu
+ --- 詳細なノードの一覧 ---
+
+@tramp{} の設定
+
+* Connection types::            リモートマシンへの接続の種類
+* Inline methods::              インラインメソッド
+* External transfer methods::   外部転送メソッド
+* Multi-hop Methods::           マルチホップを使用したリモートホストへの接続
+* Default Method::              デフォルトのメソッドの選択
+* Customizing Methods::         非標準のメソッドを使う
+* Remote Programs::             リモートマシン上で @tramp{} がプログラムを発見、使用する方法
+* Remote shell setup::          
+
+@tramp{} の使い方
+
+* Filename Syntax::             @tramp{} ファイル名のきまり
+* Multi-hop filename syntax::   マルチホップファイル名のきまり
+* Dired::                       Dired とファイル名の補完
+
+リモートバージョンコントロールの内部動作
+
+* Version Controlled Files::    ファイルがバージョン管理されているかどうかの判断
+* Remote Commands::             リモートマシン上でのバージョン管理コマンドの実行
+* Changed workfiles::           作業ファイルの変更の発見
+* Checking out files::          作業ファイルのリポジトリからの取得
+* Miscellaneous Version Control::  その他バージョン管理システムに関係する事
+
+その他バージョン管理システムに関係する事
+
+* Remote File Ownership::       VC がワークファイルのオーナーを調べる方法
+* Back-end Versions::           VC が RCS のバージョンを調べる方法
+
+ファイル名、ディレクトリ、パス名がどのように変換され(mangled)、管理されるか
+
+* Path deconstruction::         コンポーネント中のパスの分解
+
+@end detailmenu
+@end menu
+
+@node Copying, Overview, Top, Top
+@chapter @tramp{} の配布条件
+
+@ifset ja
+[訳注: This is an unofficial translation of the @tramp{} copyright into 
+Japanese. It is not legally valid. Only the original English text is the 
+legal one. 以下の日本語の配布条件は非公式なものであり、法的に有効な配布
+条件はオリジナル(英語)のものだけです。配布条件の日本語訳は、
+@uref{ftp://ftp.sra.co.jp/pub/gnu/local-fix/GPL2-j/gpl.text.gz}
+を参考にさせていただきました。]
+@end ifset
+
+Copyright (C) 1998, 1999, 2000 Free Software Foundation, Inc.
+
+tramp.el はフリーソフトウェアです。あなたは、Free Software Foundation 
+が公表したGNU 一般公有使用許諾の「バージョン2」或いはそれ以降の各バージョ
+ンの中からいずれかを選択し、そのバージョンが定める条項に従って本プログラム
+を再頒布または変更することができます。
+
+tramp.el は有用とは思いますが、頒布にあたっては、市場性及び特定目的適合
+性についての暗黙の保証を含めて、いかなる保証も行ないません。詳細については
+GNU 一般公有使用許諾書をお読みください。
+
+あなたは、GNU Emacs と一緒にGNU 一般公有使用許諾の写しを受け取ってい
+るはずです。そうでない場合は、Free Software Foundation, Inc., 
+59 Temple Place - Suite 330, Boston, MA 02111-1307, USA へ手紙を書いて
+ください。
+
+@ifset ja
+[訳注: 以下がオリジナルの配布条件です。]
+@end ifset
+
+Copyright (C) 1998, 1999, 2000 Free Software Foundation, Inc.
+
+tramp.el is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2, or (at your option) any later
+version.
+
+tramp.el is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+more details.
+
+You should have received a copy of the GNU General Public License along
+with GNU Emacs; see the file COPYING. If not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
+USA.
+
+
+@node Overview, Obtaining @tramp{}, Copying, Top
+@chapter @tramp の概要
+
+@tramp{} をインストールすると、リモートマシン上のファイルにローカル
+ファイルと同じような感覚でアクセスできます。リモートファイルシステム
+上のファイルの編集、バージョンコントロール、@command{dired} を透過的
+に実行することができます。
+
+リモートマシンへのアクセスには、@command{rsh} や @command{rlogin}、
+@command{telnet} コマンド、あるいはこれらに類似した接続方法を使用
+します。これらのコマンドは ASCII を通過させることが可能でなければ
+なりませんが、8-bit クリーンである必要はありません。
+
+このパッケージは別のマシンへの @command{ssh} 接続をサポートします。
+これは、このパッケージのもっとも一般的な使い方のひとつです。特に 
+@command{ftp}アクセスが許可されていない場合にも、他のマシンへの
+比較的セキュアなアクセスが可能となります。
+
+@tramp{} によって実行されるアクティビティのほとんどは、リモート
+ログインが可能で、端末上で実行できることだけを要求します。リモート
+ファイルにアクセスするために、@tramp {} はファイルの内容を一時的
+にローカルマシンに転送します。
+
+@tramp{} は、さまざまな方法でマシン間のファイル転送をおこないます。
+転送方法は簡単に選択でき、あなたのニーズとマシン環境に応じて使い
+わける事ができます。
+
+もっとも速い転送メソッドは、リモートファイルの転送パッケージ、たとえば
+@command{rcp}、@command{scp}、@command{rsync} を使うものです。これらの
+メソッドは、ファイルのコピーコマンドがリモートマシンのパスワードをたず
+ねない場合にのみ有効です。
+
+もし、リモートコピーメソッドが使えない場合のために、@tramp {} は、
+シェルを直接利用した符号化転送方法をサポートしています。この方法を使う
+ためには、@command{mimencode} か @command{uuencode} がリモートマシン
+上に存在しなければなりません。
+
+上記の制限内であれば、@tramp{} は非常にパワフルです。ただし、注意して
+おかなければならないのは、現在の @tramp{} は、エンドユーザー向けの洗練
+された製品とはほど遠い状態であるということです。もうしばらくの間は、時々
+ちょっと困った事になったり、コードに問題があるかもしれないということを
+念頭においておいてください。
+
+すでに開発者が日々の作業に使う事ができる程度には安定しています。しかし、
+インストールと設定を覚えるのは、専門用語のせいで若干難しいでしょう。
+
+@tramp{} は、まだアクティブに開発をしている最中です。したがって、どんな
+些細な問題であっても、ぜひ @tramp{} 開発者に報告してください。
+@xref{Bug Reports}.
+
+
+@subsubheading 舞台の裏側
+
+このセクションでは、@tramp{} を使いリモートファイルにアクセスした時に、
+舞台の裏側で何がおこっているかを説明します。
+
+@kbd{C-x C-f} とタイプし、@tramp{} のファイル名の一部を入力します。
+それから、ファイル名の補完のために @kbd{@key{TAB}} を押します。これ
+がそのホストに対する初めての @tramp{} の起動の場合、以下のような事
+がおこります。
+
+@itemize
+@item
+@tramp{} は、他のホストへの接続が必要な事を認識します。それから
+@command{telnet HOST} か @command{rsh HOST -l USER} あるいは、その他
+のリモートホストへ接続するためのツールを起動します。これらのプロセスとの
+コミュニケーションは Emacs のバッファを経由しておこなわれます。した
+がって、リモートホストからの出力はこのバッファに出力されます。
+
+@item
+リモートホストは、ログイン名のプロンプトを表示します(@command{telnet} 
+の場合)。ログイン名は入力されたファイル名に含まれているので、@tramp{} 
+はログイン名と改行を送信します。
+
+@item
+リモートホストは、パスワードあるいはパスフレーズのプロンプトを表示
+します(これは@command{rsh} の場合です。@command{telnet} の場合はログ
+イン名を送信した後に表示されます)。@tramp{} はミニバッファにプロン
+プトを表示し、パスワードまたはパスフレーズをたずねます。
+
+パスワードかパスフレーズを入力すると、@tramp{} はそれをリモートホスト
+に送信し、次に改行を送信します。
+
+@item
+@tramp{} は、シェルプロンプトかログインに失敗した旨のメッセージを待ち
+ます。
+
+もし、@tramp{} が、一定時間(たとえば一分)待っても、これらのメッセージを
+発見することができなかったら、リモートシェルのプロンプトを発見できなかっ
+た旨のメッセージを出力し、リモートホストから送信されたメッセージを表示
+します。
+
+もし、@tramp{} が「login failed」というメッセージを発見したら、それを
+表示し、ログインを中止します。これで再びログインを試みることができます。
+
+@item
+ログインに成功し、@tramp{} がシェルプロンプトを発見したとします。ここで、
+@tramp{} は @command{/bin/sh} を起動します。これは、Bourne シェルと C 
+シェルでは文法が異なるためです。@footnote{ログインシェルが 
+@command{exec /bin/sh} を正しいコマンドとして認識せずに @command{/bin/sh}
+の起動に失敗することがあるかもしれません。たぶん、あなたは Scheme シェル 
+@command{scsh} を使っているのでしょう@dots{}}
+
+Bourne シェルが起動されたら、@tramp{} は確実に動作する環境を準備するため
+にいくつかのコマンドを送信します。echo をオフにし、シェルプロンプトを設定
+したり、その他いくつかの事をおこないます。
+
+@item
+さて、リモートシェルが起動されきちんと動作する状態になりました。ここで、
+何がおこるはずだったか思いだしてください。リモートホスト上にどのような
+ファイルが存在するかを @tramp{} が調べ、ファイル名を補完できるようになる
+ことです。
+
+@tramp{} は @command{cd} と @command{ls} コマンド、そして時々 globbing 
+された @command{echo} を実行します。これ以外に、ファイルが書き込み可能
+かどうか、ディレクトリかどうか等を調べるために @command{test} が、しば
+しば使用されます。オペレーションをおこなうために、すべてのコマンドの出
+力はパースされます。
+
+@item
+ファイル名の補完が完了し、@kbd{C-xC-f}と完全なファイル名を入力し、
+@kbd{@key{RET}} を押したとしましょう。ファイルを編集するために、リモート
+ホストからローカルホストにファイルの内容を転送する時がようやくやって
+きました。
+
+@tramp{} がどのようにファイルの内容を転送するのかという説明は、上を見て
+ください。
+
+インライン転送のために、@tramp{} は @command{mimencode -b /path/to/remote/file}
+のようなコマンドを実行し、出力がコミュニケーションのためのバッファに
+蓄積されるまで待ちます。そして、ファイルの中身を作成するために、出力を
+復号化します。
+
+out-of-band 転送のために、@tramp{} は 
+@command{rcp user@@host:/path/to/remote/file /tmp/tramp.4711} のような
+コマンドを実行します。そして、ローカルな一時ファイル @file{/tmp/tramp.4711}
+をバッファに読み込み、一時ファイルを削除します。
+
+@item
+今、あなたはバッファの内容を編集しています。しかし、幸運にも舞台裏で何が
+おこっているのかに気がつきません(このセクションを読むまでは、そうでしょう)。
+作業が終り、バッファを保存するために @kbd{C-x C-s} を押します。
+
+@item
+再び、@tramp{} はファイルの内容をリモートホストにインラインか out-of-band
+メソッドで転送します。ここではファイルを読み時におこっている事と逆のこと
+がおこっています。
+
+@end itemize
+
+この説明で、@tramp{} を使いファイルをオープンした時に舞台裏でおこっている
+事をわかってもらえることを願っています。
+
+
+@c For the end user
+@node Obtaining @tramp{}, History, Overview, Top
+@chapter @tramp{} の入手方法
+
+@tramp{} は、インターネット上でフリーに配布されています。最新版は
+@uref{ftp://ls6-ftp.cs.uni-dortmund.de/pub/src/emacs/tramp.tar.gz}
+からダウンロード可能です。この中には、インストールに必要な @tramp{}
+のすべてのドキュメントとソースコードが含まれています。
+
+冒険家のために @tramp{} は CVS からも入手可能です。CVS から入手した
+バージョンはソースコードの最新バージョンです。したがって、不完全な
+機能や新たな問題をかかえているかもしれません。このバージョンは自分
+の責任で使用してください。
+
+@tramp {} の最新の開発バージョンを CVS (@command{cvs(1)}を参照してください)
+から入手するためには、以下のコマンドを実行してください(ボールドの文字を
+入力してください):
+@tramp {} の最新の開発バージョンを CVS から入手する方法は、SourceForge
+プロジェクトページ (@uref{http://sourceforge.net/projects/tramp/}) で
+一番上のナビゲーションバーにある CVS のリンクをクリックすれば見ることが
+出来ます。もしくは以下の例に倣って下さい:
+
+@example
+] @strong{cd ~/lisp}
+] @strong{cvs -d:pserver:anonymous@@cvs.tramp.sourceforge.net:/cvsroot/tramp login}
+(Logging in to anonymous@@cvs.tramp.sourceforge.net)
+CVS password: @strong{(just hit RET here)}
+@dots{}
+
+] @strong{cvs -z3 -d:pserver:anonymous@@cvs.tramp.sourceforge.net:/cvsroot/tramp co tramp}
+@end example
+
+これで、@tramp{} の最新バージョンが含まれるディレクトリ @file{~/lisp/tramp}
+が作成されるずです。以下のコマンドを実行することにより、最新のバージョン
+に更新することができます:
+
+@example
+] @strong{cd ~/lisp/tramp}
+] @strong{cvs update -d}
+@end example
+
+
+@node History, Installation, Obtaining @tramp{}, Top
+@chapter @tramp{} の歴史
+
+@tramp{} の開発は 1998 年の 11月下旬に始まりました。その当時は、この
+パッケージは `rssh.el' と呼ばれていました。ファイルにアクセスするため
+のたったひとつのメソッドがあるだけで、@command{ssh} を使用しリモート
+ホストにログインし、@command{scp} でファイルの内容を転送していました。
+しばらくして、名前が `rcp.el' に変わり、今は @tramp{} と呼ばれています。
+これに伴い、リモートシェルを起動しファイルの内容を転送する多くのメソッド
+が追加されました。また、VC サポートも追加されました。
+
+もっとも最近の大きな機能追加は、2000年4月のマルチホップメソッドです。
+
+
+@node Installation, Configuration, History, Top
+@chapter @tramp{} のインストール
+
+@tramp {} をインストールするのは比較的簡単です。すくなくとも、あなたの
+マシンを一から再構築するよりは。;)
+
+真面目な話、インストール方法は非常にシンプルです。
+
+もっとも簡単な方法は以下の通りです:
+
+@itemize
+@item
+ディレクトリ、たとえば @file{~/emacs/}を決めます。そのディレクトリに
+移動し、tarball を展開してください。@file{~/emacs/tramp/} というディ
+レクトリができているはずです。この中には、Lisp コードのための @file{lisp}
+やドキュメントのための @file{texi} というサブディレクトリが含まれています。
+ 
+@item
+Lisp ディレクトリ内の全ファイルを byte-compile することもできます。Lisp
+ディレクトリで、以下のコマンドを実行してください:
+@example
+make EMACS=emacs all            # Emacs ユーザーの場合
+make EMACS=xemacs all           # XEmacs ユーザーの場合
+@end example
+
+@item
+新らしい Lisp のディレクトリと @tramp{} パッケージを Emacs に認識させる
+ために、以下の行を @file{~/.emacs} に追加してください。
+@lisp
+(add-to-list 'load-path "~/emacs/tramp/lisp/")
+(require 'tramp)
+@end lisp
+
+@item
+Info ドキュメントを読むことができるようにするためには、
+@file{~/emacs/tramp/texi/dir} というファイルを @command{install-info}
+コマンド等を使って作成してください。そして、Info の検索パスに、この
+ディレクトリを追加してください。
+
+CCC Todo: explain how to use the @command{install-info} command.  This
+works differently in Debian than on other systems.  How does one create
+a @file{dir} file using @command{install-info} on Debian?
+
+環境変数 @env{INFOPATH} が設定されている場合、ディレクトリ
+@file{~/emacs/tramp/texi/} を追加してください。そうでなければ、
+このディレクトリを、以下のように @code{Info-default-directory-list} 
+へ追加してください:
+@lisp
+(add-to-list 'Info-default-directory-list "~/emacs/tramp/texi/")
+@end lisp
+XEmacs 21 ユーザーは、@code{Info-default-directory-list} でなく
+@code{Info-directory-list} を使ってください。
+
+@end itemize
+
+
+XEmacs ユーザーは、@command{fsf-compat} パッケージをインストールして
+おかなければなりません。パッケージのインストール方法については、
+@ref{Packages, , ,xemacs} を参照してください。
+@ifhtml
+(もし、このリンクがたどれない場合は、XEmacs のドキュメントを参照して
+ください。
+@uref{http://www.xemacs.org/Documentation/packageGuide.html、XEmacs
+サイト}.)
+@end ifhtml
+
+
+@node Configuration, Usage, Installation, Top
+@chapter @tramp{} の設定
+
+
+@tramp{} は(通常)インストールするだけで完全に機能します。初期状態では、
+リモートホストへの接続に @command{rsh} と @command{rcp} プログラムを使用
+するように設定されています。
+
+ホストによっては、接続を確立するのに問題が起きることがあります。これは、
+ remote shell の振る舞いによるものです。この詳細については @xref{Remote
+shell setup}, を参照してください。
+
+もし、リモートホストとの接続にこれらのコマンドを使用したくない場合は、
+@tramp{} のデフォルトの接続と転送メソッドを変更してください。リモート
+マシンに接続しファイルを転送するのに使うことのできる @tramp{} のメソッド
+がいくつかあります (@pxref{Connection types})。
+
+@menu
+* Connection types::            リモートマシンへの接続の種類
+* Inline methods::              インラインメソッド
+* External transfer methods::   外部転送メソッド
+* Multi-hop Methods::           マルチホップを使用したリモートホストへの接続
+* Default Method::              デフォルトのメソッドの選択
+* Customizing Methods::         非標準のメソッドを使う
+* Remote Programs::             リモートマシン上で @tramp{} がプログラムを発見、使用する方法
+* Remote shell setup::          
+@end menu
+
+
+@node Connection types, Inline methods, Configuration, Configuration
+@section リモートマシンへの接続の種類
+
+転送メソッドには二つの基本的なタイプがあり、それぞれに長所、短所が
+あります。両者ともに、@command{rsh} や @command{ssh}、@command{telnet} 
+のようなリモートシェルにアクセスするプログラムを使用し、リモートマシン
+に接続します。
+
+このコネクションは、@tramp{} がローカルマシンからリモートマシンへ透過的
+にアクセスするために、さまざまなオペレーションをおこなうために使われます。
+ファイルをオープンした時のメソッドが異なるだけです。
+
+リモートファイルを読み込んだり、保存する時には、二つのマシン間でファイル
+の内容を転送する必要があります。ファイルの内容は、マシンにログインしたの
+と同じコネクションか、@command{rcp} や @command{scp}、@command{rsync}
+などのリモートコピープログラムを使用した別のコネクションで転送されます。
+前者は @dfn{インラインメソッド}、後者は @dfn{外部転送メソッド}とよばれます。
+
+外部転送メソッドの性能は、一般にインラインメソッドよりすぐれています。
+インライン転送では、データの符号化、復号化をおこなう必要があるからです。
+
+このルールの唯一の例外は、@command{scp} を使用する転送メソッドです。
+これらのメソッドの実際のファイル転送の性能は高いのですが、転送開始時
+の暗号化にかかわるネゴシエーションのオーバーヘッドがファイル転送の性能
+を帳消しにします。
+
+外部転送メソッドを使うためには、リモートコピーコマンドが対話的でない、
+つまりコマンドがパスワードのためにプロンプトを出力しないことが必要です。
+もし、パスワード入力なしのリモートコピーコマンドを使う事ができないので
+あれば、インラインメソッドを使う必要があります。
+
+インラインメソッドの一種に、@dfn{マルチホップメソッド} があります。
+このメソッドを使うと、いくつかのホップを使い、リモートホストへ接続
+できます。これは、あなたがセキュアなネットワークの中にいて、要塞ホスト
+を経由して外部に接続する場合に便利です。
+
+
+@node Inline methods, External transfer methods, Connection types, Configuration
+@section インラインメソッド
+
+@tramp{} のインラインメソッドは大変強力で、外部転送メソッドを使う事が
+できない状況でも動作します。インラインメソッドは、telnet 経由でリモート
+マシンに接続している時に動作する唯一のメソッドです(ホスト間でなく 
+@emph{ユーザー} 間のファイル転送を可能にする、ちょっと変わったメソッド
+もあります。以下を参照してください)。
+
+これらのメソッドを使うためには、符号化、復号化のためのコマンドがリモート
+マシン上に存在しなければなりません。ローカルマシン上では、@tramp{} は
+ファイルを復号化、符号化する Emacs の機能を使うか、外部コマンドを使用
+します。
+
+@tramp{} は ファイル転送のために @command{uuencode} を使うことができます。
+しかし、これはあまりお勧め @emph{できません}。@command{uuencode} と 
+@command{uudecode} コマンドは標準化されていません。すくなくともいくつかの
+マシン、AIX と IRIX では正しく動作しないでしょう。これらのシステム上では、
+@command{uuencode} が動作しません(@var{tramp-methods} のドキュメントの
+AIX に関する注意を見てください)。
+
+まとめると、もし、@command{mimencode} を使い base64 で符号化されたデータ
+を転送するのであれば、最近の Emacs の組み込みコマンドを使用するほうが
+性能面で有利です。
+
+@itemize
+@item @option{rm}  ---  @command{rsh} と @command{mimencode}
+
+リモートホストに @command{rsh} で接続し、マシン間のファイル転送に
+base64 符号化を使用します。
+
+このメソッドを使うためには、@command{metamail} パッケージに含まれる 
+@command{mimencode} コマンドが必要です。このコマンドはリモートマシン
+すべてにインストールされているわけではありません。
+
+
+@item @option{sm}  ---  @command{ssh} と @command{mimencode}
+
+リモートホストに @command{ssh} で接続し、マシン間のファイル転送に
+base64 符号化を使用します。
+
+よりセキュアな接続をおこなうために @command{ssh} パッケージを使用する
+こと以外は、前のオプションと同じです。
+
+このメソッドにはふたつのバリエーション、@option{sm1} と @option{sm2} 
+が存在します。これらは @command{ssh1} と @command{ssh2} を明示的に
+指定します。もし、これらが何か知らない場合は、このオプションを使う
+必要はありません。
+
+
+@item @option{tm}  ---  @command{telnet} と @command{mimencode}
+
+リモートホストに @command{telnet} で接続し、マシン間のファイル転送に
+base64 符号化を使用します。
+
+このメソッドを使うためには、@command{metamail} パッケージに含まれる
+@command{mimencode} が必要です。
+
+
+@item @option{ru}  ---  @command{rsh} と @command{uuencode}
+
+リモートホストに @command{rsh} で接続し、マシン間のファイル転送に
+@command{uuencode} と @command{uudecode} を使用します。
+
+
+@item @option{su}  ---  @command{ssh} と @command{uuencode}
+
+リモートホストに @command{ssh} で接続し、マシン間のファイル転送に
+@command{uuencode} と @command{uudecode} を使用します。
+
+上で説明した、@command{ssh} と base64 オプションと同様に、
+明示的に ssh のバージョンを選択するための @option{su1} と @option{su2} 
+メソッドがあります。
+
+このメソッドは、@command{su} プログラムを起動しません。@command{su}
+を使うメソッドについては下を参照してください。
+
+
+@item @option{tu}  ---  @command{telnet} と @command{uuencode}
+
+リモートホストに @command{telnet} で接続し、マシン間のファイル転送に
+@command{uuencode} と @command{uudecode} を使用します。
+
+
+@item @option{sum} --- @command{su} と @command{mimencode}
+
+このメソッドは、まったくリモートホストに接続しません。かわりに、
+@command{su} プログラムを使い他のユーザーになり、ファイルを編集する
+ことができます。ファイルの内容を転送するために base64 符号化を使用
+します。
+
+
+@item @option{suu} --- @command{su} と @command{uuencode}
+
+@option{sum} と同様に @command{su} を使用し、他のユーザーとしてローカル
+ホスト上のファイルを編集することができます。ファイルの内容を転送するため
+に @command{uudecode} と @command{uudecode} を使用します。
+
+@item @option{sudm} --- @command{sudo} と @command{mimencode}
+
+このメソッドは、@option{sum} メソッドに似ていますが、違うユーザーになる
+ために @command{su} でなく @command{sudo} を使用します。
+
+そのユーザーでシェルを起動できるように、@command{sudo} が設定されていな
+ければならないことに注意してください。@command{ls} と @command{mimedecode} 
+の起動の許可だけで十分であればよいのですが、そのように実装するのは簡単では
+なく、まだ無理です。
+
+
+@item @option{sudu} --- @command{sudo} と @command{uuencode}
+
+このメソッドは、@option{suu} メソッドによく似ていますが、違うユーザー
+になるために @command{su} でなく、@command{sudo} を使用します。
+
+
+@end itemize
+
+
+
+@node External transfer methods, Multi-hop Methods, Inline methods, Configuration
+@section 外部転送メソッド
+
+外部転送メソッドは複数のチャネルを使用します。オペレーションのために
+リモートシェルのコネクションを使い、ファイル転送には、外部プログラム
+を使います。
+
+これは、インライン転送時の、ひとつのコネクションを使った多重化転送のため
+の符号化、復号化のオーバーヘッドを削減します。
+
+外部転送メソッドを使いたい場合は、ファイルをコピーするための転送ユーティ
+リティが、パスワード入力なしで実行できなければなりません。
+
+つまり、@command{scp} を使う場合や、使っている @command{scp} がコマンド
+ラインでパスワードを受け付けるバージョンの場合には、@command{ssh-agent}
+を使う必要があるということです。@footnote{PuTTY's @command{pscp} では
+コマンドラインでパスワードを指定できます。}
+@command{ssh} 経由で @command{rsync} を使う場合も同様です。
+
+もし、パスワード入力なしで @command{scp} を実行することができないが、
+コネクションをセキュアにするために @command{ssh} を使いたい場合は、
+@command{ssh} ベースのインラインメソッドを参照してください。
+
+
+@itemize
+@item @option{rcp}  ---  @command{rsh} と @command{rcp}
+
+このメソッドは @command{rsh} と @command{rcp} を使い、リモートマシン
+に接続、ファイル転送をおこないます。おそらく最速のメソッドです。
+
+
+@item @option{scp}  ---  @command{ssh} と @command{scp}
+
+リモートホストへの接続のための @command{ssh} や、マシン間のファイル転送
+のための @command{scp} は、リモートマシンへのセキュアな接続とファイル
+アクセスのためには最良のメソッドです。
+
+このオプションの性能も優れています。しかし、小さいファイルのオープン、
+クローズを頻繁に繰り返す場合はインラインメソッドより遅くなります。
+@command{scp}セッション開始時の暗号化のためのハンドシェークのコストは、
+符号化、復号化をおこなわない利点を帳消しにします。
+
+
+@item @option{rsync}  ---  @command{ssh} と @command{rsync}
+
+リモートホストにセキュアに接続するために @command{ssh} コマンドを、
+ファイル転送のために @command{rsync} を使うのが、@option{scp}
+メソッドの特徴です。
+
+両側のホスト上に存在するファイルを転送する場合、@command{rsync} は
+@command{scp} より高性能です。この利点は、ファイルが片側のホストに
+しかない場合には失なわれます。
+
+リモートシステムへ書き込む場合、@command{rsync} ベースのメソッドは
+@command{rcp} ベースのメソッドよりかなり速いでしょう。しかし、ローカル
+マシンのファイルを読み込む場合は、直接コピーするより速くありません。
+
+
+@item @option{scpx} --- @command{ssh} と @command{scp}
+
+想像通り、このメソッドは @option{scp} とよく似ています。@option{scp} が
+リモートホスト上で通常の対話的シェルを起動するのに対して、このオプション
+はコネクションをオープンするために @command{ssh -t HOST -l user /bin/sh} 
+を使います。このオプションは、通常のログインシェルがログイン時にいくつか
+の質問をおこなうように設定されている場合に役に立ちます。このメソッドは
+これらの質問を避け、@tramp{} と一緒に動作するより標準的、あるいは非標準的
+なログインシェルを起動します。
+
+@end itemize
+
+@node Multi-hop Methods, Default Method, External transfer methods, Configuration
+@section 複数のホップを使いリモートホストに接続する
+
+これまでに説明したメソッドでは不十分な事があります。シンプルなメソッドを
+使ってリモートホストに接続できないことがあります。たとえば、セキュアな
+ネットワークの中にいる場合、外部に接続する前にまず要塞ホストにログイン
+しなければならないでしょう。もちろん、ターゲットホストは要塞ホストも要求
+します。マルチホップのファイル名のフォーマットは、通常の @tramp{} の
+メソッドとすこし異なります。
+
+マルチホップのファイル名は、メソッド名、ホップ数、リモートホスト上の
+パス名を指定します。メソッドは、インラインコネクションでどのように
+ファイルが転送されるかを指定します。以下のふたつのマルチホップメソッド
+が存在します。
+
+@itemize
+@item @option{multi} --- @command{mimencode} を使用した base64 符号化
+
+ファイルは base64 符号化されたコネクションを使い転送されます。
+符号化と復号化のために、@command{mimencode} プログラムを使用します。
+しかし、ローカルホスト上では、可能なら Emacs の内部実装を使用します。
+
+@item @option{multiu} --- コマンド @command{uuencode} と @command{uudecode} を使用する
+
+ファイルは、`uu' 符号化(encoding)を使用したコネクションを使い転送され
+ます。符号化と復号化のために、@command{uuencode} と @command{uudecode} 
+プログラムを使用します。しかし、ローカルホスト上では、可能なら復号化の
+ために lisp 実装を使います。
+
+@end itemize
+
+それぞれのホップは @dfn{ホップメソッド}名、ユーザー名、ホスト名で構成
+されます。以下のホップメソッドが(今、現在)存在します。
+
+@itemize
+@item @option{telnet}
+
+ホストへの接続によく知られた @command{telnet} プログラムを使用します。
+ユーザー名とホスト名はファイル名の中に含まれ、パスワードをたずねられます。
+
+@item @option{rsh}
+
+ホストへの接続に @command{rsh} を使用します。@command{rsh} がパスワード
+をたずねる時以外は、パスワードを入力する必要はありません。
+
+@item @option{ssh}
+
+このメソッドはホストへの接続のために @command{ssh} を使用します。パスワード
+かパスフレーズを入力する必要があります。
+
+@item @option{su}
+
+このメソッドは他のホストへまったくアクセスしません。そのかわり、今いる
+ホスト上で他のユーザーになることができます。これは、root としてファイル
+を編集したいが、リモートホストはリモートからの root のログインを許可して
+いない場合に役に立ちます。このような場合、一般ユーザーでのリモートホスト
+への接続に @option{telnet}、@option{rsh} あるいは @option{ssh} を使う
+ことができます。それから、root になるために @option{su} ホップを使います。
+@option{su} は一連のシークエンス中の最後のホップである必要はありません。
+必要であればホップ中のどこででも使うことができます。
+
+@option{su} ホップと一緒にユーザーとホスト両方を指定しなければなりません。
+しかしながら、ホスト名は無視されユーザー名だけが使用されます。
+
+@item @option{sudo}
+
+これは @option{su} ホップに似ています。違うユーザーになるために
+@command{su} でなく @command{sudo} を使用する点が異なります。
+
+@end itemize
+
+@code{ssh} を用いてポートフォワードをしたい場合や、標準的でないポートを
+使用しなければならない場合があるかもしれません。そのような場合には、
+ホスト名ごとに異なるポート番号を指定した記述を @file{~/.ssh/config} に
+書き込むことで実現できます。しかしながら、multi-hop メソッドを使えば
+それは Tramp の枠内で実現することもできます。例えば:
+
+@lisp
+(add-to-list 'tramp-multi-connection-function-alist
+             '("sshf" tramp-multi-connect-rlogin "ssh %h -l %u -p 4400%n"))
+@end lisp
+
+とすれば、 @code{sshf} ホップを用いて、標準的なポートの変わりに 4400 番
+ポートへ繋ぐことができます。
+
+
+@node Default Method, Customizing Methods, Multi-hop Methods, Configuration
+@section デフォルトのメソッドの選択
+
+普段よく使う適切な転送メソッドを選択するには、変数 @var{tramp-default-method}
+を設定しなければなりません。この変数には @tramp{} ファイルパスにメソッドが
+指定されなかった時に使用されるデフォルトのメソッドを設定します。
+例えば:
+
+@lisp
+(setq tramp-default-method "scp")
+@end lisp
+
+一般的には、インライン転送メソッドよりは外部転送メソッドを選ぶべきです。
+外部転送メソッドはインラインより高性能です。しかし、外部転送メソッドは、
+パスワード入力なしでログインできないリモートマシンがたくさんある場合は
+役に立ちません。
+
+@xref{Inline methods}.
+@xref{External transfer methods}.
+@xref{Multi-hop Methods}.
+
+転送メソッドの選択をする時に他に考慮すべき事は、それらを使う環境と、
+特にインターネット上で使う場合あなたの選択したメソッドのセキュリティ
+との関係です。
+
+@command{rsh} と @command{telnet} メソッドは、リモートマシンにログイン
+する時に、パスワードをプレインテキストで送信します。ファイル転送も同じ
+方法でおこなうので、他もマシンからファイルの内容を簡単に読むことができます。
+
+インターネットからアクセス可能なリモートシステムに接続する必要がある場合、
+接続に @command{ssh} ベースのメソッドを使用することを真剣に考えるべきです。
+このメソッドは、高いレベルのセキュリティを提供し、誰かがパスワードを入手
+したり、編集しているファイルの内容を読んだりすることを困難にします。
+
+@node Customizing Methods, Remote Programs, Default Method, Configuration
+@section 非標準のメソッドを使う
+
+事前に定義されたメソッドだけでは不十分な場合に、それを変更するための 
+@code{tramp-methods} という変数があります。
+
+変更が必要になった時のために、この変数の Lisp ドキュメントについて述べて
+おきます。ドキュメントは @kbd{C-h v tramp-methods @key{RET}} で参照する
+ことができます。
+
+@node Remote Programs, Remote shell setup, Customizing Methods, Configuration
+@section リモートマシン上で @tramp{} がプログラムを発見、使用する方法
+
+@tramp{} はリモートホスト上のいくつかのプログラム、@command{ls}、
+@command{test}、@command{find} そして @command{cat} に依存しています。
+
+これらのツールにくわえ、コネクションメソッドのためにいくつかのツールが
+必要です。詳細は @ref{Inline methods} と @ref{External transfer methods} 
+を参照してください。
+
+いくつかの他のツール、@command{perl} (あるいは @command{perl5}) と
+@command{grep} が存在すればそれらも使用されます。これは、性能と
+リモートファイルアクセスの正確さの向上のためです。
+
+@tramp{} はリモートマシンに接続した時に、使用可能プログラムを検索します。
+変数 @var{tramp-remote-path} は、リモートマシン上で検索されるディレクトリ
+を制御します。
+
+デフォルトで多くのマシンにとって適切なパスが設定されています。しかし
+ながら、ローカル(あるいはリモート)システムの管理者が、必要なツールを
+へんぴなディレクトリにインストールしているかもしれません。
+
+このような場合でも @tramp{} を使う事ができます。単に、必要なディレクトリ
+をリモートパスに追加するコードを @file{.emacs} に書くだけです。これで
+接続時に @tramp{} により、追加したディレクトリが検索されプログラムが
+発見されます。
+
+リモートサーチパスにディレクトリを追加するためには、以下のような
+コードを使ってください:
+
+@example
+(require 'tramp)                @i{; @tramp{} を最初にロードして}
+                                @i{; おかなればならない}
+
+@i{; @command{perl} は "/usr/local/perl" にあります}
+(add-to-list 'tramp-remote-path "/usr/local/perl")
+@end example
+
+@node Remote shell setup,  , Remote Programs, Configuration
+@comment  node-name,  next,  previous,  up
+@section リモートシェルの設定のヒント
+
+@ref{Overview} の節で説明したように、@tramp{} はリモートホストに接続し、
+そこにあるシェルと対話します。もちろんログインする際にはシェルはその
+初期化ファイルを実行します。例えばあなたの初期化ファイルがあなたのお母
+さんの誕生日を入力させるようになっていたとしましょう; 当然 @tramp{}
+はそのことを知らないので、そのホストへのログインに失敗します。
+
+この問題を追求するために、いくつかの戦略が考えられます。一つは、@tramp{}
+がすべての可能な状況に対応できるようにすることです。これは消耗戦です。
+何故なら @emph{全ての} 状況を扱うことは不可能だからです。別の手として、
+@tramp{} の期待通りに振る舞うように、あなたにリモートホストの設定をして
+いただくということも出来ます。しかしこれは不便かもしれません。何故なら
+@tramp{} を使い始めるより先に、シェルの設定に多くの労力を割く必要がある
+のですから。
+
+そのことから、このパッケージではそれらを組み合わせた方法をとります。
+いくつかのありふれた設定については理解しようとしてくれて、あなたには
+本当に特異な設定だけを避けるように求めます。例えば、リモートホスト上で
+あるプログラムを見つけるためには、ディレクトリの一覧を調べます。
+そしてまた、ファイルが存在するかをどうか調べる方法というのも明らかでは
+ないので、いくつかの異なる可能性を試してくれます。
+(あるホストとシェルにおいては、@code{test -e} コマンドがその役目を果たす。
+別のホスト、シェルに対してはシェルの組み込みコマンドは働かないが、
+@code{/usr/bin/test -e} や @code{/bin/test -e} ならうまく働く。
+そしてさらに別のホストでは @code{ls -d} がその方法として働く。)
+
+以下では、@tramp{} が取り扱ってくれない、つまりあなたが正しく設定する必要
+のあるいくつかの事柄について述べます。
+
+@itemize
+@item @code{shell-prompt-pattern}
+
+@vindex shell-prompt-pattern
+リモートホストにログインした後、@tramp{} がリモートシェルに命令を送れる
+ようになる前に、リモートシェルのセットアップが終了するのを待つ必要があり
+ます。シェルプロンプトを認識する為に、変数 @code{shell-prompt-pattern}
+をリモートホストのシェルプロンプトを認識出来るように設定しておく必要が
+あります。
+
+@item @code{tset} とその他の質問
+
+シェルの起動スクリプトから @code{tset} プログラムを呼び出し、
+シェルの端末の種類を尋ねるようにしている場合があります。たぶん
+シェルによってはその他の質問を起動時にしてくる場合もあるでしょう。
+@tramp{} はこれらの質問に答える方法を知りません。
+(将来のバージョンでこれらの質問に @tramp{} が答えられるようにする
+ことが計画されていますが、期待しないでください。)
+
+したがってあなたは、シェルが @tramp{} から呼び出されたときに何の質問も
+しないように面倒を見なければなりません。そのためには、環境変数
+@code{TERM} を調べて下さい。それは接続時に @code{dumb} に設定されます。
+
+@vindex tramp-terminal-type
+変数 @code{tramp-terminal-type} によりこの @code{dumb} の値を変更する
+ことができます。
+@end itemize
+
+
+
+@node Usage, Bug Reports, Configuration, Top
+@chapter @tramp{} の使い方
+
+@tramp{} をインストールすると、@tramp{} は完全に透過的に動作します。
+ログイン可能なリモートマシン上のファイルに、あたかもローカルファイル
+のようにアクセスすることができます。
+
+@tramp{} では、formalized シンタックスを使いファイルを指定します。これは、
+@command{EFS} と @command{ange-ftp} パッケージのシンタックスに似ています。
+
+@menu
+* Filename Syntax::             @tramp{} ファイル名のきまり
+* Multi-hop filename syntax::   マルチホップファイル名のきまり
+* Dired::                       Dired とファイル名の補完
+@end menu
+
+
+@node Filename Syntax, Multi-hop filename syntax, Usage, Usage
+@section @tramp{} ファイル名のきまり
+
+リモートマシン<マシン>上のファイル<パス>にアクセスするためには、
+ファイル名 @file{/[<マシン>]<パス>}を指定してください。(角括弧は
+ファイル名の一部です。)これで、<マシン>に接続し、デフォルトメソッド
+を使用しファイルが転送されます。@xref{Default Method}.
+
+@tramp{} のファイル名の例をいくつかお見せしましょう:
+
+@table @file
+@item /[melancholia].emacs
+マシン @code{melancholia} 上のホームディレクトリにある @file{.emacs}を
+編集します。
+
+@item /[melancholia.danann.net].emacs
+完全なホスト名(FQDN)を使い、上と同じファイルを編集します。
+
+@item /./melancholia:~/.emacs
+これもまた同じファイルを編集します。@file{~} は、ローカルの場合と
+同様に、リモートマシン上のホームディレクトリに展開されます。
+
+@item /[melancholia]~daniel/.emacs
+マシン @code{melancholia} 上のユーザー @code{daniel} のホームディレクトリ
+にあるファイル @file{.emacs} を編集します。@file{~<ユーザー>} 構文は
+リモートマシン上のユーザーのホームディレクトリに展開されます。
+
+@item /[melancholia]/etc/squid.conf
+マシン @code{melancholia} 上のファイル @file{/etc/squid.conf} を編集
+します。
+
+@end table
+
+違う名前を使うように指定しない限り、@tramp{} は現在のローカルなユーザ名
+をログインのためのリモートユーザー名として使います。もし、違うユーザーで
+ログインする必要がある場合は、ファイル名の一部としてユーザー名を指定する
+ことができます。
+
+指定したユーザーでリモートマシンにログインする必要がある場合、
+@file{/[<ユーザー>@@<マシン>]/パス/ファイル} というシンタックスを
+使用してください。つまり、ユーザー @code{daniel} として @code{melancholia}
+に接続しホームディレクトリの @file{.emacs} を編集する場合、
+@file{/[daniel@@melancholia].emacs} を指定すればよいのです。
+
+CCC: The second @@file was @file{r@@...:} -- was there a missing initial
+slash?  I've added the initial slash.  Also you might want to include a
+remark about the trailing colon: without a method, it's
+@file{/./user@@host:} (one colon), but with a method it's
+@file{/./@@meth:user@@host:} (two colons).
+
+ファイル名の一部として、他のファイル転送メソッド(@pxref{Default Method})
+を指定することもできます。これは、最初の @file{/[} を、
+@file{/[<メソッド>/} でおきかえることで可能になります。(最後のスラッシュ
+に注意！) ユーザー、マシン、ファイルの指定は今までと同じです。
+
+マシン @code{melancholia} に @code{daniel} として接続し、ファイル転送に
+@option{su} メソッドを使い、ホームディレクトリの @file{.emacs} を編集する
+ためには、ファイル名 @file{/[su/daniel@@melancholia].emacs} を指定して
+ください。
+
+
+@node Multi-hop filename syntax, Dired, Filename Syntax, Usage
+@section マルチホップファイル名のきまり
+
+マルチホップファイル名のシンタックスは、当然のことながら、他の @tramp{} 
+のファイル名と若干異なります。以下に、マルチホップファイル名の例をあげます:
+
+@file{/[multi/rsh:out@@gate/telnet:kai@@real.host]/path/to.file}
+
+これは非常に重要なので、ひとつひとつ説明しましょう。ファイル名は
+スラッシュと角括弧で区切られた 3 つのパーツで構成されています。
+最初のパート @file{/[multi} はメソッドの指定です。二番目のパートは
+@file{rsh:out@@gate/telnet:kai@@real.host} でホップを指定します。
+(そうです、二番目のパートはもっと多くのスラッシュを含むこともあります。
+これがこのファイル名が二つ以上のコロンを含む理由です。)最後のパートは
+@file{/path/to.file} で、リモートホスト上のファイル名を指定します。
+
+最初と最後のパートは明白でしょう。@ref{Multi-hop Methods}に指定可能
+なメソッドの一覧があります。
+
+二番目のパートは、再びコンポーネントに分割されます。これはホップと
+よばれます。上記のファイル名には、二つのホップ、
+@file{rsh:out@@gate} と @file{telnet:kai@@real.host} が含まれています。
+
+それぞれのホップは、@emph{再び}(3つの)コンポーネント、
+@dfn{ホップメソッド}、@dfn{ユーザー名}、@dfn{ホスト名}に分割されます。
+二番目、三番目のコンポーネントの意味は明白です。ホップメソッドは、
+このホップでどのようなプログラムを使うかを意味しています。
+
+最初のホップ @file{rsh:out@@gate} は、ホスト @code{gate} にユーザー
+@code{out} としてログインするために @command{rsh} を使うという意味です。
+二番目のホップ @file{telnet:kai@@real.host} は、このホストからホスト
+@code{real.host} にユーザー @code{kai}でログインするために @command{telnet}
+を使うという意味です。
+
+@xref{Multi-hop Methods}. ここにホップメソッドの一覧があります。
+変数 @var{tramp-multi-connection-function-alist} には、選択可能なホップ
+メソッドのリストとそれらをどのように実行するかという情報が含まれています。
+あなたが作ったメソッドをこの変数に追加してください。
+
+
+@node Dired,  , Multi-hop filename syntax, Usage
+@section Dired とファイル名の補完
+
+@tramp{} は dired 上でも透過的に動作します。この強力なファイル管理
+ツールを使い、インターネットを経由しアクセス可能なすべてのマシン上の
+ファイルを管理できます。
+
+@tramp{} ではリモートマシン上のファイル名の補完も可能です。しかし、
+現段階ではユーザー名とマシン名の補完はできません。
+
+ファイル名の補完にはリモートマシンからファイルの一覧を取得する必要が
+あるので、時々、非常に時間がかかる事があります。@tramp{} には、ディレ
+クトリ一覧の結果をキャッシュする仕組みがまだないので、二度目のファイル
+名補完の時も性能は変わりません。
+
+ディレクトリツリーをブラウズしたい場合は、今のところファイル名の補完
+より dired を使うほうが良いでしょう。dired は自身でキャッシュの仕組を
+もっているので、ファイル一覧を一度しか取得しません。
+
+
+@node Bug Reports, Frequently Asked Questions, Usage, Top
+@chapter バグや問題の報告
+
+@tramp{} のバグや問題は、開発チームによってアクティブに解決されています。
+仕様に関するリクエストや提案も歓迎します。
+
+@tramp{} メーリングリストは、@tramp{} の情報を入手したり、問題の解決や、
+一般的な議論、そしてこのパッケージに関係する話題へのアドバイスに最適
+の場所です。
+
+メーリングリストは @email{tramp-devel@@lists.sourceforge.net} です。
+このアドレスにメッセージをを送るとすべての講読者に届きます。
+これは講読のリクエストを送信するためのアドレスでは @emph{ありません}。
+
+メーリングリストを講読するためのヘルプを入手するには、サブジェクトに
+@samp{help} と書いたメールを管理用のアドレス
+@email{tramp-devel-request@@lists.sourceforge.net} に送信してください。
+
+@tramp{} のバグ報告をする場合には、@kbd{M-x tramp-bug} を実行してください。
+これは、あなたのシステムの詳細や @tramp{} のバージョン情報を含むバッファ
+を自動的に生成します。
+
+バグ報告を提出する時には、問題を再現する手順、リモートマシンの設定、
+もし存在するのであれば特殊な条件を、しつこいぐらい詳細に記述してく
+ださい。もし可能なら、簡単な再現手順も記述してください。
+
+もし、問題を再現するための簡単なテストケースがわかれば、それをバグ
+報告に含めてください。これにより、開発チームがバグを突き止め、修正
+するのが容易になります。
+
+
+@node Frequently Asked Questions, Version Control, Bug Reports, Top
+@chapter よくある質問とその答
+
+@itemize @bullet
+@item 最新の @tramp{} はどこから入手できますか?
+
+@tramp{} は
+@uref{ftp://ls6-ftp.cs.uni-dortmund.de/pub/src/emacs/tramp.tar.gz}
+にあります。また、SourceForge プロジェクトページが
+@uref{http://sourceforge.net/projects/tramp} にあります。
+
+
+@item どのようなシステム上で動作しますか?
+
+このパッケージは、Emacs 20 と Emacs 21 上で動作します。XEmacs 20 上では
+問題があります。@file{tramp.el} のコメントを参照してください。Emacs 19 
+で試した人がいるのかどうかは知りません。
+
+このパッケージは Unix 上で動作するように設計されています。そしてリモート
+側も Unix 風のシステムであることを期待しています。しかし、NT Emacs 上で
+動作させることに成功した人が何人かいるようです。
+
+以下の URL には、Tramp を NT で使うための情報があります; Joe Stoy
+には情報の提供に対して深く感謝します:
+@uref{ftp://ftp.comlab.ox.ac.uk/tmp/Joe.Stoy/}
+
+上記はもっぱら古いバージョンの ssh へのパッチがおいてあります; Tom Roche
+の Web page にも説明があります:
+@uref{http://www4.ncsu.edu/~tlroche/plinkTramp.html}
+
+??? XEmacs の情報は正しいのでしょうか?
+
+??? 誰か、NT Emacs 上で動かすための情報を教えてください。たぶん、@command{ssh}
+関係の問題があるのではないかと思います。
+ 
+
+@item XEmacs で EFS が起動されてしまいます
+
+すべての古いバージョンの @tramp{} が XEmacs を正しくサポートしているわけで
+はありません。まず最初に、最新の @tramp{} がインストールされているかどうか
+を確認してください。
+
+もし最新のバージョンなら、@code{EFS} ハンドラーが実行されるための条件を
+正確に調べてください。もし可能なら、ブレークポイントを @code{efs-ftp-path} 
+に設定して、バグ報告と一緒にスタックトレースを送ってください。これらの情報
+があると、開発者が何が間違っているのかを発見することが容易になります。
+
+
+@item @tramp{} を使うとファイル名の補完ができません
+
+リモートマシンにログインした時に、@command{ls} の出力が色付きになって
+いませんか? もし、そうなら、それが原因です。
+
+@command{ls} は、端末エミュレーターが色を変更するための @acronym{ANSI} 
+エスケープシークエンスを出力します。しかしながら、このエスケープ
+シークエンスは @tramp{} を混乱させます。
+
+リモートマシン上の @file{.bashrc}、@file{.profile} あるいは同じような
+設定ファイルに、@option{--color=yes} または @option{--color=auto}
+が追加された設定の alias があるはずです。
+
+この alias を削除し、新しくログインした時の @command{ls} の出力が
+色付きで表示され @emph{ない} ことを確認してください。もし、これでも
+ファイル名の補完が正常に動作しない場合は、@tramp{} 開発者にバグ報告
+をしてください。
+
+
+@item 巨大なディレクトリの中ではファイル名の補完が動作しません
+
+@tramp{} はいくつかのオペレーションで globbing を使用します。(globbing
+とは、`*.c' のようなワイルドカード展開のためにシェルを使うことです)
+これは、たくさんのファイルが存在するディレクトリでは長いコマンドライン
+を作ります。いくつかのシェルでは長いコマンドラインをけずりとったり、
+あるいは globbing 自身を処理できません。
+
+リモートホスト側に巨大なディレクトリがある場合は、
+@command{ls -d * ..?* > /dev/null} のようなコマンドを実行し、ハングするか
+どうかを確認してください。注意する必要があるのは、最初に正しいシェル、
+@command{/bin/sh}、@command{ksh} あるいは @command{bash}、つまり tilde の
+展開をサポートするシェルから試すべきだという事です。
+
+
+@item @tramp{} はどのような種類のシステムで動作しますか
+
+@tramp{} は、リモートシステムが Unix 風のシステムである事を前提にして
+います。また、ローカルシステムも Unix 風のシステムのほうが望ましいで
+しょう。しかし、すこし修正すれば、@tramp{} は NT 上でも動作するはずです。
+
+
+@item @tramp{} のファイル転送が完了した時に通知させるにはどうすればいいでしょうか?
+
+以下のコードを、@file{~/.emacs} に追加してください。これで、リモート
+ホストに対する読み書きの後に、Emacs が beep 音をならしてくれます。
+
+@lisp
+(defadvice tramp-handle-write-region
+  (after tramp-write-beep-advice activate)
+ " make tramp beep after writing a file."
+ (interactive)
+ (beep))
+(defadvice tramp-handle-do-copy-or-rename-file
+  (after tramp-copy-beep-advice activate)
+ " make tramp beep after copying a file."
+ (interactive)
+ (beep))
+(defadvice tramp-handle-insert-file-contents
+  (after tramp-copy-beep-advice activate)
+ " make tramp beep after copying a file."
+ " make tramp beep after copying a file."
+ (interactive)
+ (beep))
+@end lisp
+
+
+@item リモートホストの @file{~/.sh_history} というファイルが肥大し続けて
+  います。これは何ですか?
+
+@tramp{} はティルダ展開の為に、しばしばリモートホストで @code{ksh} を
+起動します。たぶん @code{ksh} はデフォルトで履歴を保存します。@tramp{}
+は履歴の保存を停止しようと試みますが、あなたが手助けをする必要がある
+かもしれません。例えば、あなたの @file{.kshrc} にこれを入れてください:
+
+@example
+if [ -f $HOME/.sh_history ] ; then
+   /bin/rm $HOME/.sh_history
+fi
+if [ "$@{HISTFILE-unset@}" != "unset" ] ; then
+   unset HISTFILE
+fi
+if [ "$@{HISTSIZE-unset@}" != "unset" ] ; then
+   unset HISTSIZE
+fi
+@end example
+
+@end itemize
+
+
+@c For the developer
+@node Version Control, Files directories and paths, Frequently Asked Questions, Top
+@chapter リモートバージョンコントロールの内部動作
+
+EFS や ange-ftp と異なり、@tramp{} は、リモートマシン上のシェルを実行
+します。したがって、@tramp{} を使いアクセスしたファイルのバージョン
+管理をおこなう事ができます。
+
+バージョン管理をおこなうバイナリが、リモートマシンにインストールされて
+いなければなりません。そして、@var{tramp-remote-path} で指定された
+ディレクトリに置かれて、アクセス可能でなければなりません。
+
+バージョン管理システムの透過的な統合は、@tramp{} のもっとも価値のある
+機能のひとつです。しかし、まだ完全にはほど遠い状態です。システムの透過
+性を向上させるための作業が続けられています。
+
+@menu
+* Version Controlled Files::    ファイルがバージョン管理されているかどうかの判断
+* Remote Commands::             リモートマシン上でのバージョン管理コマンドの実行
+* Changed workfiles::           作業ファイルの変更の発見
+* Checking out files::          作業ファイルのリポジトリからの取得
+* Miscellaneous Version Control::  その他バージョン管理システムに関係する事
+@end menu
+
+
+@node Version Controlled Files, Remote Commands, Version Control, Version Control
+@section ファイルがバージョン管理されているかどうかの判断
+
+VC パッケージは、ディスク上のマスターファイルの存在をもとに、指定された
+ファイルがバージョン管理システムの管理下にあるかどうかを判断します。
+これらのファイルのテストは、標準的な @tramp{} の仕組みを使いリモート
+マシン上で実行されます。
+
+
+@node Remote Commands, Changed workfiles, Version Controlled Files, Version Control
+@section リモートマシン上のバージョン管理コマンドの実行
+
+バージョン管理システムのコマンドの実行を横取りすることのできる VC 用の 
+hook は存在しません。@code{call-process} の仕組みを使い、
+関数呼び出しが発生します。関数は @code{shell-command} より、若干
+効率的ですが、リモートでコマンドを実行するための hook は用意されていません。
+
+とりあえず動作させるために、関数 @code{vc-do-command} と 
+@code{vc-simple-command} に、@tramp{} を経由しアクセスされたファイルへの
+オペレーションのためのリクエストを横取することが通知されます。
+
+リモートファイルの場合、ローカルマシンと同じ機能を提供するために、
+@code{shell-command} インターフェースが、いくつかのラッパーコードと
+共に使用されます。
+
+
+@node Changed workfiles, Checking out files, Remote Commands, Version Control
+@section 作業ファイルの変更の発見
+
+今のところ、リモートマシン上のファイルの mtime を取得する移植性の高い
+方法は存在しません。@code{vc-workfile-unchanged-p} 関数に、リモート
+ファイルのために @tramp{} の関数の呼び出しが通知されます。
+
+@code{tramp-vc-workfile-unchanged-p} 関数は、作業ファイルとバージョン
+管理マスタファイルの変更点を調べるために VC の diff 機能を使用します。
+
+これを実現するためには、リモートでのシェルコマンドが実行可能でなれば
+なりません。この処理は、ローカルファイルで使われる mtime の取得より
+重い処理です。残念ながら、移植性の高い解決方法が見つかるまでは、リモート
+バージョン管理のコストはこのままでしょう。
+
+
+@node Checking out files, Miscellaneous Version Control, Changed workfiles, Version Control
+@section 作業ファイルのリポジトリからの取得
+
+デフォルトでは、VC はリモートファイルをチェックし、リポジトリからチェック
+アウトされたファイルがある場合は、チェックアウトをおこないません。この問題
+を解決するために、関数 @code{vc-checkout} は @tramp{} ファイルを区別し、
+バージョン管理をおこなうことを可能にします。
+
+
+@node Miscellaneous Version Control,  , Checking out files, Version Control
+@section その他バージョン管理システムに関係する事
+
+こまかな実装の詳細、その他。
+
+@menu
+* Remote File Ownership::       VC がワークファイルのオーナーを調べる方法
+* Back-end Versions::           VC が RCS のバージョンを調べる方法
+@end menu
+
+
+@node Remote File Ownership, Back-end Versions, Miscellaneous Version Control, Miscellaneous Version Control
+@subsection VC がワークファイルのオーナーを調べる方法
+
+Emacs は、任意のユーザー ID の値とログイン名をマッピングするのと同様に、
+現在のユーザーのログイン名をかえす関数 @code{user-full-name} を用意して
+います。VC は、いくつかの状況で、ワークファイルのオーナーの uid からログ
+イン名へのマップ機能を使用します。
+
+これは、リモートシステムが異なるログインセットを持つ場合には、あきらか
+に正しく動作しません。したがって、uid に対応するログイン名の決定をリモート
+マシンにおこなわせる必要があります。
+
+残念ながら、@code{NIS}、@code{NIS+}そして @code{NetInfo} のような、
+分散管理システム を使う場合、シンプルで、信頼性があり、移植性の高い
+マッピングの方法は存在しません。
+
+ありがたい事に、uid からログイン名へのマッピングに依存する VC のコードは、
+関数 @code{vc-file-owner} ひとつだけです。この関数は、ファイルのオーナー
+のログイン名を文字列として返します。
+
+ログイン名を決定するために、この関数に、リモートマシン上の @command{ls} 
+の出力を使用することが通知されます。uid からログイン名のマッピングを、
+私よりそれらについて良く知っているはずのリモートシステムに委譲します。
+
+
+@node Back-end Versions,  , Remote File Ownership, Miscellaneous Version Control
+@subsection VC が RCS のバージョンを調べる方法
+
+VC は、どのリリースのバージョン管理システムのバイナリを使っているかを
+知る必要があります。これは、VC がサポートしているすべての機能を、古い
+バージョンの@command{rcs(1)}、@command{cvs(1)}、@command{sccs(1)}が提供
+しているわけでは無いからです。
+
+VC のデフォルトの実装では、最初に必要になった時に、この値を決定します。
+これは、毎回、必要になった時に、プロセスを実行し、その出力をパースする
+オーバーヘッドをさけるためです。
+
+いかし、リモートのバージョン管理システムの事が関係してくると、人生は
+それほど簡単ではありません。リモートマシンはそれぞれ、異なるバージョン
+のバージョン管理ツールをもっています。これが困難な間は、存在しない機能
+が、リモートで使用されないことを保証する必要があります。
+
+この問題を解決するために、現在の @tramp{} は、バージョン管理ツールの
+バージョン番号を @tramp{} バッファ毎にローカルな変数にし、新しい
+ファイルを開くたびにVC にこの値を決定させるという力ずくのアプローチ
+を採用しています。
+
+これはあきらかに性能に影響します。ありがたいことに、VC によっておこなわれる
+ほとんどの処理は、実際にはリモートのバージョンを知ることを必要としません。
+したがって、それほど問題になりません。
+
+最終的には、これらの変数は @tramp{} によってシステム毎に調べられ、
+その結果は性能を改善するためにキャッシュされるようになるでしょう。
+
+
+@node Files directories and paths, Issues, Version Control, Top
+@chapter ファイル名、ディレクトリ、パス名がどのように変換され(mangled)、管理されるか
+
+@menu
+* Path deconstruction::         コンポーネント中のパスの分解
+@end menu
+
+
+@node Path deconstruction,  , Files directories and paths, Files directories and paths
+@section コンポーネント中のパスの分解
+
+@tramp{} のファイル名は普通のファイル名とはあきらかに異なっています。
+したがって、lisp の関数 @code{file-name-directory} と 
+@code{file-name-nondirectory} は、@tramp{} パッケージによってオーバー
+ライドされています。
+
+関数の置き換えはシンプルかつ適切な方法です。ファイル名は分解され、
+リモートパスに対してオリジナルのハンドラーがよばれます。そして、
+その結果をもとに @tramp{} パス名が再構成されます。
+
+これにより、@tramp{} パスの情報を扱う場合も、プラットホーム固有の
+オリジナルハンドラーのハックは有効です。
+
+
+@node Issues,  , Files directories and paths, Top
+@chapter 検討課題と決定事項
+
+@itemize @bullet
+@item uuencode メソッドがいつも動作するわけではありません
+
+@tramp{} の設計上の理由で、符号化と復号化をおこなうプログラムは標準
+入力から読み込み、標準出力に書き込む必要があります。いくつかのシステム
+では、@code{uudecode -o -} で標準入力から読み込み、復号化されたファイル
+を標準出力に書き込みます。他のシステムでは、@code{uudecode -p} が同じ
+動作をします。しかし、いくつかのシステムの uudecode の実装では、これら
+のことが全くできません。これらの uudecode の実装に、標準出力に書き込む
+ために適切なパラメータを渡して呼ぶことは不可能です。
+
+もちろん、これを回避する事は可能です。テンポラリファイル名を追加する
+ために @code{begin foo 644} 行を書きかえれば、@code{uudecode} を呼ぶこと
+ができます。そしてテンポラリファイルを表示し削除します。
+
+しかし、この方法はあまりにも信頼性が低いため、いくつかのシステムでは
+uuencode メソッドを使用できないままにしておく事にしました。
+
+@item @tramp{} は XEmacs 20 上で動きません
+
+これは、XEmacs 20 に存在しないマクロ @code{with-timeout} を使っている
+からです。私は、エミュレーションのためのマクロを @tramp{} に追加する
+ことに、あまり乗り気ではありません。しかし、XEmacs 20 ユーザーの誰かが
+積極的に実装とテストをしたいと考えているのであれば、私かメーリングリスト
+に連絡してください。
+
+@end itemize
+
+
+@c End of tramp_ja.texi - the TRAMP User Manual
+@bye
+
+@c TODO
+@c
+@c * Say something about the .login and .profile files of the remote
+@c   shells.
+@c * Explain how tramp.el works in principle: open a shell on a remote
+@c   host and then send commands to it.
+
+@c Local Variables:
+@c eval: (add-hook 'write-file-hooks 'time-stamp)
+@c time-stamp-start: "@set UPDATED "
+@c time-stamp-format: "%:y 年 %:m 月 %:d 日 (%3a)"
+@c time-stamp-end: "$"
+@c time-stamp-line-limit: 50
+@c End:

@@ -1,0 +1,295 @@
++% -*- plain-tex -*- 
+% $Id: tex-ref.tex,v 1.3 1994/05/04 22:54:43 amanda Exp $
+% Reference Card for Auc TeX version 7
+%**start of header
+\newcount\columnsperpage
+
+% This file can be printed with 1, 2, or 3 columns per page (see below).
+% Specify how many you want here.  Nothing else needs to be changed.
+
+\columnsperpage=2
+
+% This file is intended to be processed by plain TeX (TeX82).
+% compile-command: "tex ref-card.tex"
+%
+% Original author of Auc-TeX Reference Card:
+%                                  
+%       Terrence Brannon, PO Box 5027, Bethlehem, PA 18015 , USA
+%  internet: tb06@pl118f.cc.lehigh.edu  (215) 758-1720 (215) 758-2104
+%
+% Kresten Krab Thorup updated the reference card to 6.
+% Per Abrahamsen updated the reference card to 7, 8, and 9.
+%
+% Thanks to Stephen Gildea
+% Paul Rubin, Bob Chassell, Len Tower, and Richard Mlynarik
+% for creating the GNU Emacs Reference Card from which this was mutated
+
+\def\versionnumber{9}
+\def\year{1993}
+\def\version{February \year\ v\versionnumber}
+
+\def\shortcopyrightnotice{\vskip 1ex plus 2 fill
+  \centerline{\small \copyright\ \year\ Free Software Foundation, Inc.
+  Permissions on back.  v\versionnumber}}
+
+\def\copyrightnotice{
+\vskip 1ex plus 2 fill\begingroup\small
+\centerline{Copyright \copyright\ 1987 Free Software Foundation, Inc.}
+\centerline{Copyright \copyright\ 1992 Kresten Krab Thorup}
+\centerline{Copyright \copyright\ \year\ Per Abrahamsen}
+\centerline{for AUC \TeX\ version \versionnumber}
+
+Permission is granted to make and distribute copies of
+this card provided the copyright notice and this permission notice
+are preserved on all copies.
+
+
+\endgroup}
+
+% make \bye not \outer so that the \def\bye in the \else clause below
+% can be scanned without complaint.
+\def\bye{\par\vfill\supereject\end}
+
+\newdimen\intercolumnskip
+\newbox\columna
+\newbox\columnb
+
+\def\ncolumns{\the\columnsperpage}
+
+\message{[\ncolumns\space 
+  column\if 1\ncolumns\else s\fi\space per page]}
+
+\def\scaledmag#1{ scaled \magstep #1}
+
+% This multi-way format was designed by Stephen Gildea
+% October 1986.
+\if 1\ncolumns
+  \hsize 4in
+  \vsize 10in
+  \voffset -.7in
+  \font\titlefont=\fontname\tenbf \scaledmag3
+  \font\headingfont=\fontname\tenbf \scaledmag2
+  \font\smallfont=\fontname\sevenrm
+  \font\smallsy=\fontname\sevensy
+
+  \footline{\hss\folio}
+  \def\makefootline{\baselineskip10pt\hsize6.5in\line{\the\footline}}
+\else
+  \hsize 3.2in
+  \vsize 7.95in
+%  \hoffset -.75in
+%  \voffset -.745in
+  \font\titlefont=cmbx10 \scaledmag2
+  \font\headingfont=cmbx10 \scaledmag1
+  \font\smallfont=cmr6
+  \font\smallsy=cmsy6
+  \font\eightrm=cmr8
+  \font\eightbf=cmbx8
+  \font\eightit=cmti8
+  \font\eighttt=cmtt8
+  \font\eightsy=cmsy8
+  \textfont0=\eightrm
+  \textfont2=\eightsy
+  \def\rm{\eightrm}
+  \def\bf{\eightbf}
+  \def\it{\eightit}
+  \def\tt{\eighttt}
+  \normalbaselineskip=.8\normalbaselineskip
+  \normallineskip=.8\normallineskip
+  \normallineskiplimit=.8\normallineskiplimit
+  \normalbaselines\rm           %make definitions take effect
+
+  \if 2\ncolumns
+    \let\maxcolumn=b
+    \footline{\hss\rm\folio\hss}
+    \def\makefootline{\vskip 2in \hsize=6.86in\line{\the\footline}}
+  \else \if 3\ncolumns
+    \let\maxcolumn=c
+    \nopagenumbers
+  \else
+    \errhelp{You must set \columnsperpage equal to 1, 2, or 3.}
+    \errmessage{Illegal number of columns per page}
+  \fi\fi
+
+  \intercolumnskip=.46in
+  \def\abc{a}
+  \output={%
+      % This next line is useful when designing the layout.
+      %\immediate\write16{Column \folio\abc\space starts with \firstmark}
+      \if \maxcolumn\abc \multicolumnformat \global\def\abc{a}
+      \else\if a\abc
+        \global\setbox\columna\columnbox \global\def\abc{b}
+        %% in case we never use \columnb (two-column mode)
+        \global\setbox\columnb\hbox to -\intercolumnskip{}
+      \else
+        \global\setbox\columnb\columnbox \global\def\abc{c}\fi\fi}
+  \def\multicolumnformat{\shipout\vbox{\makeheadline
+      \hbox{\box\columna\hskip\intercolumnskip
+        \box\columnb\hskip\intercolumnskip\columnbox}
+      \makefootline}\advancepageno}
+  \def\columnbox{\leftline{\pagebody}}
+
+  \def\bye{\par\vfill\supereject
+    \if a\abc \else\null\vfill\eject\fi
+    \if a\abc \else\null\vfill\eject\fi
+    \end}  
+\fi
+
+% we won't be using math mode much, so redefine some of the characters
+% we might want to talk about
+\catcode`\^=12
+\catcode`\_=12
+
+\chardef\\=`\\
+\chardef\{=`\{
+\chardef\}=`\}
+
+\hyphenation{mini-buf-fer}
+
+\parindent 0pt
+\parskip 1ex plus .5ex minus .5ex
+
+\def\small{\smallfont\textfont2=\smallsy\baselineskip=.8\baselineskip}
+
+\outer\def\newcolumn{\vfill\eject}
+
+\outer\def\title#1{{\titlefont\centerline{#1}}\vskip 1ex plus .5ex}
+
+\outer\def\section#1{\par\filbreak
+  \vskip 3ex plus 2ex minus 2ex {\headingfont #1}\mark{#1}%
+  \vskip 2ex plus 1ex minus 1.5ex}
+
+\newdimen\keyindent
+
+\def\beginindentedkeys{\keyindent=1em}
+\def\endindentedkeys{\keyindent=0em}
+\endindentedkeys
+
+\def\paralign{\vskip\parskip\halign}
+
+\def\<#1>{$\langle${\rm #1}$\rangle$}
+
+\def\kbd#1{{\tt#1}\null}        %\null so not an abbrev even if period follows
+
+\def\beginexample{\par\leavevmode\begingroup
+  \obeylines\obeyspaces\parskip0pt\tt}
+{\obeyspaces\global\let =\ }
+\def\endexample{\endgroup}
+
+\def\key#1#2{\leavevmode\hbox to \hsize{\vtop
+  {\hsize=.75\hsize\rightskip=1em
+  \hskip\keyindent\relax#1}\kbd{#2}\hfil}}
+
+\newbox\metaxbox
+\setbox\metaxbox\hbox{\kbd{M-x }}
+\newdimen\metaxwidth
+\metaxwidth=\wd\metaxbox
+
+\def\metax#1#2{\leavevmode\hbox to \hsize{\hbox to .75\hsize
+  {\hskip\keyindent\relax#1\hfil}%
+  \hskip -\metaxwidth minus 1fil
+  \kbd{#2}\hfil}}
+
+\def\threecol#1#2#3{\hskip\keyindent\relax#1\hfil&\kbd{#2}\quad
+  &\kbd{#3}\quad\cr}
+
+%**end of header
+
+
+\title{AUC \TeX\ Reference Card}
+
+\centerline{(for version \versionnumber)}
+
+\section{Conventions Used}
+
+\key{Carriage Return}{RET}
+\key{Tabular}{TAB}
+\key{Linefeed}{LFD}
+
+Mode variables: You want to change the variables found in the file
+`{\tt tex-site.el}' in the AUC-\TeX\ distribution for your site.  The
+other variables should be set by the individual user.  
+
+Entering LaTeX mode calls the value of text-mode-hook, then the value
+of TeX-mode-hook, and then the value of LaTeX-mode-hook.
+
+\section{Shell Interaction}
+
+\key{Save Document}{C-c C-d}
+\key{Run a command on the master file}{C-c C-c}
+\key{Run a command on the buffer}{C-c C-b}
+\key{Run a command on the region}{C-c C-r}
+\key{Kill job}{C-c C-k}
+\key{Recenter output buffer}{C-c C-l}
+\key{Next error in \TeX/LaTeX session}{C-c `}
+\key{Toggle debug of wonderful boxes}{C-c C-w}
+\key{Switch to master file or active buffer}{C-c ^}
+
+Commands you can run on the master file (with C-c C-c) or the region
+(with C-c C-r) include the following.
+
+\key{\TeX}{TeX}
+\overfullrule=0pt %The next line is too wide.
+\key{Run \TeX{} Interactively}{TeX Interactive}
+\key{LaTeX}{LaTeX}
+\key{Run LaTeX Interactively}{LaTeX Interactive}
+\key{SliTeX}{SliTeX}
+\key{A previewer}{View}
+\key{Printing the DVI file}{Print}
+\key{Bib\TeX}{BibTeX}
+\key{MakeIndex}{Index}
+\key{LaCheck}{Check}
+\key{(PostScript) File}{File}
+\key{Ispell}{Spell} 
+
+\section{Command Insertion}
+
+\key{Insert Section}{C-c C-s}
+\key{Insert LaTeX environment}{C-c C-e}
+\key{Insert item}{C-c LFD}
+\key{Close LaTeX environment}{C-c ]}
+\key{Insert \TeX\ macro \kbd{\\\{\}} }{C-c C-m}
+\key{Insert double brace}{C-c \{}
+\key{Complete \TeX\ macro}{M-TAB}
+\key{Smart ``quote''}{"}
+\key{Smart ``dollar''}{\$}
+  
+\section{Font Selection}
+
+\key{Insert {\bf bold} text}{C-c C-f C-b}
+\key{Insert {\it italics\/} text}{C-c C-f C-i}
+\key{Insert {\rm roman} text}{C-c C-f C-r}
+\key{Insert {\it emphasized} text}{C-c C-f C-e}
+\key{Insert {\tt typewriter} text}{C-c C-f C-t}
+\key{Insert {\sl slanted\/} text}{C-c C-f C-s}
+\key{Delete font}{C-c C-f C-d}
+\key{Change font}{C-u C-c C-f <KEY>}
+
+\section{Source Formatting}
+
+\key{Indent current line}{TAB}
+\key{Indent next line}{LFD}
+
+\key{Format a paragraph}{M-q}
+\key{Format a region}{C-c C-q C-r}
+\key{Format a section}{C-c C-q C-s}
+\key{Format an environment}{C-c C-q C-e}
+
+\key{Mark an environment}{C-c .}
+\key{Mark a section}{C-c *}
+
+\key{Comment region}{C-c ;}
+\key{Comment paragraph}{C-c \%}
+\key{Uncomment region}{C-u - C-c ;}
+\key{Uncomment paragraph}{C-u - C-c \%}
+
+\section{Miscellaneous}
+
+\key{Math Mode}{C-c \~{}}
+\key{Reset AUC TeX}{C-c C-n}
+
+\copyrightnotice
+
+\bye
+
+% End:

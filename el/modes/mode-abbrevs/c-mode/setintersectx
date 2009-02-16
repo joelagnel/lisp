@@ -1,0 +1,4 @@
+std::set<std::string> tmp_set;
+std::set_intersection(<query "s1: ">.begin(), <query "s1: ">.end(),
+                      <query "s2: ">.begin(), <query "s2: ">.end(),
+                      std::inserter(tmp_set, tmp_set.begin()));

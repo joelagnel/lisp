@@ -1,0 +1,196 @@
+<title>Keybindings for html-helper-mode version 1.34</title>
+<h1>Keybindings for html-helper-mode version 1.34</h1>
+
+Note - this list might well not be up to date. Your best bet is to
+look at the mode help for html-helper-mode, <kbd>C-hm</kbd> from within the
+mode.<p>
+
+Every keysequence here inserts some HTML or HTML+ cookie. The point is
+then placed where you want to type in the information for that
+cookie. If you call the command with a prefix argument (by typing
+<kbd>C-u</kbd> first), then instead the cookie is placed around the
+current region.<p>
+
+<hr>
+<h2>Mode bindings</h2>
+<pre>
+TAB	    indent line
+RET         insert newline and indent
+
+M-TAB	    complete tag at point
+M-C-f	    move forward one mark
+M-C-b	    move backward one mark
+
+M-C-t       insert the timestamp delimiter
+</pre>
+<p>
+
+<h2>Common insertions</h2>
+<pre>
+M-RET	    html-paragraph	    &lt;p&gt;
+C-c-	    html-horizontal-rule    &lt;hr&gt;
+C-cC-t#     html-header-#           &lt;h#&gt;&lt;/h#&gt;
+
+C-cC-al	    html-anchor		    &lt;a href=""&gt;&lt;/a&gt;
+
+C-cC-lu	    html-unordered-list	    &lt;ul&gt;&lt;li&gt;&lt;/ul&gt;
+C-cC-ld	    html-definition-list    &lt;dl&gt;&lt;dt&gt;&lt;dd&gt;&lt;/dl&gt;
+C-cC-li	    html-smart-insert-item  &lt;li&gt;  or  &lt;dt&gt;&lt;dd&gt; depending on context
+</pre>
+<hr>
+
+<h2>HTML insertion commands</h2>
+
+Every HTML and HTML+ cookie should have an insertion command. These
+commands can be used in two ways: by typing the beginning of the
+cookie and hitting <kbd>M-TAB</kbd>, for completion, or by typing it's
+somewhat-mnemonic keybinding.<p>
+
+The keybindings aren't very good - I am constrained by emacs style to
+binding things only to C-cC-&lt;letter&gt;. Each class of HTML cookie is
+assigned to some particular C-cC-&lt;letter&gt;, and then within that map
+different letters insert different cookies.<p>
+
+<pre>
+Prefix      Cookie class
+------      ------------
+C-cC-b	    head element ("begin")
+C-cC-t	    headers ("title" - sorry, C-cC-h has a special meaning in emacs)
+C-cC-a	    anchors
+C-cC-s	    logical styles ("styles")
+C-cC-p	    physical styles
+C-cC-l	    lists
+C-cC-n	    annotations ("notes")
+C-cC-f	    forms
+C-cC-i	    images
+special	    text elements
+special	    entities
+</pre>
+
+<h3>Head elements - <kbd>C-cC-b</kbd></h3>
+<pre>
+key         template                inserted text
+---         --------                -------------
+t	    html-title		    &lt;title&gt;&lt;/title&gt;
+i	    html-isindex	    &lt;isindex&gt;
+n	    html-nextid		    &lt;nextid&gt;
+l	    html-link		    &lt;link href=""&gt;
+b	    html-base		    &lt;base href=""&gt;
+</pre>
+<h3>Headers - <kbd>C-cC-t</kbd></h3>
+<pre>
+1	    html-header-1	    &lt;h1&gt;&lt;/h1&gt;
+2	    html-header-2	    &lt;h2&gt;&lt;/h2&gt;
+3	    html-header-3	    &lt;h3&gt;&lt;/h3&gt;
+4	    html-header-4	    &lt;h4&gt;&lt;/h4&gt;
+5	    html-header-5	    &lt;h5&gt;&lt;/h5&gt;
+6	    html-header-6	    &lt;h6&gt;&lt;/h6&gt;
+</pre>
+
+<h3>Anchors - <kbd>C-cC-a</kbd></h3>
+<pre>
+n	    html-target-anchor	    &lt;a name=""&gt;&lt;/a&gt;
+l	    html-anchor		    &lt;a href=""&gt;&lt;/a&gt;
+</pre>
+
+<h3>Logical styles - <kbd>C-cC-s</kbd></h3>
+<pre>
+p	    html-preformatted	    &lt;pre&gt;&lt;/pre&gt;
+b	    html-blockquote	    &lt;blockquote&gt;&lt;/blockquote&gt;
+e	    html-emphasized	    &lt;em&gt;&lt;/em&gt;
+s	    html-strong		    &lt;strong&gt;&lt;/strong&gt;
+c	    html-code		    &lt;code&gt;&lt;/code&gt;
+x	    html-sample		    &lt;samp&gt;&lt;/samp&gt;
+r	    html-citation	    &lt;cite&gt;&lt;/cite&gt;
+k	    html-keyboard	    &lt;kbd&gt;&lt;/kbd&gt;
+v	    html-variable	    &lt;var&gt;&lt;/var&gt;
+d	    html-definition	    &lt;dfn&gt;&lt;/dfn&gt;
+a	    html-address	    &lt;address&gt;&lt;/address&gt;
+q	    html-quote		    &lt;q&gt;&lt;/q&gt;
+n	    html-person		    &lt;person&gt;&lt;/person&gt;
+y	    html-acronym	    &lt;acronym&gt;&lt;/acronym&gt;
+.	    html-abbrev		    &lt;abbrev&gt;&lt;/abbrev&gt;
+m	    html-cmd		    &lt;cmd&gt;&lt;/cmd&gt;
+g	    html-arg		    &lt;arg&gt;&lt;/arg&gt;
+l	    html-lit		    &lt;lit&gt;&lt;/lit&gt;
+</pre>
+
+<h3>Physical styles - <kbd>C-cC-p</kbd></h3>
+<pre>
+b	    html-bold		    &lt;b&gt;&lt;/b&gt;
+i	    html-italic		    &lt;i&gt;&lt;/i&gt;
+u	    html-underline	    &lt;u&gt;&lt;/u&gt;
+f	    html-fixed		    &lt;tt&gt;&lt;/tt&gt;
+x	    html-strikethru	    &lt;s&gt;&lt;/s&gt;
+^	    html-superscript	    &lt;sup&gt;&lt;/sup&gt;
+_	    html-subscript	    &lt;sub&gt;&lt;/sub&gt;
+r	    html-render		    &lt;render tag="" style=""&gt;   
+</pre>
+
+<h3>Lists - <kbd>C-cC-l</kbd></h3>
+<pre>
+o	    html-ordered-list	    &lt;ol&gt;&lt;li&gt;&lt;/ol&gt;
+u	    html-unordered-list	    &lt;ul&gt;&lt;li&gt;&lt;/ul&gt;
+r	    html-directory	    &lt;dir&gt;&lt;li&gt;&lt;/dir&gt;
+m	    html-menu		    &lt;menu&gt;&lt;li&gt;&lt;/menu&gt;
+d	    html-definition-list    &lt;dl&gt;&lt;dt&gt;&lt;dd&gt;&lt;/dl&gt;
+i	    html-smart-insert-item  &lt;li&gt;  or  &lt;dt&gt;&lt;dd&gt; depending on context
+l           html-item               &lt;li&gt;
+t           html-definition-item    &lt;dt&gt;&lt;dd&gt;
+</pre>
+
+<h3>Annotations - <kbd>C-cC-n</kbd></h3>
+<pre>
+a	    html-abstract	    &lt;abstract&gt;&lt;/abstract&gt;
+n	    html-note		    &lt;note role=""&gt;&lt;/note&gt;
+f	    html-footnote	    &lt;footnote&gt;&lt;/footnote&gt;
+m	    html-margin		    &lt;margin&gt;&lt;/margin&gt;
+</pre>
+
+<h3>Forms - <kbd>C-cC-f</kbd></h3>
+<pre>
+f	    html-form		    &lt;form action=""&gt;&lt;/form&gt;
+t	    html-input-text	    &lt;input name="" size=""&gt;
+i	    html-input-int	    &lt;input type="INT" name="" size=""&gt;
+.           html-input-float	    &lt;input type="FLOAT" name="" size=""&gt;
+d	    html-input-date	    &lt;input type="DATE" name="" size=""&gt;
+u	    html-input-url	    &lt;input type="URL" name="" size=""&gt;
+c	    html-input-check	    &lt;input type="CHECKBOX" name=""&gt;
+r	    html-input-radio	    &lt;input type="RADIO" name=""&gt;
+g	    html-input-image	    &lt;input type="IMAGE" name="" src=""&gt;
+s	    html-input-scribble	    &lt;input type="SCRIBBLE" name="" size=""&gt;
+a	    html-input-audio	    &lt;input type="AUDIO" name=""&gt;
+b	    html-input-submit	    &lt;input type="SUBMIT" value=""&gt;
+x	    html-input-reset	    &lt;input type="RESET" value=""&gt;
+p	    html-input-textarea	    &lt;textarea name="" rows= cols=&gt;&lt;/textarea&gt;
+c	    html-input-select	    &lt;select name=""&gt;&lt;/select&gt;
+</pre>
+
+<h3>Images - <kbd>C-cC-i</kbd></h3>
+<pre>
+i	    html-image		    &lt;img src=""&gt;
+t           html-alt-image          &lt;img alt="" src=""&gt;
+a           html-align-image        &lt;img align="" src=""&gt;
+e           html-align-alt-image    &lt;img align="" src="" alt=""&gt;
+</pre>
+
+<h3>Text Elements</h3>
+<pre>
+M-RET	    html-paragraph	    &lt;p&gt;
+C-c-	    html-horizontal-rule    &lt;hr&gt;
+C-cRET	    html-break		    &lt;br&gt;
+</pre>
+
+<h3>Entities</h3>
+<pre>
+C-c&amp;	    html-ampersand	    &amp;amp;
+C-c&lt;	    html-less-than	    &amp;lt;
+C-c&gt;	    html-greater-than	    &amp;gt;
+C-cSPC	    html-nonbreaking-space  &amp;nbsp;
+</pre>
+
+<hr>
+<!-- hhmts start -->
+Last modified: Wed Feb  1 14:16:33 1995
+<!-- hhmts end -->
+<address><a href="http://www.santafe.edu/~nelson/">Nelson Minar &lt;nelson@santafe.edu&gt;</a></address>

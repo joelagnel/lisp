@@ -1,0 +1,120 @@
+;;; -*- Mode: Emacs-Lisp -*-
+
+;;; ilisp-low.el --
+;;; ILISP low level interface functions Lisp <-> Emacs.
+;;;
+;;; This file is part of ILISP.
+;;; Please refer to the file COPYING for copyrights and licensing
+;;; information.
+;;; Please refer to the file ACKNOWLEGDEMENTS for an (incomplete) list
+;;; of present and past contributors.
+;;;
+;;; $Id: ilisp-low.el,v 1.4 2002/10/25 12:13:49 kevinrosenberg Exp $
+
+;;;%Lisp mode extensions
+;;;%%Sexps
+(defun lisp-previous-sexp (&optional prefix)
+  "Return the previous sexp.  If PREFIX is T, then prefix like ' or #'
+are allowed."
+  (save-excursion
+    (condition-case ()
+	(progn
+	  (if (and (memq major-mode ilisp-modes)
+		   (= (point)
+		      (process-mark (get-buffer-process (current-buffer)))))
+	      nil
+	      (if (not
+		   (or (eobp) (memq (char-after (point)) '(? ?\) ?\n ?\t))))
+		  (forward-sexp))
+	      (skip-chars-backward " \t\n")
+	      (let ((point (point)))
+		(backward-sexp)
+		(skip-chars-backward "^ \t\n(\",")
+		(if (not prefix) (skip-chars-forward "#'"))
+		(buffer-substring-no-properties (point) point))))
+      (error nil))))
+
+;;;
+(defun lisp-def-name (&optional namep)
+  "Return the name of a definition assuming that you are at the start
+of the sexp.  If the form starts with DEF, the form start and the next
+symbol will be returned.  Optional NAMEP will return only the name without the defining symbol."
+  (let ((case-fold-search t))
+    (if (looking-at
+	 ;; (( \( (def*) (( \( (setf)) | \(?)) | \(?) (symbol)
+	 ;; 12    3    3 45    6    65      42      1 7      7
+	 ;;0011\(22 def*        22         32 43\(54 setf54         43   \(?32 11      00 60           60
+	 "\\(\\((\\(def[^ \t\n]*\\)[ \t\n]+\\(\\((\\(setf\\)[ \t\n]+\\)\\|(*\\)\\)\\|(?\\)\\([^ \t\n)]*\\)")
+	(let ((symbol (buffer-substring-no-properties (match-beginning 7) (match-end 7))))
+	  (if (match-end 6)
+	      (concat (if (not namep) 
+			  (concat 
+			   (buffer-substring-no-properties (match-beginning 3) (match-end 3))
+			   " "))
+		      "("
+		      (buffer-substring-no-properties (match-beginning 6) (match-end 6))
+		      " " symbol ")")
+	      (if (match-end 3)
+		  (concat (if (not namep)
+			      (concat 
+			       (buffer-substring-no-properties (match-beginning 3) 
+						 (match-end 3))
+			       " "))
+			  symbol)
+		  symbol))))))
+
+
+;;;
+(defun lisp-minus-prefix ()
+  "Set current-prefix-arg to its absolute value if numeric and return
+T if it is a negative."
+  (if current-prefix-arg
+      (if (symbolp current-prefix-arg)
+	  (progn (setq current-prefix-arg nil) t)
+	  (if (< (setq current-prefix-arg
+		       (prefix-numeric-value current-prefix-arg))
+		 0)
+	      (progn 
+		(setq current-prefix-arg (- current-prefix-arg)) t)))))
+
+
+
+;;;%%Defuns
+(defun lisp-defun-region-and-name ()
+  "Return the region of the current defun and the name starting it."
+  (save-excursion
+    (let ((end (lisp-defun-end))
+	  (begin (lisp-defun-begin)))
+      (list begin end (lisp-def-name)))))
+  
+;;;
+(defun lisp-region-name (start end)
+  "Return a name for the region from START to END."
+  (save-excursion
+    (goto-char start)
+    (if (re-search-forward "^[ \t]*[^;\n]" end t)
+	(forward-char -1))
+    (setq start (point))
+    (goto-char end)
+    (re-search-backward "^[ \t]*[^;\n]" start 'move)
+    (end-of-line)
+    (skip-chars-backward " \t")
+    (setq end (min (point) end))
+    (goto-char start)
+    (let ((from
+	   (if (= (char-after (point)) ?\()
+	       (lisp-def-name)
+	       (buffer-substring-no-properties (point) 
+				 (progn (forward-sexp) (point))))))
+      (goto-char end)
+      (if (= (char-after (1- (point))) ?\))
+	  (progn
+	    (backward-sexp)
+	    (if (= (point) start)
+		from
+		(concat "from " from " to " (lisp-def-name))))
+	  (concat "from " from " to " 
+		  (buffer-substring-no-properties (save-excursion
+				      (backward-sexp)
+				      (point)) 
+				    (1- (point))))))))

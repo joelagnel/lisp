@@ -1,0 +1,9 @@
+import profile, pstats
+
+profile_file = 'profile.prof'
+profile.run('main()', profile_file)
+st = pstats.Stats(profile_file)
+print 'cumulative:'
+st.sort_stats('cumulative').print_stats(10)
+print 'time:'
+st.sort_stats('time').print_stats(10)

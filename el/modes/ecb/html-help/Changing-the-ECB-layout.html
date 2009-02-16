@@ -1,0 +1,666 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Changing%20the%20ECB-layout">Changing the ECB-layout</a>,
+Next:<a rel=next accesskey=n href="Redrawing-the-ECB-layout.html#Redrawing%20the%20ECB-layout">Redrawing the ECB-layout</a>,
+Previous:<a rel=previous accesskey=p href="The-ECB-layout.html#The%20ECB-layout">The ECB-layout</a>,
+Up:<a rel=up accesskey=u href="The-ECB-layout.html#The%20ECB-layout">The ECB-layout</a>
+<hr><br>
+
+<h4>Changing and customizing the ECB-layout</h4>
+
+<p>ECB offers several predefined layouts with different sets and also
+different locations of ECB-windows. See below the "ascii-screenshot"
+of all currently built-in layouts<a rel=footnote href="#fn-1"><sup>1</sup></a>.
+
+<p>In addition to these predefined layouts you can either interactively
+create new layouts "by example" (see <a href="Creating-a-new-ECB-layout.html#Creating%20a%20new%20ECB-layout">Creating a new ECB-layout</a>)
+or program new layouts with the macro <code>ecb-layout-define</code>
+(see <a href="The-layout-engine.html#The%20layout-engine">The layout-engine</a>). The former method is the recommended
+one!
+
+<p>There are two ways to interactively change the layout:
+<ul>
+<li>Changing permanently:
+Customize the option <code>ecb-layout-name</code> and store it for future
+Emacs sessions.
+
+<li>Switching between several layouts at runtime:
+If you want to switch fast between a certain sequence of layouts see
+the option <code>ecb-toggle-layout-sequence</code> and the command
+<code>ecb-toggle-layout</code> (see <a href="Simulating-speedbar.html#Simulating%20speedbar">Simulating speedbar</a>). For just
+selecting another layout during current Emacs-session use the command
+<code>ecb-change-layout</code>. 
+</ul>
+
+<p>With the option <code>ecb-show-sources-in-directories-buffer</code> you can
+define if sources are displayed in the directory-window of a layout
+(see <a href="ECB-Directories-buffer.html#ECB%20Directories-buffer">ECB Directories-buffer</a>).
+
+<p>In addition to the general layout you can specify if the layout should
+contain a persistent compilation-window at the bottom of the frame, see
+<code>ecb-compile-window-height</code> (see <a href="Temp--and-compile-buffers.html#Temp-%20and%20compile-buffers">Temp- and compile-buffers</a>).
+
+<p>Maybe you want also change the look&amp;feel of the tree-buffers. Then you
+can change the general style of the tree-buffers with the option
+<code>ecb-tree-buffer-style</code> and the location of the collapse- and
+expand-symbols and the indentation of sub-nodes in a tree. See
+<code>ecb-tree-indent</code> and <code>ecb-tree-expand-symbol-before</code>. More
+details about the different tree-buffer-styles are described in
+<a href="Tree-buffer-styles.html#Tree-buffer%20styles">Tree-buffer styles</a>.
+
+<p>Here are all currently available layouts (for creating own new layouts
+see <a href="Creating-a-new-ECB-layout.html#Creating%20a%20new%20ECB-layout">Creating a new ECB-layout</a>); just customize the option
+<code>ecb-layout-name</code> to the related name:
+
+<dl>
+<dt>Layout "left1"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|  Directories |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|--------------|                                      |
+|      |       |                                      |
+| Sour | Hist  |                 Edit                 |
+|      |       |                                      |
+|      |       |                                      |
+|--------------|                                      |
+|              |                                      |
+|  Methods     |                                      |
+|              |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left2"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|  Directories |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|--------------|                 Edit                 |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|  Sources     |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left3"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|  Directories |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|--------------|                                      |
+|              |                                      |
+|  Sources     |                 Edit                 |
+|              |                                      |
+|              |                                      |
+|--------------|                                      |
+|              |                                      |
+|  Methods     |                                      |
+|              |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left4"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|  Directories |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|--------------|                 Edit                 |
+|      |       |                                      |
+|      |       |                                      |
+|      |       |                                      |
+| Sour | Hist  |                                      |
+|      |       |                                      |
+|      |       |                                      |
+|      |       |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left5"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|  Directories |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|--------------|                                      |
+|              |                                      |
+|  Sources     |                 Edit                 |
+|              |                                      |
+|              |                                      |
+|--------------|                                      |
+|              |                                      |
+|  History     |                                      |
+|              |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "right1"
+<dd>
+<br><pre>-------------------------------------------------------
+|                                      |              |
+|                                      |  Directories |
+|                                      |              |
+|                                      |              |
+|                                      |--------------|
+|                                      |              |
+|                                      |              |
+|             Edit                     |  Sources     |
+|                                      |              |
+|                                      |              |
+|                                      |--------------|
+|                                      |              |
+|                                      |  Methods     |
+|                                      |              |
+|                                      |              |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left6"
+<dd>
+<br><pre>-------------------------------------------------------
+|  Sources     |                                      |
+|--------------|                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|  Methods     |                 Edit                 |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|--------------|                                      |
+|  History     |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "top1"
+<dd>
+<br><pre>-------------------------------------------------------
+|                        |             |              |
+|                        |             |              |
+|      Directories       |  Sources    |  Methods     |
+|                        |             |              |
+|                        |             |              |
+|-----------------------------------------------------|
+|                                                     |
+|                                                     |
+|                                                     |
+|                                                     |
+|                    Edit                             |
+|                                                     |
+|                                                     |
+|                                                     |
+|                                                     |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left7"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|  Directories |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|--------------|                 Edit                 |
+|              |                                      |
+|  History     |                                      |
+|              |                                      |
+|--------------|                                      |
+|              |                                      |
+|  Methods     |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left8"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|  Directories |                                      |
+|              |                                      |
+|--------------|                                      |
+|              |                                      |
+|  Sources     |                                      |
+|              |                                      |
+|--------------|                 Edit                 |
+|              |                                      |
+|  Methods     |                                      |
+|              |                                      |
+|              |                                      |
+|--------------|                                      |
+|  History     |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "top2"
+<dd>
+<br><pre>-------------------------------------------------------
+|                                                     |
+|                                                     |
+|                    Methods                          |
+|                                                     |
+|                                                     |
+|-----------------------------------------------------|
+|                                                     |
+|                                                     |
+|                                                     |
+|                                                     |
+|                    Edit                             |
+|                                                     |
+|                                                     |
+|                                                     |
+|                                                     |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left9"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|   Methods    |                 Edit                 |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left10"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|  Methods     |                 Edit                 |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|--------------|                                      |
+|      |       |                                      |
+| Sou  | Hist  |                                      |
+|      |       |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left11"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|  Methods     |                 Edit                 |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|--------------|                                      |
+|              |                                      |
+|  History     |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left12"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|   History    |                 Edit                 |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left13"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+| Directories  |                 Edit                 |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left14"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|              |                                      |
+|              |                                      |
+| Directories  |                 Edit                 |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|--------------|                                      |
+|              |                                      |
+|  History     |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left15"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|  Directories |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|--------------|                 Edit                 |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+|  Methods     |                                      |
+|              |                                      |
+|              |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "leftright1"
+<dd>
+<br><pre>-------------------------------------------------------
+|             |                         |             |
+| Directories |                         |  Methods    |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|-------------|          Edit           |             |
+|             |                         |             |
+| Sources     |                         |             |
+|             |                         |             |
+|-------------|                         |             |
+|             |                         |             |
+| History     |                         |             |
+|             |                         |             |
+-------------------------------------------------------
+|                                                     |
+|                   Compilation                       |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "leftright2"
+<dd>
+<br><pre>-------------------------------------------------------
+|             |                         |             |
+| Directories |                         |  Methods    |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |          Edit           |             |
+|-------------|                         |-------------|
+|             |                         |             |
+| Sources     |                         |  History    |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+-------------------------------------------------------
+|                                                     |
+|                   Compilation                       |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "leftright3"
+<dd>
+<br><pre>-------------------------------------------------------
+|             |                         |             |
+| Directories |                         |  Methods    |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |          Edit           |             |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+|             |                         |             |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left-dir-plus-speedbar"
+<dd>
+<br><pre>-------------------------------------------------------
+|             |                                       |
+| Directories |                                       |
+|             |                                       |
+|             |                                       |
+|             |                                       |
+|             |                                       |
+|             |                                       |
+|-------------|                                       |
+|             |                                       |
+|             |                                       |
+|             |                                       |
+| Speedbar    |                                       |
+|             |                                       |
+|             |                                       |
+|             |                                       |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left-analyse"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|  Directories |                                      |
+|              |                                      |
+|--------------|                                      |
+|              |                                      |
+|  Sources     |                                      |
+|              |                                      |
+|--------------|                 Edit                 |
+|              |                                      |
+|  Methods     |                                      |
+|              |                                      |
+|--------------|                                      |
+|              |                                      |
+|  Analyse     |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+<br><dt>Layout "left-symboldef"
+<dd>
+<br><pre>-------------------------------------------------------
+|              |                                      |
+|  Directories |                                      |
+|              |                                      |
+|--------------|                                      |
+|              |                                      |
+|  Sources     |                                      |
+|              |                                      |
+|--------------|                 Edit                 |
+|              |                                      |
+|  Methods     |                                      |
+|              |                                      |
+|--------------|                                      |
+|              |                                      |
+|  Symbol-defs |                                      |
+|              |                                      |
+-------------------------------------------------------
+|                                                     |
+|                    Compilation                      |
+|                                                     |
+-------------------------------------------------------
+</pre>
+
+</dl>
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>The command
+<code>ecb-show-layout-help'</code> shows the outline-picture for all built-in
+layouts.</p>
+
+</ol><hr>
+
+</body></html>
+

@@ -1,0 +1,2 @@
+child = popen2.Popen3(<field "command">, 1)
+cin, cout, cerr = child.tochild, child.fromchild, child.childerr

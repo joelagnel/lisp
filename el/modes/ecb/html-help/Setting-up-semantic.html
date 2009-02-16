@@ -1,0 +1,99 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Setting%20up%20semantic">Setting up semantic</a>,
+Next:<a rel=next accesskey=n href="Non-semantic-files.html#Non-semantic%20files">Non-semantic files</a>,
+Previous:<a rel=previous accesskey=p href="General-hints.html#General%20hints">General hints</a>,
+Up:<a rel=up accesskey=u href="Setting-up-Emacs.html#Setting%20up%20Emacs">Setting up Emacs</a>
+<hr><br>
+
+<h4>Setting up semantic</h4>
+
+<p>To ensure ECB and semantic are working correctly for all by semantic
+supported languages you have to pay attention to the following aspects
+concerning your Emacs-setup:
+
+<ol type=1 start=1>
+</p><li>Setting up semantic itself
+
+<p>For all semantic-supported file-types parsing files is done completely
+by semantic. ECB just displays the parsing results. For all needs of
+ECB semantic is completely setup by ECB itself, i.e. ECB sets up
+semantic for you! You have only to add the installation directory of
+semantic to your <code>load-path</code> (in an appropriate way)!
+
+<p><strong>Please note</strong>: If you setup semantic for yourself following the
+recommendations in the installation instructions of semantic then you
+have probably added code to your startup-file like:
+
+<br><pre>(setq semantic-load-turn-everything-on t)
+(require 'semantic-load)
+</pre>
+
+<p>Be aware that this also enables the minor-modes
+<code>semantic-show-dirty-mode</code> and
+<code>semantic-show-unmatched-syntax-mode</code> where the former one
+highlights all code which has to be reparsed with dark background
+(which results in large portions of dark background ;-) and the latter
+one underlines all syntax which can not be parsed. Especially the
+former one can be really annoying.
+
+<p>To switch off these modes you can add to your startup-file:
+
+<br><pre>(global-semantic-show-dirty-mode -1)
+(global-semantic-show-unmatched-syntax-mode -1)
+</pre>
+
+<p><a name="Checking%20your%20hooks"></a>
+</p><li>Checking your hooks
+
+<p>If you have already checked point (1.) and if you have still problems
+getting ECB/semantic working properly for your sources you should
+check the related major-mode hook. Every major-mode X has a hook with
+name "X-hook" which is evaluated after activating the major-mode
+(see above, 2.), e.g. the hook for the major-mode <code>c++-mode</code> is
+<code>c++-mode-hook</code>.
+
+<p>Semantic adds automatically during load-time a special
+"semantic-setup" to these major-mode hooks<a rel=footnote href="#fn-1"><sup>1</sup></a> in form of a
+"setup-function". Example: For c and c++ modes semantic adds
+<code>semantic-default-c-setup</code> to <code>c-mode-hook</code> and
+<code>c++-mode-hook</code>.
+
+<p>If your own Emacs-setup (e.g. in <code>.emacs</code> or
+<code>site-lisp/site-start.el</code>) overwrites such a major-mode-hook then
+semantic can not be activated for this major-mode and in consequence
+ECB can not work properly too!
+
+<p>Check if your Emacs-setup uses somewhere <code>setq</code> for adding code
+to a major-mode-hook. <strong>IMPORTANT</strong>: Use <code>add-hook</code> instead of
+<code>setq</code><a rel=footnote href="#fn-2"><sup>2</sup></a>!
+
+</ol>
+
+<p>If your source-files are "running" with correct <code>major-mode</code>
+and correct major-mode hooks ECB and semantic will do what you expect
+them doing!
+
+<hr><h4>Footnotes</h4>
+<ol type="1">
+<li><a name="fn-1"></a>
+<p>Of course only
+for major-modes supported by semantic!</p>
+
+<li><a name="fn-2"></a>
+<p><code>setq</code> replaces/overwrites the current
+value of a hook with the new value whereas <code>add-hook</code>
+<strong>adds</strong> the new value to the old-value of the hook!</p>
+
+</ol><hr>
+
+</body></html>
+

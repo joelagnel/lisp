@@ -1,0 +1,42 @@
+### README for template.el: Template Package for Emacs
+
+## Copyright 2002 Free Software Foundation, Inc.
+##
+## Author: Christoph Wedler <wedler@users.sourceforge.net>
+## Keywords: Emacs, template, comment decoration, auto-updating, data, tools
+## X-URL: http://emacs-template.sourceforge.net/
+
+
+When you create a new file with Emacs, package Template supplies an initial
+buffer content via a template: a file with normal text and expansion
+forms. There is a menu to easily create such templates. You can also use new
+commands to decorate comments and update the buffer contents.
+
+The main difference between Template and other similar packages is that you
+can define very flexible templates without having to learn Lisp or changing
+your Emacs init file. This package does not help Lisp programmers to define
+complex macros.
+
+
+Files in the distribution (top level directory "template"):
+
+ * README: this file
+ * INSTALL: how to install "lisp/template.el"
+ * lisp/template.el: main file
+ * lisp/ChangeLog: its detailed ChangeLog file
+
+Templates in the distribution (in "template/templates"):
+
+ * DEFAULT.tpl: the last resort, you should always have this file
+ * Makefile.tpl
+ * README.tpl
+ * TEMPLATE.c.tpl
+ * TEMPLATE.cls.tpl
+ * TEMPLATE.el.tpl
+ * TEMPLATE.h.tpl
+ * TEMPLATE.html.tpl
+ * TEMPLATE.java.tpl
+ * TEMPLATE.sty.tpl
+ * TEMPLATE.tex.tpl
+
+## README ends here

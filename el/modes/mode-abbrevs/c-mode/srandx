@@ -1,0 +1,1 @@
+srand(<field "unsigned int seed">)

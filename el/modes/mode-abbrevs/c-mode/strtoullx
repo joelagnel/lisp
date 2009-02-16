@@ -1,0 +1,1 @@
+strtoull(<field "const char *restrict s">, <field "char **restrict endptr">, <field "int base">)

@@ -1,0 +1,25 @@
+# arg is a number, or a thing that looks like a number
+def csnum(arg):
+    float_regexp = "-?([0-9]+(\\.[0-9]*)?|\\.[0-9]+)"
+    re_kb = '^' + float_regexp + '[kK]$'
+    re_mb = '^' + float_regexp + '[mM]$'
+    re_gb = '^' + float_regexp + '[gG]$'
+    re_tb = '^' + float_regexp + '[tT]$'
+    re_pb = '^' + float_regexp + '[pP]$'
+    re_eb = '^' + float_regexp + '[eE]$'
+    if (re.match(re_kb, arg)):
+        return int(round(float(re.sub(re_kb, r'\1', arg)) * (2**10)))
+    elif (re.match(re_mb, arg)):
+        return int(round(float(re.sub(re_mb, r'\1', arg)) * (2**20)))
+    elif (re.match(re_gb, arg)):
+        return int(round(float(re.sub(re_gb, r'\1', arg)) * (2**30)))
+    elif (re.match(re_tb, arg)):
+        return int(round(float(re.sub(re_tb, r'\1', arg)) * (2**40)))
+    elif (re.match(re_pb, arg)):
+        return int(round(float(re.sub(re_pb, r'\1', arg)) * (2**50)))
+    elif (re.match(re_eb, arg)):
+        return int(round(float(re.sub(re_pb, r'\1', arg)) * (2**60)))
+    elif (re.match('^[0-9]+', arg)):
+        return int(arg)
+    else:
+        raise ValueError("ERROR:  invalid number " + arg)

@@ -1,0 +1,133 @@
+.files
+Makefile
+BUGS
+CHANGELOG
+ChangeLog
+COPYING
+DEDICATION
+DEDICATION.c-r
+EMACS                 EMACS.html
+INSTALL
+NEWS                  NEWS.html
+README                README.html
+README-0.95.0
+README-0.95.1
+THANKS
+TODO
+VERSION
+
+eev.el                eev.el.html
+eev-bounded.el        eev-bounded.el.html
+eev-compose.el        eev-compose.el.html
+eev-glyphs.el         eev-glyphs.el.html
+eev-insert.el         eev-insert.el.html
+eev-langs.el          eev-langs.el.html
+eev-steps.el          eev-steps.el.html
+eev-browse-url.el     eev-browse-url.el.html
+
+eev-mini.el           eev-mini.el.html
+eev-sshot.el          eev-sshot.el.html
+
+eev-math-glyphs.el    eev-math-glyphs.el.html
+
+htmlize-eev.el        htmlize-eev.el.html
+htmlize-all.el        htmlize-all.el.html
+eeg
+eeg4                  eeg4.html
+eegchannel            eegchannel.html
+
+eev-rctool            eev-rctool.html
+
+eev-bounded-old.el    eev-bounded-old.el.html
+
+compose.el            compose.el.html
+eev-dev.el            eev-dev.el.html
+eev-insert-old.el     eev-insert-old.el.html
+eev-ttp.el            eev-ttp.el.html
+eev-walk.el           eev-walk.el.html
+glyphs.el             glyphs.el.html
+
+anim/README
+anim/channels.anim    anim/channels.anim.html
+anim/gdb.anim         anim/gdb.anim.html
+
+article/Makefile
+article/README
+article/eev.tex
+article/eev.txt
+article/ss-f9.png
+article/ss-gdbtall.png
+article/ss-gdbwide.png
+article/ss-lua.png
+article/ss-m-h.png
+article/ss-modular.png
+article/iskidip.eps
+article/iskidip.svg
+
+rcfiles/README
+rcfiles/change
+rcfiles/change.awk
+rcfiles/.bashrc
+rcfiles/.bashrc-psne
+rcfiles/.fvwmrc
+rcfiles/.pythonrc.py
+rcfiles/.tclshrc
+rcfiles/.vimrc
+rcfiles/.zshrc
+rcfiles/.zshrc-psne
+rcfiles/tmp/README
+rcfiles/channel.py
+rcfiles/channel.tcl
+
+tmp/README
+tmp/tmp.c
+tmp/tmp.mp
+tmp/tmp.tex
+tmp/tmp-pst.tex
+
+doc/EEVMANIFESTO
+doc/HISTORY
+doc/NAO_pt
+doc/README
+doc/README-0.93
+doc/TOURISM
+doc/eev.texi
+doc/keys.e
+doc/tutorial.e
+doc/shot-f3.png
+doc/shot-f9.png
+doc/diag-links.jpg
+doc/diag-links.svg
+doc/diag-save.jpg
+doc/diag-save.svg
+
+examples/escript-mode.el
+examples/infoindex.rb
+
+examples/README
+examples/anim.e
+examples/awk.e
+examples/busybox.e
+examples/c.e
+examples/debian.e
+examples/demos.e
+examples/debs2.lua
+examples/eev-tests.e
+examples/emacs.e
+examples/gtk.e
+examples/iskidip.e
+examples/iskidip2.e
+examples/lua.e
+examples/make.e
+examples/mgp.e
+examples/perl.e
+examples/php.e
+examples/python.e
+examples/ps.e
+examples/qemu.e
+examples/ruby.e
+examples/screenshots.e
+examples/sh.e
+examples/svn.e
+examples/tcltk.e
+examples/tex.e

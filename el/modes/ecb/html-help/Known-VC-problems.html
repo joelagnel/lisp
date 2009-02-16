@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Known%20VC-problems">Known VC-problems</a>,
+Previous:<a rel=previous accesskey=p href="Adding-new-backends.html#Adding%20new%20backends">Adding new backends</a>,
+Up:<a rel=up accesskey=u href="Version-control-support.html#Version-control%20support">Version-control support</a>
+<hr><br>
+
+<h4>Currently know problems with the VC-support</h4>
+
+<h5>Remote repositories and XEmacs</h5>
+
+<p>Currently there are mostly problems related to XEmacs - cause of its
+outdated VC-package which allows no heuristic state-computation but
+always runs "cvs status" to get the VC-state for a file (done by
+<code>vc-cvs-status</code>). This can be horrible slow for remote
+CVS-root-repositories. Now ECB performs the VC-check stealthy and only
+in idle-time of Emacs but even so XEmacs can be blocked espcially if
+the cygwin-build of XEmacs is used: This XEmacs-version is
+substantially slower concering file-operations and has sometimes a
+very slow and delayed response-behavior for mouse- and keyboard
+interrupts - so even ECB let the user interrupt by using
+<code>input-pending-p</code> before getting the VC-state of a file XEmacs
+sometimes does not react to such user-interrupts and seems to be
+blocked.
+
+<p>Current solution: ECB offers the option
+<code>ecb-vc-xemacs-exclude-remote-cvs-repository</code> which excludes
+remote repositories from being checked. This option is per default t
+for XEmacs. Whenever XEmacs syncs up its VC-package with the Emacs one
+this option will automatically take no effect.
+
+</body></html>
+

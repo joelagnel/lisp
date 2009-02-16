@@ -1,0 +1,712 @@
+This is ecb.info, produced by makeinfo version 4.2 from ecb.texi.
+
+INFO-DIR-SECTION GNU Emacs Lisp
+START-INFO-DIR-ENTRY
+* ECB: (ecb).           Emacs Code Browser
+END-INFO-DIR-ENTRY
+
+
+File: ecb.info,  Node: The other window,  Next: The Methods buffer,  Prev: Temp- and compile-buffers,  Up: Usage of ECB
+
+How the "other window" is determined by ECB
+===========================================
+
+Normally all windows in an Emacs-frame are arranged in a cyclic order and
+window-selecting-commands like `other-window' or window-scrolling-commands
+like `scroll-other-window' choose simply the next(1) window after the current
+window as "other window".
+
+"Other window"-basics in ECB
+----------------------------
+
+With a typical window-layout of ECB such a cyclic order of *all* windows in
+the ECB-frame does not make sense because it would be not very intuitive and
+against that what the user wants to "say" when calling `other-window' or
+`scroll-other-window'.
+
+Therefore ECB divides the whole set of windows of the ECB-frame in several
+subsets:
+
+ * The edit-windows of the edit-area
+
+ * The special tree-windows for browsing-tasks
+
+ * The compile-window at the bottom (if there is one)
+
+ * The minibuffer-window of the ECB-frame (if active)
+
+Each of these subsets will be treated as a cyclic ordered subset, i.e.  all
+windows in each of these subsets are ordered as the function `walk-windows'
+would visit the windows when the windows of a subset would be the only
+windows of a frame(2).
+
+Builtin "other window" behaviors of ECB
+---------------------------------------
+
+ECB now offers to specify the behavior of commands like `other-window' or
+`scroll-other-window' within the ECB-frame. This can be done with the option
+`ecb-other-window-behavior'. This option offers several builtin behaviors:
+
+ * All windows of the ECB-frame are considered
+
+   ECB will cycle through all windows of the ECB-frame or scroll simply the
+   next window in the ECB-frame, means it behaves like the original
+   `other-window' rsp. the original `other-window-for-scrolling'.
+
+ * Only the windows of the edit-area are considered
+
+   ECB will only cycle through the edit-windows of ECB or only scroll another
+   edit-window. If the selected window is not an edit-window then all windows
+   are taken into account.
+
+ * The edit-windows and the compile-window are considered
+
+   Like above but the compile-window will be added to the subset of the
+   edit-windows.
+
+ * Behave as smart and intuitive as possible
+
+   This is the default behavior of ECB. ECB tries to choose the
+   `other-window'-destination or the "other window" to scroll in a smart and
+   intuitive way: If point is in one of the edit-windows and if the edit-area
+   is splitted then always the "next" edit-window is choosen (whereas the
+   next edit-window of the last edit-window is the first edit-window)- if the
+   edit-area is unsplitted then the compile-window is used if there is one.
+   In the context of an `other-window'-call the ARG of `other-window' will be
+   taken into account.
+
+   If one of the special ecb-windows is selected then always the "next"
+   ecb-window is choosen (whereas the next ecb-window of the last ecb-window
+   is the first ecb-window). In the context of an `other-window'-call the ARG
+   of `other-window' will be taken into account. If there is only one
+   ecb-window then ECB considers also the edit-windows.
+
+   If the compile-window is selected then always the last edit-window which
+   had the point will be used unless `other-window' has been called with a
+   prefix-argument unequal 1.
+
+Regardless of the different behaviors above ECB handles the situation of an
+active minibuffer during a call to `other-window' or `scroll-other-window'
+like follows:
+
+If the minibuffer-window is selected then ECB always chooses the window
+`minibuffer-scroll-window' points to (when this variable is set, otherwise
+the compile-window or the last selected edit-window is choosen) when the
+called command is called to choose the 1. next window (always true for
+scrolling another window or true when `other-window' called without
+prefix-arg or with prefix-arg equal 1). Otherwise the window ARG steps away
+is choosen (in case of `other-window').
+
+If there is an active minibuffer but the minibuffer-window is not selected
+then `other-window' and `scroll-other-window' behave like the original
+version.
+
+User-defined "other window" behavior
+------------------------------------
+
+In addition to the builtin "other window" behaviors ECB offers a user to
+completely define for himself how ECB should choose another window for
+scrolling it or selecting it. This can be done with the option
+`ecb-other-window-behavior' too because this option can also have a
+function-symbol as value:
+
+Such a function gets seven arguments:
+1. A canonical list of all currently visible windows of the `ecb-frame'
+
+2. A canonical list of all currently visible edit-windows
+
+3. A canonical list of all currently visible ecb-windows
+
+4. The window-object of the compile-window if there is any.
+
+5. The minibuffer-window of the ECB-frame if there is an active minibuffer.
+
+6. The result of the function `ecb-where-is-point' - see the documentation of
+   this function for details.
+
+7. An integer which indicates how many steps away from the current selected
+   window the "other-window" is. Is nil when this function is called in
+   another context than for `other-window'.
+
+The function has to return a window-object which is then used as "other
+window" for the command `other-window' or for scrolling another window (e.g.
+with `scroll-other-window'). Such a function has to handle properly all
+situation for itself.
+
+Here is an example for such a function:
+
+   (defun ecb-get-other-window-smart (win-list
+                                      edit-win-list
+                                      ecb-win-list
+                                      comp-win
+                                      minibuf-win
+                                      point-loc
+                                      nth-window)
+     "Implements the smart-setting of `ecb-other-window-behavior'."
+     (if minibuf-win
+         ;; if we have an active mini-buffer we delegate this to
+         ;; `ecb-get-other-window-minibuf-active'
+         (ecb-get-other-window-minibuf-active win-list
+                                              edit-win-list
+                                              ecb-win-list
+                                              comp-win
+                                              minibuf-win
+                                              point-loc
+                                              nth-window)
+       ;; here we have no active minibuffer!
+       (let ((nth-win (or nth-window 1)))
+         (cond ((equal point-loc 'ecb)
+                (ecb-next-listelem ecb-win-list (selected-window) nth-win))
+               ((equal point-loc 'compile)
+                (if (= nth-win 1)
+                    (or (and ecb-last-edit-window-with-point
+                             (window-live-p ecb-last-edit-window-with-point)
+                             ecb-last-edit-window-with-point)
+                        (car edit-win-list))
+                  (ecb-next-listelem (append edit-win-list
+                                             (list (selected-window)))
+                                     (selected-window)
+                                     nth-win)))
+               (t ;; must be an edit-window
+                (ecb-next-listelem (append edit-win-list
+                                           (if (and comp-win
+                                                    (= (length edit-win-list)
+                                                       1))
+                                               (list comp-win)))
+                                   (selected-window)
+                                   nth-win))))))
+
+This example implements the builtin smart behavior described above.
+
+---------- Footnotes ----------
+
+(1) `other-window' allows to select ARG'th different window, i.e. the window
+ARG steps away from current window in the cyclic order of the windows
+
+(2) `other-window' uses the same window-ordering as `walk-windows'
+
+
+File: ecb.info,  Node: The Methods buffer,  Next: Filtering the tree-buffers,  Prev: The other window,  Up: Usage of ECB
+
+Using and customizing the ECB-Methods buffer
+============================================
+
+ECB is mostly designed to display parsing information for files supported by
+semantic. But beginning with version 1.94 it also supports other parsing
+engines like imenu and etags, so also files not supported by semantic but by
+imenu/etags can be displayed in the Method-buffer of ECB. Therefore we have
+to introduce some terminology:
+
+ - "semantic-sources": These are file-types for which a semantic grammar is
+   available, so the files are parse-able by semantic. These sources are
+   supported best by ECB and most of the following options and descriptions
+   are related to these file-types. Examples are programming-sources like
+   C++, C, Java, Emacs-Lisp and Texinfo-file and some more.
+
+ - "non-semantic-sources": For these files there is no semantic-grammar
+   available so they can not be parsed by semantic. Examples are Perl-,
+   LaTeX- and TeX-files. But for many of these files imenu and/or etags
+   parsers exist. ECB supports now parsing and displaying these file-types
+   too and it uses for this some speedbar-logic.
+
+This chapter describes how to use and customize the Methods-buffer of ECB.
+
+* Menu:
+
+* Visiting tags::               Possible actions after visiting a tag
+* Expanding::                   Explicit and automatic expanding
+* Customizing the display::     How to customize the Methods-buffer display
+* Rebuilding the Methods::      When to rebuild the Methods-buffer
+
+
+File: ecb.info,  Node: Visiting tags,  Next: Expanding,  Prev: The Methods buffer,  Up: The Methods buffer
+
+Possible actions after visiting a tag
+-------------------------------------
+
+You visit a tag by clicking with either the primary oder secondary
+mouse-button (or by hitting `RET' or `C-RET' if using the keyboard) onto a
+node in the Methods-tree-buffer of ECB. This simply selects the "right"
+edit-window (depends if clicked with the primary or secondary button, in how
+many windows the edit-area is splitted and the value of
+`ecb-mouse-click-destination') and puts the point onto the first line of the
+clicked tag.
+
+But you can define if after this "basic" tag-visit-action more additional
+actions should be performed by ECB. You can either use some of the predefined
+actions (e.g. highlighting the header-line of the tag) or define own actions.
+You can set different actions for different major-modes. All this is done via
+the option `ecb-tag-visit-post-actions'.
+
+The following actions are currently predefined:
+ - `ecb-tag-visit-highlight-tag-header'
+
+ - `ecb-tag-visit-smart-tag-start'
+
+ - `ecb-tag-visit-recenter'
+
+ - `ecb-tag-visit-recenter-top'
+
+ - `ecb-tag-visit-goto-doc-start'
+
+ - `ecb-tag-visit-narrow-tag'
+
+See the documentation of these function for details what they do.
+
+Per default ECB performs the actions `ecb-tag-visit-smart-tag-start' and
+`ecb-tag-visit-highlight-tag-header' for all major-modes.
+
+
+File: ecb.info,  Node: Expanding,  Next: Customizing the display,  Prev: Visiting tags,  Up: The Methods buffer
+
+Explicit and automatic expanding of the ECB-methods-buffer
+----------------------------------------------------------
+
+Explicit expanding all nodes to a certain expansion level
+.........................................................
+
+With the command `ecb-expand-methods-nodes' (bound to `C-c .  x') you can get
+a fast overlook of the contents of the source-buffer, because this command
+allows precisely expanding all tags with a certain indentation-level. So you
+can either expand no tags (or with other words collapse all tags) or expand
+all tags so see the contents of a buffer at one glance. Or you can expand
+exactly that tags of a certain indentation level.
+
+Which node-types are expanded (rsp. collapsed) by this command depends for
+semantic-sources on the options `ecb-methods-nodes-expand-spec' and
+`ecb-methods-nodes-collapse-spec'! For non-semantic-sources always all
+node-types are expanded/collapsed, i.e. the two options above takes no effect
+for these files.
+
+Explicit expanding of the current node to a certain level
+.........................................................
+
+With the popup-menu of the methods-buffer an even more precise expansion is
+possible because it allows not only expanding all tags (see above) but offers
+in addition expanding only the current-node (for which the menu was
+activated) to an exact level of expansion:
+
+All menu-entries are label with an expansion-"level" whereas level specifies
+precisely which level of nodes should be expanded. level means the
+indentation-level of the NODE itself and its (recursive) subnodes relative to
+the NODE itself.
+
+So a level value X means that all (sub)nodes with an indentation-level <= X
+relative to NODE are expanded and all other are collapsed.
+
+Examples:
+
+ - Expand this node to level 0: Expand only the NODE itself because it is the
+   only node which has indentation 0 to itself. All deeper indented nodes
+   will be collapsed.  This is also the important difference between using
+   this menu compared to clicking onto the expand-symbol of the node: The
+   latter one expands the NODE to that expansion-state it has before the last
+   collapsing (so when deeper nodes has been expanded they will be expanded
+   now to). The former one expands exactly(!) to level 0, means expand only
+   the node itself and collapse all(!) its subnodes recursively(!).
+
+ - Expand this node to level 1: Expand the NODE itself and all of its direct
+   subnodes - because only the direct subnodes of NODE have indentation-level
+   1 relativ to NODE.  All deeper nodes will be collapsed.
+
+ - Collapse this node completely: Collapses the current node recursively,
+   means collapse not only the node itself but also its subnodes, the
+   subnodes of the subnodes and so on! This is very differnt from clicking
+   onto the collapse symbol because this action only collapses the node
+   itself but preserves the expansion-state of all its subnodes!
+
+
+Expanding the current node with the popup-menu ignores the settings in the
+options `ecb-methods-nodes-expand-spec' and `ecb-methods-nodes-collapse-spec'!
+
+Automatic expansion ot tags after buffer-parsing
+................................................
+
+With the option `ecb-show-tags' you tell ECB how to display tags of a certain
+tag-class (*note Customizing the display::). Among other things you can tell
+ECB that a certain tag-class should be combined under an expanded or
+collapsed bucket-node. But such a setting defines the expansion-state of such
+a bucket-node only direct afterwards the buffer has been (re)parsed, which
+can occur after opening a file, after autom. reparsing the buffer via
+semantic or after manually rebuilding the methods-buffer of ECB.
+
+The tag-class `type' (classes, interfaces, enumerations etc.) is divided into
+several subtypes by semantic. The subtypes are strings which names exactly if
+the tag with tag-class `type' is a class, an interface, an enumeration, a
+typedef etc. With the option `ecb-type-tag-expansion' you can tell ECB if
+these type-tags should be autom. expanded after (reparsing) a buffer (see
+above) or if they should be displayed collapsed - so all its members (methods,
+variables etc.) are hidden.
+
+Automatic expanding the ECB-methods-buffer for current tag
+..........................................................
+
+If the option `ecb-highlight-tag-with-point' is switched on, then always that
+node in the method-buffer is highlighted which belongs to the current
+semantic-tag under point in the current active edit-window. But if this node
+is invisible (probably because its parent node is collapsed) then no node is
+highlighted if the auto.  expanding feature is switched off.
+
+You can either switch on this feature with the option
+`ecb-auto-expand-tag-tree' or even easier with the command
+`ecb-toggle-auto-expand-tag-tree'.
+
+There is another option `ecb-expand-methods-switch-off-auto-expand' which
+makes both explicit and auto. expanding best working together. See the
+documentation of this option to get the details.
+
+The autom. expanding feature is only available for semantic-sources!
+
+Previous versions of ECB have always fully expanded the whole tree in the
+Methods-buffer if the current tag in the source-buffer was not visible in the
+current tree - e.g. because the variables-bucket was collapsed or the
+containing type of a tag (e.g. the class of a method) was collapsed. So in
+most cases much more was expanded as needed to make the current tag visible.
+
+The mechanism of ECB 2.22 and higher only expands the needed parts of the
+tree-buffer to make the related node visible: First we try to highlight the
+current tag with current expansion-state of the Methods-buffer. If the node
+is not visible so the tag can not be highlighted then we go upstairs the
+ladder of type-tags the current tag belongs to (e.g. we expand successive the
+nodes of the whole class-hierachy of the current method-tag until the related
+node becomes visible). If there is no containing type for the current tag
+then the node of the tag is probably contained in a toplevel-bucket which is
+currently collapsed; in this case we expand only this bucket-node and try
+highlighting again. Only if this has still no success then we expand the full
+tree-buffer and try to highlight the current tag.
+
+There is another option `ecb-auto-expand-tag-tree-collapse-other': If this
+option is set then auto. expanding the tag-tree collapses all not related
+nodes.  This means that all nodes which have no relevance for the currently
+highlighted node will be collapsed, because they are not necessary to make
+the highlighted node visible. This feature is switched off by default because
+if always collapses the complete Methods-tree before the following
+highlighting of the node for the current tag expands the needed parts of the
+tree-buffer.
+
+
+File: ecb.info,  Node: Customizing the display,  Next: Rebuilding the Methods,  Prev: Expanding,  Up: The Methods buffer
+
+Customizing the display of the Methods-buffer
+---------------------------------------------
+
+The ECB-Methods buffer is probably the most important browsing window offered
+by ECB. It displays all parsing informations of the current source-buffer
+(the buffer displayed in the current active edit-window).
+
+Normally ECB gets all informations displayed in this Methods-buffer from the
+semantic-library - at least for semantic-sources. This library parses auto.
+the current source-buffer in the edit-window of ECB and returns all
+information in form of "tags" to ECB which displays them in a browse-able
+form in its Method-buffer. See *Note ECB Methods-buffer:: for information how
+to use the Methods-buffer.
+
+There are several options to customize which tags ECB should display in
+general, if the tags should be collapsed or expanded, how to fontify them
+(i.e. syntax-highlighting) and something more.
+
+`ecb-show-tags'
+   With the option `ecb-show-tags' you specify how ECB should display the
+   tags returned by the semantic parser. Semantic divides its tags in several
+   so called "tag classes". A tag-class is always a symbol and can be for
+   example `type' (tags which represent a class(1), a interface, an
+   enumeration etc.), `function' (tags which represent function or methods),
+   `variable' (variables and attributes), `include' (import-statements) etc.
+   There is no predefined superset of allowed tag-class-symbols because each
+   language-parser can define its own tag-classes. But to get an overview of
+   the most common tag-classes see the default value of the option
+   `ecb-show-tags'.
+
+   With the option `ecb-show-tags' you can now specify how ECB should display
+   tags of a certain tag-class in a certain major-mode.  You can tell ECB
+   that all tags of a tag-class `X' should be displayed in an expanded bucket
+   and all tags of a tag-class `Y' should be displayed in a collapsed bucket
+   and all tags of a tag-class `Z' should be displayed flattened (means not
+   contained in a expandable/collapsable bucket-node). These settings can be
+   made separately for each major-mode but you can also define a
+   default-display which takes effect when for a major-mode no special
+   setting can be found in `ecb-show-tags'.
+
+   For every tag-class you can tell ECB how the tags should be sorted.
+
+`ecb-font-lock-tags'
+`ecb-type-tag-display'
+   How to fontify the tags in the Method-buffer
+
+`ecb-tag-display-function'
+   ECB and semantic offer several predefined functions for displaying the
+   tags. Here you can customize, what informations tags should contain (only
+   the method-name or the whole signature or something else) and what
+   notation should be used, e.g. UML or not.
+
+These are the most important options for this topic but it is recommended to
+have a look into the customize-group `ecb-methods' (*note ecb-methods::) and
+check all the options offered there!
+
+All these options are only relevant for semantic-sources and take no effect
+for non-semantic-sources!
+
+---------- Footnotes ----------
+
+(1) Do not confuse the term "class" in the context of a tag, which means the
+class of the tag and which is a semantic-term and a "class" in the context of
+an object oriented language like Java or C++! Normally the surrounding
+context sould be sufficient to understand which type of "class" is meant
+whenever the term "class" is used in this manual.
+
+
+File: ecb.info,  Node: Rebuilding the Methods,  Prev: Customizing the display,  Up: The Methods buffer
+
+Rebuilding the Methods-buffer
+-----------------------------
+
+In almost all cases there is *NO* need to manually rebuild the method-buffer,
+because it is always done automatically if necessary; the mechanism depends
+on the sources:
+
+ - semantic-sources: The command `global-semantic-auto-parse-mode' switches
+   on autom.  reparsing of semantic-sources.
+
+ - non-semantic-sources (imenu supported): You can switch on autom.
+   rescanning/reparsing with the option `imenu-auto-rescan'. But nevertheless
+   you have to manually rebuild the Method-buffer (with the autom. updated
+   imenu-tags) via the command `ecb-rebuild-methods-buffer' (bound to `C-c .
+   r').
+
+ - non-semantic-sources (etags supported): For these sources there is no
+   built-in auto-rescan mechanism, because etags is an external tool it can
+   only operate on the saved file-contents. So rescanning the buffer contents
+   would need to save the buffer before. Therefore there is no built-in
+   auto-rescan mechanism because this would always result in saving the
+   buffer and running an external tool. But of course you can program such a
+   an etags-auto-rescan mechanism for yourself!
+
+Besides for etags-supported non-semantic-sources there exist a few rare
+scenarios also for the other sources where a complete manual rebuild can be
+necessary. Here is one example:
+
+Depending on the semantic-version: If an Elisp-file is parsed which contains
+a defun X in the middle where the closing ) is missing, then semantic parses
+only until this defun X is reached and you will get an incomplete ECB-method
+buffer. In such a case you must complete the defun X and then completely
+reparse the Elisp-file and rebuild the ECB method buffer!
+
+A complete manually rebuild is done by `ecb-rebuild-methods-buffer'. For
+etags-parsed non-semantic-sources this causes an automatic saving of the
+source-buffer because otherwise etags would not operate with the latest
+contents!
+
+
+File: ecb.info,  Node: Filtering the tree-buffers,  Next: The ECB-layout,  Prev: The Methods buffer,  Up: Usage of ECB
+
+Applying filters to the special ECB-tree-buffers
+================================================
+
+To get a fast and good overlook of the contents of a tree-buffer ECB offers a
+filter-mechanism for the Directories-, Sources-, the History- and the
+Methods-buffer.
+
+* Menu:
+
+* Filtering Directories::       Applying filters to the Directories-buffer
+* Filtering Sources::           Applying filters to the Sources--buffer
+* Filtering History::           Applying filters to the History-buffer
+* Filtering Methods::           Applying filters to the Methods-buffer
+
+
+File: ecb.info,  Node: Filtering Directories,  Next: Filtering Sources,  Prev: Filtering the tree-buffers,  Up: Filtering the tree-buffers
+
+Applying filters to the Directories-buffer
+------------------------------------------
+
+With the option `ecb-excluded-directories-regexps' certain directories can be
+excluded from being displayed in the directories-browser of ECB. This can be
+done by defining regular expressions. If the name of a directory matches at
+least one of the regexps of this option the directory is not displayed in the
+directories-tree-buffer.
+
+The option `ecb-sources-exclude-cvsignore' allows to exclude source-files
+from the sources-tree-buffer if their name is listed in a so called
+`.cvsignore'-file. This option is a list of regular expressions and if a
+directory-name matches at least one of these regexps then all files listed in
+the `.cvsignore'-file of this directory are not displayed in the
+sources-tree-buffer.
+
+
+File: ecb.info,  Node: Filtering Sources,  Next: Filtering History,  Prev: Filtering Directories,  Up: Filtering the tree-buffers
+
+Applying filters to the Sources-buffer
+--------------------------------------
+
+Interactive Sources-filters
+...........................
+
+The command `ecb-sources-filter' allows to filter these tree-buffer either by
+a regular expression or by an extension (e.g.  java, cc, el for java-, c++-
+rsp elisp-sources). This functionality is also available via the popup-menu
+of the Sources-tree-buffer.
+
+The currently applied filter is indicated in the modeline of the related
+tree-buffer. Applying a new filter replaces an eventually already applied
+filter.
+
+Default Sources-filters
+.......................
+
+The option `ecb-source-file-regexps' allow to specify which source-files
+should be displayed and which not. This is done on a directory-basis, ie. for
+each directory-regexp the files to display can be specified. See the
+documentation of this option for all details.
+
+In addition to this option you should also know the option
+`ecb-sources-exclude-cvsignore' (*note Filtering Directories::).
+
+
+File: ecb.info,  Node: Filtering History,  Next: Filtering Methods,  Prev: Filtering Sources,  Up: Filtering the tree-buffers
+
+Applying filters to the History-buffer
+--------------------------------------
+
+Interactive History-filters
+...........................
+
+The command `ecb-history-filter' allows to filter these tree-buffer either by
+a regular expression or by an extension (e.g.  java, cc, el for java-, c++-
+rsp elisp-sources). This functionality is also available via the popup-menu
+of the History-tree-buffer.
+
+The currently applied filter is indicated in the modeline of the related
+tree-buffer. Applying a new filter replaces an eventually already applied
+filter.
+
+Default History-filters
+.......................
+
+The option `ecb-history-exclude-file-regexps' allows to exclude source-files
+from being historized (ie. displayed in the History-buffer). Despite the fact
+that the History-buffer already excludes all non-file-buffers there can be
+still buffers which name you do not wat to be displayed in the history. These
+are file-buffer like `TAGS' or `semantic.cache' which store meta-informations
+used by Emacs and its tools (etags, semantic etc.).  These files can be
+excluded via `ecb-history-exclude-file-regexps'.
+
+
+File: ecb.info,  Node: Filtering Methods,  Prev: Filtering History,  Up: Filtering the tree-buffers
+
+Applying filters to the Methods-buffer
+--------------------------------------
+
+The commands `ecb-methods-filter', `ecb-methods-filter-regexp',
+`ecb-methods-filter-protection', `ecb-methods-filter-tagclass',
+`ecb-methods-filter-function', `ecb-methods-filter-delete-last',
+`ecb-methods-filter-nofilter' allows to filter the tags/nodes of the
+Methods-buffer by several criterias. As for the Sources- and the
+History-buffer the same functionality is also available via the popup-menu of
+the Methods-buffer.
+
+Possible filter-criterias
+.........................
+
+ * Filter by protection: Just insert the protection you want the
+   Methods-buffer being filtered: private, protected or public! For sources
+   not supported by semantic the protection filter will not be offered
+   because these informations are not available for such sources.
+
+ * Filter by regexp: Insert the filter as regular expression.
+
+ * Filter by tag-class: You can filter by tag-classes. The popup-menu
+   contains mode-dependend tag-filter entries and the command
+   `ecb-methods-filter' offers only the tag-classes of the current mode. This
+   means for sources not supported by semantic the tag-class filter will not
+   be offered. And for semantic-supported sources exactly these tag-classes
+   are offered the semantic-parser for the current major-mode offers. For
+   example texi-sources can only be filtered by the tag-classes "Definitions"
+   and "Sections" and java-sources can be filtered by "Methods", "Variables",
+   "Classes" etc. In general the semantic-variable
+   `semantic-symbol->name-assoc-list' is used to get the right tag-classes.
+
+ * Filter by a filter-function: Such a function gets two arguments: a tag and
+   the source-buffer of this tag. If the tag should be displayed (i.e. not
+   being filtered out) then the function has to return not nil otherwise nil.
+
+ * No special filter: This means to display all tags specified with the option
+   `ecb-show-tokens'. If currently some of the above filters are applied they
+   will be all removed.
+
+ * Delete the last added: This removes only the topmost filter-layer, means
+   that filter added last.
+
+Be aware that the tag-list specified by the option `ecb-show-tags' is the
+basis of all filters, i.e. tags which are excluded by that option will never
+be shown regardless of the filter type here!
+
+All tags which match the applied filter(s) will be displayed in the
+Methods-buffer. Such a filter is only applied to the current source-buffer,
+i.e. each source-buffer can have its own tag-filters.
+
+These tag-filters can also applied to sources which are not supported by the
+semantic-parser but "only" by imenu or etags. But because for these sources
+not all information are avaiable the protection- and tag-class filter are not
+offered with such "non-semantic"-sources.  See *Note Non-semantic sources::
+for further details about working with source-files not supported by the
+semantic-parser.
+
+Inverse Filters
+...............
+
+But if `ecb-methods-filter' is called with a prefix-argument then an inverse
+filter is applied to the Methods-buffer, i.e. all tags which do *NOT* match
+the choosen filter will be displayed in the Methods-buffer!
+
+Layered filters
+...............
+
+Per default the choosen filter will be applied on top of already existing
+filters. This means that filters applied before are combined with the new
+filter. This behavior can changed via the option
+`ecb-methods-filter-replace-existing'.
+
+Display of currently applied filters
+....................................
+
+The current active filter will be displayed in the modeline of the
+Methods-buffer [regexp, prot (= protection), tag-class, function (=
+filter-function)]. If an inverse filter has been applied then this is
+signalized by a preceding caret ^. If currently more than 1 filter is applied
+then always the top-most filter is displayed in the modeline but the fact of
+more than 1 filter is visualized by the number of the filters - included in
+parens. You can see all currently applied filters by moving the mouse over
+the filter-string in modeline of the Methods-buffer: They will displayed as
+help-echo.
+
+Default filters for certain files.
+..................................
+
+The new option `ecb-default-tag-filter' allow to define default tag-filters
+for certain files which are applied automatically after loading such a file
+into a buffer. The possible filters are the same as offered by the command
+`ecb-methods-filter' and they are applied in the same manner - the only
+difference is they are applied automatically. The files can be specified on a
+combined major-mode- and filename-regexp-basis.
+
+Usage-example: This can be used to display in outline-mode files (e.g.
+`NEWS') only the level-1-headings by defining a filter regexp "^\* .*".
+
+
+File: ecb.info,  Node: The ECB-layout,  Next: Hiding the ECB windows,  Prev: Filtering the tree-buffers,  Up: Usage of ECB
+
+Changing, customizing, redrawing and creating layouts
+=====================================================
+
+The term "ECB-layout" means in which windows the ECB-frame is divided. This
+chapter describes all aspects concerning this layout, especially changing,
+customizing, redrawing and also creating new layouts.
+
+* Menu:
+
+* Changing the ECB-layout::     How to change and customize the layout
+* Redrawing the ECB-layout::    How and when redrawing the layout
+* Changing window sizes::       Changing sizes of the ECB-windows
+* Fixing window sizes::         Fixing sizes of the ECB-windows
+* Creating a new ECB-layout::   Interactively creating new layouts
+

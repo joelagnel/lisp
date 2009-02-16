@@ -1,0 +1,43 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Filtering%20History">Filtering History</a>,
+Next:<a rel=next accesskey=n href="Filtering-Methods.html#Filtering%20Methods">Filtering Methods</a>,
+Previous:<a rel=previous accesskey=p href="Filtering-Sources.html#Filtering%20Sources">Filtering Sources</a>,
+Up:<a rel=up accesskey=u href="Filtering-the-tree-buffers.html#Filtering%20the%20tree-buffers">Filtering the tree-buffers</a>
+<hr><br>
+
+<h4>Applying filters to the History-buffer</h4>
+
+<h5>Interactive History-filters</h5>
+
+<p>The command <code>ecb-history-filter</code> allows to filter these
+tree-buffer either by a regular expression or by an extension (e.g. 
+java, cc, el for java-, c++- rsp elisp-sources). This functionality is
+also available via the popup-menu of the History-tree-buffer.
+
+<p>The currently applied filter is indicated in the modeline of the
+related tree-buffer. Applying a new filter replaces an eventually
+already applied filter.
+
+<h5>Default History-filters</h5>
+
+<p>The option <code>ecb-history-exclude-file-regexps</code> allows to exclude
+source-files from being historized (ie. displayed in the
+History-buffer). Despite the fact that the History-buffer already
+excludes all non-file-buffers there can be still buffers which name
+you do not wat to be displayed in the history. These are file-buffer
+like <code>TAGS</code> or <code>semantic.cache</code> which store
+meta-informations used by Emacs and its tools (etags, semantic etc.). 
+These files can be excluded via
+<code>ecb-history-exclude-file-regexps</code>.
+
+</body></html>
+

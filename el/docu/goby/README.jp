@@ -1,0 +1,17 @@
+				 Goby
+
+			       山本和彦
+			     kazu@Mew.org
+
+Goby は、Emacs 21.3 以降上で動く WYSIWYG のプレゼンテーション・ツールで
+す。
+
+インストール方法や使い方、カスタマイズの方法については、以下のページを
+参照して下さい。
+
+	http://www.mew.org/~kazu/proj/goby/
+
+サンプルは、以下にあります。インストールに成功していれば、C-xC-f で読み
+込むと、大きな文字や画像が表示されます。
+
+	sample/sample-jp.gby

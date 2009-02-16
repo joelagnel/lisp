@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eegchannel (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #b0c4de;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .eev-glyph-face-green {
+        /* eev-glyph-face-green */
+        color: #00ff00;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #98fb98;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">#</span><span class="comment">!/bin/sh
+</span><span class="comment-delimiter"># </span><span class="comment">the next line restarts using expect \
+</span><span class="builtin">exec</span> expect <span class="string">"$0"</span> -- <span class="string">"$@"</span>
+<span class="comment-delimiter"># </span><span class="comment">(find-man "tclsh" "#!")
+</span>
+<span class="comment-delimiter">## </span><span class="comment">eegchannel: run an interactive program accepting input from a "channel".
+</span>
+<span class="comment-delimiter"># </span><span class="comment">Copyright (C) 2004 Free Software Foundation, Inc.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">This file is part of GNU eev.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">GNU eev is free software; you can redistribute it and/or modify
+</span><span class="comment-delimiter"># </span><span class="comment">it under the terms of the GNU General Public License as published by
+</span><span class="comment-delimiter"># </span><span class="comment">the Free Software Foundation; either version 2, or (at your option)
+</span><span class="comment-delimiter"># </span><span class="comment">any later version.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">GNU eev is distributed in the hope that it will be useful,
+</span><span class="comment-delimiter"># </span><span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of
+</span><span class="comment-delimiter"># </span><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+</span><span class="comment-delimiter"># </span><span class="comment">GNU General Public License for more details.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">You should have received a copy of the GNU General Public License
+</span><span class="comment-delimiter"># </span><span class="comment">along with GNU eev; see the file COPYING.  If not, write to the
+</span><span class="comment-delimiter"># </span><span class="comment">Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+</span><span class="comment-delimiter"># </span><span class="comment">Boston, MA 02111-1307, USA.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">Author:     Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter"># </span><span class="comment">Maintainer: Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+</span><span class="comment-delimiter"># </span><span class="comment">Version:    2005feb07
+</span><span class="comment-delimiter"># </span><span class="comment">Keywords:   e-scripts, processes
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">Latest version: &lt;<a href="http://angg.twu.net/eev-current/eegchannel">http://angg.twu.net/eev-current/eegchannel</a>&gt;
+</span><span class="comment-delimiter">#       </span><span class="comment">htmlized: &lt;<a href="http://angg.twu.net/eev-current/eegchannel.html">http://angg.twu.net/eev-current/eegchannel.html</a>&gt;
+</span><span class="comment-delimiter">#       </span><span class="comment">See also: &lt;<a href="http://angg.twu.net/eev-current/README.html">http://angg.twu.net/eev-current/README.html</a>&gt;
+</span><span class="comment-delimiter">#            </span><span class="comment">and: &lt;<a href="http://angg.twu.net/eev-current/eeg4.html">http://angg.twu.net/eev-current/eeg4.html</a>&gt;
+</span>
+<span class="comment-delimiter"># </span><span class="comment">eegchannel: run an interactive program accepting input from a "channel".
+</span><span class="comment-delimiter"># </span><span class="comment">eegchannel is a version of eeg/eeg4 in which the sending of a command to
+</span><span class="comment-delimiter"># </span><span class="comment">the spawned process is triggered by a SIGUSR1, not by a M-L.
+</span><span class="comment-delimiter"># </span><span class="comment">Usage:
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment">eegchannel &lt;channelname&gt; &lt;prog&gt; [&lt;arg1&gt; [&lt;arg2&gt; ...]]
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">For example:
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment">eegchannel A bash
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">will invoke "bash" and run it interactively, with no keyboard or
+</span><span class="comment-delimiter"># </span><span class="comment">output translation; but eegchannel will create a file eeg.A.pid and
+</span><span class="comment-delimiter"># </span><span class="comment">will use it and a file called eeg.A.str to establish a
+</span><span class="comment-delimiter"># </span><span class="comment">(unidirectional) extra communication channel from the outside world
+</span><span class="comment-delimiter"># </span><span class="comment">to the spawned process ("bash" in this case). If we do
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment">echo 'echo $[1+2]' &gt; $EEVTMPDIR/eeg.A.str
+</span><span class="comment-delimiter">#   </span><span class="comment">kill -USR1 $(cat $EEVTMPDIR/eeg.A.pid)
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">we are storing a line of input ("echo $[1+2]\n") in eeg.A.str and
+</span><span class="comment-delimiter"># </span><span class="comment">then saying to eegchannel "send that to the process you're
+</span><span class="comment-delimiter"># </span><span class="comment">controlling". From the point of view of the controlled process,
+</span><span class="comment-delimiter"># </span><span class="comment">thanks to Expect's usual magic, things will be exactly as if the
+</span><span class="comment-delimiter"># </span><span class="comment">user typed interactively "echo $[1+2]" and then a "return".
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">For a high-level example of how this can be used see:
+</span><span class="comment-delimiter">#   <a href="doc/shot-f9.png">(find-eevfile "doc/shot-f9.png")</a></span><span class="comment">
+</span><span class="comment-delimiter">#   <a href="eev-dev.el.html#eechannel-do-this-line">(find-eev "eev-dev.el" "eechannel-do-this-line")</a></span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># <a href="eeg4.html#misc">(find-eev "eeg4" "misc")</a></span><span class="comment">
+</span><span class="comment-delimiter"># <a href="eeg4.html#arguments">(find-eev "eeg4" "arguments")</a></span><span class="comment">
+</span><span class="comment-delimiter"># <a href="eeg4.html#dospawn">(find-eev "eeg4" "dospawn")</a></span><span class="comment">
+</span>
+<span class="keyword">proc</span> <a name="readfile"><span class="function-name">readfile</span></a> {fname} {
+  <span class="builtin">set</span> <a name="ch"><span class="variable-name">ch</span></a> [<span class="builtin">open</span> $<a name="fname"><span class="variable-name">fname</span></a> r]; <span class="builtin">set</span> <a name="str"><span class="variable-name">str</span></a> [<span class="builtin">read</span> $<a name="ch"><span class="variable-name">ch</span></a>]; <span class="builtin">close</span> $<a name="ch"><span class="variable-name">ch</span></a>; <span class="keyword">return</span> $<a name="str"><span class="variable-name">str</span></a>
+}
+<span class="keyword">proc</span> <a name="writefile"><span class="function-name">writefile</span></a> {fname str} {
+  <span class="builtin">set</span> <a name="ch"><span class="variable-name">ch</span></a> [<span class="builtin">open</span> $<a name="fname"><span class="variable-name">fname</span></a> w]; <span class="builtin">puts</span> -nonewline $<a name="ch"><span class="variable-name">ch</span></a> $<a name="str"><span class="variable-name">str</span></a>; <span class="builtin">close</span> $<a name="ch"><span class="variable-name">ch</span></a>
+}
+<span class="keyword">proc</span> <a name="getenv"><span class="function-name">getenv</span></a> {key {defaultvalue {}}} {
+  <span class="type">global</span> env; <span class="builtin">expr</span> {[<span class="builtin">info</span> exist env($<a name="key"><span class="variable-name">key</span></a>)]?$<a name="env"><span class="variable-name">env</span></a>($<a name="key"><span class="variable-name">key</span></a>):$<a name="defaultvalue"><span class="variable-name">defaultvalue</span></a>}
+}
+<span class="keyword">proc</span> <a name="EEVTMPDIR"><span class="function-name">EEVTMPDIR</span></a> {} { getenv EEVTMPDIR [getenv HOME]/eev-current/tmp }
+
+<span class="keyword">proc</span> <a name="rmlastnewline"><span class="function-name">rmlastnewline</span></a> {str} { <span class="builtin">regexp</span> <span class="string">"^(.*)\n\$"</span> $<a name="str"><span class="variable-name">str</span></a> -&gt; str; <span class="keyword">return</span> $<a name="str"><span class="variable-name">str</span></a> }
+<span class="keyword">proc</span> <a name="pidfile"><span class="function-name">pidfile</span></a> {} { <span class="type">global</span> channel; <span class="keyword">return</span> [EEVTMPDIR]/eeg.${<a name="channel"><span class="variable-name">channel</span></a>}.pid }
+<span class="keyword">proc</span> <a name="strfile"><span class="function-name">strfile</span></a> {} { <span class="type">global</span> channel; <span class="keyword">return</span> [EEVTMPDIR]/eeg.${<a name="channel"><span class="variable-name">channel</span></a>}.str }
+
+<span class="builtin">set</span> <a name="channel"><span class="variable-name">channel</span></a> [<span class="builtin">lindex</span> $<a name="argv"><span class="variable-name">argv</span></a> 0];   <span class="comment"># first argument
+</span><span class="builtin">set</span> <a name="argv"><span class="variable-name">argv</span></a> [<span class="builtin">lrange</span> $<a name="argv"><span class="variable-name">argv</span></a> 1 end];  <span class="comment"># discard first argument
+</span>
+writefile [pidfile] <span class="string">"[pid]\n"</span>
+trap {send -- [readfile [strfile]]} USR1
+
+<span class="comment-delimiter"># </span><span class="comment">Transmit resizings. From &lt;<a href="http://www.hadron.org/~hatch/goodies/rrr">http://www.hadron.org/~hatch/goodies/rrr</a>&gt;.
+</span>trap {
+  stty rows [stty rows] columns [stty columns] &lt; $<a name="spawn_out"><span class="variable-name">spawn_out</span></a>(slave,name)
+} WINCH
+
+<span class="keyword">eval</span> spawn -noecho $<a name="argv"><span class="variable-name">argv</span></a>
+stty raw;               <span class="comment"># A relic. Why this? For \n -&gt; \r translation?
+</span>interact
+
+<span class="comment-delimiter">#  </span><span class="comment">Local Variables:
+</span><span class="comment-delimiter">#  </span><span class="comment">mode:                 tcl
+</span><span class="comment-delimiter">#  </span><span class="comment">coding:               raw-text-unix
+</span><span class="comment-delimiter">#  </span><span class="comment">ee-anchor-format:     "</span><span class="eev-glyph-face-green">&#171;</span><span class="comment">%s</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">"
+</span><span class="comment-delimiter">#  </span><span class="comment">End:
+</span></pre>
+  </body>
+</html>

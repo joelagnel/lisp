@@ -1,0 +1,46 @@
+This is the `BUGS' file of GNU eev.
+Author and version: Eduardo Ochs, 2005mar18.
+This file in the Public Domain.
+Latest version: <http://angg.twu.net/eev-current/BUGS>
+    See also:   <http://angg.twu.net/eev-current/README.html>
+
+
+KNOWN BUGS:
+
+GENERAL:
+
+* `find-etpat' does not do what is expected in customization buffers.
+  That's because customize uses overlays.  We need something
+  corresponding to find-etpat that will inspect overlays.
+
+* `find-sh' does not use `ee-buffer-name'.
+
+* color-theme sometimes overrides glyph faces (reported by dto).
+
+* eegchannel doesn't work well in comint mode (reported by dto).
+
+
+
+
+INSTALLATION:
+
+* It seems that @_EEVDIR@ is being replaced by "~eev-current/rcfiles"
+  - not "~/..." - in gentoos (reported by h2so4)
+
+* In some situations bash doesn't read ~/.bashrc.  Users should be
+  warned of that.  One way to force bash to restart using ~/.bashrc is
+  with "exec bash -i". Links:
+
+  (find-man "1 bash" "--norc" "~/.bashrc" "invoked as sh")
+  (find-man "1 bash" "\nINVOCATION\n" "interactive shell")
+  (find-man "1 bash" "\nINVOCATION\n" "interactive shell" " ~/.bashrc")
+  (find-man "1 bash" "\nFILES\n" "~/.bashrc" "individual per-interactive-shell")
+
+
+
+
+  Local Variables:
+  mode:                      text
+  coding:                    raw-text-unix
+  sentence-end-double-space: t
+  End:

@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Bugs">Bugs</a>,
+Previous:<a rel=previous accesskey=p href="Conflicts.html#Conflicts">Conflicts</a>,
+Up:<a rel=up accesskey=u href="Conflicts-and-bugs.html#Conflicts%20and%20bugs">Conflicts and bugs</a>
+<hr><br>
+
+<h3>Known bugs</h3>
+
+<p>This section describes all currently known bugs of ECB. The
+maintainers of ECB try to fix these bugs as soon as possible.
+
+<h4>Following the source-file link in a help-buffer</h4>
+
+<p>The following bug occurs only in ECB-versions &lt; 1.96 and is fixed
+since ECB 1.96!!
+
+<p>This bug only occurs if a compile-window is used and visible!
+
+<p>If you call functions like <code>describe-function</code> which displays a
+help-buffer in the compile-window, then you will often get an output
+like this in the compile-window:
+
+<br><pre>ecb-activate is an interactive compiled Lisp function in `ecb'.
+(ecb-activate)
+
+Activates the ECB...
+</pre>
+
+<p>The link to `ecb' is normally a click-able link, means if you click
+with the middle-mouse button onto it the file is opened (in our
+example <code>ecb.el</code> would be opened.
+
+<p>If you click onto it when the help-buffer is already the current
+buffer (i.e. the compile-window is already selected before the click!) 
+then all is working fine (i.e. the file is opened in the edit-window),
+but if you click onto the link without selecting the compile-window
+before (i.e. the edit-window is the current selected window) then the
+file is opened in the compile-window which is probably not what you
+want. Not a big problem but annoying.
+
+<p>The only available workaround is, first selecting the compile-window
+and then clicking onto the link!
+
+<h4>Extra history-entries for JDEE source-buffers</h4>
+
+<p>ECB on occasions creates an extra edit buffer for entries in the
+history window. For example, let say there are three entries in the
+history window:
+
+<br><pre>Test1
+Test2
+Test3
+</pre>
+
+<p>In the edit window Test1 file is edited. When clicked on Test2 entry
+in history, on occasion instead of switching to the existing buffer for
+Test2, a new edit buffer is opened for Test2 file. At this point, there
+are four entries in the history as follows:
+
+<br><pre>Test2
+Test2&lt;2&gt;
+Test1
+Test3
+</pre>
+
+</body></html>
+

@@ -1,0 +1,5 @@
+pid = os.fork()
+if pid != 0: # parent
+    <cursor>
+else:        # child
+    pass

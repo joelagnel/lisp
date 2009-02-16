@@ -1,0 +1,167 @@
+This is the `TODO' file of GNU eev.
+Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.
+Author and version: Eduardo Ochs, 2005jun14
+Latest version: <http://angg.twu.net/eev-current/TODO>
+      htmlized: <http://angg.twu.net/eev-current/TODO.html>
+    See also:   <http://angg.twu.net/eev-current/README.html>
+                <http://angg.twu.net/eev-current/BUGS>
+                <http://angg.twu.net/eev-current/>
+
+
+
+Short-term goals:
+-----------------
+
+* (eek "C-SPC") and (eek "M-w") don't give the expected visual cues.
+  Fix that.  Starting points: (find-enode "Keyboard Macros") and
+  (find-elnode "Keyboard Macros").  Note: there are temporary
+  workarounds: `eekr' and `eekrv'.
+
+* The command line programs (eegchannel and the like) should support
+  the standard GNU options --help and --version.  (Check the coding
+  standards for the precise output format.)
+
+* Add instructions for compiling and using the SWF player at
+  <http://gplflash.sourceforge.net/> to see the animations at
+  <http://angg.twu.net/eev-current/anim/>.
+
+* Add the examples about running the Postgres tutorial.
+
+* Add examples for Guile.
+
+* Add examples for Tcl/Tk (expr, foreach)
+
+* Add examples for Expect
+
+* Add examples for Perl
+
+* Add examples for PostScript
+
+* Add examples for html
+
+* Fix the files and shell scripts for PHP to use temporary files in
+  ~/public_html/
+
+* Add an rcfile for Lua (~/.lua50rc?) and show how to invoke Lua
+  functions to print Lua structures from inside gdb
+
+* Add examples for TeX, maybe using diagxy
+
+* Add another image to the README, describing evaluation
+
+* `inn' should generate a link like "(info "(prog)Page")" when its
+  arg is 0
+
+* change "highlight" to "flash" in the names of functions and
+  variables; make ee-se-to-string call it when invoked with a third
+  argument; rename ee-se-to-string to ee-buffer-substring (done?)
+
+* check how Sacha Chua's planner-mode implements irc URLs.
+
+* document how to use and change the "exportable vars" like ee-eevdir.
+  Do they always need to be set in the environment? It seems that the
+  right way to set permanently ee-eevdir is by doing (setenv "EEVDIR"
+  (ee-expand "~/eev-altdir")) before loading eev.el.
+
+* explain how to use browse-url (and my variations (in my .emacs) for
+  dealing with psne'd files)
+
+* make `find-man' smarter: emacs's `man' knows how to pick up a
+  manpage name and deal with it when it is something like
+  "environ(7)".  Starting point: (progn (find-estring "unix(7)")
+  (Man-default-man-entry))
+
+* `find-ecolors' and `find-efaces' can be made smarter, like
+  `find-sh': if a buffer with a certain name already exists then reuse
+  it instead of recreating it.
+
+* add a function `find-elookup'. See: (info-lookup-symbol "getopt"
+  'c-mode)
+
+* start to test eev without "(setq pop-up-windows nil)" - I have that
+  in my .emacs, but most users don't have and don't want to.
+
+* prepare a way to introduce eev to total Emacs newbies, if possible a
+  way that will work even through IRC.  I've started to write some
+  demos, - see (find-eevexfile "demos.e"), `eev-newbie', `eev-demos'.
+  Add a function `eev-keys' that describes the basic keys. 
+
+* implement a "psne-maybe" shell function for bash and zsh that won't
+  try to download an url again if the local copy already exists.
+  Ideas: test -e, wget -nc; links:
+  (find-eevrcfile ".zshrc-psne")
+  (find-eevrcfile ".bashrc-psne")
+  (find-node "(bashref)Bourne Shell Builtins" "`shift'")
+  (find-node "(coreutils)basename invocation")
+
+* Finish the TeXinfo docs (my current idea is to convert the article
+  to HTML and TeXinfo using blogme).
+
+* I do not touch-type - I almost only use my index fingers and my
+  thumbs, and I move my hands a lot.  The key sequences that I use may
+  be inconvenient for touch-typists.  Check that.
+
+* consider changing the name of `ee-adel' to `ee-arem' - according to
+  dbrock (from #emacs) Emacs tends to use seems "delete" for
+  destructive changes and "remove" for non-destructive changes.
+
+
+
+Medium- and long-term:
+----------------------
+
+* Add support for constants like :anchor, :linux, :gdb, :manfont,
+  :tagfile, etc to code-c-d
+
+* Add the docstrings.
+
+* Finish the docs (in some sense)
+
+* Finish the scripts (not included in this version) on preparing a
+  second partition running Debian, setting some gettys in inittab to
+  run chrooted into it, making the subdebian prepare a package
+  repository with all the packages installed there, and producing an
+  installation Debian CD containing exactly those packages.
+
+* Hyperlinks to sound fragments, lilypond scores, images of fragments
+  of scoresheets.
+
+* Interaction with ion and ratpoison.
+
+* Interaction with snd.
+
+* Interaction with Squeak.
+
+* The buffers created by `describe-function' and `describe-variable'
+  have hyperlinks to the source code.  Those hyperlinks obey Emacs's
+  default behaviour for splitting windows, not eev's behaviour, which
+  is to never split windows and always reuse the same window.  Maybe
+  when we reach those buffers through `find-efunctiondescr' and
+  `find-evardescr' they should inherit eev's behaviour.  (Btw: I used
+  to have a function called `ee-same-window-contagious', but it was
+  just a stub, it never worked).
+
+* Interaction with Gnome (this is very-long-term, not long-term - I
+  don't use Gnome)
+
+* Integrate rubikitch's contributions (back and speedbar).
+
+* Split `eev-dev.el' into `eev-links.el', `eev-mklinks.el',
+  `eev-scripts.el', `eev-gud.el', and `eev-invasive.el'.
+
+* Add support for XEmacs.
+
+* Add some support for BSDs and w32.
+
+
+
+
+
+  Local Variables:
+  mode:                      text
+  coding:                    raw-text-unix
+  sentence-end-double-space: t
+  End:

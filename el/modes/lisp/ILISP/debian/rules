@@ -1,0 +1,81 @@
+#!/usr/bin/make -f
+# GNU copyright 1997 to 1999 by Joey Hess.
+# GNU copyright 2002 to 2003 Kevin Rosenberg <kmr@debian.org>
+
+pkg		:= ilisp
+pkg-doc		:= ilisp-doc
+emacs_dir	:= usr/share/emacs/site-lisp/$(pkg)
+ilisp_etc_dir	:= etc/ilisp
+ilisp_share	:= usr/share/ilisp
+cl_dir		:= usr/share/common-lisp/source/ilisp
+clc_systems	:= usr/share/common-lisp/systems
+compiled_dir	:= usr/lib/ilisp
+info_dir	:= usr/share/info
+doc_dir		:= usr/share/doc/$(pkg-doc)
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	# Add here commands to compile the package.
+	(cd docs; make info pdf ilisp.html; cd ..)
+	touch build-stamp
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs -p $(pkg) $(info_dir) $(emacs_dir) $(emacs_dir)/extra \
+			$(ilisp_etc_dir) $(ilisp_share) $(info_dir)
+	dh_installdirs -p $(pkg-doc) $(doc_dir) $(cl_dir)
+
+	dh_install -p $(pkg) $(wildcard *.el) $(emacs_dir)
+	dh_install -p $(pkg) $(wildcard extra/*.el) $(emacs_dir)/extra
+	dh_install -p $(pkg) $(wildcard *.lisp) debian/ilisp.asd $(cl_dir)
+	dh_link $(cl_dir)/ilisp.asd $(clc_systems)/ilisp.asd
+	dh_install -p $(pkg) $(wildcard *.scm) $(ilisp_share)
+	dh_install -p $(pkg) debian/ilisp.el $(ilisp_etc_dir)
+	dh_install -p $(pkg) debian/ilisp-keybindings.el $(ilisp_etc_dir)
+	dh_installinfo -p $(pkg) docs/ilisp.info
+	dh_installdirs -p $(pkg) $(compiled_dir)
+	for i in debian/$(pkg)/$(cl_dir)/*.lisp; do \
+	  l=`echo $$i | sed -e "s|^debian/$(pkg)/$(cl_dir)/||;"` ;\
+          dh_link -p $(pkg) $(cl_dir)/$$l $(compiled_dir)/$$l ; \
+	done
+	for i in debian/$(pkg)/$(ilisp_share)/*.scm; do \
+	  l=`echo $$i | sed -e "s|^debian/$(pkg)/$(ilisp_share)/||;"` ;\
+          dh_link -p $(pkg) $(ilisp_share)/$$l $(compiled_dir)/$$l ; \
+	done
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	# Add here commands to clean up after the build process.
+	-$(MAKE) clean
+	dh_clean
+
+binary-indep: build install
+
+
+# Build architecture-dependent files here.
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installemacsen
+	dh_installchangelogs	
+	dh_installdebconf
+	dh_strip
+	dh_compress
+	dh_install -p $(pkg-doc) docs/ilisp.pdf docs/ilisp.html $(doc_dir)
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure
+
+

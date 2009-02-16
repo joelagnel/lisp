@@ -1,0 +1,10 @@
+*.info are formatted for Emacs/Mule, not for XEmacs. If you want info
+for XEmacs, make it by yourself by 'make info' or 'make jinfo'.
+
+Important variables are EMACS and infodir, which are specified the
+Makefile in the parent directory. If you format mew.texi in this
+directory and/or install *.info from this directory, specify them by
+yourself. 
+
+(e.g) make info EMACS=xemacs
+(e.g) make install-info infodir=/usr/local/info

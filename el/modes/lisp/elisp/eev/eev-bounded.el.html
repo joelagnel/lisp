@@ -1,0 +1,493 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eev-bounded.el (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .doc {
+      }
+      .eev-glyph-face-red {
+        /* eev-glyph-face-red */
+        color: #ff0000;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #98fb98;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;;; </span><span class="comment">eev-bounded.el -- support for bounded functions for eev.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Copyright (C) 2006 Free Software Foundation, Inc.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This file is part of GNU eev.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is free software; you can redistribute it and/or modify
+</span><span class="comment-delimiter">;; </span><span class="comment">it under the terms of the GNU General Public License as published by
+</span><span class="comment-delimiter">;; </span><span class="comment">the Free Software Foundation; either version 2, or (at your option)
+</span><span class="comment-delimiter">;; </span><span class="comment">any later version.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is distributed in the hope that it will be useful,
+</span><span class="comment-delimiter">;; </span><span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of
+</span><span class="comment-delimiter">;; </span><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU General Public License for more details.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">You should have received a copy of the GNU General Public License
+</span><span class="comment-delimiter">;; </span><span class="comment">along with GNU Emacs; see the file COPYING.  If not, write to the
+</span><span class="comment-delimiter">;; </span><span class="comment">Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+</span><span class="comment-delimiter">;; </span><span class="comment">Boston, MA 02110-1301, USA.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Author:     Eduardo Ochs &lt;<a href="mailto:eduardoochs&#64;gmail.com">eduardoochs&#64;gmail.com</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Maintainer: Eduardo Ochs &lt;<a href="mailto:eduardoochs&#64;gmail.com">eduardoochs&#64;gmail.com</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Version:    2006nov12
+</span><span class="comment-delimiter">;; </span><span class="comment">Keywords:   e-scripts, help, hyperlinks, hypertext, processes,
+</span><span class="comment-delimiter">;;             </span><span class="comment">shell, tex
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Latest version: &lt;<a href="http://angg.twu.net/eev-current/eev-bounded.el">http://angg.twu.net/eev-current/eev-bounded.el</a>&gt;
+</span><span class="comment-delimiter">;;       </span><span class="comment">htmlized: &lt;<a href="http://angg.twu.net/eev-current/eev-bounded.el.html">http://angg.twu.net/eev-current/eev-bounded.el.html</a>&gt;
+</span><span class="comment-delimiter">;;       </span><span class="comment">See also: &lt;<a href="http://angg.twu.net/eev-current/README.html">http://angg.twu.net/eev-current/README.html</a>&gt;
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">History: this used to be part of eev.el, but in sep/2006 I decided
+</span><span class="comment-delimiter">;; </span><span class="comment">to rewrite it and ended up splitting it into another file.
+</span><span class="comment-delimiter">;; </span><span class="comment">2006nov12: eev.el and the "eev block" in ~/.emacs now load this
+</span><span class="comment-delimiter">;; </span><span class="comment">instead or loading "eev-bounded-old.el".
+</span>
+<span class="comment-delimiter">;;; </span><span class="comment">Commentary:
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">This file adds support for "bounded functions" to eev. For example:
+</span><span class="comment-delimiter">;; </span><span class="comment">`M-x eev' saves the region between point and mark into the
+</span><span class="comment-delimiter">;; </span><span class="comment">temporary script file; `M-x eev-bounded' saves the region around
+</span><span class="comment-delimiter">;; </span><span class="comment">point, up to the first occurences of a certain delimiters before
+</span><span class="comment-delimiter">;; </span><span class="comment">and after point, into the temporary script file.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Naming conventions: eeb-something, eesomething-bounded.
+</span><span class="comment-delimiter">;; </span><span class="comment">Starting points:
+</span><span class="comment-delimiter">;;   </span><span class="comment">(find-efunctiondescr 'eeflash-new)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(find-efunctiondescr 'ee-edelim-adjust)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(find-efunctiondescr 'eeb-default-new)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(find-efunctiondescr 'eeb-default)
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Big letters courtesy of Figlet.
+</span>
+
+
+<span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">__   ____ _ _ __ ___
+</span><span class="comment-delimiter">;;; </span><span class="comment">\ \ / / _` | '__/ __|
+</span><span class="comment-delimiter">;;;  </span><span class="comment">\ V / (_| | |  \__ \
+</span><span class="comment-delimiter">;;;   </span><span class="comment">\_/ \__,_|_|  |___/
+</span><span class="comment-delimiter">;;;                      </span><span class="comment">
+</span>
+
+(<span class="keyword">defvar</span> <a name="ee-delimiter-hash"><span class="variable-name">ee-delimiter-hash</span></a>      <span class="string">"\n#</span><span class="eev-glyph-face-red">*</span><span class="string">\n"</span>  <span class="doc">"See `</span><span class="doc"><span class="constant">eev-bounded</span></span><span class="doc">'."</span>)
+(<span class="keyword">defvar</span> <a name="ee-delimiter-percent"><span class="variable-name">ee-delimiter-percent</span></a>   <span class="string">"\n%</span><span class="eev-glyph-face-red">*</span><span class="string">\n"</span>  <span class="doc">"See `</span><span class="doc"><span class="constant">eelatex-bounded</span></span><span class="doc">'."</span>)
+(<span class="keyword">defvar</span> <a name="ee-delimiter-semicolon"><span class="variable-name">ee-delimiter-semicolon</span></a> <span class="string">"\n;;</span><span class="eev-glyph-face-red">*</span><span class="string">\n"</span> <span class="doc">"See `</span><span class="doc"><span class="constant">eeeval-boudned</span></span><span class="doc">'."</span>)
+
+(put 'ee-delimiter-hash      'safe-local-variable 'stringp)
+(put 'ee-delimiter-percent   'safe-local-variable 'stringp)
+(put 'ee-delimiter-semicolon 'safe-local-variable 'stringp)
+
+<span class="comment-delimiter">;; </span><span class="comment">(setq eeb-highlight-spec '(highlight 0.2))
+</span>(<span class="keyword">defvar</span> <a name="ee-highlight-spec"><span class="variable-name">ee-highlight-spec</span></a>  '(highlight 0.75)) <span class="comment-delimiter">; </span><span class="comment">to do: rename highlight-&gt;flash
+</span>(<span class="keyword">defvar</span> <a name="eeb-highlight-spec"><span class="variable-name">eeb-highlight-spec</span></a> '(highlight 0.5))
+(<span class="keyword">defvar</span> <a name="eek-highlight-spec"><span class="variable-name">eek-highlight-spec</span></a> '(region 0.75))
+(<span class="keyword">defvar</span> <a name="eeflash-default"><span class="variable-name">eeflash-default</span></a>    '(highlight 0.5))
+
+(<span class="keyword">defvar</span> <a name="eeb-defaults"><span class="variable-name">eeb-defaults</span></a> '(eev ee-delimiter-hash nil t t)
+  <span class="doc">"A structure of the form (fun sdelim edelim flash-spec adjust).
+See `</span><span class="doc"><span class="constant">eeb-default</span></span><span class="doc">' and `</span><span class="doc"><span class="constant">eeb-define-try</span></span><span class="doc">'."</span>)
+
+(<span class="keyword">defvar</span> <a name="ee-flash-spec"><span class="variable-name">ee-flash-spec</span></a> '(eev-glyph-face-yellow-on-red 1))
+
+
+
+<span class="comment-delimiter">;;;             </span><span class="comment">__ _           _     
+</span><span class="comment-delimiter">;;;   </span><span class="comment">___  ___ / _| | __ _ ___| |__  
+</span><span class="comment-delimiter">;;;  </span><span class="comment">/ _ \/ _ \ |_| |/ _` / __| '_ \ 
+</span><span class="comment-delimiter">;;; </span><span class="comment">|  __/  __/  _| | (_| \__ \ | | |
+</span><span class="comment-delimiter">;;;  </span><span class="comment">\___|\___|_| |_|\__,_|___/_| |_|
+</span><span class="comment-delimiter">;;;                                  </span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eeflash-new"><span class="function-name">eeflash-new</span></a> (s e)
+  <span class="doc">"Highlight temporarily the region between S and E.
+The face and the duration are taken from `</span><span class="doc"><span class="constant">ee-flash-spec</span></span><span class="doc">'.
+This function creates an overlay with face FACE over the region
+between S and E and prepares a timer that destroys that overlay
+after its duration has expired.\n
+This function returns the result of (ee-se-to-string S E).
+As in `</span><span class="doc"><span class="constant">ee-se-to-string</span></span><span class="doc">', S and E are usually numbers, but S can
+also be a string; in that case E is ignored, and no overlay is
+created.
+Demos:
+  (eeflash-new 2 5)
+  (let ((ee-flash-spec eek-highlight-spec)) (eeflash-new 3 6))
+  (let ((ee-flash-spec '(highlight 0.5)))   (eeflash-new 4 7))
+  (let ((ee-flash-spec '((:background \"green\") 1.5)))
+    (eeflash-new 4 7))"</span>
+  (interactive <span class="string">"r"</span>)
+  (<span class="keyword">if</span> (numberp s)
+      (<span class="keyword">let</span> ((ovl (make-overlay s e))
+            (face     (car  ee-flash-spec))
+            (duration (cadr ee-flash-spec)))
+        (overlay-put ovl 'face face)
+    (run-at-time duration nil 'delete-overlay ovl)))
+  (ee-se-to-string s e))
+
+
+
+
+<span class="comment-delimiter">;;;            </span><span class="comment">_               _       __             _ _   
+</span><span class="comment-delimiter">;;;   </span><span class="comment">___  ___| |__         __| | ___ / _| __ _ _   _| | |_ 
+</span><span class="comment-delimiter">;;;  </span><span class="comment">/ _ \/ _ \ '_ \ _____ / _` |/ _ \ |_ / _` | | | | | __|
+</span><span class="comment-delimiter">;;; </span><span class="comment">|  __/  __/ |_) |_____| (_| |  __/  _| (_| | |_| | | |_ 
+</span><span class="comment-delimiter">;;;  </span><span class="comment">\___|\___|_.__/       \__,_|\___|_|  \__,_|\__,_|_|\__|
+</span><span class="comment-delimiter">;;;                                                         </span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="ee-edelim-adjust"><span class="function-name">ee-edelim-adjust</span></a> (edelim adjust)
+  <span class="doc">"Return 1 if the first newline of EDELIM is to be treated specially.
+This function is called by `</span><span class="doc"><span class="constant">ee-edelim-to-e</span></span><span class="doc">' and `</span><span class="doc"><span class="constant">eeb-default-new</span></span><span class="doc">'.
+When the ending delimiter for some bounded function starts with a
+newline the highlighting looks much better if we include that
+newline in the highlighed region. Try:\n
+#.
+# (eeflash-new (ee-sdelim-to-s \"\\n#.\\n\") (ee-edelim-to-e \"\\n#,\\n\"))
+# (eeflash-new (ee-sdelim-to-s \"\\n#.\\n\") (ee-edelim-to-e \"\\n#,\\n\" t))
+foo
+#,\n
+The rule is: when ADJUST is t and EDELIM starts with \"\\n\" then
+adjust the end of the delimited region one character forward
+before doing the higlighting. Note that that last entry in the
+`</span><span class="doc"><span class="constant">eeb-defaults</span></span><span class="doc">' structure - and the last parameter for
+`</span><span class="doc"><span class="constant">eeb-define</span></span><span class="doc">' - are both \"ADJUST\"s..."</span>
+  (<span class="keyword">if</span> (eq adjust t)                     <span class="comment-delimiter">; </span><span class="comment">special case:
+</span>      (<span class="keyword">if</span> (ee-prefixp <span class="string">"\n"</span> edelim)      <span class="comment-delimiter">; </span><span class="comment">when edelim starts with a "\n"
+</span>          1                             <span class="comment-delimiter">; </span><span class="comment">+1 -&gt; include the "\n" in the region
+</span>        0)                              <span class="comment-delimiter">; </span><span class="comment">else 0
+</span>    (or adjust 0)))
+
+(<span class="keyword">defun</span> <a name="ee-sdelim-to-s"><span class="function-name">ee-sdelim-to-s</span></a> (sdelim)
+  <span class="doc">"Search backwards for STR and return the position after STR.
+This function does not move point. See `</span><span class="doc"><span class="constant">ee-edelim-adjust</span></span><span class="doc">'."</span>
+  (+ (<span class="keyword">save-excursion</span> (search-backward sdelim))
+     (length sdelim)))
+
+(<span class="keyword">defun</span> <a name="ee-edelim-to-e"><span class="function-name">ee-edelim-to-e</span></a> (edelim <span class="type">&amp;optional</span> adjust)
+  <span class="doc">"Search forward for STR and return the position before STR.
+This function does not move point. See `</span><span class="doc"><span class="constant">ee-edelim-adjust</span></span><span class="doc">'."</span>
+  (+ (<span class="keyword">save-excursion</span> (search-forward edelim))
+     (- (length edelim))
+     (ee-edelim-adjust edelim adjust)))
+
+(<span class="keyword">defun</span> <a name="ee-symbol-value"><span class="function-name">ee-symbol-value</span></a> (v <span class="type">&amp;optional</span> t-value)
+  <span class="doc">"If V is a symbol return (symbol-value V); else return V.
+Note that the symbol-value of nil is nil - and the same for t.
+A hack: V is t and T-VALUE is not nil then return (ee-symbol-value T-VALUE).
+This function is used by `</span><span class="doc"><span class="constant">eeb-default</span></span><span class="doc">'."</span>
+  (<span class="keyword">cond</span> ((and (eq t v) t-value) (ee-symbol-value t-value))
+        ((symbolp v)            (symbol-value v))
+        (t                      v)))
+
+(<span class="keyword">defun</span> <a name="eeb-default"><span class="function-name">eeb-default</span></a> ()
+  <span class="doc">"Run the default action on a delimited region around point.
+The default action is determined by the five entries in the list
+stored in the variable `</span><span class="doc"><span class="constant">eeb-defaults</span></span><span class="doc">'; see `</span><span class="doc"><span class="constant">eeb-define-try</span></span><span class="doc">'."</span>
+  (interactive)
+  (<span class="keyword">let*</span> ((fun                            (nth 0 eeb-defaults))
+         (sdelim    (ee-symbol-value     (nth 1 eeb-defaults)))
+         (edelim    (ee-symbol-value (or (nth 2 eeb-defaults) sdelim)))
+         (flash-spec (ee-symbol-value    (nth 3 eeb-defaults) eeflash-default))
+         (adjust                         (nth 4 eeb-defaults))
+         (s         (ee-sdelim-to-s sdelim))
+         (e         (ee-edelim-to-e edelim))
+         (e+        (ee-edelim-to-e edelim adjust)))
+    (<span class="keyword">let</span> ((ee-flash-spec flash-spec))
+      (eeflash-new s e+))
+    (funcall fun s e)))
+
+
+
+
+
+<span class="comment-delimiter">;; </span><span class="comment">For compatibility
+</span>(<span class="keyword">defalias</span> '<a name="eeb-default-new"><span class="function-name">eeb-default-new</span></a>    'eeb-default)
+(<span class="keyword">defalias</span> '<a name="ee-search-forward"><span class="function-name">ee-search-forward</span></a>  'ee-edelim-to-e)
+(<span class="keyword">defalias</span> '<a name="ee-search-backward"><span class="function-name">ee-search-backward</span></a> 'ee-sdelim-to-s)
+
+<span class="comment-delimiter">;; </span><span class="comment">(defun ee-search-backward (str)
+</span><span class="comment-delimiter">;;   </span><span class="comment">"Search backwards for STR and return the position after STR.
+</span><span class="comment-delimiter">;; </span><span class="comment">This function does not move point."
+</span><span class="comment-delimiter">;;   </span><span class="comment">(+ (save-excursion (search-backward str))
+</span><span class="comment-delimiter">;;      </span><span class="comment">(length str)))
+</span><span class="comment-delimiter">;; </span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">(defun ee-search-forward (str &amp;optional adjust)
+</span><span class="comment-delimiter">;;   </span><span class="comment">"Search forward for STR and return the position before STR, plus ADJUST.
+</span><span class="comment-delimiter">;; </span><span class="comment">The default value for ADJUST is 0.
+</span><span class="comment-delimiter">;; </span><span class="comment">This function does not move point."
+</span><span class="comment-delimiter">;;   </span><span class="comment">(+ (save-excursion (search-forward str))
+</span><span class="comment-delimiter">;;      </span><span class="comment">(- (length str))
+</span><span class="comment-delimiter">;;      </span><span class="comment">(or adjust 0)))
+</span>
+
+
+
+
+
+<span class="comment-delimiter">;;;            </span><span class="comment">_               _       __ _            
+</span><span class="comment-delimiter">;;;   </span><span class="comment">___  ___| |__         __| | ___ / _(_)_ __   ___ 
+</span><span class="comment-delimiter">;;;  </span><span class="comment">/ _ \/ _ \ '_ \ _____ / _` |/ _ \ |_| | '_ \ / _ \
+</span><span class="comment-delimiter">;;; </span><span class="comment">|  __/  __/ |_) |_____| (_| |  __/  _| | | | |  __/
+</span><span class="comment-delimiter">;;;  </span><span class="comment">\___|\___|_.__/       \__,_|\___|_| |_|_| |_|\___|
+</span><span class="comment-delimiter">;;;                                                    </span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="ee-add-quote"><span class="function-name">ee-add-quote</span></a> (obj)
+  <span class="doc">"Return OBJ is OBJ is constant; else return 'OBJ."</span>
+  (<span class="keyword">if</span> (or (numberp obj) (stringp obj)
+          (eq obj nil) (eq obj t) (keywordp obj))
+      obj
+    (list 'quote obj)))
+
+(<span class="keyword">defun</span> <a name="ee-pp0q"><span class="function-name">ee-pp0q</span></a> (obj)
+  <span class="doc">"Like (ee-pp0 OBJ), but add a \"'\" in front if needed."</span>
+  (ee-pp0 (ee-add-quote obj)))
+
+(<span class="keyword">defun</span> <a name="ee-eeb-define-docstring"><span class="function-name">ee-eeb-define-docstring</span></a>
+  (eeb-fun fun sdelim edelim flash-spec adjust extra-docs)
+  <span class="doc">"Used internally by `</span><span class="doc"><span class="constant">ee-eeb-define</span></span><span class="doc">' to generate the docstring."</span>
+  (<span class="keyword">let</span> ((args `(,eeb-fun ,fun ,sdelim ,edelim ,flash-spec ,adjust
+                ,@(<span class="keyword">if</span> extra-docs (list extra-docs)))))
+    (format <span class="string">"Run `</span><span class="string"><span class="constant">%S</span></span><span class="string">' on a delimited region around point.
+This is a wrapper function created by a sexp equivalent to first
+one below (see `</span><span class="string"><span class="constant">eeb-define</span></span><span class="string">'). To inspect the code that it
+generates run the second sexp; and for an explanation of the
+parameters, and a for a way of experimenting with them, see 
+`</span><span class="string"><span class="constant">eeb-define-try</span></span><span class="string">'.\n
+  (eeb-define      %s)
+  (find-eeb-define %s)%s"</span>
+  fun
+  (mapconcat 'ee-pp0q args <span class="string">" "</span>)
+  (mapconcat 'ee-pp0q args <span class="string">" "</span>)
+  (<span class="keyword">if</span> extra-docs (concat <span class="string">"\n\n"</span> extra-docs) <span class="string">""</span>))))
+
+(<span class="keyword">defun</span> <a name="ee-eeb-define"><span class="function-name">ee-eeb-define</span></a>
+  (eeb-fun fun sdelim <span class="type">&amp;optional</span> edelim flash-spec adjust extra-docs)
+  <span class="doc">"See `</span><span class="doc"><span class="constant">eeb-define</span></span><span class="doc">' and `</span><span class="doc"><span class="constant">eeb-define-try</span></span><span class="doc">'.
+This function generates the code for defining EEB-FUN, as a string,
+and returns it without `</span><span class="doc"><span class="constant">read</span></span><span class="doc">'ing or `</span><span class="doc"><span class="constant">eval</span></span><span class="doc">'ing it. An example:\n
+  (find-estring (ee-eeb-define 'eev-bounded 'eev 'ee-delimiter-hash nil t t))"</span>
+  (format
+   <span class="string">"(defun %S ()
+  %S
+  (interactive)
+  (setq eeb-defaults '%s)
+  (eeb-default-new))"</span>
+   eeb-fun 
+   (ee-eeb-define-docstring
+    eeb-fun fun sdelim edelim flash-spec adjust extra-docs)
+   (ee-pp0 (list fun sdelim edelim flash-spec adjust))))
+
+<span class="comment-delimiter">;; </span><span class="comment">Tests:
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-eeb-define 'eev-bounded 'eev "\n#</span><span class="eev-glyph-face-red">*</span><span class="comment">\n" nil t t)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-eeb-define 'eev-bounded 'eev "\n#</span><span class="eev-glyph-face-red">*</span><span class="comment">\n" nil t t "Example\nHere")
+</span><span class="comment-delimiter">;; </span><span class="comment">(eeb-define      'eev-bounded 'eev "\n#</span><span class="eev-glyph-face-red">*</span><span class="comment">\n" nil t t)
+</span><span class="comment-delimiter">;; </span><span class="comment">(eeb-define      'eev-bounded 'eev "\n#</span><span class="eev-glyph-face-red">*</span><span class="comment">\n" nil t t "Example\nHere")
+</span><span class="comment-delimiter">;; </span><span class="comment">(eeb-define      'eev-bounded 'eev 'ee-delimiter-hash nil t t "Example\nHere")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunctiondescr 'eev-bounded)
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Note: the sexps in the docstring might come out wrong if they
+</span><span class="comment-delimiter">;; </span><span class="comment">contain nasty unibyte characters (this is a known possible bug).
+</span>
+(<span class="keyword">defun</span> <a name="eeb-define"><span class="function-name">eeb-define</span></a>
+  (eeb-fun fun sdelim <span class="type">&amp;optional</span> edelim flash-spec adjust extra-docs)
+  <span class="doc">"Define EEB-FUN as a wrapper around FUN.
+Use the delimiters SDELIM and EDELIM to find the region around
+point where where FUN will operate; highlight the region using
+FLASH-SPEC and ADJUST. If you want to add an example or extra
+explanations to the docstring of EEB-FUN use EXTRA-DOCS.
+
+See `</span><span class="doc"><span class="constant">eeb-define-try</span></span><span class="doc">' for a detailed explanation of the parameters
+and for a way of experimenting with them; see `</span><span class="doc"><span class="constant">find-eeb-define</span></span><span class="doc">'
+for a way to inspect to wrapper code."</span>
+  (eval (read (ee-eeb-define 
+               eeb-fun
+               fun sdelim edelim
+               flash-spec adjust extra-docs))))
+
+(<span class="keyword">defun</span> <a name="find-eeb-define"><span class="function-name">find-eeb-define</span></a> (<span class="type">&amp;rest</span> rest)
+  (find-estring (apply 'ee-eeb-define rest))
+  (emacs-lisp-mode))
+
+
+<span class="comment-delimiter">;;;            </span><span class="comment">_               _       __ _                  _              
+</span><span class="comment-delimiter">;;;   </span><span class="comment">___  ___| |__         __| | ___ / _(_)_ __   ___      | |_ _ __ _   _ 
+</span><span class="comment-delimiter">;;;  </span><span class="comment">/ _ \/ _ \ '_ \ _____ / _` |/ _ \ |_| | '_ \ / _ \_____| __| '__| | | |
+</span><span class="comment-delimiter">;;; </span><span class="comment">|  __/  __/ |_) |_____| (_| |  __/  _| | | | |  __/_____| |_| |  | |_| |
+</span><span class="comment-delimiter">;;;  </span><span class="comment">\___|\___|_.__/       \__,_|\___|_| |_|_| |_|\___|      \__|_|   \__, |
+</span><span class="comment-delimiter">;;;                                                                   </span><span class="comment">|___/ 
+</span>
+(<span class="keyword">defun</span> <a name="eeb-define-try"><span class="function-name">eeb-define-try</span></a>
+  (eeb-fun fun sdelim <span class="type">&amp;optional</span> edelim flash-spec adjust extra-docs)
+<span class="doc">"This is similar to `</span><span class="doc"><span class="constant">eeb-define</span></span><span class="doc">', but instead of defining EEB-FUN run it now.
+The \"default action over bounded regions\" is determined by the
+five entries in the list stored in the variable `</span><span class="doc"><span class="constant">eeb-defaults</span></span><span class="doc">'
+\(described below). All the \"bounded functions\", like
+`</span><span class="doc"><span class="constant">eev-bounded</span></span><span class="doc">', work by setting the variable `</span><span class="doc"><span class="constant">eeb-defaults</span></span><span class="doc">' and
+then calling the function `</span><span class="doc"><span class="constant">eeb-default-new</span></span><span class="doc">', that interprets the
+entries in `</span><span class="doc"><span class="constant">eeb-defaults</span></span><span class="doc">' in a certain way and acts accordingly.
+
+
+eeb-define
+==========
+Bounded functions like `</span><span class="doc"><span class="constant">eev-bounded</span></span><span class="doc">' are defined by calling the
+function `</span><span class="doc"><span class="constant">eeb-define</span></span><span class="doc">' with the name of the function to define and
+the five entries for the associated value for `</span><span class="doc"><span class="constant">eeb-defaults</span></span><span class="doc">',
+like this:
+
+  (eeb-define 'eev-bounded 'eev 'ee-delimiter-hash nil t t)
+
+`</span><span class="doc"><span class="constant">eeb-define-try</span></span><span class="doc">' provides a nice way to test how functions
+defined by `</span><span class="doc"><span class="constant">eeb-define</span></span><span class="doc">' would behave after they are defined.
+`</span><span class="doc"><span class="constant">eeb-define-try</span></span><span class="doc">' expects the same arguments as `</span><span class="doc"><span class="constant">eeb-define</span></span><span class="doc">', but
+it ignores the first one - EEB-FUN -, and instead of defining a
+function EEB-FUN that would set `</span><span class="doc"><span class="constant">eeb-defaults</span></span><span class="doc">' and run
+`</span><span class="doc"><span class="constant">eeb-default</span></span><span class="doc">', it sets `</span><span class="doc"><span class="constant">eeb-defaults</span></span><span class="doc">' immediately (temporarily,
+using `</span><span class="doc"><span class="constant">let</span></span><span class="doc">') and runs `</span><span class="doc"><span class="constant">eeb-default</span></span><span class="doc">' on that.
+
+
+eeb-defaults and eeb-default
+============================
+The variable `</span><span class="doc"><span class="constant">eeb-defaults</span></span><span class="doc">' always holds a list of this form:
+
+  (FUN SDELIM EDELIM FLASH-SPEC ADJUST)
+
+where:
+  FUN        is a function taking arguments \"s\" and \"e\", like `</span><span class="doc"><span class="constant">eev</span></span><span class="doc">',
+  SDELIM     is the starting delimiter (see `</span><span class="doc"><span class="constant">ee-edelim-adjust</span></span><span class="doc">'),
+  EDELIM     is the ending delimiter (default: same as sdelim),
+  FLASH-SPEC tells how to highlight the region (see `</span><span class="doc"><span class="constant">eeflash-new</span></span><span class="doc">'),
+  ADJUST     should usually be t; see `</span><span class="doc"><span class="constant">ee-edelim-adjust</span></span><span class="doc">'.
+
+The \"default action on a delimited region\" is always something
+composed of two \"standard actions\": first, highlight the region
+temporarily, as described below; second, and most important, run
+\"(FUN s e)\" on the region. FLASH-SPEC and ADJUST are only used
+for the highlighting part; FUN is only used for the \"run (FUN s
+e)\" part.
+
+A nil at EDELIM means to use EDELIM := SDELIM; after
+replacing the possible nil at EDELIM both SDELIM and
+EDELIM are \"expanded\" with `</span><span class="doc"><span class="constant">ee-symbol-value</span></span><span class="doc">' if their
+values are symbols, and the results must be strings. Those
+resulting strings are used as region delimiters by
+`</span><span class="doc"><span class="constant">ee-sdelim-to-s</span></span><span class="doc">' and `</span><span class="doc"><span class="constant">ee-edelim-to-e</span></span><span class="doc">' to produce the \"s\" and
+\"e\" arguments for the \"(FUN s e)\" call; see the documentation
+for `</span><span class="doc"><span class="constant">ee-edelim-adjust</span></span><span class="doc">' for an example that also shows how
+ADJUST affects the highlighting.
+
+A t at FLASH-SPEC means to use `</span><span class="doc"><span class="constant">eeflash-default</span></span><span class="doc">' as FLASH-SPEC;
+after treating the `t' case the value of FLASH-SPEC is
+\"expanded\" with `</span><span class="doc"><span class="constant">ee-symbol-value</span></span><span class="doc">' if it's a symbol, and the
+result - that should be either nil or a list of the form \"(face
+duration)\" - becomes temporarily the value of `</span><span class="doc"><span class="constant">ee-flash-spec</span></span><span class="doc">',
+and we invoke `</span><span class="doc"><span class="constant">eeflash-new</span></span><span class="doc">' to highlight the region.
+
+
+Examples
+========
+Here are some demos:\n
+#.
+# (eeb-define-try nil 'list            \"\\n#.\\n\" nil t t)
+# (eeb-define-try nil 'ee-se-to-string \"\\n#.\\n\" nil t t)
+# (eeb-define-try nil 'eeflash-new     \"\\n#.\\n\" nil t t)
+# (eeb-define-try nil 'eev             \"\\n#.\\n\" nil t t)
+echo $[1+2]
+#.\n"</span>
+  (<span class="keyword">let</span> ((eeb-defaults (list fun sdelim edelim flash-spec adjust)))
+    (eeb-default-new)))
+
+<span class="comment-delimiter">;; </span><span class="comment">(find-efunctiondescr 'eeb-define-try)
+</span>
+
+
+<span class="comment-delimiter">;;;                                  </span><span class="comment">_                           _          _ 
+</span><span class="comment-delimiter">;;;   </span><span class="comment">___  _____  ____  ____  __    | |__   ___  _   _ _ __   __| | ___  __| |
+</span><span class="comment-delimiter">;;;  </span><span class="comment">/ _ \/ _ \ \/ /\ \/ /\ \/ /____| '_ \ / _ \| | | | '_ \ / _` |/ _ \/ _` |
+</span><span class="comment-delimiter">;;; </span><span class="comment">|  __/  __/&gt;  &lt;  &gt;  &lt;  &gt;  &lt;_____| |_) | (_) | |_| | | | | (_| |  __/ (_| |
+</span><span class="comment-delimiter">;;;  </span><span class="comment">\___|\___/_/\_\/_/\_\/_/\_\    |_.__/ \___/ \__,_|_| |_|\__,_|\___|\__,_|
+</span><span class="comment-delimiter">;;;                                                                           </span><span class="comment">
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">(find-eeb-define 'eev-bounded     'eev     'ee-delimiter-hash      nil t t)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-eeb-define 'eeg-bounded     'eeg     'ee-delimiter-hash      nil t t)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-eeb-define 'eegdb-bounded   'eegdb   'ee-delimiter-hash      nil t t)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-eeb-define 'eelatex-bounded 'eelatex 'ee-delimiter-percent   nil t t)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-eeb-define 'eeeval-bounded  'eeeval  'ee-delimiter-semicolon nil t t)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-eeb-define 'eeb-eval        'eeeval  'ee-delimiter-semicolon nil t t)
+</span>
+(eeb-define 'eev-bounded     'eev     'ee-delimiter-hash      nil t t)
+(eeb-define 'eeg-bounded     'eeg     'ee-delimiter-hash      nil t t)
+(eeb-define 'eegdb-bounded   'eegdb   'ee-delimiter-hash      nil t t)
+(eeb-define 'eelatex-bounded 'eelatex 'ee-delimiter-percent   nil t t)
+(eeb-define 'eeeval-bounded  'eeeval  'ee-delimiter-semicolon nil t t)
+(eeb-define 'eeb-eval        'eeeval  'ee-delimiter-semicolon nil t t)
+
+(<span class="keyword">provide</span> '<span class="constant">eev-bounded</span>)
+
+
+
+<span class="comment-delimiter">;; </span><span class="comment">(load (buffer-file-name))
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunctiondescr 'eeb-define-try)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunctiondescr 'ee-edelim-adjust)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunctiondescr 'eeflash-new)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-fline "$VWT/eev-bounded.el")
+</span>
+
+
+<span class="comment-delimiter">;; </span><span class="comment">Local Variables:
+</span><span class="comment-delimiter">;; </span><span class="comment">coding:          raw-text-unix
+</span><span class="comment-delimiter">;; </span><span class="comment">no-byte-compile: t
+</span><span class="comment-delimiter">;; </span><span class="comment">End:
+</span></pre>
+  </body>
+</html>

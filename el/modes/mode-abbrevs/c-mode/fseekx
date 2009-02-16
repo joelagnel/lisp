@@ -1,0 +1,6 @@
+if (fseek(<field "FILE *stream">, <field "off_t offset">, <choose><choice "SEEK_SET"><choice "SEEK_CUR"></choose>) !=0) {
+    std::cerr << "ERROR: fseek() "
+              << " at " << __FILE__ << ":" << __LINE__
+              << std::endl << std::flush;
+    exit(1);
+}

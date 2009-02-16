@@ -1,0 +1,14 @@
+;;; -*-Emacs-Lisp-*-
+
+;; ELSERV-CFG: installation setting about ELSERV.
+
+;;; Code:
+
+;; Specify following if you don't want to install lisp files to the
+;; default directory.
+;(setq ELSERV_DIR "/opt/emacs/site-lisp/elserv")
+;; Specify following if you don't want to install exec files to the
+;; default directory.
+;(setq EXEC_DIR "/opt/gnu/bin")
+
+;;; ELSERV-CFG ends here

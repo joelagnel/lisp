@@ -1,0 +1,303 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eev-sshot.el (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .doc {
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #ffc0cb;
+        font-weight: bold;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;; </span><span class="comment">eev-sshot.el - hyperlinks to series of screenshots (and tools to take shots)
+</span><span class="comment-delimiter">;; </span><span class="comment">Author:  Eduardo Ochs &lt;<a href="mailto:eduardoochs&#64;gmail.com">eduardoochs&#64;gmail.com</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">License: GPL (headers missing at the moment! Sorry...)
+</span><span class="comment-delimiter">;; </span><span class="comment">Version: 2006oct02
+</span><span class="comment-delimiter">;; </span><span class="comment">(First version: 2006sep30)
+</span><span class="comment-delimiter">;; </span><span class="comment">Author home page: &lt;<a href="http://angg.twu.net/">http://angg.twu.net/</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">IRC: I'm "edrx" at freenode, channels #emacs and #eev.
+</span><span class="comment-delimiter">;; </span><span class="comment">URLs for this file:
+</span><span class="comment-delimiter">;;   </span><span class="comment">&lt;<a href="http://angg.twu.net/eev-current/eev-sshot.el">http://angg.twu.net/eev-current/eev-sshot.el</a>&gt;
+</span><span class="comment-delimiter">;;   </span><span class="comment">&lt;<a href="http://angg.twu.net/eev-current/eev-sshot.el.html">http://angg.twu.net/eev-current/eev-sshot.el.html</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Examples of output (in html flipbook format):
+</span><span class="comment-delimiter">;;   </span><span class="comment">&lt;<a href="http://angg.twu.net/flipbooks/eesteps.html">http://angg.twu.net/flipbooks/eesteps.html</a>&gt;
+</span><span class="comment-delimiter">;;   </span><span class="comment">&lt;<a href="http://angg.twu.net/flipbooks/ee-glyph.html">http://angg.twu.net/flipbooks/ee-glyph.html</a>&gt;
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This file contains functions for:
+</span><span class="comment-delimiter">;; </span><span class="comment">(1) taking series of (numbered) screenshots in Emacs,
+</span><span class="comment-delimiter">;; </span><span class="comment">(2) producing an HTML "flipbook interface" for viewing them,
+</span><span class="comment-delimiter">;; </span><span class="comment">(3) a minor mode for viewing screenshot series inside Emacs,
+</span><span class="comment-delimiter">;; </span><span class="comment">(4) hyperlinking to a specific screenshot in a series.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">WARNING: (1) is tricky to run - it requires a prepared Fvwm that
+</span><span class="comment-delimiter">;; </span><span class="comment">reacts to commands sent by FvwmCommand. Finding the geometry of a
+</span><span class="comment-delimiter">;; </span><span class="comment">window, including the window's borders and title bar - that are
+</span><span class="comment-delimiter">;; </span><span class="comment">added by the window manager - is something that depends on the WM,
+</span><span class="comment-delimiter">;; </span><span class="comment">and I've been using Fvwm since the dawn of times and I know
+</span><span class="comment-delimiter">;; </span><span class="comment">practically nothing about other WMs...
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">(Old stuff that I'm rewriting...)
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">The "take screenshots" part requires fvwm with eev support to get
+</span><span class="comment-delimiter">;; </span><span class="comment">the geometry of the Emacs window window (`</span><span class="comment"><span class="constant">sshot-save-geom-fvwm</span></span><span class="comment">'),
+</span><span class="comment-delimiter">;; </span><span class="comment">and ImageMagick to generate the pngs; you can bypass the dependency
+</span><span class="comment-delimiter">;; </span><span class="comment">on fvwm if you have other ways to write the geometry of the region
+</span><span class="comment-delimiter">;; </span><span class="comment">to take screenshots of to the file /tmp/sshot.geom. See:
+</span><span class="comment-delimiter">;;   </span><span class="comment">&lt;<a href="http://angg.twu.net/eev-current/eev-langs.el.html#eefvwm">http://angg.twu.net/eev-current/eev-langs.el.html#eefvwm</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Note: if you find other ways to get the geometry please tell me!!!
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">The "view screenshots" part requires just a graphical Emacs.
+</span><span class="comment-delimiter">;; </span><span class="comment">Navigation through the screenshots in sshot-view-mode is done with
+</span><span class="comment-delimiter">;; </span><span class="comment">the keys &lt;left&gt; and &lt;right&gt;. This is better than watching passively
+</span><span class="comment-delimiter">;; </span><span class="comment">the animations in &lt;<a href="http://angg.twu.net/eev-current/anim/">http://angg.twu.net/eev-current/anim/</a>&gt; because:
+</span><span class="comment-delimiter">;;   </span><span class="comment">(1) png screenshots can be viewed inside Emacs,
+</span><span class="comment-delimiter">;;   </span><span class="comment">(2) they doesn't require a browser and a Flash plugin,
+</span><span class="comment-delimiter">;;   </span><span class="comment">(3) you can "move forward and backward in time" though them,
+</span><span class="comment-delimiter">;;   </span><span class="comment">(4) you can spend as much or as little time as you wish in each
+</span><span class="comment-delimiter">;;       </span><span class="comment">screenshot,
+</span><span class="comment-delimiter">;;   </span><span class="comment">(5) you can create hyperlinks to specific shots with `</span><span class="comment"><span class="constant">find-sshot</span></span><span class="comment">'.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">The "html flipbooks" part generates HTML pages like these:
+</span><span class="comment-delimiter">;;   </span><span class="comment">&lt;<a href="http://angg.twu.net/flipbooks/eesteps.html">http://angg.twu.net/flipbooks/eesteps.html</a>&gt;
+</span><span class="comment-delimiter">;;   </span><span class="comment">&lt;<a href="http://angg.twu.net/flipbooks/ee-glyph.html">http://angg.twu.net/flipbooks/ee-glyph.html</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">You won't need to run it unless you are creating your own series of
+</span><span class="comment-delimiter">;; </span><span class="comment">screenshots - but for that you will need fvwm, etc.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Note: compare this with the "stepper" functions of eev:
+</span><span class="comment-delimiter">;;   </span><span class="comment">&lt;<a href="http://angg.twu.net/eev-current/eev-steps.el.html">http://angg.twu.net/eev-current/eev-steps.el.html</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">the functions there can be thought as hyperlinks to _performing_
+</span><span class="comment-delimiter">;; </span><span class="comment">series of steps; the functions here implement hyperlinks to the
+</span><span class="comment-delimiter">;; </span><span class="comment">_expected result_ of performing series of steps.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">script to removes duplicates:
+</span><span class="comment-delimiter">;;   </span><span class="comment">&lt;<a href="http://angg.twu.net/bin/sshot-uniq.lua.html">http://angg.twu.net/bin/sshot-uniq.lua.html</a>&gt;
+</span><span class="comment-delimiter">;;   </span><span class="comment">&lt;<a href="http://angg.twu.net/.emacs.html#sshot">http://angg.twu.net/.emacs.html#sshot</a>&gt;
+</span>
+
+<span class="comment-delimiter">;; </span><span class="comment">The style of this file is reminiscent of my Forth roots.
+</span>
+
+<span class="comment-delimiter">;; </span><span class="comment">Save the desired geometry in "/tmp/sshot.geom".
+</span><span class="comment-delimiter">;; </span><span class="comment">WARNING: this depends on Fvwm and is not supposed to be easy to run! 
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defvar</span> <a name="sshot-geom-file"><span class="variable-name">sshot-geom-file</span></a>    <span class="string">"/tmp/sshot.geom"</span>) <span class="comment-delimiter">; </span><span class="comment">don't change this
+</span>(<span class="keyword">defvar</span> <a name="sshot-fname-prefix"><span class="variable-name">sshot-fname-prefix</span></a> <span class="string">"/tmp/sshot/test"</span>) <span class="comment-delimiter">; </span><span class="comment">"test_001.png", "_002.png"...
+</span>(<span class="keyword">defvar</span> <a name="sshot-next"><span class="variable-name">sshot-next</span></a>         1)                 <span class="comment-delimiter">; </span><span class="comment">next screenshot to save
+</span>
+(<span class="keyword">defun</span> <a name="sshot-save-fvwm-script"><span class="function-name">sshot-save-fvwm-script</span></a> ()
+  (write-region <span class="string">"Current Exec sh -c \
+                 'echo $[w.width]x$[w.height]+$[w.x]+$[w.y] &gt; /tmp/sshot.geom'"</span>
+                nil <span class="string">"/tmp/sshot.geom.fvwm"</span>))
+(<span class="keyword">defun</span> <a name="sshot-save-tcl-script"><span class="function-name">sshot-save-tcl-script</span></a>  ()
+  (write-region <span class="string">"bind . &lt;Key-q&gt; {
+                   puts [exec FvwmCommand {read /tmp/sshot.geom.fvwm}]; exit
+                 }"</span> nil <span class="string">"/tmp/sshot.geom.tcl"</span>))
+(<span class="keyword">defun</span> <a name="sshot-save-geom-fvwm"><span class="function-name">sshot-save-geom-fvwm</span></a>   () (sshot-save-fvwm-script) (find-sh0
+                                  <span class="string">"FvwmCommand 'read /tmp/sshot.geom.fvwm'"</span>))
+(<span class="keyword">defun</span> <a name="sshot-save-geom-tcl"><span class="function-name">sshot-save-geom-tcl</span></a>    () (sshot-save-fvwm-script)
+                                 (sshot-save-tcl-script)
+                                 (find-sh0 <span class="string">"wish /tmp/sshot.geom.tcl"</span>))
+(<span class="keyword">defun</span> <a name="sshot-force-geom"><span class="function-name">sshot-force-geom</span></a> (geom) (write-region geom nil <span class="string">"/tmp/sshot.geom"</span>))
+(<span class="keyword">defun</span> <a name="sshot-save-geom"><span class="function-name">sshot-save-geom</span></a>  () (sshot-save-geom-fvwm))    <span class="comment-delimiter">; </span><span class="comment">redefine this if needed
+</span>(<span class="keyword">defun</span> <a name="sshot-geom"><span class="function-name">sshot-geom</span></a>       () (ee-no-trailing-nl (ee-read-file sshot-geom-file)))
+
+
+<span class="comment-delimiter">;; </span><span class="comment">Take a screenshot.
+</span><span class="comment-delimiter">;; </span><span class="comment">Depends on "import", from ImageMagick.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defun</span> <a name="sshot-n-to-fname"><span class="function-name">sshot-n-to-fname</span></a> (n) (format <span class="string">"%s_%03d.png"</span> sshot-fname-prefix n))
+(<span class="keyword">defun</span> <a name="sshot-fname-next"><span class="function-name">sshot-fname-next</span></a> () (sshot-n-to-fname sshot-next))
+(<span class="keyword">defun</span> <a name="sshot-import-cmd"><span class="function-name">sshot-import-cmd</span></a> ()
+  (format <span class="string">"import -window root -crop %s %s"</span> (sshot-geom) (sshot-fname-next)))
+(<span class="keyword">defun</span> <a name="sshot-import"><span class="function-name">sshot-import</span></a>     () (find-sh0 (sshot-import-cmd)))
+(<span class="keyword">defun</span> <span class="function-name">sshot-next++</span>     () (setq sshot-next (1+ sshot-next)))
+(<span class="keyword">defun</span> <a name="sshot-dir"><span class="function-name">sshot-dir</span></a>        () (file-name-directory sshot-fname-prefix))
+(<span class="keyword">defun</span> <a name="sshot-mkdir"><span class="function-name">sshot-mkdir</span></a>      () (make-directory (file-name-directory (sshot-dir)) t))
+(<span class="keyword">defun</span> <span class="function-name">sshot-fname-*png</span> () (concat sshot-fname-prefix <span class="string">"*.png"</span>))
+(<span class="keyword">defun</span> <a name="sshot-rm-v-shots"><span class="function-name">sshot-rm-v-shots</span></a> () (find-sh0 (format <span class="string">"rm -v %s"</span> (sshot-fname-*png))))
+(<span class="keyword">defun</span> <span class="function-name">sshot-next=1</span>     () (setq sshot-next 1))
+(<span class="keyword">defun</span> <a name="sshot-cursor"><span class="function-name">sshot-cursor</span></a>     () (blink-cursor-mode 0))
+(<span class="keyword">defun</span> <a name="sshot-blink"><span class="function-name">sshot-blink</span></a>      () (blink-cursor-mode 1))
+(<span class="keyword">defun</span> <a name="sshot-init"><span class="function-name">sshot-init</span></a> (prefix) (interactive) (setq sshot-fname-prefix prefix)
+                           (sshot-rm-v-shots) (sshot-mkdir) (sshot-next=1)
+                           (sshot-cursor))
+(<span class="keyword">defun</span> <a name="sshot-take"><span class="function-name">sshot-take</span></a>       () (interactive) (sshot-import) (sshot-next++))
+
+
+<span class="comment-delimiter">;; </span><span class="comment">Discard the last screenshot taken if it's a duplicate.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defun</span> <a name="sshot-read-file"><span class="function-name">sshot-read-file</span></a>   (f) (<span class="keyword">with-temp-buffer</span>
+                               (insert-file-contents-literally f)
+                               (buffer-string)))
+(<span class="keyword">defun</span> <a name="sshot-read-file-n"><span class="function-name">sshot-read-file-n</span></a> (n) (sshot-read-file (sshot-n-to-fname n)))
+(<span class="keyword">defun</span> <a name="sshot-equal-prev"><span class="function-name">sshot-equal-prev</span></a>  () (and (&gt; sshot-next 2)
+                                 (equal (sshot-read-file-n (- sshot-next 1))
+                                        (sshot-read-file-n (- sshot-next 2)))))
+(<span class="keyword">defun</span> <a name="sshot-remove"><span class="function-name">sshot-remove</span></a>      () (setq sshot-next (- sshot-next 1))
+                            (delete-file (sshot-n-to-fname sshot-next)))
+(<span class="keyword">defun</span> <span class="function-name">sshot-remove*</span>     () (<span class="keyword">while</span> (sshot-equal-prev) (sshot-remove)))
+(<span class="keyword">defun</span> <a name="sshot-take-unique"><span class="function-name">sshot-take-unique</span></a> () (interactive) (sshot-take) (sshot-remove*))
+
+
+<span class="comment-delimiter">;; </span><span class="comment">Produce an html "flipbook interface" for the current series of screenshots.
+</span><span class="comment-delimiter">;; </span><span class="comment">Example of output: &lt;<a href="http://angg.twu.net/flipbooks/eesteps.html">http://angg.twu.net/flipbooks/eesteps.html</a>&gt;
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defun</span> <a name="sshot-aname"><span class="function-name">sshot-aname</span></a>      (n) (format <span class="string">"&lt;a name=\"%03d\"&gt;&lt;/a&gt;"</span> n))
+(<span class="keyword">defun</span> <a name="sshot-imgsrc"><span class="function-name">sshot-imgsrc</span></a>     (pr n) (format <span class="string">"&lt;img src=\"%s_%03d.png\"&gt;"</span> pr n))
+(<span class="keyword">defun</span> <a name="sshot-prev-text"><span class="function-name">sshot-prev-text</span></a>  (n) (format                   <span class="string">"&amp;larr;%03d"</span>       n))
+(<span class="keyword">defun</span> <a name="sshot-prev-href"><span class="function-name">sshot-prev-href</span></a>  (n) (format <span class="string">"&lt;a href=\"#%03d\"&gt;&amp;larr;%03d&lt;/a&gt;"</span> n n))
+(<span class="keyword">defun</span> <a name="sshot-next-text"><span class="function-name">sshot-next-text</span></a>  (n) (format                   <span class="string">"%03d&amp;rarr;"</span>       n))
+(<span class="keyword">defun</span> <a name="sshot-next-href"><span class="function-name">sshot-next-href</span></a>  (n) (format <span class="string">"&lt;a href=\"#%03d\"&gt;%03d&amp;rarr;&lt;/a&gt;"</span> n n))
+(<span class="keyword">defun</span> <a name="sshot-image-html"><span class="function-name">sshot-image-html</span></a> (prefix max n) (format <span class="string">"%s\n%s&lt;br&gt;\n%s %s&lt;br&gt;\n"</span>
+       (sshot-aname n)
+       (sshot-imgsrc prefix n)
+       (<span class="keyword">if</span> (&lt;= n 1)   (sshot-prev-text (- n 1)) (sshot-prev-href (- n 1)))
+       (<span class="keyword">if</span> (&gt;= n max) (sshot-next-text (+ n 1)) (sshot-next-href (+ n 1)))))
+(<span class="keyword">defun</span> <a name="sshot-images-html"><span class="function-name">sshot-images-html</span></a> (prefix max) (mapconcat
+                            (<span class="keyword">lambda</span> (n) (sshot-image-html prefix max n))
+                            (number-sequence 1 max)
+                            <span class="string">"&lt;br&gt;\n\n"</span>))
+(<span class="keyword">defun</span> <a name="sshot-html-wrap"><span class="function-name">sshot-html-wrap</span></a>   (title body tail)
+          (format <span class="string">"&lt;html&gt;\n%s\n%s&lt;/html&gt;\n"</span>
+           (format <span class="string">"&lt;head&gt;\n&lt;title&gt;%s&lt;/title&gt;\n&lt;/head&gt;"</span> title)
+           (format <span class="string">"&lt;body bgcolor=\"#4C4C4C\"&gt;\n\n%s\n%s\n&lt;/body&gt;"</span> body tail)))
+(<span class="keyword">defun</span> <a name="sshot-mkstr"><span class="function-name">sshot-mkstr</span></a> (s n) (mapconcat (<span class="keyword">lambda</span> (n) s) (number-sequence 1 n) <span class="string">""</span>))
+(<span class="keyword">defun</span> <a name="sshot-html-3"><span class="function-name">sshot-html-3</span></a>      (title prefix max) (sshot-html-wrap title
+                                             (sshot-images-html prefix max)
+                                             (sshot-mkstr <span class="string">"&lt;br&gt;\n"</span> 40)))
+(<span class="keyword">defun</span> <a name="sshot-stem"><span class="function-name">sshot-stem</span></a>       () (file-name-nondirectory sshot-fname-prefix))
+(<span class="keyword">defun</span> <a name="sshot-fname-html"><span class="function-name">sshot-fname-html</span></a> () (format <span class="string">"%s.html"</span> sshot-fname-prefix))
+(<span class="keyword">defun</span> <a name="sshot-title-html"><span class="function-name">sshot-title-html</span></a> () (format <span class="string">"flipbook: %s"</span> (sshot-stem)))
+(<span class="keyword">defun</span> <a name="sshot-html-0"><span class="function-name">sshot-html-0</span></a>     () (sshot-html-3 (sshot-title-html) (sshot-stem)
+                                         (- sshot-next 1)))
+(<span class="keyword">defun</span> <a name="sshot-write-html"><span class="function-name">sshot-write-html</span></a> () (write-region (sshot-html-0) nil (sshot-fname-html)))
+(<span class="keyword">defun</span> <span class="function-name">sshot-take+</span>      () (interactive) (sshot-take-unique) (sshot-write-html))
+
+<span class="comment-delimiter">;; </span><span class="comment">(global-set-key (kbd "&lt;print&gt;") 'sshot-take)
+</span><span class="comment-delimiter">;; </span><span class="comment">(global-set-key (kbd "&lt;print&gt;") 'sshot-take-unique)
+</span><span class="comment-delimiter">;; </span><span class="comment">(global-set-key (kbd "&lt;print&gt;") 'sshot-take+)
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">(find-man "1 fvwm" "Key [(window)] Keyname Context Modifiers Function")
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-man "1 fvwm" "Modifiers is any combination")
+</span><span class="comment-delimiter">;; </span><span class="comment">(eefvwm0 "Key Print A N   Exec gnudoit '(ssjot-take+)'")
+</span><span class="comment-delimiter">;; </span><span class="comment">(eefvwm0 "Key Print A N   -")
+</span>
+
+
+
+<span class="comment-delimiter">;; </span><span class="comment">This is how I produced a certain series of screenshots.
+</span><span class="comment-delimiter">;; </span><span class="comment">You are not expected to understand all of this!!!
+</span><span class="comment-delimiter">;; </span><span class="comment">Preparation: 
+</span><span class="comment-delimiter">;;   </span><span class="comment">(eval-buffer)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(set-frame-size (selected-frame) 80 25)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(sshot-save-geom-fvwm)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(recenter 12)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(sshot-init "/tmp/sshot/eesteps")
+</span><span class="comment-delimiter">;; </span><span class="comment">Now we get into the states that are to be "photographed".
+</span><span class="comment-delimiter">;; </span><span class="comment">The keys here are M-e, then 10*&lt;down&gt;, C-e, etc, etc,
+</span><span class="comment-delimiter">;; </span><span class="comment">with &lt;print&gt;s at the right places.
+</span><span class="comment-delimiter">;;   </span><span class="comment">(find-efunctiondescr 'eesteps)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(sshot-blink)
+</span><span class="comment-delimiter">;;   </span><span class="comment">(sshot-write-html)
+</span><span class="comment-delimiter">;; </span><span class="comment">Here's how to view that series of screenshots inside Emacs:
+</span><span class="comment-delimiter">;;   </span><span class="comment">(find-fline (sshot-dir))
+</span><span class="comment-delimiter">;;   </span><span class="comment">(find-fline "/tmp/sshot/")
+</span><span class="comment-delimiter">;;   </span><span class="comment">(find-sshot "/tmp/sshot/eesteps" 1)
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">And here's how to download one such series of screenshots
+</span><span class="comment-delimiter">;; </span><span class="comment">(instead of producing it locally):
+</span><span class="comment-delimiter">;;   </span><span class="comment">mkdir -p /tmp/flipbooks/
+</span><span class="comment-delimiter">;;   </span><span class="comment">cd       /tmp/flipbooks/
+</span><span class="comment-delimiter">;;   </span><span class="comment">wget http://angg.twu.net/flipbooks/eesteps.tgz
+</span><span class="comment-delimiter">;;   </span><span class="comment">tar -xvzf eesteps.tgz
+</span><span class="comment-delimiter">;; </span><span class="comment">Now to view it:
+</span><span class="comment-delimiter">;;   </span><span class="comment">(find-sshot "/tmp/flipbooks/eesteps" 1)
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defvar</span> <a name="sshot-view-mode-map"><span class="variable-name">sshot-view-mode-map</span></a> (make-sparse-keymap))
+(define-key sshot-view-mode-map (kbd <span class="string">"&lt;left&gt;"</span>)  'sshot-open-prev)
+(define-key sshot-view-mode-map (kbd <span class="string">"&lt;right&gt;"</span>) 'sshot-open-next)
+(define-key sshot-view-mode-map (kbd <span class="string">"q"</span>)       'sshot-bury-all)
+(<span class="keyword">define-minor-mode</span> <a name="sshot-view-mode"><span class="function-name">sshot-view-mode</span></a>
+  <span class="doc">"Navigate through screenshots with &lt;left&gt; and &lt;right&gt;."</span>
+  nil <span class="string">" sshot-view"</span> sshot-view-mode-map)
+
+(<span class="keyword">defvar</span> <a name="sshot-this"><span class="variable-name">sshot-this</span></a>          nil)        <span class="comment-delimiter">; </span><span class="comment">like sshot-next
+</span>(<span class="keyword">defvar</span> <a name="sshot-view-prefix"><span class="variable-name">sshot-view-prefix</span></a>   nil)        <span class="comment-delimiter">; </span><span class="comment">like sshot-fname-prefix
+</span>(make-variable-buffer-local 'sshot-this)
+(make-variable-buffer-local 'sshot-view-prefix)
+
+(<span class="keyword">defun</span> <a name="sshot-message"><span class="function-name">sshot-message</span></a>    () <span class="doc">"sshot-view-mode - navigate with &lt;left&gt;, &lt;right&gt;, q"</span>)
+(<span class="keyword">defun</span> <a name="sshot-pn-to-fname"><span class="function-name">sshot-pn-to-fname</span></a> (p n) (format <span class="string">"%s_%03d.png"</span> p n))
+(<span class="keyword">defun</span> <a name="sshot-exists-p"><span class="function-name">sshot-exists-p</span></a>    (p n) (file-exists-p (sshot-pn-to-fname p n)))
+(<span class="keyword">defun</span> <a name="sshot-not-found"><span class="function-name">sshot-not-found</span></a>   (p n) (<span class="warning">error</span> <span class="string">"Not found: %s"</span> (sshot-pn-to-fname p n)))
+(<span class="keyword">defun</span> <a name="sshot-assert"><span class="function-name">sshot-assert</span></a>      (p n) (or (sshot-exists-p p n) (sshot-not-found p n)))
+(<span class="keyword">defun</span> <a name="sshot-open"><span class="function-name">sshot-open</span></a>        (p n) (sshot-assert p n)
+                               (find-file (sshot-pn-to-fname p n))
+                               (sshot-view-mode 1)
+                               (setq sshot-view-prefix p sshot-this n)
+                               (message (sshot-message)))
+(<span class="keyword">defun</span> <a name="sshot-open-prev"><span class="function-name">sshot-open-prev</span></a>      () (interactive)
+                               (sshot-open sshot-view-prefix (- sshot-this 1)))
+(<span class="keyword">defun</span> <a name="sshot-open-next"><span class="function-name">sshot-open-next</span></a>      () (interactive)
+                               (sshot-open sshot-view-prefix (+ sshot-this 1)))
+(<span class="keyword">defun</span> <a name="sshot-bury-all"><span class="function-name">sshot-bury-all</span></a>       () (interactive) (<span class="keyword">let</span> ((p sshot-view-prefix))
+                                (<span class="keyword">if</span> p (<span class="keyword">while</span> (equal p sshot-view-prefix)
+                                        (bury-buffer)))))
+(<span class="keyword">defun</span> <a name="find-sshot"><span class="function-name">find-sshot</span></a>        (p n) (sshot-open p n) (sshot-message))
+
+
+
+
+
+
+(<span class="keyword">provide</span> '<span class="constant">eev-sshot</span>)
+</pre>
+  </body>
+</html>

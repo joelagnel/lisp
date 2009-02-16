@@ -1,0 +1,70 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Refreshing%20the%20VC-state">Refreshing the VC-state</a>,
+Next:<a rel=next accesskey=n href="Adding-new-backends.html#Adding%20new%20backends">Adding new backends</a>,
+Previous:<a rel=previous accesskey=p href="Remote-repositories.html#Remote%20repositories">Remote repositories</a>,
+Up:<a rel=up accesskey=u href="Version-control-support.html#Version-control%20support">Version-control support</a>
+<hr><br>
+
+<h4>How to refresh ECB-state-display when changed outside</h4>
+
+<p>If all actions concerning version controlling of a file are performed
+within Emacs with commands offeres by VC then the displayed state for
+such a file in the tree-buffers of ECB will be always correct - in
+that sense that ECB will always display that state which the
+check-state-function for the file will return. At least with GNU Emacs
+for the backends CVS, RCS, SCCS and Subversion this will be true. With
+XEmacs only for CVS. For other backends see <a href="Adding-new-backends.html#Adding%20new%20backends">Adding new backends</a>.
+
+<p>But if the VC-state of a file will be changed outside of Emacs
+(unfortunately PCL-CVS must be called "outside" too because PCL-CVS
+doesn't use the functions of the VC-package of Emacs for checking-in
+or -out) then ECB can not automatically recognize this and therefore
+it can not aurtomatically update the displayed state-image-icon. You
+have to tell ECB for which files in the tree-buffers the VC-state
+should be recomputed. This can be done via the popup-menus of the
+ECB-tree-buffers - The following popup-commands are offered in the
+submenu "Version Control":
+
+<dl>
+<dt>ECB-directories-buffer (if sources are displayed within):
+<dd>"Recompute state for file" and "Recompute state for dir" whereas
+the latter one recomputes the VC-state for all files of that directory
+the file belongs. 
+<br><dt>ECB-sources-buffer
+<dd>"Recompute state for file" and "Recompute state for dir" whereas
+the latter one recomputes the VC-state for all files currently
+displayed in the sources-buffer. 
+<br><dt>ECB-history-buffer
+<dd>"Recompute state for file" and "Recompute state for whole history"
+whereas the latter one recomputes the VC-state for all file-entries currently
+displayed in the history-buffer. 
+</dl>
+
+<p><strong>Caution</strong>: The state will only recomputed right under all
+situations if you use either <code>ecb-vc-state</code> or
+<code>vc-recompute-state</code> as check-state-function in
+<code>ecb-vc-supported-backends</code> (see <a href="Checking-the-state.html#Checking%20the%20state">Checking the state</a>).
+
+<p>Of course all these commands update the VC-state in all visible
+tree-buffers the file is currently displayed (e.g. often a file is
+displayed in the sources- and the history-buffer)!
+
+<p>For general informations about the usage of popup-menus in ECB see
+<a href="Using-the-mouse.html#Using%20the%20mouse">Using the mouse</a> (subsection "The right mouse button").
+
+<p>In addition to these popup-commands using the POWER- rsp. Shift-click
+(see <a href="Using-the-mouse.html#Using%20the%20mouse">Using the mouse</a>) onto a directory in the directory-window of
+ECB refreshes the VC-state-values of all files contained in this
+directory too.
+
+</body></html>
+

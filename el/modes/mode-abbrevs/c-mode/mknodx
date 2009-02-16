@@ -1,0 +1,1 @@
+mknod(<field "const char *FILENAME">, <field "int MODE">, <field "int DEV">)<endpoint>

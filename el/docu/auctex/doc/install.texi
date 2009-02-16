@@ -1,0 +1,138 @@
+@chapter Installation of AUC @TeX{}
+@cindex Installation
+@cindex Make
+@cindex @file{Makefile}
+@cindex @file{.emacs}
+@cindex Site initialization
+@cindex Initialization
+@cindex @file{tex-site.el}
+@cindex Personal customization
+@cindex Site customization
+@cindex Customization
+@cindex Customization, personal
+@cindex Customization, site
+
+@section Compiling
+
+The following describes how to install AUC @TeX{} under Unix.  You may
+also be able to do use these instructions under some other operating
+systems, if you have already installed the proper GNU tools, such as
+@file{make}. 
+
+To install AUC @TeX{} for an entire site (which may just be your own
+personal Linux box), issue the following two commands as root:
+
+@example
+make 
+make lispdir=/usr/local/share/emacs/site-lisp install
+@end example
+
+except that instead of @t{/usr/local/...} you should use the location of
+your sites emacs installation.  AUC @TeX{} will then be installed in a
+subdirectory named @file{auctex} of the @file{site-lisp} directory, and
+the file @file{tex-site.el} will be stored directly in the
+@file{site-lisp}.  You can now tell your users to enable AUC @TeX{} by
+adding 
+
+@example
+(require 'tex-site)
+@end example
+
+to their @file{.emacs} file.
+
+If you use xemacs instead, or if your emacs binary is named something
+else than @file{emacs}, specify this by using the commands
+
+@example
+make EMACS=xemacs
+make lispdir=/usr/local/share/emacs/site-lisp install
+@end example
+
+to install.
+
+If you want to install AUC @TeX{} in your personal account, you should
+chose a directory for all your emacs add-ons, for example an
+@file{elisp} subdirectory in your home directory.  You can then install
+AUC @TeX{} with the commands
+
+@example
+make 
+make lispdir=$HOME/elisp install
+@end example
+
+You will then need to add the following lines to your @file{.emacs}
+file:
+
+@example
+(setq load-path (cons "~/elisp" load-path))
+(require 'tex-site)
+@end example
+
+@section Customizing
+
+Next, you should edit the file @file{tex-site.el} to fit your local
+site.  You do this by looking at the customization section in the
+beginning of @file{tex.el} and copy the definitions that are wrong for
+your site to @file{tex-site.el}.  Do @emph{not} edit @file{tex.el}
+directly, or you will have to do all the work over again when you
+upgrade AUC @TeX{}.  AUC @TeX{} will not overwrite your old
+@file{tex-site.el} file next time you install, so you will be able to
+keep all your customizations.
+
+There are two variables with a special significance.
+
+@defopt TeX-lisp-directory
+The directory where you want to install the AUC @TeX{} lisp files. 
+@end defopt
+
+This variable is set automatically by the @code{make install} command.
+If you don't issue a @code{make install}, for example if you don't want
+to install AUC @TeX{} in a different place, you will have to set this
+variable manually to the location of the compiled files.
+
+@defopt TeX-macro-global
+Directories containing the site's @TeX{} style files.
+@end defopt
+
+Normally, AUC @TeX{} will only allow you to complete a short list of
+built-in macros and environments and on the macros you define yourself.
+If you issue the @kbd{M-x TeX-auto-generate-global} command after
+loading AUC @TeX{}, you will be able to complete on all macros available
+in the standard style files used by your document.  To do this, you must
+set this variable to a list of directories where the standard style
+files are located.  The directories will be searched recursively, so
+there is no reason to list subsirectories explicitly.
+
+You probably also need to change @code{TeX-command-list} to make sure
+that the commands used for starting @TeX{}, printing, etc. work on your
+system.  Copy the definition from @file{tex.el} to @file{tex-site.el}
+and edit the command names appropriately.
+@vindex TeX-command-list
+
+Finally, copy and edit @code{TeX-printer-list} to contain the printers
+available at your site.
+@vindex TeX-printer-list
+
+To extract information from your sites @TeX{} macros, type @kbd{M-x
+TeX-auto-generate-global} in your emacs.  This will only work if you
+have set @code{TeX-macro-global} correctly in @file{tex-site.el}.
+
+@section Contributed files
+
+There are several files that are not part of AUC @TeX{} proper, but
+included in the distribution in case they are useful.  
+
+@table @file
+@item hilit-LaTeX.el
+Better highlighting for the obsolete @file{hilit19} package.
+
+@item bib-cite.el
+Better support for bibliographies and much more.
+
+@item tex-jp.el
+Support for Japanese.
+
+@end table
+
+Read the comments in the start of each file for more information about
+how to install, what they do, and who wrote and maintains them.

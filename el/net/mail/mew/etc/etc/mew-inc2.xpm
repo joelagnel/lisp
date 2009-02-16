@@ -1,0 +1,40 @@
+/* XPM */
+/*
+ * Copyright (C) 1997 Yoshiaki Kasahara <kasahara@nc.kyushu-u.ac.jp>
+ * Copyright (C) 1997 Kazu Yamamoto <kazu@Mew.org>
+ * Copyright notice is the same as Mew's one.
+ */
+static char * mew_inc2_xpm[] = {
+"28 28 4 1",
+" 	s backgroundToolBarColor	c None",
+".	c black",
+"X	c Gray60",
+"o	c white",
+"                            ",
+"                            ",
+"          ..............    ",
+"         .XXX..X.X.ooooo.   ",
+"        .XXXXXX.XXX.ooooo.  ",
+"        .XXXXXX.....ooooo.  ",
+"       .XXXXXX.X.   .o...o. ",
+"       .XXXXXX.X.....ooooo. ",
+"   ... .XXXXXX.XXXX..o...o. ",
+"   ..  .XXXXXX.XXX.o.oo.oo. ",
+"  ...  .XXXXXX.XX.oo.oo.oo. ",
+"  ...  .XXXXXX.X.ooo.oo.oo. ",
+"  ...  .XXXXXX..oo...ooooo. ",
+" ..... .XXXXXX.o..oo.ooooo. ",
+"  ...  .XXXXX...oooo.ooooo. ",
+"   .   .XXXXX........ooo... ",
+"     ...................    ",
+"   ..oooooooooooooo..       ",
+"  .oooooooooooooo...        ",
+"  .ooo..oooooo.....         ",
+"   ................         ",
+"              .....         ",
+"    ...  .            .     ",
+"   .   . ...   .   .. . .   ",
+"   .     .  . . . .   ..    ",
+"   .     .  . ... .   ..    ",
+"   .   . .  . .   .   . .   ",
+"    ...  .  .  ..  .. . .   "};

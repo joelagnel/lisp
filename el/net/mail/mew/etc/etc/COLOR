@@ -1,0 +1,5 @@
+#000000000000 c black
+#FFFFFFFFFFFF c white
+/* Gray75 */
+#BEFBBEFBBEFB s backgroundToolBarColor	c None
+#9A699A699A69 c Gray60

@@ -1,0 +1,34 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Filtering%20Directories">Filtering Directories</a>,
+Next:<a rel=next accesskey=n href="Filtering-Sources.html#Filtering%20Sources">Filtering Sources</a>,
+Previous:<a rel=previous accesskey=p href="Filtering-the-tree-buffers.html#Filtering%20the%20tree-buffers">Filtering the tree-buffers</a>,
+Up:<a rel=up accesskey=u href="Filtering-the-tree-buffers.html#Filtering%20the%20tree-buffers">Filtering the tree-buffers</a>
+<hr><br>
+
+<h4>Applying filters to the Directories-buffer</h4>
+
+<p>With the option <code>ecb-excluded-directories-regexps</code> certain
+directories can be excluded from being displayed in the
+directories-browser of ECB. This can be done by defining regular
+expressions. If the name of a directory matches at least one of the
+regexps of this option the directory is not displayed in the
+directories-tree-buffer.
+
+<p>The option <code>ecb-sources-exclude-cvsignore</code> allows to exclude
+source-files from the sources-tree-buffer if their name is listed in a
+so called <code>.cvsignore</code>-file. This option is a list of regular
+expressions and if a directory-name matches at least one of these
+regexps then all files listed in the <code>.cvsignore</code>-file of this
+directory are not displayed in the sources-tree-buffer.
+
+</body></html>
+

@@ -1,0 +1,759 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>htmlize-eev.el (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #b0c4de;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .doc {
+      }
+      .eev-glyph-face-bang {
+        /* eev-glyph-face-bang */
+        color: #0000ff;
+        background-color: #ff0000;
+      }
+      .eev-glyph-face-blue {
+        /* eev-glyph-face-blue */
+        color: #0000ff;
+      }
+      .eev-glyph-face-bluebg {
+        /* eev-glyph-face-bluebg */
+        background-color: #0000ff;
+      }
+      .eev-glyph-face-green {
+        /* eev-glyph-face-green */
+        color: #00ff00;
+      }
+      .eev-glyph-face-red {
+        /* eev-glyph-face-red */
+        color: #ff0000;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .negation-char {
+      }
+      .regexp-grouping-backslash {
+      }
+      .regexp-grouping-construct {
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #98fb98;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #ffc0cb;
+        font-weight: bold;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;; </span><span class="comment">htmlize-eev.el - htmlize files containing glyphs and elisp hyperlinks.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Copyright (C) 2004, 2005 Free Software Foundation, Inc.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">This file is part of GNU eev.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is free software; you can redistribute it and/or modify
+</span><span class="comment-delimiter">;; </span><span class="comment">it under the terms of the GNU General Public License as published by
+</span><span class="comment-delimiter">;; </span><span class="comment">the Free Software Foundation; either version 2, or (at your option)
+</span><span class="comment-delimiter">;; </span><span class="comment">any later version.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU eev is distributed in the hope that it will be useful,
+</span><span class="comment-delimiter">;; </span><span class="comment">but WITHOUT ANY WARRANTY; without even the implied warranty of
+</span><span class="comment-delimiter">;; </span><span class="comment">MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+</span><span class="comment-delimiter">;; </span><span class="comment">GNU General Public License for more details.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">You should have received a copy of the GNU General Public License
+</span><span class="comment-delimiter">;; </span><span class="comment">along with GNU Emacs; see the file COPYING.  If not, write to the
+</span><span class="comment-delimiter">;; </span><span class="comment">Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+</span><span class="comment-delimiter">;; </span><span class="comment">Boston, MA 02111-1307, USA.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Author:     Eduardo Ochs &lt;<a href="mailto:eduardoochs&#64;gmail.com">eduardoochs&#64;gmail.com</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Maintainer: Eduardo Ochs &lt;<a href="mailto:eduardoochs&#64;gmail.com">eduardoochs&#64;gmail.com</a>&gt;
+</span><span class="comment-delimiter">;; </span><span class="comment">Version:    2006nov13
+</span><span class="comment-delimiter">;; </span><span class="comment">Keywords:   e-scripts, glyphs, html, hyperlinks
+</span>
+<span class="comment-delimiter">;;; </span><span class="comment">Commentary:
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">WARNING! WARNING! This file was put up in a hurry to generate the
+</span><span class="comment-delimiter">;; </span><span class="comment">html files in the eev package - it is not intended for public
+</span><span class="comment-delimiter">;; </span><span class="comment">consumption (yet!) and it may depend on functions that you don't
+</span><span class="comment-delimiter">;; </span><span class="comment">have because they are only in my .emacs, and on features that are
+</span><span class="comment-delimiter">;; </span><span class="comment">only on CVS GNU Emacs.
+</span>
+<span class="comment-delimiter">;; <a href="../.emacs.html#emacs-ascii-screenshots">(find-angg ".emacs" "emacs-ascii-screenshots")</a></span><span class="comment">
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el
+</span>(<span class="keyword">require</span> '<span class="constant">htmlize</span>)
+(<span class="keyword">require</span> '<span class="constant">jit-lock</span>)
+
+
+<span class="comment-delimiter">;; </span><span class="comment">This is just for eev-ttp.el, I think...
+</span><span class="comment-delimiter">;; <a href="../.emacs.html#modes-safe-local">(find-angg ".emacs" "modes-safe-local")</a></span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(put 'modes 'safe-local-variable 'listp)
+
+
+
+
+<span class="comment-delimiter">;;;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Some basic tools
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;;;;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="ee-kill-buffer"><span class="function-name">ee-kill-buffer</span></a> (buffer-or-name <span class="type">&amp;rest</span> rest)
+  <span class="doc">"For each BUFFER-OR-NAME in the list of arguments kills it if it exists"</span>
+  (<span class="keyword">if</span> (get-buffer buffer-or-name) (kill-buffer buffer-or-name))
+  (<span class="keyword">if</span> rest (apply 'ee-kill-buffer rest)))
+
+(<span class="keyword">defun</span> <a name="my-replace-regexps-with-inheritance"><span class="function-name">my-replace-regexps-with-inheritance</span></a> (regexp to <span class="type">&amp;rest</span> rest)
+  (<span class="keyword">save-excursion</span>
+    (<span class="keyword">while</span> (re-search-forward regexp nil 'no-error)
+      (replace-match to 'fixedcase nil)))
+  (<span class="keyword">if</span> rest (apply 'my-replace-regexps-with-inheritance rest)))
+
+(<span class="keyword">defun</span> <a name="my-replace-strings-with-inheritance"><span class="function-name">my-replace-strings-with-inheritance</span></a> (from to <span class="type">&amp;rest</span> rest)
+  (<span class="keyword">save-excursion</span>
+    (<span class="keyword">while</span> (search-forward from nil 'no-error)
+      (delete-region (match-beginning 0) (match-end 0))
+      (insert-and-inherit to))))
+
+(<span class="keyword">defun</span> <a name="my-replace-strings"><span class="function-name">my-replace-strings</span></a> (from to <span class="type">&amp;rest</span> rest)
+  (<span class="keyword">save-excursion</span>
+    (<span class="keyword">while</span> (search-forward from nil 'no-error)
+      (delete-region (match-beginning 0) (match-end 0))
+      (insert to))))
+
+
+
+<span class="comment-delimiter">;;;        </span><span class="comment">_             _         
+</span><span class="comment-delimiter">;;;   </span><span class="comment">__ _| |_   _ _ __ | |__  ___ 
+</span><span class="comment-delimiter">;;;  </span><span class="comment">/ _` | | | | | '_ \| '_ \/ __|
+</span><span class="comment-delimiter">;;; </span><span class="comment">| (_| | | |_| | |_) | | | \__ \
+</span><span class="comment-delimiter">;;;  </span><span class="comment">\__, |_|\__, | .__/|_| |_|___/
+</span><span class="comment-delimiter">;;;  </span><span class="comment">|___/   |___/|_|              
+</span><span class="comment-delimiter">;;;</span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">Dealing with glyphs - for example, converting ^Os to (real) red stars
+</span>
+(<span class="keyword">defun</span> <a name="ee-faceid-to-face"><span class="function-name">ee-faceid-to-face</span></a> (faceid facelist)
+  (<span class="keyword">if</span> facelist
+      (<span class="keyword">if</span> (= faceid (face-id (car facelist)))
+          (car facelist)
+        (ee-faceid-to-face faceid (cdr facelist)))))
+
+(<span class="keyword">defun</span> <a name="glyphs-faceglyph-to-facechar"><span class="function-name">glyphs-faceglyph-to-facechar</span></a> (code)
+  <span class="doc">"Convert a character associated to a glyph to a propertized string.
+CODE is an integer - the code of the character (e.g. 15 for ^O)."</span>
+  (<span class="keyword">let*</span> ((n (aref (aref standard-display-table code) 0))
+         (faceid (ash n -19))
+         (face (ee-faceid-to-face faceid (face-list)))
+         (char (logand n 524287))
+         (charstr (format <span class="string">"%c"</span> char)))
+    (add-text-properties 0 1 (list 'face face) charstr)
+    charstr))
+
+(<span class="keyword">defun</span> <a name="my-replace-glyphs"><span class="function-name">my-replace-glyphs</span></a> (<span class="type">&amp;optional</span> glyphsstr)
+  (or glyphsstr (setq glyphsstr <span class="string">"</span><span class="eev-glyph-face-bluebg"> </span><span class="string">\f</span><span class="eev-glyph-face-blue">M</span><span class="eev-glyph-face-red">*</span><span class="eev-glyph-face-bang">!</span><span class="eev-glyph-face-green">&#171;&#187;</span><span class="string">"</span>)) <span class="comment-delimiter">; </span><span class="comment">nil means use the default list
+</span>  (<span class="keyword">if</span> (&gt; (length glyphsstr) 0)
+      (<span class="keyword">let*</span> ((code      (aref glyphsstr 0))
+             (firstchar (substring glyphsstr 0 1))
+             (rest      (substring glyphsstr 1 nil))
+             (unglyphstr (glyphs-faceglyph-to-facechar code)))
+        (my-replace-strings firstchar unglyphstr)
+        (my-replace-glyphs  (substring glyphsstr 1 nil)))))
+
+
+
+
+<span class="comment-delimiter">;;;                        </span><span class="comment">_ _       _        
+</span><span class="comment-delimiter">;;;  </span><span class="comment">___  _____  ___ __   | (_)_ __ | | _____ 
+</span><span class="comment-delimiter">;;; </span><span class="comment">/ __|/ _ \ \/ / '_ \  | | | '_ \| |/ / __|
+</span><span class="comment-delimiter">;;; </span><span class="comment">\__ \  __/&gt;  &lt;| |_) | | | | | | |   &lt;\__ \
+</span><span class="comment-delimiter">;;; </span><span class="comment">|___/\___/_/\_\ .__/  |_|_|_| |_|_|\_\___/
+</span><span class="comment-delimiter">;;;               </span><span class="comment">|_|                         
+</span><span class="comment-delimiter">;;; </span><span class="comment">htmlizing elisp hyperlinks
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">variables used by the functions that htmlize elisp hyperlinks.
+</span><span class="comment-delimiter">;; </span><span class="comment">We use dynamic scoping here: sometimes we make them local with
+</span><span class="comment-delimiter">;; </span><span class="comment">`</span><span class="comment"><span class="constant">let</span></span><span class="comment">' and then some subfunction will set them.
+</span>
+(<span class="keyword">defvar</span> <a name="eeh-text"><span class="variable-name">eeh-text</span></a>   <span class="string">"(text bar)"</span>)        <span class="comment-delimiter">; </span><span class="comment">overridden by `</span><span class="comment"><span class="constant">let</span></span><span class="comment">'s
+</span>(<span class="keyword">defvar</span> <a name="eeh-sexp"><span class="variable-name">eeh-sexp</span></a>   '(sexp bar))         <span class="comment-delimiter">; </span><span class="comment">overridden by `</span><span class="comment"><span class="constant">let</span></span><span class="comment">'s
+</span>(<span class="keyword">defvar</span> <a name="eeh-target"><span class="variable-name">eeh-target</span></a> <span class="string">"http://url/bar"</span>)    <span class="comment-delimiter">; </span><span class="comment">overridden by `</span><span class="comment"><span class="constant">let</span></span><span class="comment">'s
+</span>(<span class="keyword">defvar</span> <a name="eeh-html"><span class="variable-name">eeh-html</span></a>   <span class="string">"&lt;it&gt;(foo bar not converted)&lt;/it&gt;"</span>) <span class="comment-delimiter">; </span><span class="comment">same
+</span>
+
+<span class="comment-delimiter">;; </span><span class="comment">modified hyperlink functions - these return either nil (meaning "do
+</span><span class="comment-delimiter">;; </span><span class="comment">not htmlize in any special way"), or a target for a html hyperlink;
+</span><span class="comment-delimiter">;; </span><span class="comment">for the really special cases - like inlined images - these
+</span><span class="comment-delimiter">;; </span><span class="comment">functions change the variable `</span><span class="comment"><span class="constant">eeh-html</span></span><span class="comment">' and put the resulting html
+</span><span class="comment-delimiter">;; </span><span class="comment">there; when `</span><span class="comment"><span class="constant">eeh-html</span></span><span class="comment">' is non-nil this overrides the target and all
+</span><span class="comment-delimiter">;; </span><span class="comment">the rest.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Hyperlinks to plain files and to files with anchors
+</span><span class="comment-delimiter">;; <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "File Name Expansion" "Function: file-relative-name")</a></span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eeh-find-anchor"><span class="function-name">eeh-find-anchor</span></a> (fname <span class="type">&amp;optional</span> anchor <span class="type">&amp;rest</span> rest)
+  (concat (file-relative-name fname)
+          <span class="string">".html"</span>
+          (<span class="keyword">if</span> anchor (format <span class="string">"#%s"</span> anchor) <span class="string">""</span>)))
+
+(<span class="keyword">defun</span> <a name="eeh-find-eev"><span class="function-name">eeh-find-eev</span></a> (fname <span class="type">&amp;optional</span> anchor <span class="type">&amp;rest</span> rest)
+  (eeh-find-anchor (ee-eevfile fname) anchor))
+(<span class="keyword">defun</span> <a name="eeh-find-eevex"><span class="function-name">eeh-find-eevex</span></a> (fname <span class="type">&amp;optional</span> anchor <span class="type">&amp;rest</span> rest)
+  (eeh-find-anchor (ee-eevexfile fname) anchor))
+(<span class="keyword">defun</span> <a name="eeh-find-angg"><span class="function-name">eeh-find-angg</span></a> (fname <span class="type">&amp;optional</span> anchor <span class="type">&amp;rest</span> rest)
+  (eeh-find-anchor (ee-anggfile fname) anchor))
+
+(<span class="keyword">defun</span> <a name="eeh-find-eevfile"><span class="function-name">eeh-find-eevfile</span></a> (fname <span class="type">&amp;rest</span> rest)
+  (file-relative-name (ee-eevfile fname)))
+(<span class="keyword">defun</span> <a name="eeh-find-eevexfile"><span class="function-name">eeh-find-eevexfile</span></a> (fname <span class="type">&amp;rest</span> rest)
+  (file-relative-name (ee-eevexfile fname)))
+(<span class="keyword">defun</span> <a name="eeh-find-anggfile"><span class="function-name">eeh-find-anggfile</span></a> (fname <span class="type">&amp;rest</span> rest)
+  (file-relative-name (ee-anggfile fname)))
+
+<span class="comment-delimiter">;; </span><span class="comment">Hyperlinks to images
+</span><span class="comment-delimiter">;; <a href="README.html">(find-eevfile "README.html")</a></span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eeh-find-eimage0"><span class="function-name">eeh-find-eimage0</span></a> (fname <span class="type">&amp;optional</span> nlines nchars perc <span class="type">&amp;rest</span> ignore)
+<span class="doc">"Htmlize hyperlinks to images. Supports inlining and scaling.
+NLINES and NCHARS are ignored, PERC controls whether to inline or scale.
+Examples (try with \\[</span><span class="doc"><span class="constant">eeh-1flash</span></span><span class="doc">]):\n
+  (find-eimage0 \"doc/shot-f3.png\")
+    -&gt; just a link to the image\n
+  (find-eimage0 \"doc/shot-f3.png\" nil nil 'anything-not-nil-or-string)
+    -&gt; \"&lt;img src=\"doc/shot-f3.png\" border=0&gt;\"\n
+  (find-eimage0 \"doc/shot-f3.png\" nil nil \"40%\")
+    -&gt; &lt;a href=\"doc/shot-f3.png\"&gt;
+       &lt;img src=\"doc/shot-f3.png\" width=\"40%\" height=\"40%\" border=0&gt;
+       &lt;/a&gt;"</span>
+  (<span class="keyword">cond</span> ((null perc) fname)             <span class="comment-delimiter">; </span><span class="comment">nil:   no inline image, just the link
+</span>        ((stringp perc)                 <span class="comment-delimiter">; </span><span class="comment">"nn%": inline a miniature,
+</span>         (setq eeh-html                 <span class="comment-delimiter">;        </span><span class="comment">link to full image
+</span>               (format (concat
+                        <span class="string">"&lt;a href=\"%s\"&gt;"</span>
+                        <span class="string">"&lt;img src=\"%s\" width=\"%s\" height=\"%s\" border=0&gt;"</span>
+                        <span class="string">"&lt;/a&gt;"</span>)
+                       fname fname perc perc)))
+        (t (setq eeh-html (format <span class="string">"&lt;img src=\"%s\" border=0&gt;"</span> fname)))))
+
+<span class="comment-delimiter">;; </span><span class="comment">Hyperlinks to info nodes
+</span>
+(<span class="keyword">defun</span> <a name="eeh-info-dash"><span class="function-name">eeh-info-dash</span></a> (url node)
+  (concat url (replace-regexp-in-string <span class="string">"[ &amp;&lt;&gt;/]"</span> <span class="string">"-"</span> node) <span class="string">".html"</span>))
+
+(<span class="keyword">defun</span> <a name="eeh-info"><span class="function-name">eeh-info</span></a> (manual-and-node)
+  <span class="doc">"Htmlize some hyperlinks to info nodes.
+Examples: (eeh-info \"(emacs)Lisp Eval\")
+          (eeh-info \"(elisp)Scope\")
+          (eeh-info \"(eintr)Buffer Names\")"</span>
+  (<span class="keyword">if</span> (string-match <span class="string">"^(</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[</span><span class="string"><span class="negation-char">^</span></span><span class="string">()]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">)</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span> manual-and-node)
+      (<span class="keyword">let</span> ((manual (match-string 1 manual-and-node))
+            (node   (match-string 2 manual-and-node)))
+        (<span class="keyword">cond</span>
+         ((equal manual <span class="string">"emacs"</span>)
+          (eeh-info-dash <span class="string">"http://www.gnu.org/software/emacs/manual/html_node/"</span> node))
+         ((equal manual <span class="string">"elisp"</span>)
+          <span class="string">"http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html"</span>)
+         ((member manual '(<span class="string">"eintr"</span> <span class="string">"elintro"</span>))
+          (eeh-info-dash <span class="string">"http://www.gnu.org/software/emacs/emacs-lisp-intro/html_node/"</span> node))))))
+
+(<span class="keyword">defun</span> <a name="eeh-find-node"><span class="function-name">eeh-find-node</span></a> (node <span class="type">&amp;rest</span> rest)
+  (eeh-info node))
+(<span class="keyword">defun</span> <a name="eeh-find-enode"><span class="function-name">eeh-find-enode</span></a> (node <span class="type">&amp;rest</span> rest)
+  (eeh-info (format <span class="string">"(emacs)%s"</span> node)))
+(<span class="keyword">defun</span> <a name="eeh-find-elnode"><span class="function-name">eeh-find-elnode</span></a> (node <span class="type">&amp;rest</span> rest)
+  (eeh-info (format <span class="string">"(elisp)%s"</span> node)))
+(<span class="keyword">defun</span> <a name="eeh-find-elinode"><span class="function-name">eeh-find-elinode</span></a> (node <span class="type">&amp;rest</span> rest)
+  (eeh-info (format <span class="string">"(eintr)%s"</span> node)))
+
+<span class="comment-delimiter">;; </span><span class="comment">Hyperlinks to swf animations
+</span>
+(<span class="keyword">defun</span> <a name="eeh-find-eevanim"><span class="function-name">eeh-find-eevanim</span></a> (fname width height <span class="type">&amp;rest</span> rest)
+  (setq eeh-html (ee-swf-html-embed fname width height)))
+
+<span class="comment-delimiter">;; </span><span class="comment">Take a hyperlink sexp or its textual representation and call the
+</span><span class="comment-delimiter">;; </span><span class="comment">modified hyperlink functions to obtain its htmlization
+</span>
+(<span class="keyword">defvar</span> <a name="eeh-functions"><span class="variable-name">eeh-functions</span></a> nil)
+(setq eeh-functions
+      '((find-eimage0   . eeh-find-eimage0)
+        (find-eev       . eeh-find-eev)
+        (find-eevfile   . eeh-find-eevfile)
+        (find-eevex     . eeh-find-eevex)
+        (find-eevexfile . eeh-find-eevexfile)
+        (find-angg      . eeh-find-angg)
+        (find-anggfile  . eeh-find-anggfile)
+        (info           . eeh-info)
+        (find-node      . eeh-find-node)
+        (find-enode     . eeh-find-enode)
+        (find-elnode    . eeh-find-elnode)
+        (find-eevanim   . eeh-find-eevanim)
+        ))
+
+(<span class="keyword">defun</span> <a name="eeh-sexp-to-html"><span class="function-name">eeh-sexp-to-html</span></a> (sexp)
+  <span class="doc">"Take a hyperlink sexp and htmlize it."</span>
+  (<span class="keyword">let*</span> ((eeh-target nil)
+         (eeh-html nil)
+         (f     (car sexp))
+         (eeh-f (cdr (assoc f eeh-functions))))
+    (<span class="keyword">if</span> eeh-f (setq eeh-target (apply eeh-f (cdr sexp))))
+    (or eeh-html
+        (<span class="keyword">if</span> eeh-target
+            (format <span class="string">"&lt;a href=\"%s\"&gt;%s&lt;/a&gt;"</span> eeh-target eeh-text)
+          eeh-text))))
+
+(<span class="keyword">defun</span> <a name="eeh-text-to-html"><span class="function-name">eeh-text-to-html</span></a> (text)
+  <span class="doc">"Take the textual representation of a hyperlink sexp and htmlize it.
+This function invokes `</span><span class="doc"><span class="constant">eeh-sexp-to-html</span></span><span class="doc">', which in its turn uses
+the table `</span><span class="doc"><span class="constant">eeh-functions</span></span><span class="doc">' to pass the control to the modified
+hyperlink functions (find-node -&gt; eeh-find-node, etc); we use
+variables with dynamic scoping to make the definitions of the
+modified hyperlink functions shorter."</span>
+  (<span class="keyword">let</span> ((eeh-text text)
+        (eeh-sexp (read text)))
+    (eeh-sexp-to-html eeh-sexp)))
+
+<span class="comment-delimiter">;; </span><span class="comment">Htmlize all the elisp hyperlinks at once, and some debugging functions.
+</span><span class="comment-delimiter">;; </span><span class="comment">We do this in two separate steps to overcome limitations of htmlize.el.
+</span><span class="comment-delimiter">;; <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-elnode "Regexp Backslash" "shy group")</a></span><span class="comment">
+</span>
+(<span class="keyword">defvar</span> <a name="eeh-regexp-no-space"><span class="variable-name">eeh-regexp-no-space</span></a>  <span class="string">"^</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">;;</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">#</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string"> +</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">(find-[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\n]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span>)
+(<span class="keyword">defvar</span> <a name="eeh-regexp-space"><span class="variable-name">eeh-regexp-space</span></a> <span class="string">"^</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">;;</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">#</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string"> </span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string"> +</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">(find-[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\n]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span>)
+(<span class="keyword">defvar</span> <a name="eeh-regexp"><span class="variable-name">eeh-regexp</span></a> eeh-regexp-space)
+(<span class="keyword">defvar</span> <a name="eeh-regexp-sexp-n"><span class="variable-name">eeh-regexp-sexp-n</span></a> 2)
+(<span class="keyword">defvar</span> <a name="eeh-pairs"><span class="variable-name">eeh-pairs</span></a> nil)
+(<span class="keyword">defvar</span> <a name="eeh-n"><span class="variable-name">eeh-n</span></a> 0)
+
+(<span class="keyword">defun</span> <a name="eeh-flash"><span class="function-name">eeh-flash</span></a> ()
+  <span class="doc">"Show which hyperlink sexps after point will be processed"</span>
+  (interactive)
+  (<span class="keyword">save-excursion</span>
+    (<span class="keyword">while</span> (re-search-forward eeh-regexp nil t)
+      (<span class="keyword">let*</span> ((b (match-beginning eeh-regexp-sexp-n))
+             (e (match-end       eeh-regexp-sexp-n)))
+        (eeflash b e)))))
+
+(<span class="keyword">defun</span> <a name="eeh-1flash"><span class="function-name">eeh-1flash</span></a> ()
+  <span class="doc">"Show the next hyperlink sexp after point and how will be htmlized"</span>
+  (interactive)
+  (<span class="keyword">if</span> (re-search-forward eeh-regexp nil t)
+      (<span class="keyword">let*</span> ((b (match-beginning eeh-regexp-sexp-n))
+             (e (match-end       eeh-regexp-sexp-n))
+             (str (buffer-substring-no-properties b e)))
+        (eeflash b e)
+        (message <span class="string">"%s"</span> (eeh-text-to-html str)))))
+  
+(<span class="keyword">defun</span> <a name="eeh-encode-sexps"><span class="function-name">eeh-encode-sexps</span></a> ()
+  <span class="doc">"Transform all the htmlizable hyperlink sexps after point into \"@nn@\"s"</span>
+  (interactive)
+  (setq eeh-pairs nil)
+  (setq eeh-n 0)
+  (<span class="keyword">while</span> (re-search-forward eeh-regexp nil t)
+    (<span class="keyword">let*</span> ((b (match-beginning eeh-regexp-sexp-n))
+           (e (match-end       eeh-regexp-sexp-n))
+           (str (buffer-substring-no-properties b e))
+           (html (eeh-text-to-html str)))
+      (<span class="keyword">when</span> (not (equal str html))
+        (setq eeh-n (1+ eeh-n))
+        (<span class="keyword">let</span> ((newstr (format <span class="string">"@%d@"</span> eeh-n)))
+          (delete-region b e)
+          (insert-and-inherit newstr)
+          (setq eeh-pairs `((,newstr . ,html) . ,eeh-pairs)))))))
+
+(<span class="keyword">defun</span> <a name="eeh-unencode-sexps"><span class="function-name">eeh-unencode-sexps</span></a> ()
+<span class="doc">"Transform all the \"@nn@\"s after point into the corresponding htmlized sexps"</span>
+  (interactive)
+  (<span class="keyword">let</span> ((pairs-left (reverse eeh-pairs)))
+    (<span class="keyword">while</span> pairs-left
+      (<span class="keyword">let*</span> ((encstr (caar pairs-left))
+             (html   (cdar pairs-left)))
+        (search-forward encstr)
+        (delete-region (match-beginning 0) (match-end 0))
+        (insert-and-inherit html)
+        (setq pairs-left (cdr pairs-left))))))
+
+
+
+
+<span class="comment-delimiter">;;;  </span><span class="comment">_     _             _ _           _            __  __               
+</span><span class="comment-delimiter">;;; </span><span class="comment">| |__ | |_ _ __ ___ | (_)_______  | |__  _   _ / _|/ _| ___ _ __ ___ 
+</span><span class="comment-delimiter">;;; </span><span class="comment">| '_ \| __| '_ ` _ \| | |_  / _ \ | '_ \| | | | |_| |_ / _ \ '__/ __|
+</span><span class="comment-delimiter">;;; </span><span class="comment">| | | | |_| | | | | | | |/ /  __/ | |_) | |_| |  _|  _|  __/ |  \__ \
+</span><span class="comment-delimiter">;;; </span><span class="comment">|_| |_|\__|_| |_| |_|_|_/___\___| |_.__/ \__,_|_| |_|  \___|_|  |___/
+</span><span class="comment-delimiter">;;;                                                                      </span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">htmlize full buffers
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">font-lock-support-mode
+</span>
+(<span class="keyword">defun</span> <a name="my-fontify-whole-buffer"><span class="function-name">my-fontify-whole-buffer</span></a> ()
+  <span class="doc">"Fontify the whole buffer. BTW, it took me *ages* to discover how to do this."</span>
+  (interactive)
+  (font-lock-mode 1)
+  (jit-lock-fontify-now))
+
+(<span class="keyword">defun</span> <a name="some-extra-replacements"><span class="function-name">some-extra-replacements</span></a> ()
+  (interactive)
+  (my-replace-regexps-with-inheritance  
+   (concat <span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">&lt;span class=\"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">function</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">variable</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">-name\"&gt;</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span>
+           <span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">[-_A-Za-z0-9]+</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span>
+           <span class="string">"</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">&lt;/span&gt;</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">"</span>)
+   <span class="string">"&lt;a name=\"\\3\"&gt;\\1\\3\\4&lt;/a&gt;"</span>))
+
+(<span class="keyword">defun</span> <a name="my-htmlize-buffer"><span class="function-name">my-htmlize-buffer</span></a> (<span class="type">&amp;optional</span> bufname glyphsstr)
+  (interactive)
+  (or bufname (setq bufname (buffer-name)))
+  (<span class="keyword">let</span> ((ee-buffer-name (concat bufname <span class="string">" (htmlized)"</span>)))
+    (find-estring (buffer-substring (point-min) (point-max)))
+    (kill-region (point-min) (point-max)) <span class="comment-delimiter">; </span><span class="comment">for converting classes to props
+</span>    (yank))
+  (ee-kill-buffer (concat bufname <span class="string">".html"</span>))
+  <span class="comment-delimiter">;;</span><span class="comment">
+</span>  <span class="comment-delimiter">;; </span><span class="comment">Now we're in a temporary buffer called "bufname (htmlized)";
+</span>  <span class="comment-delimiter">;; </span><span class="comment">mode is fundamental-mode
+</span>  <span class="comment-delimiter">;;</span><span class="comment">
+</span>  (goto-char (point-min))
+  (my-replace-glyphs glyphsstr)         <span class="comment-delimiter">; </span><span class="comment">transform glyphs into normal chars
+</span>  (eeh-encode-sexps)                    <span class="comment-delimiter">; </span><span class="comment">hack for htmlizing elisp hyperlinks
+</span>  (switch-to-buffer (htmlize-buffer))   <span class="comment-delimiter">; </span><span class="comment">ask htmlize.el to do its magic
+</span>  <span class="comment-delimiter">;;</span><span class="comment">
+</span>  <span class="comment-delimiter">;; </span><span class="comment">Now we're in a temporary buffer called "bufname.html"
+</span>  <span class="comment-delimiter">;;</span><span class="comment">
+</span>  (goto-char (point-min))
+  (some-extra-replacements)             <span class="comment-delimiter">; </span><span class="comment">make some anchors
+</span>  (eeh-unencode-sexps)                  <span class="comment-delimiter">; </span><span class="comment">hack for elisp hyperlinks, part 2
+</span>  )
+
+(<span class="keyword">defun</span> <a name="my-htmlize-this-file"><span class="function-name">my-htmlize-this-file</span></a> (<span class="type">&amp;optional</span> glyphsstr)
+  (interactive)
+  (<span class="keyword">let</span> ((bufname (file-name-nondirectory (buffer-file-name))))
+    <span class="comment-delimiter">;; </span><span class="comment">^ because we don't want names like README&lt;2&gt;
+</span>    (my-fontify-whole-buffer)
+    (my-htmlize-buffer bufname glyphsstr)
+    (write-file (concat bufname <span class="string">".html"</span>))))
+
+<span class="comment-delimiter">;; </span><span class="comment">(find-sh0 "cp -v ~/eev-current/README /tmp/")
+</span><span class="comment-delimiter">;; </span><span class="comment">"^\\(;;\\|#\\| \\) +\\((find-[</span><span class="comment"><span class="negation-char">^</span></span><span class="comment">\n]+\\)"
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">(find-efaces)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-ecolors)
+</span><span class="comment-delimiter">;; <a href="http://www.gnu.org/software/emacs/elisp-manual/html_node/elisp_toc.html">(find-node "(elisp)Face Attributes")</a></span><span class="comment">
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">(my-outline-colors)
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>(<span class="keyword">defun</span> <a name="my-outline-colors"><span class="function-name">my-outline-colors</span></a> ()
+  (interactive)
+  (<span class="keyword">require</span> '<span class="constant">outline</span>)
+  (set-face-foreground 'outline-1 <span class="string">"OrangeRed"</span>)
+  (set-face-foreground 'outline-2 <span class="string">"Goldenrod2"</span>)
+  (set-face-foreground 'outline-3 <span class="string">"LimeGreen"</span>)
+  (set-face-foreground 'outline-4 <span class="string">"Dodger Blue"</span>))
+
+(<span class="keyword">defun</span> <a name="change-log-mode-face-hack"><span class="function-name">change-log-mode-face-hack</span></a> ()
+  <span class="doc">"Because htmlize.el doesn't follow inherits in faces."</span>
+  (<span class="keyword">require</span> '<span class="constant">add-log</span>)
+  (mapc (<span class="keyword">lambda</span> (face)
+          (set-face-foreground
+           face
+           (face-attribute face <span class="builtin">:foreground</span> nil 'default)))
+        '(change-log-date-face
+          change-log-email-face
+          change-log-file-face
+          change-log-function-face
+          change-log-list-face
+          change-log-name-face)))
+
+
+<span class="comment-delimiter">;;;                  </span><span class="comment">_       
+</span><span class="comment-delimiter">;;;  </span><span class="comment">_ __ ___   __ _(_)_ __  
+</span><span class="comment-delimiter">;;; </span><span class="comment">| '_ ` _ \ / _` | | '_ \ 
+</span><span class="comment-delimiter">;;; </span><span class="comment">| | | | | | (_| | | | | |
+</span><span class="comment-delimiter">;;; </span><span class="comment">|_| |_| |_|\__,_|_|_| |_|
+</span><span class="comment-delimiter">;;;                          </span><span class="comment">
+</span><span class="comment-delimiter">;;; </span><span class="comment">(find-es "page" "upload-rsync")
+</span>
+(<span class="keyword">defun</span> <a name="htmlize-eev-files"><span class="function-name">htmlize-eev-files</span></a> ()
+  (interactive)
+  (my-outline-colors)
+  (<span class="keyword">if</span> (not window-system)
+      (<span class="warning">error</span> <span class="string">"Running htmlize outside X would produce ugly colors"</span>))
+  (<span class="keyword">let</span> ((eeh-regexp <span class="string">"^</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">[ \t]</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">(find-[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\n]+)</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">$"</span>))
+    (find-eev <span class="string">"EMACS"</span>)           (my-htmlize-this-file)
+    (find-eev <span class="string">"INSTALL"</span>)         (my-htmlize-this-file)
+    (find-eev <span class="string">"INTERFACE"</span>)       (my-htmlize-this-file)
+    (find-eev <span class="string">"NEWS"</span>)            (my-htmlize-this-file)
+    (find-eev <span class="string">"README"</span>)          (my-htmlize-this-file)
+    (find-eev <span class="string">"doc/keys.e"</span>)      (my-htmlize-this-file))
+  (<span class="keyword">let</span> ((eeh-regexp <span class="string">"^</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*;.*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">[ \t]</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">(find-[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\n]+)</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">$"</span>))
+    (find-eev <span class="string">"eev.el"</span>)          (my-htmlize-this-file)
+    (find-eev <span class="string">"eev-bounded.el"</span>)  (my-htmlize-this-file)
+    (find-eev <span class="string">"eev-bounded-old.el"</span>) (my-htmlize-this-file)
+    (find-eev <span class="string">"eev-compose.el"</span>)  (my-htmlize-this-file)
+    (find-eev <span class="string">"eev-glyphs.el"</span>)   (my-htmlize-this-file)
+    (find-eev <span class="string">"eev-insert.el"</span>)   (my-htmlize-this-file)
+    (find-eev <span class="string">"eev-langs.el"</span>)    (my-htmlize-this-file)
+    (find-eev <span class="string">"eev-sshot.el"</span>)    (my-htmlize-this-file)
+    (find-eev <span class="string">"eev-steps.el"</span>)    (my-htmlize-this-file)
+    (find-eev <span class="string">"eev-browse-url.el"</span>) (my-htmlize-this-file)
+    (find-eev <span class="string">"eev-mini.el"</span>)     (my-htmlize-this-file)
+    <span class="comment-delimiter">;;</span><span class="comment">
+</span>    (find-eev <span class="string">"htmlize-all.el"</span>)  (my-htmlize-this-file)
+    (find-eev <span class="string">"htmlize-eev.el"</span>)  (my-htmlize-this-file)
+    <span class="comment-delimiter">;;</span><span class="comment">
+</span>    (find-eev <span class="string">"eev-dev.el"</span>)      (my-htmlize-this-file) <span class="comment-delimiter">; </span><span class="comment">obsolete
+</span>    (find-eev <span class="string">"eev-insert-old.el"</span>) (my-htmlize-this-file) <span class="comment-delimiter">; </span><span class="comment">obsolete
+</span>    (find-eev <span class="string">"eev-ttp.el"</span>)      (my-htmlize-this-file) <span class="comment-delimiter">; </span><span class="comment">obsolete
+</span>    (find-eev <span class="string">"eev-walk.el"</span>)     (my-htmlize-this-file) <span class="comment-delimiter">; </span><span class="comment">obsolete
+</span>    (find-eev <span class="string">"compose.el"</span>)      (my-htmlize-this-file) <span class="comment-delimiter">; </span><span class="comment">obsolete
+</span>    (find-eev <span class="string">"glyphs.el"</span>)       (my-htmlize-this-file) <span class="comment-delimiter">; </span><span class="comment">obsolete
+</span>    <span class="comment-delimiter">;;</span><span class="comment">
+</span>    (<span class="keyword">require</span> '<span class="constant">eev-math-glyphs</span>)
+    (eev-math-glyphs-edrx)
+    (<span class="keyword">let</span> ((g <span class="string">"</span><span class="eev-glyph-face-bluebg"> </span><span class="string">\f</span><span class="eev-glyph-face-blue">M</span><span class="eev-glyph-face-red">*</span><span class="eev-glyph-face-bang">!</span><span class="eev-glyph-face-green">&#171;&#187;</span><span class="string">&#222;&#229;&#198;&#216;&#4;&#5;&#20;&#240;&#219;&#18;&#14;&#28;&#207;&#167;&#174;&#180;&#31;&#182;&#253;&#206;&#241;&#168;&#221;&#162;&#204;&#254;&#197;&#191;&#130;&#169;&#23;&#209;&#165;&#164;&#184;&#247;&#238;&#173;&#163;&#166;&#175;&#203;&#208;"</span>))
+      (find-eev <span class="string">"eev-math-glyphs.el"</span>) (my-htmlize-this-file g) <span class="comment-delimiter">; </span><span class="comment">new
+</span>    )
+    <span class="comment-delimiter">;;</span><span class="comment">
+</span>    (change-log-mode-face-hack)
+    (find-eev <span class="string">"ChangeLog"</span>)       (my-htmlize-this-file))
+  (<span class="keyword">let</span> ((eeh-regexp <span class="string">"^</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">[ \t]</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">(find-[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\n]+)</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">$"</span>))
+    (find-eev <span class="string">"anim/channels.anim"</span>)   (my-htmlize-this-file)
+    (find-eev <span class="string">"anim/gdb.anim"</span>)        (my-htmlize-this-file))
+  <span class="comment-delimiter">;;</span><span class="comment">
+</span>  (<span class="keyword">let</span> ((eeh-regexp <span class="string">"^</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">.*#.*</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">[ \t]</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">(find-[</span><span class="string"><span class="negation-char">^</span></span><span class="string">\n]+)</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">$"</span>))
+    (find-eev <span class="string">"eeg4"</span>)            (my-htmlize-this-file)
+    (find-eev <span class="string">"eegchannel"</span>)      (my-htmlize-this-file)
+    (find-eev <span class="string">"rcfiles/.bashrc"</span>)      (my-htmlize-this-file)
+    (find-eev <span class="string">"rcfiles/.bashrc-psne"</span>) (my-htmlize-this-file)
+    (find-eev <span class="string">"rcfiles/.fvwmrc"</span>)      (my-htmlize-this-file)
+    (find-eev <span class="string">"rcfiles/.pythonrc.py"</span>) (my-htmlize-this-file)
+    (find-eev <span class="string">"rcfiles/.tclshrc"</span>)     (my-htmlize-this-file)
+    (find-eev <span class="string">"rcfiles/.vimrc"</span>)       (my-htmlize-this-file)
+    (find-eev <span class="string">"rcfiles/.zshrc"</span>)       (my-htmlize-this-file)
+    (find-eev <span class="string">"rcfiles/.zshrc-psne"</span>)  (my-htmlize-this-file)
+    (find-eev <span class="string">"rcfiles/change"</span>)       (my-htmlize-this-file)
+    (find-eev <span class="string">"rcfiles/change.awk"</span>)   (my-htmlize-this-file)
+    (find-eev <span class="string">"rcfiles/channel.py"</span>)   (my-htmlize-this-file)
+    (find-eev <span class="string">"rcfiles/channel.tcl"</span>)  (my-htmlize-this-file)
+    <span class="comment-delimiter">;;</span><span class="comment">
+</span>    (find-eev <span class="string">"eev-rctool"</span>)           (my-htmlize-this-file) <span class="comment-delimiter">; </span><span class="comment">new
+</span>    ))
+
+(<span class="keyword">defun</span> <a name="htmlize-eev-files-then-quit"><span class="function-name">htmlize-eev-files-then-quit</span></a> ()
+  (interactive)
+  (htmlize-eev-files-then-quit)
+  (save-buffers-kill-emacs))
+
+
+<span class="comment-delimiter">;; </span><span class="comment">(htmlize-eev-files)
+</span>
+
+
+<span class="comment-delimiter">;;;        </span><span class="comment">_ _        _ _    
+</span><span class="comment-delimiter">;;;  </span><span class="comment">_ __ (_) | _____(_) | __
+</span><span class="comment-delimiter">;;; </span><span class="comment">| '_ \| | |/ / __| | |/ /
+</span><span class="comment-delimiter">;;; </span><span class="comment">| | | | |   &lt;\__ \ |   &lt; 
+</span><span class="comment-delimiter">;;; </span><span class="comment">|_| |_|_|_|\_\___/_|_|\_\
+</span><span class="comment-delimiter">;;;                          </span><span class="comment">
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Notes, 2006aug22:
+</span><span class="comment-delimiter">;; </span><span class="comment">I select each file manually and I do my own tricks to fontify and
+</span><span class="comment-delimiter">;; </span><span class="comment">htmlize each one; but my tricks don't work so well -- some faces are
+</span><span class="comment-delimiter">;; </span><span class="comment">not applied. htmlize-file and htmlize-many-files are much better --
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; <a href="htmlize.el">(find-eevfile "htmlize.el" "defun htmlize-file")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; <a href="htmlize.el">(find-eevfile "htmlize.el" "defun htmlize-many-files")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; <a href="htmlize-all.el">(find-eevfile "htmlize-all.el")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; <a href="htmlize-eev.el">(find-eevfile "htmlize-eev.el")</a></span><span class="comment">
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">TODO: change htmlize-file a bit to implement hooks for htmlizing
+</span><span class="comment-delimiter">;; </span><span class="comment">glyphs, elisp hyperlinks, and defun/defvar anchors.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">A demo ("yes, htmlize knows how to fontify everything"):
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>' (find-sh  <span class="string">"cd ~/eev-current/; ls *.el"</span>)
+' (find-sh0 <span class="string">"rm -Rv /tmp/ehtml/; mkdir /tmp/ehtml/"</span>)
+' (<span class="keyword">require</span> '<span class="constant">htmlize</span>)
+' (<span class="keyword">let</span> ((default-directory (ee-expand <span class="string">"~/eev-current/"</span>)))
+    (htmlize-many-files
+     '(<span class="string">"compose.el"</span>
+       <span class="string">"eev-browse-url.el"</span>
+       <span class="string">"eev-compose.el"</span>
+       <span class="string">"eev-glyphs.el"</span>
+       <span class="string">"eev-insert.el"</span>
+       <span class="string">"eev-langs.el"</span>
+       <span class="string">"eev-math-glyphs.el"</span>
+       <span class="string">"eev-steps.el"</span>
+       <span class="string">"eev.el"</span>
+       <span class="string">"glyphs.el"</span>
+       <span class="string">"htmlize-all.el"</span>
+       <span class="string">"htmlize-eev.el"</span>)
+     <span class="string">"/tmp/ehtml/"</span>))
+' (find-fline <span class="string">"/tmp/ehtml/"</span>)
+' (find-firefox (eeurl-u-to-f <span class="string">"/tmp/ehtml/eev.el.html"</span>))
+' (find-firefox (eeurl-u-to-f <span class="string">"~/eev-current/eev.el.html"</span>))
+
+
+
+<span class="comment-delimiter">;; <a href="htmlize.el">(find-eevfile "htmlize.el" "defun htmlize-file")</a></span><span class="comment">
+</span>'
+(<span class="keyword">defun</span> <a name="htmlize-file"><span class="function-name">htmlize-file</span></a> (file <span class="type">&amp;optional</span> target)
+  <span class="doc">"Load FILE, fontify it, convert it to HTML, and save the result.
+
+Contents of FILE are inserted into a temporary buffer, whose major mode
+is set with `</span><span class="doc"><span class="constant">normal-mode</span></span><span class="doc">' as appropriate for the file type.  The buffer
+is subsequently fontified with `</span><span class="doc"><span class="constant">font-lock</span></span><span class="doc">' and converted to HTML.  Note
+that, unlike `</span><span class="doc"><span class="constant">htmlize-buffer</span></span><span class="doc">', this function explicitly turns on
+font-lock.  If a form of highlighting other than font-lock is desired,
+please use `</span><span class="doc"><span class="constant">htmlize-buffer</span></span><span class="doc">' directly on buffers so highlighted.
+
+Buffers currently visiting FILE are unaffected by this function.  The
+function does not change current buffer or move the point.
+
+If TARGET is specified and names a directory, the resulting file will be
+saved there instead of to FILE's directory.  If TARGET is specified and
+does not name a directory, it will be used as output file name."</span>
+  (interactive (list (read-file-name
+                      <span class="string">"HTML-ize file: "</span>
+                      nil nil nil (and (buffer-file-name)
+                                       (file-name-nondirectory
+                                        (buffer-file-name))))))
+  (<span class="keyword">let</span> ((output-file (<span class="keyword">if</span> (and target (not (file-directory-p target)))
+                         target
+                       (expand-file-name
+                        (htmlize-make-file-name (file-name-nondirectory file))
+                        (or target (file-name-directory file)))))
+        <span class="comment-delimiter">;; </span><span class="comment">Try to prevent `</span><span class="comment"><span class="constant">find-file-noselect</span></span><span class="comment">' from triggering
+</span>        <span class="comment-delimiter">;; </span><span class="comment">font-lock because we'll fontify explicitly below.
+</span>        (font-lock-mode nil)
+        (font-lock-auto-fontify nil)
+        (global-font-lock-mode nil)
+        <span class="comment-delimiter">;; </span><span class="comment">Ignore the size limit for the purposes of htmlization.
+</span>        (font-lock-maximum-size nil)
+        <span class="comment-delimiter">;; </span><span class="comment">Disable font-lock support modes.  This will only work in
+</span>        <span class="comment-delimiter">;; </span><span class="comment">more recent Emacs versions, so htmlize-buffer-1 still needs
+</span>        <span class="comment-delimiter">;; </span><span class="comment">to call htmlize-ensure-fontified.
+</span>        (font-lock-support-mode nil))
+    (<span class="keyword">with-temp-buffer</span>
+      <span class="comment-delimiter">;; </span><span class="comment">Insert FILE into the temporary buffer.
+</span>      (insert-file-contents file)
+      <span class="comment-delimiter">;; </span><span class="comment">Set the file name so normal-mode and htmlize-buffer-1 pick it
+</span>      <span class="comment-delimiter">;; </span><span class="comment">up.  Restore it afterwards so with-temp-buffer's kill-buffer
+</span>      <span class="comment-delimiter">;; </span><span class="comment">doesn't complain about killing a modified buffer.
+</span>      (<span class="keyword">let</span> ((buffer-file-name file))
+        <span class="comment-delimiter">;; </span><span class="comment">Set the major mode for the sake of font-lock.
+</span>        (normal-mode)
+        (font-lock-mode 1)
+        (<span class="keyword">unless</span> font-lock-mode
+          <span class="comment-delimiter">;; </span><span class="comment">In GNU Emacs (font-lock-mode 1) doesn't force font-lock,
+</span>          <span class="comment-delimiter">;; </span><span class="comment">contrary to the documentation.  This seems to work.
+</span>          (font-lock-fontify-buffer))
+        <span class="comment-delimiter">;; </span><span class="comment">htmlize the buffer and save the HTML.
+</span>        (<span class="keyword">with-current-buffer</span> (htmlize-buffer-1)
+          (<span class="keyword">unwind-protect</span>
+              (<span class="keyword">progn</span>
+                (run-hooks 'htmlize-file-hook)
+                (write-region (point-min) (point-max) output-file))
+            (kill-buffer (current-buffer)))))))
+  <span class="comment-delimiter">;; </span><span class="comment">I haven't decided on a useful return value yet, so just return
+</span>  <span class="comment-delimiter">;; </span><span class="comment">nil.
+</span>  nil)
+
+<span class="comment-delimiter">;; <a href="htmlize.el">(find-eevfile "htmlize.el" "defun htmlize-many-files")</a></span><span class="comment">
+</span>'
+(<span class="keyword">defun</span> <a name="htmlize-many-files"><span class="function-name">htmlize-many-files</span></a> (files <span class="type">&amp;optional</span> target-directory)
+  <span class="doc">"Convert FILES to HTML and save the corresponding HTML versions.
+
+FILES should be a list of file names to convert.  This function calls
+`</span><span class="doc"><span class="constant">htmlize-file</span></span><span class="doc">' on each file; see that function for details.  When
+invoked interactively, you are prompted for a list of files to convert,
+terminated with RET.
+
+If TARGET-DIRECTORY is specified, the HTML files will be saved to that
+directory.  Normally, each HTML file is saved to the directory of the
+corresponding source file."</span>
+  (interactive
+   (list
+    (<span class="keyword">let</span> (list file)
+      <span class="comment-delimiter">;; </span><span class="comment">Use empty string as DEFAULT because setting DEFAULT to nil
+</span>      <span class="comment-delimiter">;; </span><span class="comment">defaults to the directory name, which is not what we want.
+</span>      (<span class="keyword">while</span> (not (equal (setq file (read-file-name
+                                     <span class="string">"HTML-ize file (RET to finish): "</span>
+                                     (and list (file-name-directory
+                                                (car list)))
+                                     <span class="string">""</span> t))
+                         <span class="string">""</span>))
+        (push file list))
+      (nreverse list))))
+  <span class="comment-delimiter">;; </span><span class="comment">Verify that TARGET-DIRECTORY is indeed a directory.  If it's a
+</span>  <span class="comment-delimiter">;; </span><span class="comment">file, htmlize-file will use it as target, and that doesn't make
+</span>  <span class="comment-delimiter">;; </span><span class="comment">sense.
+</span>  (and target-directory
+       (not (file-directory-p target-directory))
+       (<span class="warning">error</span> <span class="string">"target-directory must name a directory: %s"</span> target-directory))
+  (<span class="keyword">dolist</span> (file files)
+    (htmlize-file file target-directory)))
+
+
+
+
+
+
+
+
+
+
+(<span class="keyword">provide</span> '<span class="constant">htmlize-eev</span>)
+
+
+<span class="comment-delimiter">;; </span><span class="comment">Local Variables:
+</span><span class="comment-delimiter">;; </span><span class="comment">coding:            raw-text-unix
+</span><span class="comment-delimiter">;; </span><span class="comment">ee-anchor-format:  "defun %s "
+</span><span class="comment-delimiter">;; </span><span class="comment">End:
+</span></pre>
+  </body>
+</html>

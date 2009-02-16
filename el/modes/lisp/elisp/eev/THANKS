@@ -1,0 +1,26 @@
+This is the `THANKS' file of GNU eev.
+Written by: Eduardo Ochs. This version: 2005apr12.
+This file is in the Public Domain.
+
+Eev wouldn't have been possible - or would have been much worse, or
+whatever - without the help of:
+
+  David Allouche
+  David Hansen
+  David O'Toole
+  Diogo Leal
+  Georg Greve
+  Gerd Moellmann
+  Igor Morgado
+  Leslie Watter
+  Marcos Nicolaiewsky
+  Richard Stallman
+  bpalmer
+  dvalois
+  jahnke
+  kov
+  rubikitch
+  sachac
+
+and of the people at the #emacs IRC channel at freenode.
+This list is grossly incomplete, but hey, this is a pre-release!

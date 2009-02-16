@@ -1,0 +1,337 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eev-browse-url.el (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #b0c4de;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .constant {
+        /* font-lock-constant-face */
+        color: #7fffd4;
+      }
+      .doc {
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .regexp-grouping-backslash {
+      }
+      .regexp-grouping-construct {
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #98fb98;
+      }
+      .warning {
+        /* font-lock-warning-face */
+        color: #ffc0cb;
+        font-weight: bold;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">;; </span><span class="comment">I'm not sure if this is a working file...
+</span><span class="comment-delimiter">;; </span><span class="comment">I need to test it tomorrow.
+</span><span class="comment-delimiter">;; </span><span class="comment">Edrx, 2006aug14
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">This is VERY related to the psne and "S=$HOME/snarf" thingy
+</span><span class="comment-delimiter">;; </span><span class="comment">described at &lt;<a href="http://angg.twu.net/eev-article.html#local-copies">http://angg.twu.net/eev-article.html#local-copies</a>&gt;.
+</span><span class="comment-delimiter">;; </span><span class="comment">Think about opening ~/.psne.log in a buffer and running M-x brfl,
+</span><span class="comment-delimiter">;; </span><span class="comment">M-x brml, M-x brm, etc, on the urls listed there (and M-x brgvl on
+</span><span class="comment-delimiter">;; </span><span class="comment">the ps/pdf urls)...
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">The original code, which was very terse and hard to understand:
+</span><span class="comment-delimiter">;; <a href="../.emacs.html#brwl-and-friends">(find-angg ".emacs" "brwl-and-friends")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">http://angg.twu.net/.emacs.html#brwl-and-friends
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Four functions just to make this file somewhat standalone-ish.
+</span><span class="comment-delimiter">;; </span><span class="comment">I copied them from my .emacs. They need documentation.
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">The "official" version of find-firefox lives in my .emacs, iirc, so here is.
+</span>' (<span class="keyword">defun</span> <a name="find-firefox"><span class="function-name">find-firefox</span></a> (url <span class="type">&amp;optional</span> rest)
+    (interactive <span class="string">"sURL: "</span>)
+    (start-process <span class="string">"firefox"</span> <span class="string">"*Messages*"</span> <span class="string">"firefox"</span> url)
+    url)
+
+<span class="comment-delimiter">;; </span><span class="comment">Same for find-pspage. Hm, not sure. Whatever.
+</span>' (<span class="keyword">defun</span> <a name="find-pspage"><span class="function-name">find-pspage</span></a> (fname <span class="type">&amp;optional</span> page gvargs)
+    (interactive <span class="string">"fPS or PDF file: "</span>)
+    (apply 'start-process <span class="string">"gv"</span> <span class="string">"*Messages*"</span>
+           `(<span class="string">"gv"</span>
+             ,@(<span class="keyword">if</span> page (list (format <span class="string">"--page=%d"</span> page)))
+             ,@gvargs
+             ,(ee-expand fname))))
+
+<span class="comment-delimiter">;; </span><span class="comment">http://angg.twu.net/eev-article.html#local-copies
+</span>(<span class="keyword">defun</span> <a name="eepsne"><span class="function-name">eepsne</span></a> (url <span class="type">&amp;rest</span> ignore)
+  (interactive (browse-url-interactive-arg <span class="string">"psne "</span>))
+  (eev (format <span class="string">"psne '%s'"</span> url)))
+ 
+(<span class="keyword">defun</span> <a name="eetmpwget"><span class="function-name">eetmpwget</span></a> (url <span class="type">&amp;rest</span> ignore)
+  (interactive (browse-url-interactive-arg <span class="string">"cd /tmp; wget "</span>))
+  (eev (concat <span class="string">"cd /tmp\nwget "</span> url)))
+
+
+
+<span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Utility functions.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eeurl-dired-file-name-at-point"><span class="function-name">eeurl-dired-file-name-at-point</span></a> ()
+  (<span class="keyword">if</span> (eq major-mode 'dired-mode)
+      (file-name-sans-versions (dired-get-filename) t)
+    (<span class="warning">error</span> <span class="string">"Not in dired mode"</span>)))
+
+(<span class="keyword">defun</span> <a name="eeurl-u-to-f"><span class="function-name">eeurl-u-to-f</span></a> (url)
+  <span class="doc">"Convert an url like http://foo/bar to a filename like $S/http/foo/bar."</span>
+  <span class="comment-delimiter">;; </span><span class="comment">Add comments about psne and the snarf directory
+</span>  (replace-regexp-in-string <span class="string">"^</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">(</span></span><span class="string">http</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">|</span></span><span class="string">ftp</span><span class="string"><span class="regexp-grouping-backslash">\\</span></span><span class="string"><span class="regexp-grouping-construct">)</span></span><span class="string">://"</span> <span class="string">"$S/\\1/"</span> url))
+
+(<span class="keyword">defun</span> <a name="eeurl-f-to-u"><span class="function-name">eeurl-f-to-u</span></a> (fname)
+  <span class="doc">"Convert a filename to a \"file://\" url"</span>
+  (concat <span class="string">"file://"</span> (expand-file-name (ee-expand fname))))
+
+(<span class="keyword">defun</span> <a name="eeurl-u-to-u-l"><span class="function-name">eeurl-u-to-u-l</span></a> (url)
+  <span class="doc">"Convert a url like http://foo/bar to a url like file://&lt;$S&gt;/http/foo/bar.
+This should be made smarter - file:// urls should be returned unchanged."</span>
+  <span class="comment-delimiter">;; </span><span class="comment">Add comments about psne and the snarf directory
+</span>  (eeurl-f-to-u (eeurl-u-to-f url)))
+
+
+<span class="comment-delimiter">;; </span><span class="comment">The functions that generate the defuns.
+</span><span class="comment-delimiter">;; </span><span class="comment">Here is the explanation for the cryptic names that they use.
+</span><span class="comment-delimiter">;; </span><span class="comment">Names, long form:
+</span><span class="comment-delimiter">;;              </span><span class="comment">dired-    Names, short form:
+</span><span class="comment-delimiter">;;   </span><span class="comment">url-at-   fname-at-
+</span><span class="comment-delimiter">;;    </span><span class="comment">point      point        up     dfp
+</span><span class="comment-delimiter">;;      </span><span class="comment">|          |          |       |
+</span><span class="comment-delimiter">;;      </span><span class="comment">v          v          v       v
+</span><span class="comment-delimiter">;;     </span><span class="comment">url &lt;===&gt; fname        u &lt;===&gt; f
+</span><span class="comment-delimiter">;;        </span><span class="comment">\      /             \     /
+</span><span class="comment-delimiter">;;         </span><span class="comment">v    v               v   v
+</span><span class="comment-delimiter">;;         </span><span class="comment">action                 a
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Also, an "l" suffix means "prefer local copy" when both local and
+</span><span class="comment-delimiter">;; </span><span class="comment">remote make sense.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Example: `</span><span class="comment"><span class="constant">eeurl-utoa-to-uptoa-defun</span></span><span class="comment">' takes the name of a u-&gt;a
+</span><span class="comment-delimiter">;; </span><span class="comment">function (a symbol) and produces the defun for a up-&gt;a function
+</span><span class="comment-delimiter">;; </span><span class="comment">that is a wrapper around the original function.
+</span>
+(<span class="keyword">defun</span> <a name="eeurl-utoa-to-uptoa-defun"><span class="function-name">eeurl-utoa-to-uptoa-defun</span></a> (find-uxxx brxxx)
+  <span class="doc">"Try this: (find-epp (eeurl-utoa-to-uptoa-defun 'find-w3m 'brw))"</span>
+  `(<span class="keyword">defun</span> ,brxxx (url <span class="type">&amp;rest</span> ignore)
+     ,(format <span class="string">"Apply `</span><span class="string"><span class="constant">%S</span></span><span class="string">' on URL."</span> find-uxxx)
+     (interactive (browse-url-interactive-arg <span class="string">"URL: "</span>))
+     (setq browse-url-browser-function ',brxxx)
+     (list ',find-uxxx url '-&gt; (,find-uxxx url))))
+
+(<span class="keyword">defun</span> <a name="eeurl-utoa-to-uptoal-defun"><span class="function-name">eeurl-utoa-to-uptoal-defun</span></a> (find-uxxx brxxxl)
+  <span class="doc">"Try this: (find-epp (eeurl-utoa-to-uptoal-defun 'find-w3m 'brwl))"</span>
+  `(<span class="keyword">defun</span> ,brxxxl (url <span class="type">&amp;rest</span> ignore)
+     ,(format <span class="string">"Apply `</span><span class="string"><span class="constant">%S</span></span><span class="string">' on the local url associated to URL."</span> find-uxxx)
+     (interactive (browse-url-interactive-arg <span class="string">"URL: "</span>))
+     (setq browse-url-browser-function ',brxxxl)
+     (setq url (eeurl-u-to-u-l url))
+     (list ',find-uxxx url '-&gt; (,find-uxxx url))))
+
+(<span class="keyword">defun</span> <a name="eeurl-ftoa-to-uptoa-defun"><span class="function-name">eeurl-ftoa-to-uptoa-defun</span></a> (find-xxx brxxxl)
+  <span class="doc">"Try this: (find-epp (eeurl-ftoa-to-uptoa-defun 'find-fline 'brfl))"</span>
+  `(<span class="keyword">defun</span> ,brxxxl (url <span class="type">&amp;rest</span> ignore)
+     ,(format <span class="string">"Apply `</span><span class="string"><span class="constant">%S</span></span><span class="string">' on the local file name associated to URL."</span> find-xxx)
+     (interactive (browse-url-interactive-arg <span class="string">"URL: "</span>))
+     (setq browse-url-browser-function ',brxxxl)
+     (<span class="keyword">let</span> ((fname (eeurl-u-to-f url)))
+       (list ',find-xxx fname '-&gt; (,find-xxx fname)))))
+
+(<span class="keyword">defun</span> <a name="eeurl-ftoa-to-dfptoa-defun"><span class="function-name">eeurl-ftoa-to-dfptoa-defun</span></a> (find-xxx brxxxd)
+  <span class="doc">"Try this: (find-epp (eeurl-ftoa-to-dfptoa-defun 'find-pspage 'brgvd))"</span>
+  `(<span class="keyword">defun</span> ,brxxxd ()
+     ,(format <span class="string">"Apply `</span><span class="string"><span class="constant">%S</span></span><span class="string">' on the dired file at point."</span> find-xxx)
+     (interactive)
+      (<span class="keyword">let</span> ((fname (eeurl-dired-file-name-at-point)))
+        (message (format <span class="string">"%S"</span> (list ',find-xxx fname '-&gt;
+                                    (,find-xxx fname)))))))
+
+(<span class="keyword">defun</span> <a name="eeurl-utoa-to-dfptoa-defun"><span class="function-name">eeurl-utoa-to-dfptoa-defun</span></a> (find-uxxx brxxxd)
+  <span class="doc">"Try this: (find-epp (eeurl-utoa-to-dfptoa-defun 'find-w3m 'brwd))"</span>
+  <span class="comment-delimiter">;; </span><span class="comment">Note: a command like brgvd is in the right format to be bound in
+</span>  <span class="comment-delimiter">;; </span><span class="comment">dired-mode-map... See, for example: (find-efunction 'dired-find-file)
+</span>  `(<span class="keyword">defun</span> ,brxxxd ()
+     ,(format <span class="string">"Apply `</span><span class="string"><span class="constant">%S</span></span><span class="string">' on the url of the dired file at point."</span> find-uxxx)
+     (interactive)
+      (<span class="keyword">let</span> ((url (eeurl-f-to-u
+                  (eeurl-dired-file-name-at-point))))
+        (message (format <span class="string">"%S"</span> (list ',find-uxxx url '-&gt;
+                                    (,find-uxxx url)))))))
+
+
+<span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">The high-level interface - eeurl-define-from
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>
+(<span class="keyword">defun</span> <a name="eeurl-keywords-to-builder"><span class="function-name">eeurl-keywords-to-builder</span></a> (keyword1 keyword2)
+  (<span class="keyword">let</span> ((ks (list keyword1 keyword2)))
+    (<span class="keyword">cond</span> ((equal ks '(<span class="builtin">:url-&gt;action:</span>  <span class="builtin">:remote:</span>)) 'eeurl-utoa-to-uptoa-defun)
+          ((equal ks '(<span class="builtin">:url-&gt;action:</span>   <span class="builtin">:local:</span>)) 'eeurl-utoa-to-uptoal-defun)
+          ((equal ks '(<span class="builtin">:url-&gt;action:</span>   <span class="builtin">:dired:</span>)) 'eeurl-utoa-to-dfptoa-defun)
+          ((equal ks '(<span class="builtin">:fname-&gt;action:</span> <span class="builtin">:local:</span>)) 'eeurl-ftoa-to-uptoa-defun)
+          ((equal ks '(<span class="builtin">:fname-&gt;action:</span> <span class="builtin">:dired:</span>)) 'eeurl-ftoa-to-dfptoa-defun))))
+
+(<span class="keyword">defun</span> <a name="eeurl-builders-for-define-from"><span class="function-name">eeurl-builders-for-define-from</span></a>
+  (keyword1 origfun keyword2 newfun <span class="type">&amp;rest</span> rest)
+  <span class="doc">"Internal use - see: (find-efunctiondescr 'eeurl-define-from)"</span>
+  (cons `(,(eeurl-keywords-to-builder keyword1 keyword2)
+          ',origfun ',newfun)
+        (<span class="keyword">if</span> rest (apply 'eeurl-builders-for-define-from
+                        keyword1 origfun rest))))
+
+(<span class="keyword">defun</span> <a name="eeurl-defuns-for-define-from"><span class="function-name">eeurl-defuns-for-define-from</span></a> (<span class="type">&amp;rest</span> rest)
+  <span class="doc">"Internal use - see: (find-efunctiondescr 'eeurl-define-from)"</span>
+  (mapcar 'eval (apply 'eeurl-builders-for-define-from rest)))
+
+<span class="comment-delimiter">;; </span><span class="comment">This is pretty nice...
+</span>(<span class="keyword">defun</span> <a name="find-eeurl-define-from"><span class="function-name">find-eeurl-define-from</span></a> (<span class="type">&amp;rest</span> rest)
+  <span class="doc">"Show the code that a `</span><span class="doc"><span class="constant">eeurl-define-from</span></span><span class="doc">' call would evaluate, without evaluating it."</span>
+  (find-epp (cons 'progn (apply 'eeurl-defuns-for-define-from rest))))
+
+(<span class="keyword">defun</span> <a name="eeurl-define-from"><span class="function-name">eeurl-define-from</span></a> (<span class="type">&amp;rest</span> rest)
+  <span class="doc">"Define a series of browse-url or dired-visit functions from a standard function.
+This is hard to describe abstractly, so try the `</span><span class="doc"><span class="constant">find-epp</span></span><span class="doc">' sexps
+below - they just produce lists and display them, and have no
+side-effects.
+
+  (find-epp (eeurl-builders-for-define-from
+             :fname-&gt;action: 'find-pspage
+             :local:         'brgvl
+             :dired:         'brgvd))
+
+  (find-epp (eeurl-defuns-for-define-from
+             :fname-&gt;action: 'find-pspage
+             :local:         'brgvl
+             :dired:         'brgvd))
+
+`</span><span class="doc"><span class="constant">eeurl-define-from</span></span><span class="doc">' runs the defuns that
+`</span><span class="doc"><span class="constant">eeurl-defuns-for-define-from</span></span><span class="doc">' generates, so...
+There are more examples in the source file. Eh, more later."</span>
+  (eval (cons 'progn (apply 'eeurl-defuns-for-define-from rest))))
+
+
+<span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Define lots of br functions.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span>
+(eeurl-define-from <span class="builtin">:fname-&gt;action:</span> 'find-fline
+                   <span class="builtin">:local:</span>         'brfl)
+(eeurl-define-from <span class="builtin">:fname-&gt;action:</span> 'eecd
+                   <span class="builtin">:local:</span>         'brcdl)
+(eeurl-define-from <span class="builtin">:fname-&gt;action:</span> 'find-pspage
+                   <span class="builtin">:local:</span>         'brgvl
+                   <span class="builtin">:dired:</span>         'brgvd)
+(eeurl-define-from <span class="builtin">:fname-&gt;action:</span> 'find-dvipage
+                   <span class="builtin">:local:</span>         'brxdvil
+                   <span class="builtin">:dired:</span>         'brxdvid)
+(eeurl-define-from <span class="builtin">:fname-&gt;action:</span> 'find-xpdfpage
+                   <span class="builtin">:local:</span>         'brxpdfl
+                   <span class="builtin">:dired:</span>         'brxpdfd)
+(eeurl-define-from <span class="builtin">:url-&gt;action:</span>   'find-firefox
+                   <span class="builtin">:remote:</span>        'brm
+                   <span class="builtin">:local:</span>         'brml
+                   <span class="builtin">:dired:</span>         'brmd)
+(eeurl-define-from <span class="builtin">:url-&gt;action:</span>   'find-w3m
+                   <span class="builtin">:remote:</span>        'brw
+                   <span class="builtin">:local:</span>         'brwl
+                   <span class="builtin">:dired:</span>         'brwd)
+(eeurl-define-from <span class="builtin">:url-&gt;action:</span>   'eepsne
+                   <span class="builtin">:remote:</span>        'brp)
+(eeurl-define-from <span class="builtin">:url-&gt;action:</span>   'eetmpwget
+                   <span class="builtin">:remote:</span>        'brtmpwget)
+
+
+
+(<span class="keyword">provide</span> '<span class="constant">eev-browse-url</span>)
+
+
+<span class="comment-delimiter">;; </span><span class="comment">(eval-buffer)
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Ooops, this block of notes is about how I'm planning to make an
+</span><span class="comment-delimiter">;; </span><span class="comment">intro to eev using lots of screenshots, like dto did for org-mode...
+</span><span class="comment-delimiter">;; <a href="../bin/Xscreenshot-window.html">(find-angg "bin/Xscreenshot-window")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">http://angg.twu.net/bin/Xscreenshot-window.html
+</span><span class="comment-delimiter">;; </span><span class="comment">Oops, Mod4-w is not yet bound by default...
+</span><span class="comment-delimiter">;; <a href="../.fvwm/keys.fvwm.html">(find-angg ".fvwm/keys.fvwm")</a></span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">http://angg.twu.net/.fvwm/keys.fvwm.html
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">The parts of eev
+</span><span class="comment-delimiter">;; </span><span class="comment">================
+</span><span class="comment-delimiter">;; </span><span class="comment">Hyperlinks
+</span><span class="comment-delimiter">;; </span><span class="comment">Hyperlink generators
+</span><span class="comment-delimiter">;;   </span><span class="comment">Temporary buffers
+</span><span class="comment-delimiter">;;   </span><span class="comment">code-c-d, find-code-c-d
+</span><span class="comment-delimiter">;;   </span><span class="comment">dff
+</span><span class="comment-delimiter">;; </span><span class="comment">Sending regions
+</span><span class="comment-delimiter">;;   </span><span class="comment">bounded regions
+</span><span class="comment-delimiter">;; </span><span class="comment">The steppers
+</span><span class="comment-delimiter">;; </span><span class="comment">Glyphs
+</span><span class="comment-delimiter">;; </span><span class="comment">Help tools
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">Auxiliars
+</span><span class="comment-delimiter">;; </span><span class="comment">=========
+</span><span class="comment-delimiter">;; </span><span class="comment">The installer
+</span><span class="comment-delimiter">;; </span><span class="comment">The snarfer
+</span><span class="comment-delimiter">;; </span><span class="comment">browse-url and friends
+</span><span class="comment-delimiter">;; </span><span class="comment">hippie-expand
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">file:///home/edrx/TH/L/eev-article.html
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">Old notes, random crap.
+</span><span class="comment-delimiter">;;</span><span class="comment">
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-efunction 'find-w3m)
+</span><span class="comment-delimiter">;; </span><span class="comment">(find-fline "~/TH/L/")
+</span><span class="comment-delimiter">;; </span><span class="comment">(progn (find-fline "~/TH/L/") (find-w3m "01jul14.html"))
+</span>
+<span class="comment-delimiter">;; </span><span class="comment">u  - string: an url, like http://foo/bar
+</span><span class="comment-delimiter">;; </span><span class="comment">sf - string: a snarfed filename, like $S/http/foo/bar
+</span><span class="comment-delimiter">;; </span><span class="comment">f  - string: a filename, like /tmp/foo
+</span><span class="comment-delimiter">;; </span><span class="comment">fu - string: a "file://" url, like file:///tmp/foo
+</span><span class="comment-delimiter">;; </span><span class="comment">su - string: a snarfed file url, like file:///home/edrx/snarf/http/foo/bar
+</span><span class="comment-delimiter">;; </span><span class="comment">_fun - symbol; a function whose argument is a _
+</span><span class="comment-delimiter">;; </span><span class="comment">brfun - symbol: a browse-url-like function
+</span><span class="comment-delimiter">;; </span><span class="comment">def___ - a defun sexp
+</span></pre>
+  </body>
+</html>

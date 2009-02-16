@@ -1,0 +1,10 @@
+This is the `tmp/README' file of GNU eev.
+This directory is where eev saves most of its temporary scripts.
+If other people have access to your home directory then you should
+consider making this directory accessible only by you.
+
+The files with names starting with "ee" are temporary files created by eev.
+The files with names starting with "tmp" are usually wrappers. See tmp.tex.
+
+  Eduardo Ochs
+  2005jan07

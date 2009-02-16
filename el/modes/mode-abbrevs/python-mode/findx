@@ -1,0 +1,5 @@
+def unixfind(path):
+    for (pth, dames, fnames) in os.walk(path):
+        for fn in fnames:
+            yield os.path.join(pth, fn)
+    return

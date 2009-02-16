@@ -1,0 +1,40 @@
+/* XPM */
+/*
+ * Copyright (C) 1997 Yuuichi Teranishi <teranisi@isl.ntt.co.jp> 
+ * Copyright (C) 1997 Kazu Yamamoto <kazu@Mew.org>
+ * Copyright notice is the same as Mew's one.
+ */
+static char * mew_kill_xpm[] = {
+"28 28 4 1",
+" 	s backgroundToolBarColor	c None",
+".	c black",
+"X	c white",
+"o	c gray60",
+"                            ",
+"                            ",
+"                            ",
+"                       ...  ",
+"                      .     ",
+"                    ...     ",
+"            .      . . .    ",
+"         . .X.    .  . .    ",
+"        .X.XXX.   .   .     ",
+"       .XXX.XX.             ",
+"      ..XX.XX.X.            ",
+"      .XX.X.X.XX.           ",
+"       ...XX.XX.            ",
+"       .XX.XX...            ",
+"        .XX..XX.            ",
+"        ...XX..             ",
+"       oooo..ooo            ",
+"         oooooo             ",
+"                            ",
+"                            ",
+"                            ",
+"         .  . . . .         ",
+"         . .    . .         ",
+"         ..   . . .         ",
+"         ...  . . .         ",
+"         .  . . . .         ",
+"         .  . . . .         ",
+"                            "};

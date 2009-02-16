@@ -1,0 +1,78 @@
+
+Elserv -- Yet Another HTTP Server on Emacsen
+
+Elserv は Emacs 上で常駐して動く HTTP サーバです。
+
+Emacs 自身にはサーバの機能がありませんので、専用のサーバプロセス
+(ruby スクリプト)をバックエンドで立ち上げ、そのプロセスと通信することに
+よってサーバ機能を実現しています。
+
+特徴：
+
+* 手軽に Web サーバを立ち上げられる (Emacs のコマンドを実行するだけ)。
+* Emacs lisp で動的コンテンツを作成できる。
+* コンテンツの置き換えは eval するだけで OK。
+* HTTP 1.1 GET, HEAD, POST に対応。
+
+必要なもの：
+
+* Emacs (Emacs 20 or XEmacs)
+* APEL, FLIM
+* ruby (1.6.3 or later)
+
+インストール：
+
+* アーカイブを適当なところで展開します。
+* `make install' を実行します。
+(XEmacs パッケージとしてインストールする場合は `make install-package'
+ を実行します。)
+
+使い方：
+
+(require 'elserv) したあと関数 elserv-start を実行すると
+サーバが立ち上がります。
+デフォルトのままだとポート番号は 8000 番となります。
+
+そのままではほとんどコンテンツがありませんので、
+関数 elserv-publish を使ってコンテンツを登録してください。
+
+es- で始まるファイルに定義されたアプリケーションは、
+関数 elserv-package-publish で登録できます。
+例えば、es-wiki.el に定義された wiki サーバを /wiki に登録するには
+以下を実行します。
+
+(elserv-package-publish (elserv-find-process) "/wiki" "wiki")
+
+関数 elserv-stop を実行するか、バッファ "*elserv*.." を消すと
+サーバプロセスが終了します。
+
+"*Log of elserv*..." というバッファにアクセスログが残ります。
+
+アプリケーション：
+
+es-demo.el:    デモ用のサンプルサーバです。
+es-wiki.el:    emacs-wiki を使った Wiki サーバです。
+es-mhc.el:     MHC を使ったスケジュールサーバです。
+es-monitor.el: publish されているコンテンツの一覧を表示します。
+               デフォルトで /monitor に publish されています。
+
+remote.el:     web ブラウザ経由で Emacs を操作するためのサーバです。
+web-custom.el: web ブラウザ経由で Emacs をカスタマイズするためのサーバです。
+
+性能評価：
+
+http_load による評価
+
+% http_load -parallel 10 -seconds 2 elserv-test
+171 fetches, 10 max parallel, 191349 bytes, in 2.00573 seconds
+1119 mean bytes/connection
+85.2557 fetches/sec, 95401.1 bytes/sec
+msecs/connect: 0.203205 mean, 1.205 max, 0.082 min
+msecs/first-response: 77.3926 mean, 133.693 max, 27.229 min
+(localhost から localhost に対するアクセス。
+ elserv-demo のトップページを対象とした。
+ 環境：Celeron 400MHz, FreeBSD 3.5.1, Emacs 21)
+
+--
+Yuuichi Teranishi <teranisi@gohome.org>
+

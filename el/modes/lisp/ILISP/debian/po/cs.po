@@ -1,0 +1,64 @@
+#
+#    Translators, if you are not familiar with the PO format, gettext
+#    documentation is worth reading, especially sections dedicated to
+#    this format, e.g. by running:
+#         info -n '(gettext)PO Files'
+#         info -n '(gettext)Header Entry'
+#
+#    Some information specific to po-debconf are available at
+#            /usr/share/doc/po-debconf/README-trans
+#         or http://www.debian.org/intl/l10n/po-debconf/README-trans
+#
+#    Developers do not need to manually edit POT or PO files.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ilisp\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-03-19 12:43-0700\n"
+"PO-Revision-Date: 2004-10-29 12:06+0200\n"
+"Last-Translator: Miroslav Kure <kurem@debian.cz>\n"
+"Language-Team: Czech <provoz@debian.cz>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-2\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: boolean
+#. Description
+#: ../ilisp.templates:4
+msgid "Use FSF-compliant keybindings?"
+msgstr "Pou¾ít klávesové zkratky podle FSF?"
+
+#. Type: boolean
+#. Description
+#: ../ilisp.templates:4
+msgid ""
+"ILISP allows the choice of using FSF-compliant keybindings which start with "
+"a Control-C character. The older ILISP keybindings use a Control-Z character "
+"as the prefix."
+msgstr ""
+"Mù¾ete si vybrat, zda má ILISP pou¾ívat klávesové zkratky kompatibilní s "
+"FSF (zaèínají Control-C), nebo zda má pou¾ít star¹í konvenci (prefix je "
+"Control-Z)."
+
+# zaèíná 
+#. Type: boolean
+#. Description
+#: ../ilisp.templates:4
+msgid ""
+"In general, the non-FSF compliant keybindings are easier to use: the ILISP "
+"manual in the Debian package ilisp-doc uses the non-FSF compliant "
+"keybindings and these keybindings often use fewer keystrokes."
+msgstr ""
+"Obecnì jsou ne-FSF zkratky jednodu¹¹í na pou¾ití a èasto vy¾adují ménì "
+"kláves. ILISPový manuál v balíku ilisp-doc také pou¾ívá tuto konvenci."
+
+#. Type: boolean
+#. Description
+#: ../ilisp.templates:4
+msgid ""
+"If you change you mind later, you can run dpkg-reconfigure ilisp and change "
+"your keybinding selection."
+msgstr ""
+"Pokud se pozdìji rozhodnete jinak, mù¾ete kdykoliv spustit pøíkaz "
+"'dpkg-reconfigure ilisp'."

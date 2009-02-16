@@ -1,0 +1,97 @@
+-------------------
+INSTALLING dired-dd
+-------------------
+
+If you are mule-2.3 (19.28) user,
+
+$ make emacs=mule compile
+$ su
+# make emacs=mule elispdir=/usr/local/lib/mule/site-lisp install
+
+If you are emacs-20.x user,
+
+$ make emacs=emacs compile
+$ su
+# make emacs=emacs elispdir=/usr/local/emacs-20.2/share/emacs/site-lisp install
+
+If you do not have write permission for {mule,emacs}/site-lisp above,
+or if you want to install dired-dd into private directory, the second
+line invoking `make' in the examples above may be:
+
+$ make emacs=mule elispdir=~/your_dired-dd_dir install
+
+If directory ~/your_dired-dd_dir is not included in load-path, you must put
+
+(setq load-path (cons "~/your_dired-dd_dir" load-path))
+
+in your ~/.emacs.
+
+In 19.34 based mule-2.3, probably similar path can be specified.
+
+The entity of mule/emacs or the {mule,emacs}/site-lisp path in your
+environment may differ from the examples above.  Consult your system
+administrator.
+
+In the Makefile included in the distribution, default emacs and elispdir are
+defined as:
+
+emacs=/usr/local/emacs-20.2/bin/emacs
+elispdir=~/elisp
+
+Sorry for the inconvenience.
+
+
+----------------
+LOADING dired-dd
+----------------
+
+Include something like
+
+(add-hook
+ 'dired-load-hook
+ (function
+  (lambda ()
+    (load "dired-x")
+    ;; Set dired-x variables here.
+    ;; To and flo...
+    (if window-system (require 'dired-dd)))))
+
+in your ~/.emacs (or any startup file).
+
+See attached dired-dd.info for detailed informations.
+
+After 0.9.1.11, dired-dd-mew.el (very experimental and cheap) should
+be included in the distribution to support drag drop into Mew's draft
+buffer.
+
+If you want to load dired-dd-mew.el as well, include something like
+
+(add-hook
+ 'dired-load-hook
+ (function
+  (lambda ()
+    (load "dired-x")
+    ;; Set dired-x variables here.
+    ;; To and flo...
+    (if window-system
+	(progn (require 'dired-dd)
+	       (require 'dired-dd-mew))))))
+
+dired-dd-insert-file.el or dired-dd-insert-fname.el can be loaded
+similarly. If you want to load all of the three the add-hook code might be:
+
+(add-hook
+ 'dired-load-hook
+ (function
+  (lambda ()
+    (load "dired-x")
+    ;; Set dired-x variables here.
+    ;; To and flo...
+    (if window-system
+	(progn (require 'dired-dd)
+	       (require 'dired-dd-mew)
+	       (require 'dired-dd-insert-fname)
+	       (require 'dired-dd-insert-file))))))
+
+s.n.
+Sun Apr  4 11:57:08 1999

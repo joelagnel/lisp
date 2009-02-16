@@ -1,0 +1,4 @@
+if ((rc = MPI_Finalize()) != 0) {
+    fprintf(stderr, "ERROR: MPI_Finalize (%d)\n", rc);
+    exit(1);
+}

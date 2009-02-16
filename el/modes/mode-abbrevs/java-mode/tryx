@@ -1,0 +1,6 @@
+try {
+    <cursor>
+}
+catch (Exception e) {
+    e.printStackTrace();
+}

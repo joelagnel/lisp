@@ -1,0 +1,27 @@
+History of Emacs IRC Client development:
+----------------------------------------
+
+ERC was originally written by Alexander L. Belikoff (abel@bfr.co.il) and
+Sergey Berezin (sergey.berezin@cs.cmu.edu).  They stopped development
+around december 1999. Their last released version was ERC 2.0.
+
+In June 2001, Mario Lang (mlang@delysid.org) and Alex Schroeder (alex@gnu.org)
+took over development and created a ERC Project at sourceforge.net.
+
+In reaction to a mail about the new erc development,
+Sergey Berezin said, "First of all, I'm glad that my version of ERC is
+being used out there. The thing is, I do not have free time and
+enough incentive anymore to work on ERC, so I would be happy if
+you guys take over the project entirely."
+
+So we happily hacked away on ERC, and soon after (september 2001)
+released the next "stable" version, 2.1.
+
+Most of the development of the new ERC happend on #emacs on
+irc.openprojects.net. Over time, many people contributed
+code, ideas, bugfixes. And not to forget alot of alpha/beta/gamma testing.
+
+See the file CREDITS for a list of contributors.
+
+P.S.: If one of the original developers of ERC reads this, we'd like to receive
+additional information for this file and hear comments in general.

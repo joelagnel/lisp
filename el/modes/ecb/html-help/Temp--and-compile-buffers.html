@@ -1,0 +1,144 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Temp-%20and%20compile-buffers">Temp- and compile-buffers</a>,
+Next:<a rel=next accesskey=n href="The-other-window.html#The%20other%20window">The other window</a>,
+Previous:<a rel=previous accesskey=p href="The-edit-area.html#The%20edit-area">The edit-area</a>,
+Up:<a rel=up accesskey=u href="Usage-of-ECB.html#Usage%20of%20ECB">Usage of ECB</a>
+<hr><br>
+
+<h3>Temp- and compile-buffers display in ECB</h3>
+
+<p>If you call any help in Emacs, e.g. by calling <code>describe-function</code>, or
+if you do a completion in the minibuffer, then Emacs displays the
+result-buffer in another window. This behavior you have also in ECB.
+
+<h4>Standard Emacs behavior</h4>
+
+<p>If the edit-area is already splitted into at least two edit-windows
+then the temp-buffer is displayed in another edit-window otherwise the
+edit-area will be splitted first into two edit-windows, one above the
+other. The variables <code>temp-buffer-max-height</code> and
+<code>temp-buffer-resize-mode</code> (for GNU Emacs) and
+<code>temp-buffer-shrink-to-fit</code> (for XEmacs) work also correctly with
+ECB.
+
+<p>Same for all compilation output-buffers (e.g. after a <code>compile</code> or
+<code>grep</code>) and the variable <code>compilation-window-height</code>.
+
+<p>This is default behavior of ECB. But there is also another way to
+display such buffers: Using a persistent extra window at the bottom of
+the ECB-frame:
+
+<h4>Using a persistent compile window</h4>
+
+<p>With the option <code>ecb-compile-window-height</code> you can define if the
+ECB layout should contain per default a compile-window at the
+bottom (just specify the number of lines which should be used for the
+compile-window at the bottom of the frame). If "yes" ECB displays
+all buffers for which the function <code>ecb-compilation-buffer-p</code>
+returns not nil (e.g. all output of compilation-mode (compile, grep
+etc.) or all temp-buffers like *Help*-buffers) in this special
+window.
+
+<p>In general: With the options <code>ecb-compilation-buffer-names</code>,
+<code>ecb-compilation-major-modes</code> and
+<code>ecb-compilation-predicates</code> you can define which buffers should
+be displayed in the compile-window of ECB (for example if you call
+<code>switch-to-buffer</code> or <code>display-buffer</code> or if you run
+<code>compile</code> or if you display *Help*-buffers). Per default these
+are all temp-buffers like *Help*-buffers, all compile- and grep
+buffers, *Occur*-buffers etc. See the default values of these options.
+
+<p>With the command <code>ecb-toggle-compile-window</code> (bound to <kbd>C-c . 
+\</kbd>) you can toggle the visibility of the compile-window
+(see <a href="Interactive-ECB-commands.html#Interactive%20ECB%20commands">Interactive ECB commands</a>).
+
+<p>There are some more useful options and commands related to the
+compile-window of ECB (to see all options for the compile-window see
+the customization group <a href="ecb-compilation.html#ecb-compilation">ecb-compilation</a>):
+
+<ul>
+<li>With the option <code>ecb-compile-window-temporally-enlarge</code> you can
+allow Emacs to enlarge temporally the ECB-compile-window in some
+situations. Please read the comment of this option. See also the
+description of the command
+<code>ecb-toggle-compile-window-height</code>.
+
+<li>With the option <code>ecb-enlarged-compilation-window-max-height</code> you
+specify how <code>ecb-toggle-compile-window-height</code> should
+enlarge the compile-window.
+
+<li>With the command <code>ecb-cycle-through-compilation-buffers</code>
+(see <a href="Interactive-ECB-commands.html#Interactive%20ECB%20commands">Interactive ECB commands</a>) you can cycle through all current
+open compilation-buffers (in the sense of
+<code>ecb-compilation-buffer-p</code>) very fast. 
+</ul>
+
+<p>ECB offers the same compile-window functionality regardless if the
+ECB-window are hidden or not. The state of the compile-window will be
+preserved when toggling the ecb-windows or when maximizing one
+ecb-windows! So you have the advantage of one special window for all
+help-, grep or compile-output (see above) also when the ecb-windows
+are hidden - a window which will not be deleted if you call
+<code>delete-other-windows</code> (bound to <kbd>C-x 1</kbd>) for one of the
+edit-windows. In general: All features of the compile-window work with
+hidden ecb-windows exactly as when the ecb-windows are visible.
+
+<p><a name="Problems%20with%20the%20compile%20window"></a>
+
+<h4>What to do if there are problems with the compile-window</h4>
+
+<p>Normally displaying temp- and compilation-buffers (or more general:
+displaying buffer for which <code>ecb-compilation-buffer-p</code> is not
+nil) should work reliable. But if there are problems which you can not
+handle with the options <code>ecb-compilation-buffer-names</code>,
+<code>ecb-compilation-major-modes</code> or
+<code>ecb-compilation-predicates</code> then please go on like follows:
+
+<ol type=1 start=1>
+</p><li>Set the option <code>ecb-layout-debug-mode</code> to not nil.
+
+<li>Reproduce the wrong behavior exactly by repeating all the operations
+which lead to the problem. If possible then restart Emacs before
+reproducing the problem so you can begin from the beginning!
+
+<li>Now send immediately a bug report with
+<code>ecb-submit-problem-report</code>.
+
+<li>Set <code>ecb-layout-debug-mode</code> back to nil if you do not want
+further debugging output in the *Messages* buffer"
+</ol>
+
+<p><a name="Using%20special-display%20with%20ECB"></a>
+
+<h4>Handling special-display-buffers</h4>
+
+<p>Emacs offers three options for a special-display-handling of certain
+buffers: <code>special-display-function</code>,
+<code>special-display-buffer-names</code> and
+<code>special-display-regexps</code> (see the Emacs manual for a description
+of these options). ECB offers an option
+<code>ecb-ignore-special-display</code> for specification in which
+situations ECB should take account for the values of these
+special-display-options.
+
+<p>Default-behavior of ECB is to ignore these special-display-options
+when a persistent compile-window is active (i.e. 
+<code>ecb-compile-window-height</code> is not nil). But with
+<code>ecb-ignore-special-display</code> you can tell ECB, that either always
+the special-display-options should be ignored as long as ECB is active
+or that they should be never igored regardless if a persistent
+compile-window is set or not. In the latter case using
+<code>display-buffer</code> or <code>pop-to-buffer</code> takes always account for
+the values of these options - like the original behavior of Emacs.
+
+</body></html>
+

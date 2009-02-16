@@ -1,0 +1,167 @@
+This is the `INSTALL' file of GNU eev.
+Author and version: Eduardo Ochs, 2005aug23.
+(This is for a version of eev-current that is _almost_ eev-0.95.1).
+This file in the Public Domain.
+Latest version: <http://angg.twu.net/eev-current/INSTALL>
+      htmlized: <http://angg.twu.net/eev-current/INSTALL.html>
+    See also:   <http://angg.twu.net/eev-current/README.html>
+                <http://angg.twu.net/eev-current/>
+
+
+
+Installation and uninstallation
+===============================
+
+Note: eev is never installed "globally"; you unpack it somewhere - at,
+say, ~/eev-current/ - and then you use the installation script,
+eev-rctool, to create a directory for storing temporary script files -
+typically ~/.eev/ - and to patch some rcfiles. Take a look at the
+comments in eev-rctool for more details.
+
+This is the quick way of installing eev: first unpack it,
+
+  mkdir ~/eev-current/       ;# or any other dir
+  cd    ~/eev-current/
+  wget http://angg.twu.net/eev-current.tar.gz
+  tar -xvzf eev-current.tar.gz
+
+and now install it: this is the quick way, if you trust its way of
+changing rcfiles:
+
+  cd  ~/eev-current/
+  unset EEVTMPDIR
+  ./eev-rctool prepare
+  ./eev-rctool install_rc
+
+it keeps backups of the old rcfiles and so you can revert the
+installation with:
+
+  cd  ~/eev-current/
+  ./eev-rctool uninstall_rc
+
+You will see something like this for this installation part,
+
+  /home/beth/eev-current$ ./eev-rctool prepare
+    Creating dir: /home/beth/.eev/
+    Creating:     /home/beth/.eev/README
+    Creating:     /home/beth/.eev/tmp.tex
+    Creating:     /home/edrx/.eev/psne.sh
+    Creating dir: /home/beth/.eev/backup/
+    Creating:     /home/beth/.eev/backup/do_install.sh
+    Creating:     /home/beth/.eev/backup/do_uninstall.sh
+    Backup:  /home/beth/.bashrc  ->  /home/beth/.eev/backup/.bashrc.backup
+    Backup:  /home/beth/.zshrc  ->  /home/beth/.eev/backup/.zshrc.backup
+    Creating:     /home/beth/.eev/backup/.emacs.new
+    Creating:     /home/beth/.eev/backup/.bashrc.new
+    Creating:     /home/beth/.eev/backup/.zshrc.new
+    Creating:     /home/beth/.eev/backup/.gdbinit.new
+    Creating:     /home/beth/.eev/backup/.tclshrc.new
+  /home/beth/eev-current$ ./eev-rctool install_rc
+    Running: /home/beth/.eev/backup/do_install.sh
+    Install: /home/beth/.emacs  <-  /home/beth/.eev/backup/.emacs.new
+    Install: /home/beth/.bashrc  <-  /home/beth/.eev/backup/.bashrc.new
+    Install: /home/beth/.zshrc  <-  /home/beth/.eev/backup/.zshrc.new
+    Install: /home/beth/.gdbinit  <-  /home/beth/.eev/backup/.gdbinit.new
+    Install: /home/beth/.tclshrc  <-  /home/beth/.eev/backup/.tclshrc.new
+
+and like this for the unistallation:
+
+  /home/beth/eev-current$ ./eev-rctool uninstall_rc
+    Running: /home/beth/.eev/backup/do_uninstall.sh
+    Remove:  /home/beth/.emacs
+    Restore: /home/beth/.bashrc  <-  /home/beth/.eev/backup/.bashrc.backup
+    Restore: /home/beth/.zshrc  <-  /home/beth/.eev/backup/.zshrc.backup
+    Remove:  /home/beth/.gdbinit
+    Remove:  /home/beth/.tclshrc
+
+eev-rctool has some options for diff'ing the old files and the new
+ones, for using other directories, and for lots of other things. Run
+"./eev-rctool help" for help, or, even better, look at its code...
+
+Please note: 1) the code for this "new installer" is not super-clean
+yet, and it may have some bugs, 2) it installs things in a way
+slightly different from the old way: it uses eev.el, eev-glyphs.el and
+eev-compose.el instead of eev-dev.el, glyphs.el and compose.el, the
+code that it puts in .bashrc and .zshrc doesn't source
+rcfiles/.bashrc-psne and rcfiles/.zshrc-psne, it puts less stuff in
+.emacs, etc.
+
+
+
+Eev considered harmless
+=======================
+
+There's a long article in the eev mailing list discussing the
+installation in details and how it used to be ugly and vaguely nasty
+and how nice it is nice now:
+
+  <http://article.gmane.org/gmane.emacs.eev.devel/20>
+  <http://lists.gnu.org/archive/html/eev/2005-07/msg00017.html>
+
+
+
+What changes after installing the eev support into these rcfiles
+================================================================
+
+Not much: several new environment variables will be defined, all with
+names starting with EE; bash, zsh, tclsh and gdb will have a new
+command each, `ee'; and Emacs will be in eev-mode by default.
+
+  <http://angg.twu.net/eev-current/eev-rctool.html>
+  <http://angg.twu.net/eev-current/eev-rctool.html#new_block_emacs>
+  <http://angg.twu.net/eev-current/eev-rctool.html#new_block_bashrc>
+  <http://angg.twu.net/eev-current/eev-rctool.html#new_block_zshrc>
+  <http://angg.twu.net/eev-current/eev-rctool.html#new_block_tclshrc>
+  <http://angg.twu.net/eev-current/eev-rctool.html#new_block_gdbinit>
+
+  (find-eev "eev-rctool" "new_block_emacs")
+  (find-eev "eev-rctool" "new_block_bashrc")
+  (find-eev "eev-rctool" "new_block_zshrc")
+  (find-eev "eev-rctool" "new_block_tclshrc")
+  (find-eev "eev-rctool" "new_block_gdbinit")
+
+Eev-mode is a global minor mode whose only function is to set up some
+keybindings; the full list of these keybinding is at:
+
+  (find-eev "eev.el" "eev-mode-map")
+
+[TODO: Explain how to redefine the keymap.]
+[TODO: Suggest putting 
+
+  (setq debug-on-error nil)
+  (setq eval-expression-debug-on-error nil)
+  (setq pop-up-windows nil)
+
+in .emacs; eev-newbie sets this.]
+
+  (find-eev "eev.el" "eev-newbie")
+
+
+
+Upgrading eev from inside Emacs
+===============================
+
+If you are running a version of eev that is recent enough (2005aug23
+or newer) then you can upgrade eev from inside Emacs using these
+sexps: [Missing: explain this...]
+
+  (find-sh0 "echo  $EEVTMPDIR")
+  (find-sh0 "mkdir $EEVTMPDIR")
+  (find-eevsh0 "pwd")
+  (find-eevsh0 "mv -v eev-current.tar.gz eev-current-old.tar.gz")
+  ;;
+  ;; Note that the sexp below is 5 lines long and needs <f12>s...
+  (eesteps '(
+    (shell)
+    (eek0 "cd $EEVTMPDIR\r")
+    (eek0 "wget http://angg.twu.net/eev-current.tar.gz\r")
+    ))
+  ;;
+  (find-eevsh0 "tar -xvzf eev-current.tar.gz")
+  (find-eevsh0 "./eev-rctool prepare")
+  (find-eevsh0 "./eev-rctool install_rc")
+
+  ;; Execute the sexps in the eev block of .emacs by hand to reload:
+  ;; (find-fline "~/.emacs" "Beginning of the eev block")
+
+

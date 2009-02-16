@@ -1,0 +1,5 @@
+Emacspeak  Revision 4289:4293
+Distribution created by raman on labrador
+Unpack the  distribution And type make config 
+Then type make
+See the Makefile for details. 

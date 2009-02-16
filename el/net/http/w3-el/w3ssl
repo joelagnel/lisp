@@ -1,0 +1,2 @@
+#! /bin/sh
+openssl 2>/dev/null $*

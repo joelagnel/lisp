@@ -1,0 +1,73 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="Style%20basics">Style basics</a>,
+Next:<a rel=next accesskey=n href="Ascii-based-styles.html#Ascii-based%20styles">Ascii-based styles</a>,
+Previous:<a rel=previous accesskey=p href="Tree-buffer-styles.html#Tree-buffer%20styles">Tree-buffer styles</a>,
+Up:<a rel=up accesskey=u href="Tree-buffer-styles.html#Tree-buffer%20styles">Tree-buffer styles</a>
+<hr><br>
+
+<h5>Basic knowledge about the styles</h5>
+
+<p>There are nine image-names which define the control- and guide-symbols
+to draw the tree. Here is the list of the allowed image-names and the
+related corresponding ascii-symbols:
+
+<ul>
+<li>open ("[-]"):
+The control-symbol displayed for an opened tree-node which has several
+subnodes. Clicking onto this control closes the node.
+
+<li>close ("[+]"):
+The control-symbol displayed for a closed tree-node, i.e. an
+expandable node with subnodes but all subnodes are hidden. Clicking
+onto this control opened the node and displays its subnodes - if
+there are any. If it has no subnodes the empty-symbol will be
+displayed.
+
+<li>empty ("[x]"):
+The symbol displayed for an empty node. An empty node is a
+node which could have subnodes but has currently none.
+
+<li>leaf ("*"):
+The symbol displayed for a node which can not have any subnodes so it
+is a "leaf" in the tree.
+
+<li>guide (" |"):
+The symbol used for drawing vertical "guide-lines" for opened nodes. 
+See the example below.
+
+<li>no-guide ("  "):
+Sometimes invisible guide-lines are needed to draw the tree.
+
+<li>end-guide (" `"):
+The symbol used for the guide-line of the last subnode of an opened
+node.
+
+<li>handle ("-"):
+The symbol displayed before every subnode. Each handle is connected to
+a guide-line - either a normal guide or an end-guide.
+
+<li>no-handle (" "):
+An invisible handle. 
+</ul>
+
+<p>A tree will be build-up with these elements like follows:
+
+<br><pre>[-] node-with-subnodes      (open)
+ |-[+] not-empty-subnode1   (guide+handle+close)
+ |-[x] empty-subnode        (guide+handle+empty)
+ `-[-] not-empty-subnode2   (end-guide+handle+open)
+    |-* leaf-1              (no-guide+no-handle+guide+handle+leaf)
+    `-* leaf-2              (no-guide+no-handle+end-guide+handle+leaf)
+</pre>
+
+</body></html>
+

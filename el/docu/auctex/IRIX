@@ -1,0 +1,33 @@
+From: Bruce Allen <ballen@gravity.phys.uwm.edu>
+Subject: AUC TeX installation problem
+To: auc-tex_mgr@sunsite.auc.dk
+cc: Bruce Allen <ballen@dirac.phys.uwm.edu>
+Date: Mon, 12 Jun 2000 11:20:08 -0500 (CDT)
+
+This is on SGI Irix, trying to install in my home directory (I am not su
+on this system).
+
+In INSTALLATION, tell users of IRIX that they need to be running the bash
+shell before doing
+make
+make ... install
+
+Otherwise it will fail:
+
+make listdir=$HOME/elist install
+        if [ ! -d /usr/local/share/emacs/site-lisp ]; then mkdir
+/usr/local/share/emacs/site-lisp; else true; fi ;
+Cannot create directory "/usr/local/share/emacs/site-lisp": No such file
+or directory
+*** Error code 2 (bu21)
+gerd> more INSTALLATION 
+Installation of AUC TeX
+***********************
+
+
+I've seen this problem with a package that I maintain.  It's because of
+screwy Irix make behavior.  Just tell people to run bash & problem is
+fixed.
+
+Bruce Allen
+

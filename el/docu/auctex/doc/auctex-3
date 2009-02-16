@@ -1,0 +1,422 @@
+This is auctex, produced by makeinfo version 4.2 from auc-tex.texi.
+
+START-INFO-DIR-ENTRY
+* AUCTeX: (auctex).      A much enhanced LaTeX mode for GNU Emacs.
+END-INFO-DIR-ENTRY
+
+
+File: auctex,  Node: Function Index,  Next: Variable Index,  Prev: Key Index,  Up: Top
+
+Function Index
+**************
+
+* Menu:
+
+* LaTeX-add-bibliographies:              Adding Other.
+* LaTeX-add-environments:                Adding Environments.
+* LaTeX-add-labels:                      Adding Other.
+* LaTeX-close-environment:               Environments.
+* LaTeX-env-item:                        Adding Environments.
+* LaTeX-environment:                     Environments.
+* LaTeX-fill-environment:                Marking and formatting.
+* LaTeX-fill-paragraph:                  Marking and formatting.
+* LaTeX-fill-region:                     Marking and formatting.
+* LaTeX-fill-section:                    Marking and formatting.
+* LaTeX-indent-line:                     Marking and formatting.
+* LaTeX-insert-environment:              Adding Environments.
+* LaTeX-insert-item:                     Itemize-like.
+* LaTeX-math-mode:                       Mathematics.
+* LaTeX-section:                         Sectioning.
+* LaTeX-section-heading:                 Sectioning.
+* LaTeX-section-label:                   Sectioning.
+* LaTeX-section-section:                 Sectioning.
+* LaTeX-section-title:                   Sectioning.
+* LaTeX-section-toc:                     Sectioning.
+* TeX-add-style-hook:                    Simple Style.
+* TeX-add-symbols:                       Adding Macros.
+* TeX-arg-cite:                          Adding Macros.
+* TeX-arg-conditional:                   Adding Macros.
+* TeX-arg-coordinate:                    Adding Macros.
+* TeX-arg-corner:                        Adding Macros.
+* TeX-arg-counter:                       Adding Macros.
+* TeX-arg-define-cite:                   Adding Macros.
+* TeX-arg-define-counter:                Adding Macros.
+* TeX-arg-define-environment:            Adding Macros.
+* TeX-arg-define-label:                  Adding Macros.
+* TeX-arg-define-macro:                  Adding Macros.
+* TeX-arg-define-savebox:                Adding Macros.
+* TeX-arg-environment:                   Adding Macros.
+* TeX-arg-eval:                          Adding Macros.
+* TeX-arg-file:                          Adding Macros.
+* TeX-arg-free:                          Adding Macros.
+* TeX-arg-input-file:                    Adding Macros.
+* TeX-arg-label:                         Adding Macros.
+* TeX-arg-literal:                       Adding Macros.
+* TeX-arg-lr:                            Adding Macros.
+* TeX-arg-macro:                         Adding Macros.
+* TeX-arg-pagestyle:                     Adding Macros.
+* TeX-arg-pair:                          Adding Macros.
+* TeX-arg-savebox:                       Adding Macros.
+* TeX-arg-size:                          Adding Macros.
+* TeX-arg-tb:                            Adding Macros.
+* TeX-arg-verb:                          Adding Macros.
+* TeX-auto-generate:                     Automatic Private.
+* TeX-command-master:                    Commands.
+* TeX-command-region:                    Commands.
+* TeX-comment-paragraph:                 Commenting.
+* TeX-comment-region:                    Commenting.
+* TeX-complete-symbol:                   Completion.
+* TeX-electric-macro:                    Completion.
+* TeX-font:                              Font Specifiers.
+* TeX-header-end:                        Multifile.
+* TeX-home-buffer:                       Control.
+* TeX-insert-braces:                     Quotes.
+* TeX-insert-dollar:                     Quotes.
+* TeX-insert-macro:                      Completion.
+* TeX-insert-quote:                      Quotes.
+* TeX-kill-job:                          Control.
+* TeX-next-error:                        Debugging.
+* TeX-normal-mode:                       Parsing Files.
+* TeX-recenter-output-buffer:            Control.
+* TeX-save-document:                     Multifile.
+* TeX-toggle-debug-bad-boxes:            Debugging.
+
+
+File: auctex,  Node: Variable Index,  Next: Concept Index,  Prev: Function Index,  Up: Top
+
+Variable Index
+**************
+
+* Menu:
+
+* japanese-LaTeX-command-default:        Japanese.
+* japanese-LaTeX-default-style:          Japanese.
+* japanese-TeX-command-default:          Japanese.
+* LaTeX-amsmath-label:                   Equations.
+* LaTeX-auto-label-regexp-list:          Parsing Files.
+* LaTeX-auto-minimal-regexp-list:        Parsing Files.
+* LaTeX-auto-regexp-list:                Parsing Files.
+* LaTeX-default-environment:             Environments.
+* LaTeX-eqnarray-label:                  Equations.
+* LaTeX-equation-label:                  Equations.
+* LaTeX-figure-label:                    Floats.
+* LaTeX-float:                           Floats.
+* LaTeX-indent-level:                    Marking and formatting.
+* LaTeX-item-indent:                     Marking and formatting.
+* LaTeX-math-abbrev-prefix:              Mathematics.
+* LaTeX-math-list:                       Mathematics.
+* LaTeX-section-hook:                    Sectioning.
+* LaTeX-section-label:                   Sectioning.
+* LaTeX-table-label:                     Floats.
+* plain-TeX-auto-regexp-list:            Parsing Files.
+* TeX-auto-cleanup-hook:                 Hacking the Parser.
+* TeX-auto-empty-regexp-list:            Parsing Files.
+* TeX-auto-full-regexp-list:             Parsing Files.
+* TeX-auto-global:                       Automatic Global.
+* TeX-auto-local:                        Automatic Local.
+* TeX-auto-parse-length:                 Parsing Files.
+* TeX-auto-prepare-hook:                 Hacking the Parser.
+* TeX-auto-private:                      Automatic Private.
+* TeX-auto-regexp-list <1>:              Hacking the Parser.
+* TeX-auto-regexp-list:                  Parsing Files.
+* TeX-auto-save:                         Parsing Files.
+* TeX-auto-untabify:                     Parsing Files.
+* TeX-brace-indent-level:                Marking and formatting.
+* TeX-check-path:                        Commands.
+* TeX-close-quote:                       Quotes.
+* TeX-command-default:                   Commands.
+* TeX-command-list <1>:                  Installation.
+* TeX-command-list:                      Commands.
+* TeX-default-macro:                     Completion.
+* TeX-default-mode:                      Japanese.
+* TeX-display-help:                      Debugging.
+* TeX-electric-escape:                   Completion.
+* TeX-file-recurse:                      Automatic.
+* TeX-font-list:                         Font Specifiers.
+* TeX-header-end:                        Commands.
+* TeX-ignore-file:                       Automatic.
+* TeX-insert-braces:                     Completion.
+* TeX-lisp-directory:                    Installation.
+* TeX-macro-global <1>:                  Installation.
+* TeX-macro-global:                      Automatic Global.
+* TeX-macro-private:                     Automatic Private.
+* TeX-master <1>:                        Multifile.
+* TeX-master:                            Commands.
+* TeX-one-master:                        Multifile.
+* TeX-open-quote:                        Quotes.
+* TeX-outline-extra:                     Outline.
+* TeX-parse-self:                        Parsing Files.
+* TeX-printer-list:                      Installation.
+* TeX-region:                            Commands.
+* TeX-save-query:                        Multifile.
+* TeX-style-global:                      Automatic Global.
+* TeX-style-local:                       Automatic Local.
+* TeX-style-path:                        Automatic.
+* TeX-style-private:                     Automatic Private.
+* TeX-trailer-start:                     Commands.
+
+
+File: auctex,  Node: Concept Index,  Prev: Variable Index,  Up: Top
+
+Concept Index
+*************
+
+* Menu:
+
+* .emacs:                                Installation.
+* \begin:                                Environments.
+* \chapter:                              Sectioning.
+* \cite, completion of:                  Completion.
+* \emph:                                 Font Specifiers.
+* \end:                                  Environments.
+* \include:                              Multifile.
+* \input:                                Multifile.
+* \item:                                 Itemize-like.
+* \label:                                Sectioning.
+* \label, completion:                    Completion.
+* \ref, completion:                      Completion.
+* \section:                              Sectioning.
+* \subsection:                           Sectioning.
+* \textbf:                               Font Specifiers.
+* \textit:                               Font Specifiers.
+* \textrm:                               Font Specifiers.
+* \textsc:                               Font Specifiers.
+* \textsl:                               Font Specifiers.
+* \texttt:                               Font Specifiers.
+* Abbreviations:                         Mathematics.
+* Adding a style hook:                   Simple Style.
+* Adding bibliographies:                 Adding Other.
+* Adding environments:                   Adding Environments.
+* Adding labels:                         Adding Other.
+* Adding macros:                         Adding Macros.
+* Adding other information:              Adding Other.
+* Advanced features:                     Advanced Features.
+* amsmath:                               Equations.
+* ANSI:                                  European.
+* Arguments to TeX macros:               Completion.
+* auto directories.:                     Automatic.
+* Automatic:                             Automatic.
+* Automatic Customization:               Automatic.
+* Automatic Parsing:                     Parsing Files.
+* Automatic updating style hooks:        Automatic Local.
+* Bad boxes:                             Debugging.
+* Bibliographies, adding:                Adding Other.
+* Bibliography:                          Commands.
+* bibliography, completion:              Completion.
+* BibTeX:                                Commands.
+* BibTeX, completion:                    Completion.
+* book.el:                               Simple Style.
+* Braces:                                Quotes.
+* Brackets:                              Quotes.
+* Changing font:                         Font Specifiers.
+* Changing the parser:                   Hacking the Parser.
+* Chapters:                              Sectioning.
+* Character set:                         I18n.
+* Checking:                              Checking.
+* chktex:                                Checking.
+* citations, completion of:              Completion.
+* cite, completion of:                   Completion.
+* Commands:                              Commands.
+* Completion:                            Completion.
+* Controlling the output:                Control.
+* Copying:                               Copying.
+* Copyright:                             Copying.
+* Current file:                          Control.
+* Customization:                         Installation.
+* Customization, personal:               Installation.
+* Customization, site:                   Installation.
+* Danish:                                European.
+* Debugging:                             Debugging.
+* Default command:                       Commands.
+* Defining bibliographies in style hooks: Adding Other.
+* Defining environments in style hooks:  Adding Environments.
+* Defining labels in style hooks:        Adding Other.
+* Defining macros in style hooks:        Adding Macros.
+* Defining other information in style hooks: Adding Other.
+* Deleting fonts:                        Font Specifiers.
+* Denmark:                               European.
+* Descriptions:                          Itemize-like.
+* Display math mode:                     Quotes.
+* Distribution:                          Copying.
+* Documents:                             Multifile.
+* Documents with multiple files:         Multifile.
+* Dollars:                               Quotes.
+* Double quotes:                         Quotes.
+* Dutch:                                 European.
+* Enumerates:                            Itemize-like.
+* Environments:                          Environments.
+* Environments, adding:                  Adding Environments.
+* Eqnarray:                              Equations.
+* Equation:                              Equations.
+* Equations:                             Equations.
+* Errors:                                Debugging.
+* Europe:                                European.
+* European Characters:                   European.
+* Example of a style file.:              Simple Style.
+* Expansion:                             Completion.
+* External Commands:                     Commands.
+* Extracting TeX symbols:                Automatic.
+* Figure environment:                    Floats.
+* Figures:                               Floats.
+* File Variables:                        Commands.
+* Filling:                               Marking and formatting.
+* Finding errors:                        Checking.
+* Finding the current file:              Control.
+* Finding the master file:               Control.
+* Floats:                                Floats.
+* Folding:                               Outline.
+* Font macros:                           Font Specifiers.
+* Fonts:                                 Font Specifiers.
+* Formatting <1>:                        Commands.
+* Formatting:                            Marking and formatting.
+* Free:                                  Copying.
+* Free software:                         Copying.
+* General Public License:                Copying.
+* Generating symbols:                    Automatic.
+* Germany:                               European.
+* Global directories:                    Automatic Global.
+* Global macro directory:                Automatic Global.
+* Global style hook directory:           Automatic Global.
+* Global TeX macro directory:            Automatic Global.
+* GPL:                                   Copying.
+* Header:                                Commands.
+* Headers:                               Outline.
+* Holland:                               European.
+* Including:                             Multifile.
+* Indenting:                             Marking and formatting.
+* Indexing:                              Commands.
+* Initialization:                        Installation.
+* Inputing:                              Multifile.
+* Installation:                          Installation.
+* Internationalization:                  I18n.
+* ISO 8859 Latin 1:                      European.
+* ISO 8859 Latin 2:                      European.
+* iso-cvt.el:                            European.
+* Itemize:                               Itemize-like.
+* Items:                                 Itemize-like.
+* Japan:                                 Japanese.
+* Japanese:                              Japanese.
+* jLaTeX:                                Japanese.
+* jTeX:                                  Japanese.
+* Killing a process:                     Control.
+* Label prefix <1>:                      Floats.
+* Label prefix:                          Sectioning.
+* Labels <1>:                            Floats.
+* Labels:                                Sectioning.
+* Labels, adding:                        Adding Other.
+* labels, completion of:                 Completion.
+* lacheck:                               Checking.
+* LaTeX:                                 Commands.
+* Latin 1:                               European.
+* Latin 2:                               European.
+* License:                               Copying.
+* Literature:                            Commands.
+* Local style directory:                 Automatic Local.
+* Local style hooks:                     Automatic Local.
+* Local Variables:                       Commands.
+* Macro arguments:                       Completion.
+* Macro completion:                      Completion.
+* Macro expansion:                       Completion.
+* macro.el:                              Hacking the Parser.
+* macro.tex:                             Hacking the Parser.
+* Macros, adding:                        Adding Macros.
+* Make:                                  Installation.
+* Makefile:                              Installation.
+* makeindex:                             Commands.
+* Making a bibliography:                 Commands.
+* Making an index:                       Commands.
+* Many Files:                            Multifile.
+* Master file <1>:                       Multifile.
+* Master file:                           Control.
+* Matching dollar signs:                 Quotes.
+* Math mode delimiters:                  Quotes.
+* Mathematics:                           Mathematics.
+* MULE:                                  Japanese.
+* Multifile Documents:                   Multifile.
+* Multiple Files:                        Multifile.
+* National letters:                      I18n.
+* Next error:                            Debugging.
+* Nippon:                                Japanese.
+* Other information, adding:             Adding Other.
+* Outlining:                             Outline.
+* Output:                                Control.
+* Overfull boxes:                        Debugging.
+* Overview:                              Outline.
+* Parsing errors:                        Debugging.
+* Parsing LaTeX errors:                  Debugging.
+* Parsing new macros:                    Hacking the Parser.
+* Parsing TeX <1>:                       Automatic.
+* Parsing TeX:                           Parsing Files.
+* Parsing TeX output:                    Debugging.
+* Personal customization:                Installation.
+* Personal information:                  Automatic Private.
+* Personal macro directory:              Automatic Private.
+* Personal TeX macro directory:          Automatic Private.
+* pLaTeX:                                Japanese.
+* Poland:                                European.
+* Prefix for labels <1>:                 Floats.
+* Prefix for labels:                     Sectioning.
+* Previewing:                            Commands.
+* Printing:                              Commands.
+* Private directories:                   Automatic Private.
+* Private macro directory:               Automatic Private.
+* Private style hook directory:          Automatic Private.
+* Private TeX macro directory:           Automatic Private.
+* Problems:                              Checking.
+* Processes:                             Control.
+* pTeX:                                  Japanese.
+* Quotes:                                Quotes.
+* Redisplay output:                      Control.
+* Reformatting:                          Marking and formatting.
+* Region:                                Commands.
+* Region file:                           Commands.
+* Reindenting:                           Marking and formatting.
+* Right:                                 Copying.
+* Running BibTeX:                        Commands.
+* Running chktex:                        Checking.
+* Running commands:                      Commands.
+* Running lacheck:                       Checking.
+* Running LaTeX:                         Commands.
+* Running makeindex:                     Commands.
+* Running TeX:                           Commands.
+* Sample style file:                     Simple Style.
+* Sectioning:                            Sectioning.
+* Sections <1>:                          Outline.
+* Sections:                              Sectioning.
+* Setting the default command:           Commands.
+* Setting the header:                    Commands.
+* Setting the trailer:                   Commands.
+* Site customization:                    Installation.
+* Site information:                      Automatic Global.
+* Site initialization:                   Installation.
+* Site macro directory:                  Automatic Global.
+* Site TeX macro directory:              Automatic Global.
+* Specifying a font:                     Font Specifiers.
+* Starting a previewer:                  Commands.
+* Stopping a process:                    Control.
+* style:                                 Style Files.
+* Style:                                 Checking.
+* Style file:                            Simple Style.
+* Style files:                           Style Files.
+* Style hook:                            Simple Style.
+* Style hooks:                           Style Files.
+* Symbols:                               Mathematics.
+* Tabify:                                Parsing Files.
+* Table environment:                     Floats.
+* Tables:                                Floats.
+* Tabs:                                  Parsing Files.
+* TeX:                                   Commands.
+* TeX parsing:                           Automatic.
+* tex-site.el:                           Installation.
+* Trailer:                               Commands.
+* Untabify:                              Parsing Files.
+* Updating style hooks:                  Automatic Local.
+* Variables:                             Commands.
+* Viewing:                               Commands.
+* Warranty:                              Copying.
+* Wonderful boxes:                       Debugging.
+* Writing to a printer:                  Commands.
+* x-compose.el:                          European.
+* X-Symbol:                              European.
+
+

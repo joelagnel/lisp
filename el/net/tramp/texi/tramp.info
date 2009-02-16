@@ -1,0 +1,1444 @@
+This is tramp.info, produced by makeinfo version 4.0f from tramp.texi.
+
+START-INFO-DIR-ENTRY
+* TRAMP: (tramp).                Transparent Remote Access, Multiple Protocol
+                                 Emacs remote file access via rsh and rcp.
+END-INFO-DIR-ENTRY
+
+   This file documents TRAMP, a remote file editing package for Emacs
+and XEmacs.
+
+   Copyright (C) 1999, 2000 Free Software Foundation, Inc.
+
+   Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+   Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided also
+that the sections entitled "Copying" and "GNU General Public License"
+are included exactly as in the original, and provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+   Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation approved by the Free Software Foundation.
+
+
+File: tramp.info,  Node: Top,  Next: Copying,  Prev: (dir),  Up: (dir)
+
+TRAMP User Manual
+*****************
+
+   TRAMP stands for `Transparent Remote (file) Access, Multiple
+Protocol'.  This package provides remote file editing, similar to
+`ange-ftp' and `EFS'.
+
+   The difference is that ange-ftp uses FTP to transfer files between
+the local and the remote host, whereas TRAMP uses a combination of
+`rsh' and `rcp' or other work-alike programs, such as `ssh'/`scp'.
+
+   This is version $Revision: 2.11 $ of the TRAMP manual, last updated
+on Sunday, 20 January, 2002.
+
+   You can find the latest version of this document on the web at
+`http://tramp.sourceforge.net/'.
+
+   There is a mailing list for TRAMP, available at
+<tramp-devel@lists.sourceforge.net>, and archived at
+`http://www.mail-archive.com/emacs-rcp@ls6.cs.uni-dortmund.de/' as well
+as the usual SourceForge archives.
+
+* Menu:
+
+* Copying::                     TRAMP Copying conditions.
+* Overview::                    What TRAMP can and cannot do.
+
+For the end user:
+* Obtaining TRAMP::          How to obtain TRAMP.
+* History::                     History of TRAMP
+* Installation::                Installing TRAMP with your (X)Emacs.
+* Configuration::               Configuring TRAMP for use.
+* Usage::                       An overview of the operation of TRAMP.
+* Bug Reports::                 Reporting Bugs and Problems
+* Frequently Asked Questions::  Questions and answers from the mailing list.
+
+For the developer:
+* Version Control::             The inner workings of remote version control.
+* Files directories and paths::  How file names, directories and paths are mangled and managed.
+* Issues::
+
+ --- The Detailed Node Listing ---
+
+Configuring TRAMP for use
+
+* Connection types::            Types of connections made to remote machines.
+* Inline methods::              Inline methods.
+* External transfer methods::   External transfer methods.
+* Multi-hop Methods::           Connecting to a remote host using multiple hops.
+* Default Method::              Selecting a default method.
+* Customizing Methods::         Using Non-Standard Methods.
+* Remote Programs::             How TRAMP finds and uses programs on the remote machine.
+* Remote shell setup::
+
+Using TRAMP
+
+* Filename Syntax::             TRAMP filename conventions.
+* Multi-hop filename syntax::   Multi-hop filename conventions
+* Dired::                       Dired and filename completion.
+
+The inner workings of remote version control
+
+* Version Controlled Files::    Determining if a file is under version control.
+* Remote Commands::             Executing the version control commands on the remote machine.
+* Changed workfiles::           Detecting if the working file has changed.
+* Checking out files::          Bringing the workfile out of the repository.
+* Miscellaneous Version Control::  Things related to Version Control that don't fit elsewhere
+
+Things related to Version Control that don't fit elsewhere
+
+* Remote File Ownership::       How VC determines who owns a workfile.
+* Back-end Versions::           How VC determines what release your RCS is.
+
+How file names, directories and paths are mangled and managed.
+
+* Path deconstruction::         Breaking a path into it's components.
+
+
+File: tramp.info,  Node: Copying,  Next: Overview,  Prev: Top,  Up: Top
+
+TRAMP Copying conditions
+************************
+
+   Copyright (C) 1998, 1999, 2000 Free Software Foundation, Inc.
+
+   tramp.el is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2, or (at your option) any
+later version.
+
+   tramp.el is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+along with GNU Emacs; see the file COPYING. If not, write to the Free
+Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+02111-1307, USA.
+
+
+File: tramp.info,  Node: Overview,  Next: Obtaining TRAMP,  Prev: Copying,  Up: Top
+
+An overview of TRAMP
+********************
+
+   After the installation of TRAMP into your Emacs, you will be able to
+access files on remote machines as though they were local. Access to the
+remote file system for editing files, version control, and `dired' are
+transparently enabled.
+
+   Your access to the remote machine can be with the `rsh', `rlogin',
+`telnet' programs or with any similar connection method. This
+connection must pass ASCII successfully to be usable but need not be
+8-bit clean.
+
+   The package provides support for `ssh' connections out of the box,
+one of the more common uses of the package. This allows relatively
+secure access to machines, especially if `ftp' access is disabled.
+
+   The majority of activity carried out by TRAMP requires only that the
+remote login is possible and is carried out at the terminal. In order to
+access remote files TRAMP needs to transfer their content to the local
+machine temporarily.
+
+   TRAMP can transfer files between the machines in a variety of ways.
+The details are easy to select, depending on your needs and the
+machines in question.
+
+   The fastest transfer methods rely on a remote file transfer package
+such as `rcp', `scp' or `rsync'. The use of these methods is only
+possible if the file copy command does not ask for a password for the
+remote machine.
+
+   If the remote copy methods are not suitable for you, TRAMP also
+supports the use of encoded transfers directly through the shell. This
+requires that the `mimencode' or `uuencode' tools are available on the
+remote machine.
+
+   Within these limitations, TRAMP is quite powerful. It is worth noting
+that, as of the time of writing, it is far from a polished end-user
+product. For a while yet you should expect to run into rough edges and
+problems with the code now and then.
+
+   It is finished enough that the developers use it for day to day work
+but the installation and setup can be a little difficult to master, as
+can the terminology.
+
+   TRAMP is still under active development and any problems you
+encounter, trivial or major, should be reported to the TRAMP developers.
+*Note Bug Reports::.
+
+Behind the scenes
+.................
+
+   This section tries to explain what goes on behind the scenes when you
+access a remote file through TRAMP.
+
+   Suppose you type `C-x C-f' and enter part of an TRAMP file name,
+then hit `<TAB>' for completion.  Suppose further that this is the
+first time that TRAMP is invoked for the host in question.  Here's what
+happens:
+
+   * TRAMP discovers that it needs a connection to the host. So it
+     invokes `telnet HOST' or `rsh HOST -l USER' or a similar tool to
+     connect to the remote host. Communication with this process happens
+     through an Emacs buffer, that is, the output from the remote end
+     goes into a buffer.
+
+   * The remote host may prompt for a login name (for `telnet').  The
+     login name is given in the file name, so TRAMP sends the login
+     name and a newline.
+
+   * The remote host may prompt for a password or pass phrase (for
+     `rsh' or for `telnet' after sending the login name).  TRAMP
+     displays the prompt in the minibuffer, asking you for the password
+     or pass phrase.
+
+     You enter the password or pass phrase.  TRAMP sends it to the
+     remote host, followed by a newline.
+
+   * TRAMP now waits for the shell prompt or for a message that the
+     login failed.
+
+     If TRAMP sees neither of them after a certain period of time (a
+     minute, say), then it issues an error message saying that it
+     couldn't find the remote shell prompt and shows you what the
+     remote host has sent.
+
+     If TRAMP sees a `login failed' message, it tells you so, aborts the
+     login attempt and allows you to try again.
+
+   * Suppose that the login was successful and TRAMP sees the shell
+     prompt from the remote host.  Now TRAMP invokes `/bin/sh' because
+     Bourne shells and C shells have different command syntaxes.(1)
+
+     After the Bourne shell has come up, TRAMP sends a few commands to
+     ensure a good working environment.  It turns off echoing, it sets
+     the shell prompt, and a few other things.
+
+   * Now the remote shell is up and it good working order.  Remember,
+     what was supposed to happen is that TRAMP tries to find out what
+     files exist on the remote host so that it can do filename
+     completion.
+
+     So, TRAMP basically issues `cd' and `ls' commands and also
+     sometimes `echo' with globbing.  Another command that is often
+     used is `test' to find out whether a file is writable or a
+     directory or the like.  The output of each command is parsed for
+     the necessary operation.
+
+   * Suppose you are finished with filename completion, have entered
+     `C-x C-f', a full file name and hit `<RET>'.  Now comes the time to
+     transfer the file contents from the remote host to the local host
+     so that you can edit them.
+
+     See above for an explanation of how TRAMP transfers the file
+     contents.
+
+     For inline transfers, TRAMP issues a command like `mimencode -b
+     /path/to/remote/file', waits until the output has accumulated in
+     the buffer that's used for communication, then decodes that output
+     to produce the file contents.
+
+     For out-of-band transfers, TRAMP issues a command like `rcp
+     user@host:/path/to/remote/file /tmp/tramp.4711' and then reads the
+     local temporary file `/tmp/tramp.4711' into a buffer and deletes
+     the temporary file.
+
+   * You now edit the buffer contents, blithely unaware of what has
+     happened behind the scenes.  (Unless you have read this section,
+     that is.)  When you are finished, you type `C-x C-s' to save the
+     buffer.
+
+   * Again, TRAMP transfers the file contents to the remote host either
+     inline or out-of-band.  This is the reverse of what happens when
+     reading the file.
+
+
+   I hope this has provided you with a basic overview of what happens
+behind the scenes when you open a file with TRAMP.
+
+   ---------- Footnotes ----------
+
+   (1) Invoking `/bin/sh' will fail if your login shell doesn't
+recognize `exec /bin/sh' as a valid command.  Maybe you use the Scheme
+shell `scsh'...
+
+
+File: tramp.info,  Node: Obtaining TRAMP,  Next: History,  Prev: Overview,  Up: Top
+
+Obtaining TRAMP.
+****************
+
+   TRAMP is freely available on the Internet and the latest release may
+be downloaded from
+`ftp://ls6-ftp.cs.uni-dortmund.de/pub/src/emacs/tramp.tar.gz'. This
+release includes the full documentation and code for TRAMP, suitable
+for installation.
+
+   For the especially brave, TRAMP is available from CVS. The CVS
+version is the latest version of the code and may contain incomplete
+features or new issues. Use these versions at your own risk.
+
+   Instructions for obtaining the latest development version of TRAMP
+from CVS can be found by going to the SourceForge project page at
+`http://sourceforge.net/projects/tramp/' and then clicking on the CVS
+link in the navigation bar at the top.  Or follow the example session
+below:
+
+     ] *cd ~/lisp*
+     ] *cvs -d:pserver:anonymous@cvs.tramp.sourceforge.net:/cvsroot/tramp login*
+     (Logging in to anonymous@cvs.tramp.sourceforge.net)
+     CVS password: *(just hit RET here)*
+     ...
+     
+     ] *cvs -z3 -d:pserver:anonymous@cvs.tramp.sourceforge.net:/cvsroot/tramp co tramp*
+
+   You should now have a directory `~/lisp/tramp' containing the latest
+version of TRAMP. You can fetch the latest updates from the repository
+by issuing the command:
+
+     ] *cd ~/lisp/tramp*
+     ] *cvs update -d*
+
+
+File: tramp.info,  Node: History,  Next: Installation,  Prev: Obtaining TRAMP,  Up: Top
+
+History of TRAMP
+****************
+
+   Development was started end of November 1998.  The package was called
+`rssh.el', back then.  It only provided one method to access a file,
+using `ssh' to log in to a remote host and using `scp' to transfer the
+file contents.  After a while, the name was changed to `rcp.el', and
+now it's TRAMP.  Along the way, many more methods for getting a remote
+shell and for transferring the file contents were added.  Support for
+VC was added.
+
+   The most recent addition of a major feature was the multi-hop methods
+added in April 2000.
+
+
+File: tramp.info,  Node: Installation,  Next: Configuration,  Prev: History,  Up: Top
+
+Installing TRAMP into Emacs or XEmacs
+*************************************
+
+   Installing TRAMP into your Emacs or XEmacs is a relatively easy
+process, at least compared to rebuilding your machine from scratch. ;)
+
+   Seriously though, the installation should be a fairly simple matter.
+
+   The easiest way to proceed is as follows:
+
+   * Choose a directory, say `~/emacs/'.  Change into that directory and
+     unpack the tarball.  This will give you a directory
+     `~/emacs/tramp/' which contains subdirectories `lisp' for the Lisp
+     code and `texi' for the documentation.
+
+   * Optionally byte-compile all files in the Lisp directory,
+     `~/emacs/tramp/lisp/', by issuing a command like the following from
+     that directory:
+          make EMACS=emacs all            # for Emacs users
+          make EMACS=xemacs all           # for XEmacs users
+
+   * Tell Emacs about the new Lisp directory and the TRAMP package, with
+     the following lines in `~/.emacs':
+          (add-to-list 'load-path "~/emacs/tramp/lisp/")
+          (require 'tramp)
+
+   * To be able to read the Info documentation, create a file
+     `~/emacs/tramp/texi/dir' using for example the `install-info'
+     command, and add the directory to the search path for Info.
+
+     CCC Todo: explain how to use the `install-info' command.  This
+     works differently in Debian than on other systems.  How does one
+     create a `dir' file using `install-info' on Debian?
+
+     If the environment variable `INFOPATH' is set, add the directory
+     `~/emacs/tramp/texi/' to it.  Else, add the directory to
+     `Info-default-directory-list', as follows:
+          (add-to-list 'Info-default-directory-list "~/emacs/tramp/texi/")
+     XEmacs 21 users should use `Info-directory-list' rather than
+     `Info-default-directory-list'.
+
+
+   For XEmacs users, the package `fsf-compat' must be installed.  For
+details on package installation, see *Note Packages: (xemacs)Packages.
+
+
+File: tramp.info,  Node: Configuration,  Next: Usage,  Prev: Installation,  Up: Top
+
+Configuring TRAMP for use
+*************************
+
+   TRAMP is (normally) fully functional when it is initially installed.
+It is initially configured to use the `rsh' and `rcp' programs to
+connect to the remote host.
+
+   On some hosts, there are problems with opening a connection.  These
+are related to the behavior of the remote shell.  See *Note Remote
+shell setup::, for details on this.
+
+   If you do not wish to use these commands to connect to the remote
+host, you should change the default connection and transfer method that
+TRAMP uses. There are several different methods that TRAMP can use to
+connect to remote machines and transfer files (*note Connection
+types::).
+
+* Menu:
+
+* Connection types::            Types of connections made to remote machines.
+* Inline methods::              Inline methods.
+* External transfer methods::   External transfer methods.
+* Multi-hop Methods::           Connecting to a remote host using multiple hops.
+* Default Method::              Selecting a default method.
+* Customizing Methods::         Using Non-Standard Methods.
+* Remote Programs::             How TRAMP finds and uses programs on the remote machine.
+* Remote shell setup::
+
+
+File: tramp.info,  Node: Connection types,  Next: Inline methods,  Prev: Configuration,  Up: Configuration
+
+Types of connections made to remote machines.
+=============================================
+
+   There are two basic types of transfer methods, each with it's own
+advantages and limitations. Both types of connection make use of a
+remote shell access program such as `rsh', `ssh' or `telnet' to connect
+to the remote machine.
+
+   This connection is used to perform many of the operations that TRAMP
+requires to make the remote file system transparently accessible from
+the local machine. It is only when visiting files that the methods
+differ.
+
+   Loading or saving a remote file requires that the content of the
+file be transfered between the two machines. The content of the file
+can be transfered over the same connection used to log in to the remote
+machine or the file can be transfered through another connection using
+a remote copy program such as `rcp', `scp' or `rsync'.  The former are
+called "inline methods", the latter are called "external transfer
+methods".
+
+   The performance of the external transfer methods is generally better
+than that of the inline methods.  This is caused by the need to encode
+and decode the data when transferring inline.
+
+   The one exception to this rule are the `scp' based transfer methods.
+While these methods do see better performance when actually
+transferring files, the overhead of the cryptographic negotiation at
+startup may drown out the improvement in file transfer times.
+
+   External transfer methods do require that the remote copy command is
+not interactive -- that is, the command does not prompt you for a
+password.  If you cannot perform remote copies without a password, you
+will need to use an inline transfer method to work with TRAMP.
+
+   A variant of the inline methods are the "multi-hop methods".  These
+methods allow you to connect a remote host using a number `hops', each
+of which connects to a different host.  This is useful if you are in a
+secured network where you need to go through a bastion host to connect
+to the outside world.
+
+
+File: tramp.info,  Node: Inline methods,  Next: External transfer methods,  Prev: Connection types,  Up: Configuration
+
+Inline methods
+==============
+
+   The inline methods in TRAMP are quite powerful and can work in
+situations where you cannot use an external transfer program to connect.
+Inline methods are the only methods that work when connecting to the
+remote machine via telnet.  (There are also strange inline methods which
+allow you to transfer files between _user identities_ rather than
+hosts, see below.)
+
+   These methods depend on the existence of a suitable encoding and
+decoding command on remote machine. Locally, TRAMP may be able to use
+features of Emacs to decode and encode the files or it may require
+access to external commands to perform that task.
+
+   TRAMP supports the use of `uuencode' to transfer files. This is
+_not_ recommended. The `uuencode' and `uudecode' commands are not well
+standardized and may not function correctly or at all on some machines,
+notably AIX and IRIX. These systems do not work with `uuencode' at all.
+(But do see the note about AIX in the documentation for TRAMP-METHODS.)
+
+   In summary, if possible use the `mimencode' methods to transfer the
+data base64 encoded. This has the advantage of using a built-in command
+in every modern Emacs, improving performance.
+
+   * `rm'  --  `rsh' with `mimencode'
+
+     Connect to the remote host with `rsh' and use base64 encoding to
+     transfer files between the machines.
+
+     This requires the `mimencode' command that is part of the
+     `metamail' packages. This may not be installed on all remote
+     machines.
+
+   * `sm'  --  `ssh' with `mimencode'
+
+     Connect to the remote host with `ssh' and use base64 encoding to
+     transfer files between the machines.
+
+     This is identical to the previous option except that the `ssh'
+     package is used, making the connection more secure.
+
+     There are also two variants, `sm1' and `sm2' that use the `ssh1'
+     and `ssh2' commands explicitly. If you don't know what these are,
+     you do not need these options.
+
+   * `tm'  --  `telnet' with `mimencode'
+
+     Connect to the remote host with `telnet' and use base64 encoding
+     to transfer files between the machines.
+
+     This requires the `mimencode' command that is part of the
+     `metamail' packages.
+
+   * `ru'  --  `rsh' with `uuencode'
+
+     Connect to the remote host with `rsh' and use the `uuencode' and
+     `uudecode' commands to transfer files between the machines.
+
+   * `su'  --  `ssh' with `uuencode'
+
+     Connect to the remote host with `ssh' and use the `uuencode' and
+     `uudecode' commands to transfer files between the machines.
+
+     As with the `ssh' and base64 option above, this provides the `su1'
+     and `su2' methods to explicitly select an ssh version.
+
+     Note that this method does not invoke the `su' program, see below
+     for methods which use that.
+
+   * `tu'  --  `telnet' with `uuencode'
+
+     Connect to the remote host with `telnet' and use the `uuencode'
+     and `uudecode' commands to transfer files between the machines.
+
+   * `sum' -- `su' with `mimencode'
+
+     This method does not connect to a remote host at all, rather it
+     uses the `su' program to allow you to edit files as another user.
+     Uses base64 encoding to transfer the file contents.
+
+   * `suu' -- `su' with `uuencode'
+
+     Like `sum', this uses the `su' program to allow you to edit files
+     on the local host as another user.  Uses `uuencode' and `uudecode'
+     to transfer the file contents.
+
+   * `sudm' -- `sudo' with `mimencode'
+
+     This is similar to the `sum' method, but it uses `sudo' rather
+     than `su' to become a different user.
+
+     Note that `sudo' must be configured to allow you to start a shell
+     as the user.  It would be nice if it was sufficient if `ls' and
+     `mimencode' were allowed, but that is not easy to implement, so I
+     haven't got around to it, yet.
+
+   * `sudu' -- `sudo' with `uuencode'
+
+     This is similar to the `suu' method, but it uses `sudo' rather
+     than `su' to become a different user.
+
+   * `smx' -- `ssh' with `mimencode'
+
+     As you expect, this is similar to `sm', only a little different.
+     Whereas `sm' opens a normal interactive shell on the remote host,
+     this option uses `ssh -t -t HOST -l USER /bin/sh' tp open a
+     connection.  This is useful for users where the normal login shell
+     is set up to ask them a number of questions when logging in.  This
+     procedure avoids these questions, and just gives TRAMP a
+     more-or-less `standard' login shell to work with.
+
+     This is also useful for Windows users where `ssh', when invoked
+     from an Emacs buffer, tells them that it is not allocating a
+     pseudo tty.  When this happens, the login shell is wont to not
+     print any shell prompt, which confuses TRAMP mightily.
+
+
+
+File: tramp.info,  Node: External transfer methods,  Next: Multi-hop Methods,  Prev: Inline methods,  Up: Configuration
+
+External transfer methods
+=========================
+
+   The external transfer methods operate through multiple channels,
+using the remote shell connection for many actions while delegating file
+transfers to an external transfer utility.
+
+   This saves the overhead of encoding and decoding that multiplexing
+the transfer through the one connection has with the inline methods.
+
+   If you want to use an external transfer method you _must_ be able to
+execute the transfer utility to copy files to and from the remote
+machine without any interaction.
+
+   This means that you will need to use `ssh-agent' if you use the
+`scp' program for transfers, or maybe your version of `scp' accepts a
+password on the command line.(1) If you use `rsync' via `ssh' then the
+same rule must apply to that connection.
+
+   If you cannot get `scp' to run without asking for a password but
+would still like to use `ssh' to secure your connection, have a look at
+the `ssh' based inline methods.
+
+   * `rcp'  --  `rsh' and `rcp'
+
+     This method uses the `rsh' and `rcp' commands to connect to the
+     remote machine and transfer files. This is probably the fastest
+     connection method available.
+
+   * `scp'  --  `ssh' and `scp'
+
+     Using `ssh' to connect to the remote host and `scp' to transfer
+     files between the machines is the best method for securely
+     connecting to a remote machine and accessing files.
+
+     The performance of this option is also quite good. It may be
+     slower than the inline methods when you often open and close small
+     files however.  The cost of the cryptographic handshake at the
+     start of an `scp' session can begin to absorb the advantage that
+     the lack of encoding and decoding presents.
+
+   * `rsync'  --  `ssh' and `rsync'
+
+     Using the `ssh' command to connect securely to the remote machine
+     and the `rsync' command to transfer files is almost identical to
+     the `scp' method.
+
+     While `rsync' performs much better than `scp' when transferring
+     files that exist on both hosts, this advantage is lost if the file
+     exists only on one side of the connection.
+
+     The `rsync' based method may be considerably faster than the `rcp'
+     based methods when writing to the remote system. Reading files to
+     the local machine is no faster than with a direct copy.
+
+   * `scpx' -- `ssh' and `scp'
+
+     As you expect, this is similar to `scp', only a little different.
+     Whereas `scp' opens a normal interactive shell on the remote host,
+     this option uses `ssh -t -t HOST -l USER /bin/sh' to open a
+     connection.  This is useful for users where the normal login shell
+     is set up to ask them a number of questions when logging in.  This
+     procedure avoids these questions, and just gives TRAMP a
+     more-or-less `standard' login shell to work with.
+
+     This is also useful for Windows users where `ssh', when invoked
+     from an Emacs buffer, tells them that it is not allocating a
+     pseudo tty.  When this happens, the login shell is wont to not
+     print any shell prompt, which confuses TRAMP mightily.
+
+
+   ---------- Footnotes ----------
+
+   (1) PuTTY's `pscp' allows you to specify the password on the command
+line.
+
+
+File: tramp.info,  Node: Multi-hop Methods,  Next: Default Method,  Prev: External transfer methods,  Up: Configuration
+
+Connecting to a remote host using multiple hops
+===============================================
+
+   Sometimes, the methods described before are not sufficient.
+Sometimes, it is not possible to connect to a remote host using a
+simple command.  For example, if you are in a secured network, you
+might have to log in to a `bastion host' first before you can connect
+to the outside world.  Of course, the target host may also require a
+bastion host.  The format of multi-hop filenames is slightly different
+than the format of normal TRAMP methods.
+
+   A multi-hop file name specifies a method, a number of hops, and a
+path name on the remote system.  The method specifies how the file is
+transferred through the inline connection.  The following two multi-hop
+methods are available:
+
+   * `multi' -- base64 encoding with `mimencode'
+
+     The file is transferred through the connection in base64 encoding.
+     Uses the `mimencode' program for doing encoding and decoding, but
+     uses an Emacs internal implementation on the local host if
+     available.
+
+   * `multiu' -- use commands `uuencode' and `uudecode'
+
+     The file is transferred through the connection in `uu' encoding.
+     Uses the `uuencode' and `uudecode' programs for encoding and
+     decoding, but uses a Lisp implementation for decoding on the local
+     host if available.
+
+
+   Each hop consists of a "hop method" specification, a user name and a
+host name.  The following hop methods are (currently) available:
+
+   * `telnet'
+
+     Uses the well-known `telnet' program to connect to the host.
+     Whereas user name and host name are supplied in the file name, the
+     user is queried for the password.
+
+   * `rsh'
+
+     This uses `rsh' to connect to the host.  You do not need to enter
+     a password unless `rsh' explicitly asks for it.
+
+   * `ssh'
+
+     This uses `ssh' to connect to the host.  You might have to enter a
+     password or a pass phrase.
+
+   * `su'
+
+     This method does not actually contact a different host, but it
+     allows you to become a different user on the host you're currently
+     on.  This might be useful if you want to edit files as root, but
+     the remote host does not allow remote root logins.  In this case
+     you can use `telnet', `rsh' or `ssh' to connect to the remote host
+     as a non-root user, then use an `su' hop to become root.  But `su'
+     need not be the last hop in a sequence, you could also use it
+     somewhere in the middle, if the need arises.
+
+     Even though you _must_ specify both user and host with a `su' hop,
+     the host name is ignored and only the user name is used.
+
+   * `sudo'
+
+     This is similar to the `su' hop, except that it uses `sudo' rather
+     than `su' to become a different user.
+
+
+   Some people might wish to use port forwarding with `ssh' or maybe
+they have to use a nonstandard port.  This can be accomplished by
+putting a stanza in `~/.ssh/config' for the account which specifies a
+different port number for a certain host name.  But it can also be
+accomplished within Tramp, by adding a multi-hop method.  For example:
+
+     (add-to-list 'tramp-multi-connection-function-alist
+                  '("sshf" tramp-multi-connect-rlogin "ssh %h -l %u -p 4400%n"))
+
+   Now you can use a `sshf' hop which connects to port 4400 instead of
+the standard port.
+
+
+File: tramp.info,  Node: Default Method,  Next: Customizing Methods,  Prev: Multi-hop Methods,  Up: Configuration
+
+Selecting a default method
+==========================
+
+   When you select an appropriate transfer method for your typical usage
+you should set the variable TRAMP-DEFAULT-METHOD to reflect that
+choice. This variable controls which method will be used when a method
+is not specified in the TRAMP file path.  For example:
+
+     (setq tramp-default-method "scp")
+
+   External transfer methods are normally preferable to inline transfer
+methods, giving better performance. They may not be useful if you use
+many remote machines where you cannot log in without a password.
+
+   *Note Inline methods::.  *Note External transfer methods::.  *Note
+Multi-hop Methods::.
+
+   Another consideration with the selection of transfer methods is the
+environment you will use them in and, especially when used over the
+Internet, the security implications of your preferred method.
+
+   The `rsh' and `telnet' methods send your password as plain text as
+you log in to the remote machine, as well as transferring the files in
+such a way that the content can easily be read from other machines.
+
+   If you need to connect to remote systems that are accessible from the
+Internet, you should give serious thought to using `ssh' based methods
+to connect. These provide a much higher level of security, making it a
+non-trivial exercise for someone to obtain your password or read the
+content of the files you are editing.
+
+
+File: tramp.info,  Node: Customizing Methods,  Next: Remote Programs,  Prev: Default Method,  Up: Configuration
+
+Using Non-Standard Methods
+==========================
+
+   There is a variable `tramp-methods' which you can change if the
+predefined methods don't seem right.
+
+   For the time being, I'll refer you to the Lisp documentation of that
+variable, accessible with `C-h v tramp-methods <RET>'.
+
+
+File: tramp.info,  Node: Remote Programs,  Next: Remote shell setup,  Prev: Customizing Methods,  Up: Configuration
+
+How TRAMP finds and uses programs on the remote machine.
+========================================================
+
+   TRAMP depends on a number of programs on the remote host in order to
+function, including `ls', `test', `find' and `cat'.
+
+   In addition to these required tools, there are various tools that
+may be required based on the connection method. See *Note Inline
+methods:: and *Note External transfer methods:: for details on these.
+
+   Certain other tools, such as `perl' (or `perl5') and `grep' will be
+used if they can be found. When they are available, they are used to
+improve the performance and accuracy of remote file access.
+
+   When TRAMP connects to the remote machine, it searches for the
+programs that it can use. The variable TRAMP-REMOTE-PATH controls the
+directories searched on the remote machine.
+
+   By default, this is set to a reasonable set of defaults for most
+machines. It is possible, however, that your local (or remote ;) system
+administrator has put the tools you want in some obscure local
+directory.
+
+   In this case, you can still use them with TRAMP. You simply need to
+add code to your `.emacs' to add the directory to the remote path.
+This will then be searched by TRAMP when you connect and the software
+found.
+
+   To add a directory to the remote search path, you could use code such
+as:
+
+     (require 'tramp)                ; TRAMP must be loaded before this
+                                     ; happens.
+     
+     ; We have `perl' in "/usr/local/perl"
+     (add-to-list 'tramp-remote-path "/usr/local/perl")
+
+
+File: tramp.info,  Node: Remote shell setup,  Prev: Remote Programs,  Up: Configuration
+
+Remote shell setup hints
+========================
+
+   As explained in the *Note Overview:: section, TRAMP connects to the
+remote host and talks to the shell it finds there.  Of course, when you
+log in, the shell executes its init files.  Suppose your init file
+requires you to enter the birthdate of your mother; clearly TRAMP does
+not know this and hence fails to log you in to that host.
+
+   There are different possible strategies for pursuing this problem.
+One strategy is to enable TRAMP to deal with all possible situations.
+This is a losing battle, since it is not possible to deal with _all_
+situations.  The other strategy is to require you to set up the remote
+host such that it behaves like TRAMP expect.  This might be
+inconvenient because you have to invest a lot of effort into shell
+setup before you can begin to use TRAMP.
+
+   The package, therefore, pursues a combined approach.  It tries to
+figure out some of the more common setups, and only requires you to
+avoid really exotic stuff.  For example, it looks through a list of
+directories to find some programs on the remote host.  And also, it
+knows that it is not obvious how to check whether a file exist, and
+therefore it tries different possibilities.  (On some hosts and shells,
+the command `test -e' does the trick, on some hosts the shell builtin
+doesn't work but the program `/usr/bin/test -e' or `/bin/test -e'
+works.  And on still other hosts, `ls -d' is the right way to do this.)
+
+   Below you find a discussion of a few things that TRAMP does not deal
+with, and that you therefore have to set up correctly.
+
+   * `shell-prompt-pattern'
+
+     After logging in to the remote host, TRAMP has to wait for the
+     remote shell startup to finish before it can send commands to the
+     remote shell.  The strategy here is to wait for the shell prompt.
+     In order to recognize the shell prompt, the variable
+     `shell-prompt-pattern' has to be set correctly to recognize the
+     shell prompt on the remote host.
+
+   * `tset' and other questions
+
+     Some people invoke the `tset' program from their shell startup
+     scripts which asks the user about the terminal type of the shell.
+     Maybe some shells ask other questions when they are started.
+     TRAMP does not know how to answer these questions.  (A facility
+     for enabling TRAMP to answer these questions is planned for some
+     future version, but don't hold your breath.)
+
+     Therefore, you should take care that the shell does not ask any
+     questions when invoked from TRAMP.  You can do this by checking the
+     `TERM' environment variable, it will be set to `dumb' when
+     connecting.
+
+     The variable `tramp-terminal-type' can be used to change this value
+     `dumb'.
+
+
+
+File: tramp.info,  Node: Usage,  Next: Bug Reports,  Prev: Configuration,  Up: Top
+
+Using TRAMP
+***********
+
+   Once you have installed TRAMP it will operate fairly transparently.
+You will be able to access files on any remote machine that you can log
+in to as though they were local.
+
+   Files are specified to TRAMP using a formalized syntax specifying the
+details of the system to connect to. This is similar to the syntax used
+by the `EFS' and `ange-ftp' packages.
+
+* Menu:
+
+* Filename Syntax::             TRAMP filename conventions.
+* Multi-hop filename syntax::   Multi-hop filename conventions
+* Dired::                       Dired and filename completion.
+
+
+File: tramp.info,  Node: Filename Syntax,  Next: Multi-hop filename syntax,  Prev: Usage,  Up: Usage
+
+TRAMP filename conventions
+==========================
+
+   To access the file <path> on the remote machine <machine> you would
+specify the filename `/[<machine>]<path>'.  (The square brackets are
+part of the file name.)  This will connect to <machine> and transfer
+the file using the default method.  *Note Default Method::.
+
+   Some examples of TRAMP filenames are:
+
+`/[melancholia].emacs'
+     Edit the file `.emacs' in your home directory on the machine
+     `melancholia'.
+
+`/[melancholia.danann.net].emacs'
+     This edits the same file, using the fully qualified domain name of
+     the machine.
+
+`/[melancholia]~/.emacs'
+     This also edits the same file -- the `~' is expanded to your home
+     directory on the remote machine, just like it is locally.
+
+`/[melancholia]~daniel/.emacs'
+     This edits the file `.emacs' in the home directory of the user
+     `daniel' on the machine `melancholia'. The `~<user>' construct is
+     expanded to the home directory of that user on the remote machine.
+
+`/[melancholia]/etc/squid.conf'
+     This edits the file `/etc/squid.conf' on the machine `melancholia'.
+
+   Unless you specify a different name to use, TRAMP will use the
+current local user name as the remote user name to log in with. If you
+need to log in as a different user, you can specify the user name as
+part of the filename.
+
+   To log in to the remote machine as a specific user, you use the
+syntax `/[<user>@<machine>]/path/to.file'.  That means that connecting
+to `melancholia' as `daniel' and editing `.emacs' in your home
+directory you would specify `/[daniel@melancholia].emacs'.
+
+   It is also possible to specify other file transfer methods (*note
+Default Method::) as part of the filename.  This is done by replacing
+the initial `/[' with `/[<method>/'.  (Note the trailing slash!)  The
+user, machine and file specification remain the same.
+
+   So, to connect to the machine `melancholia' as `daniel', using the
+`su' method to transfer files, and edit `.emacs' in my home directory I
+would specify the filename `/[su/daniel@melancholia].emacs'.
+
+
+File: tramp.info,  Node: Multi-hop filename syntax,  Next: Dired,  Prev: Filename Syntax,  Up: Usage
+
+Multi-hop filename conventions
+==============================
+
+   The syntax of multi-hop file names is necessarily slightly different
+than the syntax of other TRAMP file names.  Here's an example multi-hop
+file name:
+
+   `/[multi/rsh:out@gate/telnet:kai@real.host]/path/to.file'
+
+   This is quite a mouthful.  So let's go through it step by step.  The
+file name consists of three parts, separated by slashes and square
+brackets.  The first part is `/[multi', the method specification.  The
+second part is `rsh:out@gate/telnet:kai@real.host' and specifies the
+hops.  (Yes, the second part may contain even more slashes, so that's
+why this file name has more than two colons in it.)  The final part is
+`/path/to.file' and specifies the file name on the remote host.
+
+   The first part and the final part should be clear.  *Note Multi-hop
+Methods::, for a list of alternatives for the method specification.
+
+   The second part can be subdivided again into components, so-called
+hops.  In the above file name, there are two hops, `rsh:out@gate' and
+`telnet:kai@real.host'.
+
+   Each hop can _again_ be subdivided into (three) components, the "hop
+method", the "user name" and the "host name".  The meaning of the
+second and third component should be clear, and the hop method says
+what program to use to perform that hop.
+
+   The first hop, `rsh:out@gate', says to use `rsh' to log in as user
+`out' to the host `gate'.  Starting at that host, the second hop,
+`telnet:kai@real.host', says to use `telnet' to log in as user `kai' to
+host `real.host'.
+
+   *Note Multi-hop Methods::, for a list of possible hop method values.
+The variable TRAMP-MULTI-CONNECTION-FUNCTION-ALIST contains the list of
+possible hop methods and information on how to execute them, should you
+want to add your own.
+
+
+File: tramp.info,  Node: Dired,  Prev: Multi-hop filename syntax,  Up: Usage
+
+Dired and filename completion
+=============================
+
+   TRAMP works transparently with dired, enabling you to use this
+powerful file management tool to manage files on any machine you have
+access to over the Internet.
+
+   Filename completion also works with TRAMP for files on remote
+machines although there is no completion for user names or machine
+names at this stage.
+
+   As filename completion needs to fetch the listing of files from the
+remote machine, this feature is sometimes fairly slow. As TRAMP does not
+yet cache the results of directory listing, there is no gain in
+performance the second time you complete filenames.
+
+   If you need to browse a directory tree, Dired is a better choice, at
+present, than filename completion. Dired has it's own cache mechanism
+and will only fetch the directory listing once.
+
+
+File: tramp.info,  Node: Bug Reports,  Next: Frequently Asked Questions,  Prev: Usage,  Up: Top
+
+Reporting Bugs and Problems
+***************************
+
+   Bugs and problems with TRAMP are actively worked on by the
+development team. Feature requests and suggestions are also more than
+welcome.
+
+   The TRAMP mailing list is a great place to get information on working
+with TRAMP, solving problems and general discussion and advice on topics
+relating to the package.
+
+   The  mailing list is at <tramp-devel@lists.sourceforge.net>.
+Messages sent to this address go to all the subscribers. This is _not_
+the address to send subscription requests to.
+
+   For help on subscribing to the list, send mail to the administrative
+address, <tramp-devel-request@lists.sourceforge.net>, with the subject
+`help'.
+
+   To report a bug in TRAMP, you should execute `M-x tramp-bug'. This
+will automatically generate a buffer with the details of your system and
+TRAMP version.
+
+   When submitting a bug report, please try to describe in excruciating
+detail the steps required to reproduce the problem, the setup of the
+remote machine and any special conditions that exist.
+
+   If you can identify a minimal test case that reproduces the problem,
+include that with your bug report. This will make it much easier for the
+development team to analyze and correct the problem.
+
+
+File: tramp.info,  Node: Frequently Asked Questions,  Next: Version Control,  Prev: Bug Reports,  Up: Top
+
+Frequently Asked Questions
+**************************
+
+   * Where can I get the latest TRAMP?
+
+     TRAMP is available at
+     `ftp://ls6-ftp.cs.uni-dortmund.de/pub/src/emacs/tramp.tar.gz'.
+     There is also a SourceForge project page, at
+     `http://sourceforge.net/projects/tramp'.
+
+   * Which systems does it work on?
+
+     The package has been used successfully on Emacs 20 and Emacs 21,
+     as well as XEmacs 21.  XEmacs 20 is more problematic, see the
+     notes in `tramp.el'.  I don't think anybody has really tried it on
+     Emacs 19.
+
+     The package was intended to work on Unix, and it really expects a
+     Unix-like system on the remote end, but some people seemed to have
+     some success getting it to work on NT Emacs.
+
+     There are some informations on Tramp on NT at the following URL;
+     many thanks to Joe Stoy for providing the information:
+     `ftp://ftp.comlab.ox.ac.uk/tmp/Joe.Stoy/'
+
+     The above mostly contains patches to old ssh versions; Tom Roche
+     has a Web page with instructions:
+     `http://www4.ncsu.edu/~tlroche/plinkTramp.html'
+
+     ??? Is the XEmacs info correct?
+
+     ??? Can somebody provide some information for getting it to work
+     on NT Emacs?  I think there was some issue with `ssh'?
+
+   * I can't stop EFS starting with XEmacs
+
+     Not all the older versions of TRAMP supported XEmacs correctly. The
+     first thing to do is to make sure that you have the latest version
+     of TRAMP installed.
+
+     If you do, please try and find out exactly the conditions required
+     for the `EFS' handlers to fire. If you can, putting a breakpoint on
+     `efs-ftp-path' and sending in the stack trace along with your bug
+     report would make it easier for the developers to work out what is
+     going wrong.
+
+   * File name completion does not work with TRAMP
+
+     When you log in to the remote machine, do you see the output of
+     `ls' in color? If so, this may be the cause of your problems.
+
+     `ls' outputs ANSI escape sequences that your terminal emulator
+     interprets to set the colors. These escape sequences will confuse
+     TRAMP however.
+
+     In your `.bashrc', `.profile' or equivalent on the remote machine
+     you probably have an alias configured that adds the option
+     `--color=yes' or `--color=auto'.
+
+     You should remove that alias and ensure that a new login _does not_
+     display the output of `ls' in color. If you still cannot use
+     filename completion, report a bug to the TRAMP developers.
+
+   * File name completion does not work in large directories
+
+     TRAMP uses globbing for some operations.  (Globbing means to use
+     the shell to expand wildcards such as `*.c'.)  This might create
+     long command lines, especially in directories with many files.
+     Some shell choke on long command lines, or don't cope well with
+     the globbing itself.
+
+     If you have a large directory on the remote end, you may wish to
+     execute a command like `ls -d * ..?* > /dev/null' and see if it
+     hangs.  Note that you must first start the right shell, which
+     might be `/bin/sh', `ksh' or `bash', depending on which of those
+     supports tilde expansion.
+
+   * What kinds of systems does TRAMP work on
+
+     TRAMP really expects the remote system to be a Unix-like system.
+     The local system should preferably be Unix-like, as well, but
+     TRAMP might work on NT with some tweaking.
+
+   * How can I get notified when TRAMP file transfers are complete?
+
+     The following snippet can be put in your `~/.emacs' file.  It makes
+     Emacs beep after reading from or writing to the remote host.
+
+          (defadvice tramp-handle-write-region
+            (after tramp-write-beep-advice activate)
+           " make tramp beep after writing a file."
+           (interactive)
+           (beep))
+          (defadvice tramp-handle-do-copy-or-rename-file
+            (after tramp-copy-beep-advice activate)
+           " make tramp beep after copying a file."
+           (interactive)
+           (beep))
+          (defadvice tramp-handle-insert-file-contents
+            (after tramp-copy-beep-advice activate)
+           " make tramp beep after copying a file."
+           (interactive)
+           (beep))
+
+   * There's this `~/.sh_history' file on the remote host which   keeps
+     growing and growing.  What's that?
+
+     Sometimes, TRAMP starts `ksh' on the remote host for tilde
+     expansion.  Maybe `ksh' saves the history by default.  TRAMP tries
+     to turn off saving the history, but maybe you have to help.  For
+     example, you could put this in your `.kshrc':
+
+          if [ -f $HOME/.sh_history ] ; then
+             /bin/rm $HOME/.sh_history
+          fi
+          if [ "${HISTFILE-unset}" != "unset" ] ; then
+             unset HISTFILE
+          fi
+          if [ "${HISTSIZE-unset}" != "unset" ] ; then
+             unset HISTSIZE
+          fi
+
+
+
+File: tramp.info,  Node: Version Control,  Next: Files directories and paths,  Prev: Frequently Asked Questions,  Up: Top
+
+The inner workings of remote version control
+********************************************
+
+   Unlike EFS and ange-ftp, TRAMP has full shell access to the remote
+machine. This makes it possible to provide version control for files
+accessed under TRAMP.
+
+   The actual version control binaries must be installed on the remote
+machine, accessible in the directories specified in TRAMP-REMOTE-PATH.
+
+   This transparent integration with the version control systems is one
+of the most valuable features provided by TRAMP, but it is far from
+perfect.  Work is ongoing to improve the transparency of the system.
+
+* Menu:
+
+* Version Controlled Files::    Determining if a file is under version control.
+* Remote Commands::             Executing the version control commands on the remote machine.
+* Changed workfiles::           Detecting if the working file has changed.
+* Checking out files::          Bringing the workfile out of the repository.
+* Miscellaneous Version Control::  Things related to Version Control that don't fit elsewhere
+
+
+File: tramp.info,  Node: Version Controlled Files,  Next: Remote Commands,  Prev: Version Control,  Up: Version Control
+
+Determining if a file is under version control
+==============================================
+
+   The VC package uses the existence of on-disk revision control master
+files to determine if a given file is under revision control. These file
+tests happen on the remote machine through the standard TRAMP
+mechanisms.
+
+
+File: tramp.info,  Node: Remote Commands,  Next: Changed workfiles,  Prev: Version Controlled Files,  Up: Version Control
+
+Executing the version control commands on the remote machine
+============================================================
+
+   There are no hooks provided by VC to allow intercepting of the
+version control command execution. The calls occur through the
+`call-process' mechanism, a function that is somewhat more efficient
+than the `shell-command' function but that does not provide hooks for
+remote execution of commands.
+
+   To work around this, the functions `vc-do-command' and
+`vc-simple-command' have been advised to intercept requests for
+operations on files accessed via TRAMP.
+
+   In the case of a remote file, the `shell-command' interface is used,
+with some wrapper code, to provide the same functionality on the remote
+machine as would be seen on the local machine.
+
+
+File: tramp.info,  Node: Changed workfiles,  Next: Checking out files,  Prev: Remote Commands,  Up: Version Control
+
+Detecting if the working file has changed
+=========================================
+
+   As there is currently no way to get access to the mtime of a file on
+a remote machine in a portable way, the `vc-workfile-unchanged-p'
+function is advised to call an TRAMP specific function for remote files.
+
+   The `tramp-vc-workfile-unchanged-p' function uses the functioning VC
+diff functionality to determine if any changes have occurred between the
+workfile and the version control master.
+
+   This requires that a shell command be executed remotely, a process
+that is notably heavier-weight than the mtime comparison used for local
+files. Unfortunately, unless a portable solution to the issue is found,
+this will remain the cost of remote version control.
+
+
+File: tramp.info,  Node: Checking out files,  Next: Miscellaneous Version Control,  Prev: Changed workfiles,  Up: Version Control
+
+Bringing the workfile out of the repository
+===========================================
+
+   VC will, by default, check for remote files and refuse to act on them
+when checking out files from the repository. To work around this
+problem, the function `vc-checkout' knows about TRAMP files and allows
+version control to occur.
+
+
+File: tramp.info,  Node: Miscellaneous Version Control,  Prev: Checking out files,  Up: Version Control
+
+Things related to Version Control that don't fit elsewhere
+==========================================================
+
+   Minor implementation details, &c.
+
+* Menu:
+
+* Remote File Ownership::       How VC determines who owns a workfile.
+* Back-end Versions::           How VC determines what release your RCS is.
+
+
+File: tramp.info,  Node: Remote File Ownership,  Next: Back-end Versions,  Prev: Miscellaneous Version Control,  Up: Miscellaneous Version Control
+
+How VC determines who owns a workfile
+-------------------------------------
+
+   Emacs provides the `user-full-name' function to return the login name
+of the current user as well as mapping from arbitrary user id values
+back to login names. The VC code uses this functionality to map from the
+uid of the owner of a workfile to the login name in some circumstances.
+
+   This will not, for obvious reasons, work if the remote system has a
+different set of logins. As such, it is necessary to delegate to the
+remote machine the job of determining the login name associated with a
+uid.
+
+   Unfortunately, with the profusion of distributed management systems
+such as `NIS', `NIS+' and `NetInfo', there is no simple, reliable and
+portable method for performing this mapping.
+
+   Thankfully, the only place in the VC code that depends on the
+mapping of a uid to a login name is the `vc-file-owner' function. This
+returns the login of the owner of the file as a string.
+
+   This function has been advised to use the output of `ls' on the
+remote machine to determine the login name, delegating the problem of
+mapping the uid to the login to the remote system which should know more
+about it than I do.
+
+
+File: tramp.info,  Node: Back-end Versions,  Prev: Remote File Ownership,  Up: Miscellaneous Version Control
+
+How VC determines what release your RCS is
+------------------------------------------
+
+   VC needs to know what release your revision control binaries you are
+running as not all features VC supports are available with older
+versions of `rcs(1)', `cvs(1)' or `sccs(1)'.
+
+   The default implementation of VC determines this value the first
+time it is needed and then stores the value globally to avoid the
+overhead of executing a process and parsing it's output each time the
+information is needed.
+
+   Unfortunately, life is not quite so easy when remote version control
+comes into the picture. Each remote machine may have a different version
+of the version control tools and, while this is painful, we need to
+ensure that unavailable features are not used remotely.
+
+   To resolve this issue, TRAMP currently takes the sledgehammer
+approach of making the release values of the revision control tools
+local to each TRAMP buffer, forcing VC to determine these values again
+each time a new file is visited.
+
+   This has, quite obviously, some performance implications. Thankfully,
+most of the common operations performed by VC do not actually require
+that the remote version be known. This makes the problem far less
+apparent.
+
+   Eventually these values will be captured by TRAMP on a system by
+system basis and the results cached to improve performance.
+
+
+File: tramp.info,  Node: Files directories and paths,  Next: Issues,  Prev: Version Control,  Up: Top
+
+How file names, directories and paths are mangled and managed.
+**************************************************************
+
+* Menu:
+
+* Path deconstruction::         Breaking a path into it's components.
+
+
+File: tramp.info,  Node: Path deconstruction,  Prev: Files directories and paths,  Up: Files directories and paths
+
+Breaking a path into it's components.
+=====================================
+
+   TRAMP filenames are somewhat different, obviously, to ordinary path
+names. As such, the lisp functions `file-name-directory' and
+`file-name-nondirectory' are overridden within the TRAMP package.
+
+   Their replacements are reasonably simplistic in their approach. They
+dissect the filename, call the original handler on the remote path and
+then rebuild the TRAMP path with the result.
+
+   This allows the platform specific hacks in the original handlers to
+take effect while preserving the TRAMP path information.
+
+
+File: tramp.info,  Node: Issues,  Prev: Files directories and paths,  Up: Top
+
+Debatable Issues and What Was Decided
+*************************************
+
+   * The uuencode method does not always work.
+
+     Due to the design of TRAMP, the encoding and decoding programs
+     need to read from stdin and write to stdout.  On some systems,
+     `uudecode -o -' will read stdin and write the decoded file to
+     stdout, on other systems `uudecode -p' does the same thing.  But
+     some systems have uudecode implementations which cannot do this at
+     all--it is not possible to call these uudecode implementations
+     with suitable parameters so that they write to stdout.
+
+     Of course, this could be circumvented: the `begin foo 644' line
+     could be rewritten to put in some temporary file name, then
+     `uudecode' could be called, then the temp file could be printed and
+     deleted.
+
+     But I have decided that this is too fragile to reliably work, so
+     on some systems you'll have to do without the uuencode methods.
+
+   * TRAMP does not work on XEmacs 20.
+
+     This is because it requires the macro `with-timeout' which does not
+     appear to exist in XEmacs 20.  I'm somewhat reluctant to add an
+     emulation macro to TRAMP, but if somebody who uses XEmacs 20 steps
+     forward and wishes to implement and test it, please contact me or
+     the mailing list.
+
+
+
+
+Tag Table:
+Node: Top1212
+Node: Copying4455
+Node: Overview5329
+Ref: Overview-Footnote-111418
+Node: Obtaining TRAMP11570
+Node: History12939
+Node: Installation13598
+Node: Configuration15637
+Node: Connection types16913
+Node: Inline methods19028
+Node: External transfer methods23889
+Ref: External transfer methods-Footnote-127141
+Node: Multi-hop Methods27220
+Node: Default Method30665
+Node: Customizing Methods32177
+Node: Remote Programs32580
+Node: Remote shell setup34261
+Node: Usage37087
+Node: Filename Syntax37755
+Node: Multi-hop filename syntax39928
+Node: Dired41817
+Node: Bug Reports42730
+Node: Frequently Asked Questions44088
+Node: Version Control49082
+Node: Version Controlled Files50243
+Node: Remote Commands50681
+Node: Changed workfiles51583
+Node: Checking out files52454
+Node: Miscellaneous Version Control52912
+Node: Remote File Ownership53333
+Node: Back-end Versions54676
+Node: Files directories and paths56143
+Node: Path deconstruction56455
+Node: Issues57167
+
+End Tag Table

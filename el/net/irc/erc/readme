@@ -1,0 +1,26 @@
+ERC is an IRC client for Emacs
+
+The documentation is kept on the Emacs Wiki:
+
+* http://www.emacswiki.org/cgi-bin/wiki.pl?EmacsIRCClient
+
+Quick start:
+
+Put all the files in your load-path*, and add the following
+to your ~/.emacs:
+
+(require 'erc)
+
+*Don't know what a load path is? See:
+
+http://www.emacswiki.org/cgi-bin/wiki.pl?LoadPath
+
+Usage:
+
+Use M-x erc-select to connect to a server.  You can connect to
+multiple servers.
+
+Customization:
+
+Use M-x customize-group RET erc RET to get an overview of all the
+variables you can tweak.

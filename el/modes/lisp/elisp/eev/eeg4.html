@@ -1,0 +1,370 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.16 in css mode. -->
+<html>
+  <head>
+    <title>eeg4 (htmlized)</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #ffe4c4;
+        background-color: #000000;
+      }
+      .builtin {
+        /* font-lock-builtin-face */
+        color: #b0c4de;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #ff7f24;
+      }
+      .comment-delimiter {
+      }
+      .eev-glyph-face-green {
+        /* eev-glyph-face-green */
+        color: #00ff00;
+      }
+      .eev-glyph-face-yellow-on-red {
+        /* eev-glyph-face-yellow-on-red */
+        color: #ffff00;
+        background-color: #ff0000;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #87cefa;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #00ffff;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #ffa07a;
+      }
+      .tcl-escaped-newline {
+      }
+      .type {
+        /* font-lock-type-face */
+        color: #98fb98;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #eedd82;
+      }
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="comment-delimiter">#</span><span class="comment">!/bin/sh
+</span><span class="comment-delimiter"># </span><span class="comment">the next line restarts using expect \
+</span><span class="builtin">exec</span> expect <span class="string">"$0"</span> -- <span class="string">"$@"</span>
+<span class="comment-delimiter"># </span><span class="comment">(find-man "1 tclsh" "#!")
+</span><span class="comment-delimiter"># </span><span class="comment">eeg4 and eeg: support for the "generic" interface for eev.
+</span>
+<span class="keyword">proc</span> <a name="COPYRIGHT"><span class="function-name">COPYRIGHT</span></a> {} { <span class="builtin">puts</span> {<span class="tcl-escaped-newline">\</span>
+This is the `eeg4' <span class="builtin">file</span> of GNU eev (and also the `eeg' <span class="builtin">file</span>, due to a link).
+
+Copyright (C) 2001,2002,2003,2004,2005 Free Software Foundation, Inc.
+
+This <span class="builtin">file</span> is part of GNU eev.
+
+GNU eev is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2, or (at your option) any
+later version.
+
+GNU eev is distributed <span class="keyword">in</span> the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+<span class="keyword">for</span> more details.
+
+You should have received a copy of the GNU General Public License
+along with GNU eev; see the <span class="builtin">file</span> COPYING. If not, write to the Free
+Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+02111-1307, USA.
+
+Author:     Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+Maintainer: Eduardo Ochs &lt;<a href="mailto:edrx&#64;mat.puc-rio.br">edrx&#64;mat.puc-rio.br</a>&gt;
+Version:    2005aug26
+}}
+
+<span class="comment-delimiter">### </span><span class="comment">Comment:
+</span>
+<span class="comment-delimiter"># </span><span class="comment">eeg4 and eeg: support for the "generic" interface for eev.
+</span><span class="comment-delimiter"># </span><span class="comment">Keywords:     e-scripts, processes
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">Latest version: &lt;<a href="http://angg.twu.net/eev-current/eeg4">http://angg.twu.net/eev-current/eeg4</a>&gt;
+</span><span class="comment-delimiter">#       </span><span class="comment">htmlized: &lt;<a href="http://angg.twu.net/eev-current/eeg4.html">http://angg.twu.net/eev-current/eeg4.html</a>&gt;
+</span><span class="comment-delimiter">#       </span><span class="comment">See also: &lt;<a href="http://angg.twu.net/eev-current/README.html">http://angg.twu.net/eev-current/README.html</a>&gt;
+</span><span class="comment-delimiter">#            </span><span class="comment">and: &lt;<a href="http://angg.twu.net/eev-current/eegchannel.html">http://angg.twu.net/eev-current/eegchannel.html</a>&gt;
+</span>
+<span class="comment-delimiter"># </span><span class="comment">With this script almost any program that takes input from stdin
+</span><span class="comment-delimiter"># </span><span class="comment">becomes e-scriptable. The file $EEG (usually ~/eev-current/tmp/ee.eeg)
+</span><span class="comment-delimiter"># </span><span class="comment">contains a sequence of "actions"; when we invoke a program through
+</span><span class="comment-delimiter"># </span><span class="comment">eeg4 or eeg, with
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#        </span><span class="comment">eeg4 [options] program [args]
+</span><span class="comment-delimiter">#   </span><span class="comment">or   eeg  [options] program [args]
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">this script will run "program args" with a bit of keyboard (i.e.,
+</span><span class="comment-delimiter"># </span><span class="comment">stdin) translation: if we type a "M-l" ("meta-L", which is the Emacs
+</span><span class="comment-delimiter"># </span><span class="comment">terminology for an alt-L), eeg4 will capture it and instead of
+</span><span class="comment-delimiter"># </span><span class="comment">sending it to the program it will run an action from its list; for
+</span><span class="comment-delimiter"># </span><span class="comment">example, in
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment">cat &gt; $EEG &lt;'---'
+</span><span class="comment-delimiter">#   </span><span class="comment">echo $shell
+</span><span class="comment-delimiter">#   </span><span class="comment">exit
+</span><span class="comment-delimiter">#   </span><span class="comment">---
+</span><span class="comment-delimiter">#   </span><span class="comment">eeg tcsh
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">the first action will be "send the string 'echo $shell' to the
+</span><span class="comment-delimiter"># </span><span class="comment">controlled program, followed by a newline", and the second will be
+</span><span class="comment-delimiter"># </span><span class="comment">"send the string 'exit' to the controlled program, followed by a
+</span><span class="comment-delimiter"># </span><span class="comment">newline", and so if we run the block above with M-x eev and "ee" and
+</span><span class="comment-delimiter"># </span><span class="comment">we type some "M-l"s to eeg we will see something like:
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment">/home/edrx(edrx)# ee
+</span><span class="comment-delimiter">#   </span><span class="comment">cat &gt; $EEG &lt;&lt;'---'
+</span><span class="comment-delimiter">#   </span><span class="comment">echo $shell
+</span><span class="comment-delimiter">#   </span><span class="comment">exit
+</span><span class="comment-delimiter">#   </span><span class="comment">---
+</span><span class="comment-delimiter">#   </span><span class="comment">eeg tcsh
+</span><span class="comment-delimiter">#   </span><span class="comment">angg:~# echo $shell
+</span><span class="comment-delimiter">#   </span><span class="comment">/usr/bin/tcsh
+</span><span class="comment-delimiter">#   </span><span class="comment">angg:~# exit
+</span><span class="comment-delimiter">#   </span><span class="comment">exit
+</span><span class="comment-delimiter">#   </span><span class="comment">/home/edrx(edrx)#
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">Compare with what we would see if we had run tcsh and typed "echo
+</span><span class="comment-delimiter"># </span><span class="comment">$shell" and "exit" by hand:
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment">/home/edrx(edrx)# tcsh
+</span><span class="comment-delimiter">#   </span><span class="comment">angg:~# echo $shell
+</span><span class="comment-delimiter">#   </span><span class="comment">/usr/bin/tcsh
+</span><span class="comment-delimiter">#   </span><span class="comment">angg:~# exit
+</span><span class="comment-delimiter">#   </span><span class="comment">exit
+</span><span class="comment-delimiter">#   </span><span class="comment">/home/edrx(edrx)#
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">but in the first case we only had to type "e e &lt;enter&gt; M-l M-l" in
+</span><span class="comment-delimiter"># </span><span class="comment">the shell.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">If this script is invoked as "eeg" then each line of $EEG becomes an
+</span><span class="comment-delimiter"># </span><span class="comment">action like "send the contents of this line, followed by a newline";
+</span><span class="comment-delimiter"># </span><span class="comment">if it is invoked by any other name (for example, eeg4) then $EEG is
+</span><span class="comment-delimiter"># </span><span class="comment">interpreted as a Tcl script; the block
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment">cat &gt; $EEG &lt;'---'
+</span><span class="comment-delimiter">#   </span><span class="comment">l {echo $shell}
+</span><span class="comment-delimiter">#   </span><span class="comment">l {exit}
+</span><span class="comment-delimiter">#   </span><span class="comment">---
+</span><span class="comment-delimiter">#   </span><span class="comment">eeg4 tcsh
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">is equivalent to the block used in the example above.
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="comment">I have tried to keep this script as minimal as possible; it works
+</span><span class="comment-delimiter"># </span><span class="comment">and is useful enough, yet, plus, it has a mechanism for loading
+</span><span class="comment-delimiter"># </span><span class="comment">extensions! Take a look at the "loadeeglib" section below and at the
+</span><span class="comment-delimiter"># </span><span class="comment">"eeg libraries" that it refers to -- in Tcl it is trivial to replace
+</span><span class="comment-delimiter"># </span><span class="comment">a function by just redefining it, so some of the extensions redefine
+</span><span class="comment-delimiter"># </span><span class="comment">functions in this file by other, not so minimal, versions.
+</span>
+<span class="comment-delimiter"># </span><span class="comment">Note, 2004dec29: commented out the code for loadeeglib (see below).
+</span>
+<span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">.misc</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">               (to "misc")
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">.loadeeglib</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">         (to "loadeeglib")
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">.actions</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">            (to "actions")
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">.dointeraction</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">      (to "dointeraction")
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">.actionkey</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">          (to "actionkey")
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">.doreadscript</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">       (to "doreadscript")
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">.eeg</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">                (to "eeg")
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">.dospawn</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">            (to "dospawn")
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">.arguments</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">          (to "arguments")
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">.mainloop</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">           (to "mainloop")
+</span>
+
+
+<span class="comment-delimiter">####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">misc</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">  (to ".misc")
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">####</span><span class="comment">
+</span>
+<span class="comment-delimiter"># </span><span class="comment">I/O and generic library functions.
+</span>
+<span class="keyword">proc</span> <a name="readfile"><span class="function-name">readfile</span></a> {fname} {
+  <span class="builtin">set</span> <a name="ch"><span class="variable-name">ch</span></a> [<span class="builtin">open</span> $<a name="fname"><span class="variable-name">fname</span></a> r]; <span class="builtin">set</span> <a name="str"><span class="variable-name">str</span></a> [<span class="builtin">read</span> $<a name="ch"><span class="variable-name">ch</span></a>]; <span class="builtin">close</span> $<a name="ch"><span class="variable-name">ch</span></a>; <span class="keyword">return</span> $<a name="str"><span class="variable-name">str</span></a>
+}
+<span class="keyword">proc</span> <a name="writefile"><span class="function-name">writefile</span></a> {fname str} {
+  <span class="builtin">set</span> <a name="ch"><span class="variable-name">ch</span></a> [<span class="builtin">open</span> $<a name="fname"><span class="variable-name">fname</span></a> w]; <span class="builtin">puts</span> -nonewline $<a name="ch"><span class="variable-name">ch</span></a> $<a name="str"><span class="variable-name">str</span></a>; <span class="builtin">close</span> $<a name="ch"><span class="variable-name">ch</span></a>
+}
+<span class="keyword">proc</span> <a name="getenv"><span class="function-name">getenv</span></a> {key {defaultvalue {}}} {
+  <span class="type">global</span> env
+  <span class="builtin">expr</span> {[<span class="builtin">info</span> exist env($<a name="key"><span class="variable-name">key</span></a>)]?$<a name="env"><span class="variable-name">env</span></a>($<a name="key"><span class="variable-name">key</span></a>):$<a name="defaultvalue"><span class="variable-name">defaultvalue</span></a>}
+}
+
+<span class="keyword">proc</span> <a name="ord"><span class="function-name">ord</span></a> {str} {<span class="builtin">scan</span> $<a name="str"><span class="variable-name">str</span></a> %c n; <span class="keyword">return</span> $<a name="n"><span class="variable-name">n</span></a>}
+<span class="keyword">proc</span> <a name="char"><span class="function-name">char</span></a> {n} {<span class="builtin">format</span> %c $<a name="n"><span class="variable-name">n</span></a>}
+<span class="keyword">proc</span> <a name="gset"><span class="function-name">gset</span></a> {args} { <span class="keyword">uplevel</span> #0 <span class="builtin">set</span> $<a name="args"><span class="variable-name">args</span></a> }       ;<span class="comment"># "global set"
+</span><span class="comment-delimiter"># </span><span class="comment">This is to remove a trailing newline, when there is one.
+</span><span class="keyword">proc</span> <a name="rmlastnewline"><span class="function-name">rmlastnewline</span></a> {str} {
+  <span class="builtin">regexp</span> <span class="string">"^(.*)\n\$"</span> $<a name="str"><span class="variable-name">str</span></a> -&gt; str
+  <span class="keyword">return</span> $<a name="str"><span class="variable-name">str</span></a>
+}
+
+<span class="keyword">proc</span> <a name="HOME"><span class="function-name">HOME</span></a>      {} { getenv HOME }
+<span class="keyword">proc</span> <a name="EEVDIR"><span class="function-name">EEVDIR</span></a>    {} { getenv EEVDIR    [HOME]/eev-current }
+<span class="keyword">proc</span> <a name="EEVTMPDIR"><span class="function-name">EEVTMPDIR</span></a> {} { getenv EEVTMPDIR [EEVDIR]/tmp }
+<span class="keyword">proc</span> <a name="EEG"><span class="function-name">EEG</span></a>       {} { getenv EEG       [EEVTMPDIR]/ee.eeg }
+
+
+
+<span class="comment-delimiter">####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">loadeeglib</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">  (to ".loadeeglib")
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">####</span><span class="comment">
+</span>
+<span class="comment-delimiter"># <a href="../eev/libeeg/k.html">(find-angg "eev/libeeg/k")</a></span><span class="comment">
+</span><span class="comment-delimiter"># <a href="../eev/libeeg/term.html">(find-angg "eev/libeeg/term")</a></span><span class="comment">
+</span><span class="comment-delimiter"># <a href="../eev/libeeg/msg.html">(find-angg "eev/libeeg/msg")</a></span><span class="comment">
+</span>
+<span class="comment-delimiter"># </span><span class="comment">Just add the following to top of your eegscript if you want to load
+</span><span class="comment-delimiter"># </span><span class="comment">all the standard extensions and don't want to worry too much about
+</span><span class="comment-delimiter"># </span><span class="comment">the details:
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">#   </span><span class="comment">loadeeglibs all ;# <a href="../eev/libeeg/all.html">(find-angg "eev/libeeg/all")</a>
+</span>
+<span class="comment-delimiter"># </span><span class="comment">2004dec29: This is very old code, I haven't used these libraries
+</span><span class="comment-delimiter"># </span><span class="comment">("all" and stuff) in a long time, and I have even removed their code
+</span><span class="comment-delimiter"># </span><span class="comment">from the latest versions of eev... I'm commenting out the code
+</span><span class="comment-delimiter"># </span><span class="comment">below.
+</span>
+<span class="comment-delimiter"># </span><span class="comment">proc toeeglibfname {stem} {
+</span><span class="comment-delimiter">#   </span><span class="comment">return [getenv LIBEEGDIR [getenv HOME]/eev/libeeg]/$stem
+</span><span class="comment-delimiter"># </span><span class="comment">}
+</span><span class="comment-delimiter"># </span><span class="comment">proc loadeeglib {stem} { uplevel #0 source [toeeglibfname $stem] }
+</span><span class="comment-delimiter"># </span><span class="comment">proc loadeeglibs {args} { foreach stem $args {loadeeglib $stem} }
+</span>
+
+
+<span class="comment-delimiter">####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">actions</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">  (to ".actions")
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">####</span><span class="comment">
+</span>
+<span class="builtin">set</span> <a name="actions"><span class="variable-name">actions</span></a> {}
+<span class="builtin">set</span> <a name="actions_i"><span class="variable-name">actions_i</span></a> 0
+<span class="keyword">proc</span> <a name="doaction"><span class="function-name">doaction</span></a> {} {
+  <span class="type">global</span> actions actions_i
+  <span class="keyword">uplevel</span> #0 [<span class="builtin">lindex</span> $<a name="actions"><span class="variable-name">actions</span></a> $<a name="actions_i"><span class="variable-name">actions_i</span></a>]
+  <span class="builtin">incr</span> actions_i
+}
+<span class="keyword">proc</span> <a name="appendaction"><span class="function-name">appendaction</span></a> {str} { <span class="type">global</span> actions; <span class="builtin">lappend</span> actions $<a name="str"><span class="variable-name">str</span></a> }
+<span class="keyword">proc</span> <a name="_str"><span class="function-name">_str</span></a> {str} { send -- $<a name="str"><span class="variable-name">str</span></a> }
+<span class="keyword">proc</span> <a name="str"><span class="function-name">str</span></a> {str} { appendaction [<span class="builtin">list</span> _str $<a name="str"><span class="variable-name">str</span></a>] }
+<span class="keyword">proc</span> <a name="_l"><span class="function-name">_l</span></a> {str} { send -- <span class="string">"$str\r"</span> }
+<span class="keyword">proc</span> <a name="l"><span class="function-name">l</span></a> {str} { appendaction [<span class="builtin">list</span> _l $<a name="str"><span class="variable-name">str</span></a>] }
+
+
+<span class="comment-delimiter">####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">dointeraction</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">  (to ".dointeraction")
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">####</span><span class="comment">
+</span>
+<span class="builtin">set</span> <a name="action_re"><span class="variable-name">action_re</span></a> <span class="string">"\354|\033l"</span>
+<span class="keyword">proc</span> <a name="dointeraction"><span class="function-name">dointeraction</span></a> {} {
+  <span class="type">global</span> action_re
+  interact -re $<a name="action_re"><span class="variable-name">action_re</span></a> {doaction; inter_return 1}
+  <span class="keyword">return</span> 0
+}
+
+
+<span class="comment-delimiter">####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">actionkey</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">  (to ".actionkey")
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">####</span><span class="comment">
+</span>
+<span class="keyword">proc</span> <a name="meta_re"><span class="function-name">meta_re</span></a> {c} { <span class="builtin">format</span> <span class="string">"%c|\033%s"</span> [<span class="builtin">expr</span> [ord $<a name="c"><span class="variable-name">c</span></a>]+128] $<a name="c"><span class="variable-name">c</span></a> }
+<span class="keyword">proc</span> <a name="actionkey"><span class="function-name">actionkey</span></a> {c} { gset action_re [meta_re $<a name="c"><span class="variable-name">c</span></a>] }
+
+
+<span class="comment-delimiter">####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">doreadscript</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">  (to ".doreadscript")
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">####</span><span class="comment">
+</span>
+<span class="keyword">proc</span> <a name="doreadscript"><span class="function-name">doreadscript</span></a> {} { <span class="keyword">uplevel</span> #0 <span class="builtin">source</span> [EEG] }
+
+<span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">eeg</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">  (to ".eeg")
+</span><span class="comment-delimiter"># </span><span class="comment">A hack: if this script is invoked as "eeg" it will interpret the
+</span><span class="comment-delimiter"># </span><span class="comment">$EEG file as a sequence of lines to be sent literally, instead of as
+</span><span class="comment-delimiter"># </span><span class="comment">a Tcl script.
+</span><span class="keyword">proc</span> <a name="doreadscript_eeg"><span class="function-name">doreadscript_eeg</span></a> {} {
+  <span class="keyword">foreach</span> line [<span class="builtin">split</span> [rmlastnewline [readfile [EEG]]] <span class="string">"\n"</span>] {l $<a name="line"><span class="variable-name">line</span></a>}
+}
+<span class="keyword">proc</span> <a name="eeg"><span class="function-name">eeg</span></a> {} { <span class="keyword">proc</span> doreadscript {} { doreadscript_eeg } }
+<span class="keyword">if</span> {[<span class="builtin">file</span> tail $<a name="argv0"><span class="variable-name">argv0</span></a>]==<span class="string">"eeg"</span>} eeg
+
+
+<span class="comment-delimiter">####</span><span class="comment">
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">dospawn</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">  (to ".dospawn")
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">arguments</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">  (to ".arguments")
+</span><span class="comment-delimiter"># </span><span class="eev-glyph-face-green">&#171;</span><span class="comment">mainloop</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">  (to ".mainloop")
+</span><span class="comment-delimiter">#</span><span class="comment">
+</span><span class="comment-delimiter">####</span><span class="comment">
+</span>
+<span class="keyword">proc</span> <a name="dospawn"><span class="function-name">dospawn</span></a> {} { <span class="type">global</span> argv; <span class="keyword">uplevel</span> #0 spawn -noecho $<a name="argv"><span class="variable-name">argv</span></a>; stty raw }
+
+<span class="builtin">set</span> <a name="oldargv"><span class="variable-name">oldargv</span></a> $<a name="argv"><span class="variable-name">argv</span></a>
+<span class="keyword">while</span> 1 {
+  <span class="keyword">if</span> {[<span class="builtin">lindex</span> $<a name="argv"><span class="variable-name">argv</span></a> 0]==<span class="string">"-c"</span>} {
+    <span class="keyword">uplevel</span> #0 [<span class="builtin">lindex</span> $<a name="argv"><span class="variable-name">argv</span></a> 1]
+    <span class="builtin">set</span> <a name="argv"><span class="variable-name">argv</span></a> [<span class="builtin">lrange</span> $<a name="argv"><span class="variable-name">argv</span></a> 2 end]
+  }
+  <span class="keyword">if</span> {[<span class="builtin">lindex</span> $<a name="argv"><span class="variable-name">argv</span></a> 0]==<span class="string">"-f"</span>} {
+    <span class="builtin">set</span> <a name="env"><span class="variable-name">env</span></a>(EEG) [<span class="builtin">lindex</span> $<a name="argv"><span class="variable-name">argv</span></a> 1]; <span class="comment"># QUICK HACK, AFFECTS SUB-"eeg"S! FIX THIS!
+</span>    <span class="builtin">set</span> <a name="argv"><span class="variable-name">argv</span></a> [<span class="builtin">lrange</span> $<a name="argv"><span class="variable-name">argv</span></a> 2 end]
+  }
+  <span class="keyword">if</span> {$<a name="oldargv"><span class="variable-name">oldargv</span></a>==$<a name="argv"><span class="variable-name">argv</span></a>} <span class="keyword">break</span> <span class="keyword">else</span> {<span class="builtin">set</span> oldargv $<a name="argv"><span class="variable-name">argv</span></a>}
+}
+
+doreadscript
+dospawn
+
+<span class="comment-delimiter"># </span><span class="comment">Code for SIGWINCH added in 2005jan08.
+</span><span class="comment-delimiter"># </span><span class="comment">Transmit resizings. From &lt;<a href="http://www.hadron.org/~hatch/goodies/rrr">http://www.hadron.org/~hatch/goodies/rrr</a>&gt;.
+</span>trap {
+  stty rows [stty rows] columns [stty columns] &lt; $<a name="spawn_out"><span class="variable-name">spawn_out</span></a>(slave,name)
+} WINCH
+
+
+<span class="comment-delimiter"># </span><span class="comment">The main loop:
+</span><span class="keyword">while</span> {[dointeraction]} {}
+
+
+
+
+<span class="comment-delimiter">#</span><span class="eev-glyph-face-yellow-on-red">L</span><span class="comment">
+</span><span class="comment-delimiter">#  </span><span class="comment">Local Variables:
+</span><span class="comment-delimiter">#  </span><span class="comment">mode:                 tcl
+</span><span class="comment-delimiter">#  </span><span class="comment">coding:               raw-text-unix
+</span><span class="comment-delimiter">#  </span><span class="comment">ee-anchor-format:     "</span><span class="eev-glyph-face-green">&#171;</span><span class="comment">%s</span><span class="eev-glyph-face-green">&#187;</span><span class="comment">"
+</span><span class="comment-delimiter">#  </span><span class="comment">End:
+</span></pre>
+  </body>
+</html>

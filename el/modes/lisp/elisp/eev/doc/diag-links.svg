@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg1"
+   sodipodi:version="0.32"
+   inkscape:version="0.39"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   width="210mm"
+   height="297mm"
+   sodipodi:docbase="/home/edrx/IMAGES"
+   sodipodi:docname="find-fline.svg">
+  <defs
+     id="defs3">
+    <marker
+       style="overflow:visible;"
+       id="TriangleOutM"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         transform="scale(0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         id="path1619"
+         sodipodi:nodetypes="cccc" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.7366334"
+     inkscape:cx="259.01757"
+     inkscape:cy="407.61523"
+     inkscape:window-width="752"
+     inkscape:window-height="740"
+     inkscape:window-x="61"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF
+       id="RDF5">
+      <cc:Work
+         rdf:about=""
+         id="Work6">
+        <dc:format
+           id="format7">image/svg+xml</dc:format>
+        <dc:type
+           id="type9"
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <text
+     xml:space="preserve"
+     style="font-size:12.000000;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;"
+     x="113.72578"
+     y="535.55768"
+     id="text908"><tspan
+       id="tspan909">C-x C-f /usr/share/doc/bash/</tspan><tspan
+       sodipodi:role="line"
+       id="tspan911"
+       x="113.72578"
+       y="547.55768">M-x find-file /usr/share/doc/bash/</tspan><tspan
+       sodipodi:role="line"
+       id="tspan913"
+       x="113.72578"
+       y="559.55768">(find-file &quot;/usr/share/doc/bash/&quot;)</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:12.000000;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;"
+     x="118.04449"
+     y="610.41516"
+     id="text915"><tspan
+       id="tspan916">(find-fline &quot;/usr/share/doc/bash/&quot;)</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:12.000000;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;"
+     x="118.04449"
+     y="652.16260"
+     id="text918"><tspan
+       id="tspan919">(find-udfile &quot;bash/&quot;)</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:12.000000;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;"
+     x="118.04449"
+     y="693.91003"
+     id="text925"><tspan
+       id="tspan926">(code-c-d &quot;ud&quot; &quot;/usr/share/doc/&quot;)</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:12.000000;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;"
+     x="360.61151"
+     y="534.83783"
+     id="text928"><tspan
+       id="tspan929">buffer visiting</tspan><tspan
+       sodipodi:role="line"
+       id="tspan931"
+       x="360.61151"
+       y="546.83783">/usr/share/doc/bash/</tspan><tspan
+       sodipodi:role="line"
+       id="tspan933"
+       x="360.61151"
+       y="558.83783">(dired mode)</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:12.000000;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;"
+     x="362.05106"
+     y="619.05255"
+     id="text935"><tspan
+       id="tspan936">buffer with</tspan><tspan
+       sodipodi:role="line"
+       id="tspan938"
+       x="362.05106"
+       y="631.05255">hyperlinks to</tspan><tspan
+       sodipodi:role="line"
+       id="tspan940"
+       x="362.05106"
+       y="643.05255">/usr/share/doc/bash/</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:12.000000;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1.0000000;stroke:none;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;font-family:Bitstream Vera Sans;"
+     x="410.27655"
+     y="582.34363"
+     id="text942"><tspan
+       id="tspan943">M-h f</tspan><tspan
+       sodipodi:role="line"
+       id="tspan945"
+       x="410.27655"
+       y="594.34363">M-x find-file-links</tspan></text>
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;marker-end:url(#TriangleOutM);"
+     d="M 184.26456,682.39349 L 184.26456,656.48129"
+     id="path947"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;marker-end:url(#TriangleOutM);"
+     d="M 183.54478,639.20648 L 183.54478,617.61298"
+     id="path948"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;marker-end:url(#TriangleOutM);"
+     d="M 183.54478,596.01948 L 183.54478,564.34901"
+     id="path949" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;marker-end:url(#TriangleOutM);"
+     d="M 317.42450,542.75550 L 355.57302,542.75550"
+     id="path950" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;marker-end:url(#TriangleOutM);"
+     d="M 404.51829,564.34901 L 404.51829,606.81623"
+     id="path951" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;marker-end:url(#TriangleOutM);stroke-miterlimit:4.0000000;stroke-dasharray:1.2500000,1.2500000;stroke-dashoffset:0.0000000;"
+     d="M 357.73237,607.53601 L 309.50688,561.46987"
+     id="path952" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;marker-end:url(#TriangleOutM);stroke-miterlimit:4.0000000;stroke-dasharray:1.2500000,1.2500000;stroke-dashoffset:0.0000000;"
+     d="M 357.73237,619.05255 L 323.18277,607.53601"
+     id="path953" />
+  <path
+     style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1.0000000;marker-end:url(#TriangleOutM);stroke-miterlimit:4.0000000;stroke-dasharray:1.2500000,1.2500000;stroke-dashoffset:0.0000000;"
+     d="M 355.57302,629.84930 L 241.12745,647.84389"
+     id="path954" />
+</svg>

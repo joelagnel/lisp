@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+<title>ECB - the Emacs Code Browser</title>
+<meta http-equiv="Content-Type" content="text/html">
+<meta name=description content="ECB - the Emacs Code Browser">
+<meta name=generator content="makeinfo 4.2">
+<link href="http://www.gnu.org/software/texinfo/" rel=generator-home>
+</head>
+<body>
+<p>
+Node:<a name="ecb-help">ecb-help</a>,
+Next:<a rel=next accesskey=n href="ecb-eshell.html#ecb-eshell">ecb-eshell</a>,
+Previous:<a rel=previous accesskey=p href="ecb-download.html#ecb-download">ecb-download</a>,
+Up:<a rel=up accesskey=u href="Customizable-options.html#Customizable%20options">Customizable options</a>
+<hr><br>
+
+<h4>Group ecb-help</h4>
+
+<p>This group contains settings for the ECB online help:
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>help-html-path</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Path where the ECB online help in HTML format resides. This must be
+the location of the <code>ecb.html</code> which comes with the ECB
+distribution. If is installed by unpacking the archive available on
+the ECB website then this is the subdir <code>ecb-help-html-subdir</code> of
+the installation directory of ECB. If it is installed as
+XEmacs-package (e.g. via the package manager of XEmacs) then this is
+probably either the directory "../../html/" or
+"../../etc/ecb/html/" (both relative to the Elisp directory of ECB).
+
+<p>The path can either be an absolute path or a path relative to the directory
+where the Elisp files of ECB are.
+
+<p>Normally there should be no need to change this option! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>help-info-path</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+Path where the ECB online help in info format resides. This must be
+the location of the <code>ecb.info</code> which comes with the ECB
+distribution. If is installed by unpacking the archive available on
+the ECB website then this is the subdir <code>ecb-help-info-subdir</code> of
+the installation directory of ECB. If it is installed as
+XEmacs-package (e.g. via the package manager of XEmacs) then this is
+probably the directory "../../info/" (relative to the Elisp directory
+of ECB).
+
+<p>The path can either be an absolute path or a path relative to the directory
+where the Elisp files of ECB are.
+
+<p>Normally there should be no need to change this option! 
+</td></tr>
+</table>
+
+<p>
+<table width="100%">
+<tr>
+<td align="left"><b>show-help-format</b><i>
+</i></td>
+<td align="right">User Option</td>
+</tr>
+</table>
+<table width="95%" align="center">
+<tr><td>
+The format <code>ecb-show-help</code> shows its online help. Allowed values
+are 'info (for the Info format) and 'html (for HTML format). If the
+value is 'html then <code>browse-url-browser-function</code> says which
+browser is used.
+
+<p>Note: If you got ECB as a standard XEmacs-package maybe the
+HTML-online-documentation is not included. 
+</td></tr>
+</table>
+
+</body></html>
+

@@ -1,0 +1,619 @@
+2003-08-21  Christoph Wedler  <wedler@users.sourceforge.net>
+
+	* template.el 3.1c.
+
+2003-08-09  Christoph Wedler  <wedler@users.sourceforge.net>
+
+	* template.el: Correct and improve header updating.
+	Reported by Ulf Klaperski <ulf.klaperski@web.de>.
+	(template-new-file): Remove `template-update-header' here.
+	(template-new-file-0): Call it here, i.e., after `normal-mode' has
+	been executed which sets `comment-start'.
+	(template-header-regexp-alist): Allow second %s in REGEXP.
+	(template-update-header): Provide substitution.
+
+	* template.el (template-single-comment): Allow to use in comments
+	not starting with default comment.
+	(template-new-file-interactive): New function.
+	(template-new-file): Use it.
+	(template-expand-template-interactive): New function.
+	(template-expand-template): Use it.
+
+2003-04-04  Christoph Wedler  <wedler@users.sourceforge.net>
+
+	* template.el: Allow messages to be displayed in a separate buffer
+	"*Template Messages*" instead at point.
+	(template-definition-start): Update docstring.
+	(template-message-buffer): New user option.
+	(template-message-prompt-intro): Ditto.
+	(template-message-prompt-format): Ditto.
+	(template-message-register-intro): Ditto.
+	(template-message-register-format): Ditto.
+	(template-point-messages): New internal var.
+	(template-before-messages): Ditto.
+	(template-after-messages): Ditto.
+	(template-messages): Deletia.
+	(template-display-messages): New function.
+	(template-new-file-0): Use them.  Don't add newline if there is
+	just one message at point.
+	(template-message-face): Define with background color pink.
+
+	* template.el (template-not-found-function): Disable package
+	session for the new file, with session v2.2a or higher.
+
+2003-03-14  Christoph Wedler  <wedler@users.sourceforge.net>
+
+	* template.el 3.1b.
+
+2003-03-06  Christoph Wedler  <wedler@users.sourceforge.net>
+
+	* template.el: Also allow to decorate comment in current line if
+	the line just contains a comment terminated by end-of-line.
+	Before, it must have been a comment-only line.
+	(template-single-comment): Change accordingly.
+	(template-comment-syntax): New value `boc' for NO-INDENT.
+	(template-comment-at-point): New return value `cont'.
+	(template-comment-menu): Use `cont' for :active test.
+
+	* template.el: Make sure that the buffer auto-update function
+	really comes first in `write-file-hooks'.  Other packages like
+	X-Symbol with crypt might add function as well.
+	(template-initialize): Execute `template-after-init' very late.
+	(template-after-init): Enable `template-auto-update' and
+	`template-auto-insert' here, not in `template-initialize'.
+
+	* template.el: Simplify Emacs/XEmacs compatiblity.
+	(cond-emacs-xemacs): New compile-time macro.
+	(defunx): New compile-time macro.
+	(template-point-at-bol): Use macro for definition.
+	(template-point-at-eol): Ditto.
+	(template-directory-files): Deletia:
+	(template-all-templates): Change accordingly.
+	(template-unique-file): Ditto.
+	(template-not-found-function): Use new macros.
+ 	(template-characterp): Deletia.
+	(template-char-or-char-int-p): Define instead.
+	(template-int-to-char): Deletia.
+	(template-char-or-int-to-char): Define instead.
+	(template-register): Use new functions.
+	(template-new-file-0): Ditto.
+	(template-translate-definition): Ditto.
+	(template-add-submenu): Use new macros.  Change 2nd argument.
+	(template-initialize): Change accordingly.  Use macros.
+
+	* template.el: Miscellaneous improvements.
+	(template-expansion-regexp): Allow `-'.
+	(template-stop-derivation): Correct custom setting.
+
+2002-05-24  Christoph Wedler  <wedler@users.sourceforge.net>
+
+	* template.el 3.1a.
+
+2002-05-21  Christoph Wedler  <wedler@users.sourceforge.net>
+
+	* template.el: When adding submenus, always check for menu support
+	and parent menus, always change default menubar.
+	(template-add-submenu): Check for "Edit" menu.
+	(template-initialize): Check for "File" menu.
+
+2002-03-01  Christoph Wedler  <wedler@users.sourceforge.net>
+
+	* template 3.1 is released.
+	
+	* template.el (template): Moved to SourceForge.net.
+
+2002-02-23  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el: Menus work with Emacs-21, too.
+	(template-comment-menu): Rename header to "Comment", rename menu
+	entries.  Renamed variable from `template-menu'.  Don't specify
+	:included, change :active for all items instead.
+	(template-creation-menu): Rename menu entries.
+	(template-add-submenu): New function.
+	(template-initialize): Use it.  Also do menu setup for Emacs.
+	(template-comment-at-point): Be more specific when decoration can
+	be used.  Delete return value `t', add `none' and `delimited'.
+	(template-comment-menu): Change accordingly.
+
+	* template.el: Make date/time formats work as names suggest.
+	(template-date-format): Change format, customize, is not obsolete.
+	(template-time-format): Change format.
+	(template-insert-time): New option argument DEFAULT.
+	(template-default-expansion-alist): New expansion (>>>TIME<<<).
+	Use `template-insert-time' for all date/time expansions.
+	
+	* template.el: XEmacs can now read template files with register
+	definitions using numbers, not characters.  Only define functions
+	starting with `template-'.  Only require cl for compilation.
+	(template-characterp): Define alias instead `characterp'.
+	(template-translate-definition): Use it.
+	(template-int-to-char): New alias/function.
+	(template-register): Use it.
+	(template-new-file-0): Use both.  Use `integerp', not `numberp'.
+	(template-point-at-bol): Define alias instead `point-at-bol'.
+	(template-block-comment): Use it.
+	(template-point-at-eol): Define alias instead `point-at-eol'.
+	(template-single-comment): Use it.
+	(template-comment-at-point): Use it.
+	(cl):  Don't require package at runtime.
+	(template-initialize): Don't use `pushnew' from cl.
+	(template-default-expansion-alist): Don't use cl
+	functions or macros.
+
+2002-02-16  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el: Don't rely on command `ffap' to always add an entry
+	to `command-history' if the filename is read from terminal.
+	(template-ffap-file-finder): New variable.
+	(template-ffap-find-file): New function.
+	(template-after-init): New function.
+	(template-initialize): Use it, entry `ffap' in variable list.
+
+	* template.el: Don't search for remote templates.  Nuke this
+	home/base directory stuff, stop at root.
+	(template-stop-derivation): New user option.
+	(template-home-directory): Delete user option.
+	(template-base-directories): Ditto.
+	(template-derivation): Change accordingly.
+	(template-directory-regexp): Deletia.
+
+	* template.el: Installation for html-helper . Miscellaneous.
+	(template-initialize): Disable `html-helper's template and
+	timestamp updating.  Entry `de-html-helper' in variable list.
+	(template-update-buffer): Don't ask when called interactively.
+	(template-update-buffer): Include `ms-dos', not just `windows-nt'.
+	(template-derivation): Ditto.
+	(template-new-file-0): Don't call `template-update-header' when
+	called via `template-expand-template'.
+
+	* template.el. Delete unused commenting feature.  Miscellaneous.
+	(template-comment-end-decoration-length): Deletia.
+	(template-insert-separator): Delete optional arg NO-COMMENT-END.
+	(template-single-comment): Ditto.
+	(template-block-comment): Only works with EOL terminated comments.
+	(template-menu): Change accordingly.
+	(template-block-comment): Use marker for orig position.
+	(template-single-comment): Ditto.
+
+2001-06-16  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el 2.5b.
+
+2001-06-12  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el: Allow user to define a choice in the definition
+	section to be answered via `y-or-n-p'.
+	Suggested by Jean-Philippe Georget <jp.georget@free.fr>
+	(template-choice): Allow keys in table to be nil and t.
+
+	* template.el: Miscellaneous improvements.
+	(template-single-comment): Make it also work without defined
+	comment syntax.  Was already working before 2.5a.
+	(template-menu): Set :active accordingly.
+
+2000-11-01  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el 2.5a.
+
+2000-10-22  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el: Fix for bug introduced in 2.4d.  Would sometimes
+	indent the current line when using the menubar.
+	Reported by Stephan Helma <s.p.helma@gmx.net>.
+	(template-comment-syntax): New argument NO-INDENT.
+	(template-comment-at-point): Use it.
+	(template-indent-mode-disable-list): Include `makefile-mode'.
+
+	* template.el: Command to insert & expand a template file.
+	Suggested by Stephan Helma <s.p.helma@gmx.net>.
+	(template-expand-template): New command.
+	(template-new-file): Optional argument changed from CREATED to
+	WITH-UNDO.  Corresponding changes.
+	(template-not-found-function): Change accordingly.
+	(template-new-file-0): New argument WITH-UNDO.  Corresponding
+	changes.  Run `normal-mode' without restriction.
+	(template-find-template): Prevent infloop in XEmacs.  Don't use t
+	as 4th arg of `insert-file-contents' if the narrowed part is
+	empty.
+	
+	* template.el: Miscellaneous improvements.
+	(template-new-file-0): With (>>>MARK<<<), push -not set- mark.
+	Reported by Stephan Helma <s.p.helma@gmx.net>.
+	(template-menu): Remove `template-update-header' from menu.
+	(template-new-file): Improved error message if no file name is
+	given or the file name is a directory.
+	(template-comment-syntax): Improved error message if no comment
+	syntax has been defined.
+	(template-initialize): Add initialization for `antlr-mode'.
+
+2000-06-04  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.5 is released.
+
+1999-12-18  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el: Commenting support for languages with non-empty
+	`comment-end' and languages with "mixed" comments like C++/Java.
+	(template-menu): Additional/changed entries for commenting.
+	(template-max-column-with-end): New user option.
+	(template-comment-end-decoration-length): Ditto.
+	(template-alt-comment-syntax-alist): New user option.
+	(template-comment-at-point): New function for menu.
+
+	* template.el (template-single-comment): New optional arg
+	NO-COMMENT-END.  Allow non-empty `comment-end'.
+	(template-block-comment): If `comment-end' is non-empty, works
+	like `template-single-comment' without the final `comment-end'.
+	(template-comment-start): Deletia.
+	(template-comment-syntax): New function.
+	(template-comment-syntax-0): Ditto.
+	(template-comment-separator-regexp): New argument SYNTAX.  Use
+	non-empty `comment-end'.  Construct "fast" regexp.
+	(template-comment-specification): Use argument SYNTAX instead
+	COMMENT.  Be smarter if `comment-start' is longer than 1 char.
+	(template-insert-separator): Use optional arguments SYNTAX and
+	NO-COMMENT-END instead ESTRING.  Allow non-empty `comment-end'.
+	(template-match-modes-or-regexp): New function.
+	(template-update-buffer): Use it.
+
+	* template.el: Don't "fill" separators in C/C++/Java comments.
+	(template-c-fill-paragraph): New function.
+	(template-c-init-fill-function): New function.
+	(template-initialize): Add to `c-mode-common-hook'.
+
+	* template.el: Do not use template DEFAULT.tpl for [C-x C-f].
+	(template-derivation-alist): Delete entry for DEFAULT.
+	(template-default-directory): New function.
+	(template-derivation): Use it.  New optional argument NO-DEFAULT.
+	(template-not-found-function): Use it.
+
+	* template.el: Changed directories, new user options.
+	(template-default-directories): Changed default value from
+	"~/lib/templates/" to "~/.templates/" except if "~/lib/templates/"
+	exists but "~/.templates/" does not.
+	(template-base-directories): New user option.  Should be used
+	instead `template-home-directory'.
+	(template-derivation): Use it.  Always consider templates in
+	current directory.
+	(template-default-directory): Fallback is "~/.templates/".
+	(template-open-template): Consider `template-subdirectories' when
+	creating a new template file.
+
+	* template.el: Minor changes.
+	(template-new-file): If argument TEMPLATE is nil for empty input,
+	do not use templates.
+	(template-new-file-0): New function, was second part of
+	`template-new-file'.  Recenter at the end.
+	(template-make-directory): Changed error message.
+	(template-initialize): All keybindings for Emacs also.
+
+	* template.el: Emacs/XEmacs bug workaround.
+	(template-directory-regexp): New function.  Also considers the
+	file truename and its abbreviated form.
+	(template-derivation): Use it.  Otherwise, a bug in
+	`abbreviate-file-name' would cause some surprises.
+
+	* template.el: With Emacs on MS-NT/MS-DOS, files with extension
+	".tpl" are binary files.  Our template files are text files...  I
+	would suggest to change the value of `template-extension' or
+	`file-name-buffer-file-type-alist'.
+	(template-find-template): New function.
+	(template-new-file): Use it.
+	(template-open-template): Use it.
+
+	* template.el: A text with expansion forms which is inserted
+	should not be expanded together with the buffer contents.
+	Avoiding a rare situation...
+	(template-read): Insert "(>>>LITERAL<<<)(>>>/LITERAL<<<)" at the
+	end with AGAIN-P is `expand'.
+	(template-choice): Ditto, always.
+
+	* template.el: File names are case insensitive on MS-Windows.
+	(template-derivation): Change accordingly.
+	(template-update-buffer): Change accordingly.
+
+1999-06-12  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.4d.
+
+1999-06-12  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el (template-max-column): Give semantics for negative
+ 	value as relative to `fill-column', change default value to -1.
+	(template-insert-separator): Change accordingly.
+
+	* template.el (template-comment-indent): New user option.
+	(template-indent-mode-disable-list): Ditto.
+	(template-indent-mode-enable-list): Ditto.
+	(template-indent-according-to-mode): New function.
+	(template-block-comment): Use it.
+	(template-comment-start): Ditto.
+	(template-insert-separator): Ditto.
+
+	* template.el (template-initialize): Would require to set variable
+ 	`template-initialize' under XEmacs without menu support.  Reported
+ 	by Mathias Trucks <trucks@physik.tu-berlin.de>.
+
+1999-03-13  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.4c.
+
+1999-02-20  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el (template-default-expansion-alist): New key
+ 	"FILE_SANS" for file name without extension.
+
+1999-01-30  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.  Copyright transferred to the FSF.
+
+1999-01-30  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.4b.
+
+	* template.el (template-derivation): Would infloop under NT, DOSen
+ 	etc.  Reported by Barney Dalton <barney@mech.uwa.edu.au>.
+
+1999-01-29  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.4a.
+
+1999-01-28  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el: Allow conditional and repetitive/recursive
+ 	expansions.  Literal environments, i.e., without expansions.
+	(template-string-default): Is a format string now.
+	(template-literal-environment): New variable option.
+	(template-default-expansion-alist): New key "LITERAL".
+	(template-choice-history): New variable.
+	(template-read-again): Deletia.
+ 	(template-read): New optional arguments.
+	(template-choice): New function.
+	(template-translate-definition): Change accordingly.
+	(template-define-prompt): Also insert additional arguments.
+	(template-define-start): Look from start for definition section.
+	(template-insert-form): Also insert closing literal tag.
+
+1999-01-25  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.4 is released.
+
+1999-01-22  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el: Easier info for package and test of package.
+ 	(template): Provide `emacs-commentary-link'.
+	(template-use-package): New pseudo variable.
+	(template-initialize): Might be used as :action function.
+	(template-initialize): Put into group `template-miscellaneous'.
+	(template-menu-filter): Bind variable key in let.
+
+1999-01-21  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.3d.
+
+1999-01-20  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el: Support template creation.
+	(template-menu-filter): New function.
+ 	(template-creation-menu): New variable.
+	(template-initialize): Use it.
+	(template-expansion-format): New variable.
+	(template-definition-start): Is a string, no regexp anymore.
+	(template-new-file): Changed accordingly.
+	(template-buffer-no-template-p): New function.
+	(template-open-template): New command.
+	(template-define-start): Ditto.
+	(template-define-prompt): Ditto.
+	(template-define-message): Ditto.
+	(template-define-register): Ditto.
+	(template-insert-form): New command.
+
+	* template.el: Key in expansion form can be longer than one
+ 	character.  Suggested by Jesper Pedersen <blackie@ifad.dk>.
+ 	(template-expansion-regexp): Key with more letters.
+	(template-default-expansion-alist): Use multi-letter keys.
+	(template-key-alias-alist): New variable.
+	(template-new-file): Use it.
+
+	* template.el: No special template derivation for 00readme.txt,
+ 	additional entries for templates where all parts match, useful for
+ 	Makefile, dotfiles, README files etc.  Miscellaneous.
+	(template-derivation-alist): Change entry.  Provide custom group.
+	(template-update-header): File name in header without version.
+ 	(template-update-buffer-alist): Ditto.
+	(template-menu): Don't include if buffer is read-only.
+	(template-new-file): Under XEmacs, activate region if mark is set.
+	(template-initialize): Don't use hard-coded `template-extension'.
+
+1999-01-18  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.3c.
+
+1999-01-15  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el: Package has been customized (->Data->Template).
+	(template): New group.
+	(template-comments): New group.
+	(template-updating): New group.
+	(template-derivation): New group.
+	(template-expansion): New group.
+	(template-miscellaneous): New group.
+ 	(template-version): New constant.
+	(template-initialize): Rename item `bindings' to keys'.
+	(template-message-face): Is a face, no variable anymore.
+	(template-new-file): Changed accordingly.
+
+	* template.el: Automatic templates work with package ff-paths.
+	(template-file-select-commands): New user option.
+ 	(template-not-found-function): Use it.
+	(template-new-file): Check whether template is a directory.
+	(template-default-expansion-alist): New predefined expansion form
+ 	(>>>B<<<) for Block = upcase(RAW)++NUM, useful for C header files.
+
+	* template.el: Stabilize auto updating.
+ 	(template-update-buffer-alist): Different specification format.
+  	Changed value accordingly.
+	(template-default-comment): New function.
+	(template-comment-start): Use it.
+	(template-update-header): Ditto.  Consider different spec format.
+	(template-header-regexp-alist): Slight change.
+	(template-update-buffer-region): Delete variable.
+	(template-update-buffer-region): Use `save-excursion' and friends
+ 	in `template-update-header', not here anymore.
+	(template-translate-definition): New function.
+	(template-new-file): Use it.
+
+1999-01-13  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.3b.
+
+	* template.el: Extend and improve auto-updating.
+ 	(template-header-regexp-alist): Be stricter using %s in REGEXP.
+	(template-update-buffer-alist): Auto-update header.  PROMPT is a
+ 	format string to show the buffer name.  Allow to delay user
+ 	confirmation by specifying replacement as SAFE.
+	(template-auto-update-disable-regexp): New variable.
+	(template-update-buffer): Use it.  Show buffer with prompt.  Don't
+ 	ask for confirmation if entry has no prompt.  No updating without
+ 	change, delaying user confirmation in SAFE replacements.
+	(template-update-header): Use `comment-start' for %s in REGEXP of
+ 	`template-header-regexp-alist'.  Be smarter for auto-updating.
+
+1999-01-13  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.3a.
+
+	* template.el: For a complete installation, you now have to call
+ 	`template-initialize'.  According to the Emacs convention, there
+ 	is no top-level initialization code in the package anymore.
+	(template-initialize): New variable.
+	(template-initialize): New function.  Includes all previously
+ 	top-level hook additions and code from template-site.el
+	(template-check-header): Deletia.
+ 	(template-menu): Include "Update Buffer".
+	(template-default-expansion-alist): Renamed.
+	(template-expansion-alist): New variable.
+	(template-new-file): Use it.
+
+	* template-site.el: Deletia.  Code moved to template.el
+
+1999-01-12  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.3.  Internal: last two-file version.
+
+1999-01-11  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.2g.
+
+	* template.el: Make it easier to insert the time in any format.
+ 	(template-elisp-in-definition): If the commands symbol property
+ 	`template-secure-command' is a function, it checks the arguments
+ 	whether the command could be run safely directly.
+	(template-insert-time): New safe command.
+	(template-expansion-alist): Use it.
+
+1999-01-07  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.2f.
+
+	* template.el (template-derivation): Would infloop if
+ 	`template-home-directory' is "/" or "".  Reported by Jesper
+ 	Pedersen <blackie@ifad.dk>.
+
+1999-01-07  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.2e.
+
+	* template-site.el (template-find-file-commands): More entries.
+  	To make automatic templates work with package ffap, use ffap-1.10
+ 	or higher.  Reported by Jesper Pedersen <blackie@ifad.dk>.
+
+	* template.el: The year alone is much more likely to be used,
+ 	e.g., in copyright messages, than hour:min:sec.  (>>>T<<<) now
+ 	inserts something like "06 Jan 1999", (>>>Y<<<) something like
+ 	"1999".  Insert the two lines from the initial comment into your
+ 	~/.emacs to get the old behavior.
+ 	(template-date-format): Obsolete.  Thus, not safe to change.
+	(template-time-format): New value is old `template-date-format'.
+	(template-expansion-regexp): Safe to set to a string.
+	(template-string-default): Ditto.
+	(template-expansion-alist): Little change in older Emacsen, i.e.,
+ 	if `format-time-string' does not exist.
+	(template-register-regexp): Change, not visible.
+	(template-update-header): Return region of header on success.
+
+	* template-site.el: New functionality similar to / generalizing
+ 	time-stamp and psgml-html/html-helper-mode timestamps.
+ 	(template-auto-update): New user option.
+	(template-update-buffer-alist): New variable.
+	(template-update-buffer-region): New internal variable.
+	(template-update-buffer-region): New function.
+	(template-update-buffer): New command.
+	(write-file-hooks): Use it.
+
+1999-01-04  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.2d.
+
+	* template-site.el (template-not-found-function): Make function
+ 	work with Emacs.  Reported by Jesper Pedersen <blackie@ifad.dk>.
+
+1998-12-21  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.2c.
+
+	* template.el (template-set-template-part): New function
+	defining template part specification "inherit if non-empty".
+	(template-default-template): Use it.
+	(template-derivation-alist): Use new template part specification
+	for specifying a default extension.
+ 	(template-unique-file): Another slight change with auto-numbering.
+
+1998-12-16  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.2b.
+
+	* template.el (template-unique-file): Very minor change in test
+ 	whether auto-numbering is used.
+	(template-derivation-alist): Better docstring with examples.
+
+1998-12-15  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.2a.
+
+	* template.el (template-expansion-alist): New predefined expansion
+ 	form (>>>I<<<) for ISO 8601 date, i.e., date format "%Y-%m-%d".
+
+1998-12-14  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.2 is released.
+
+1998-11-03  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el (template-expansion-alist): New predefined expansion 
+	form (>>>V<<<) for UTC date/time like RCS's $Date$.
+	(template-date-format): Defaults to "%d %b %Y".
+
+1998-10-19  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.1a.
+
+1998-10-07  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template-site.el (template-auto-insert): New user option.
+	(template-find-file-commands): New variable.
+	(template-not-found-function): New function.
+	(find-file-not-found-hooks): Add `template-not-found-function'.
+	(template-derivation): New autoload.
+
+	* template.el (template-new-file): New optional argument CREATED,
+	used by `template-not-found-function'.
+
+1998-08-20  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template.el (template-date-format): Defaults to "%Y-%m-%d".
+	(template-time-format): Safe to set it to a string.
+
+1998-03-03  Christoph Wedler  <wedler@fmi.uni-passau.de>
+
+	* template 2.1 is released.

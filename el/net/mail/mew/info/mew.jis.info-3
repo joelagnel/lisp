@@ -1,0 +1,1358 @@
+Info file: mew.jis.info,    -*-Text-*-
+produced by `texinfo-format-buffer'
+from file `mew.texi'
+using `texinfmt.el' version 2.40 of  6 Dec 2002.
+
+INFO-DIR-SECTION Message User Agent
+START-INFO-DIR-ENTRY
+* Mew-J: (mew.jis.info).     Messaging in the Emacs World.
+END-INFO-DIR-ENTRY
+
+
+
+
+
+
+
+File: mew.jis.info, Node: pop, Next: imap, Prev: hooks, Up: Customize
+
+POP
+===
+
+Mew では、メッセージを受信する際に POP を利用できます。ここでは、POP を
+制御するための以下の変数についてまとめます。
+
+`mew-pop-server'
+     POP サーバの名前。
+`mew-pop-ssh-server'
+     POP を SSH 経由で取得する場合の SSH サーバの名前。
+`mew-pop-ssl'
+     POP over SSL を使うか否か。
+`mew-pop-ssl-port'
+     POP over SSL のポート番号。
+`mew-pop-user'
+     POP のアカウント名。初期値はログイン名。
+`mew-pop-auth'
+     POP の認証方式。`'pass' は USER/PASS (生パスワード)、`'apop' は
+     APOP、`t' は `mew-pop-auth-list' に従った SASL を意味する。初期値
+     は `'apop'。
+`mew-pop-auth-list'
+     SASL で利用する認証方式のリスト。優先順位の高い順に並べる。現在、
+     CRAM-MD5" が利用可能。
+`mew-pop-delete'
+     POP サーバからメッセージを取得後、POP サーバにあるメッセージを削除
+     するか否か。`t' なら削除。`nil' なら削除しない。数値 N なら、最初
+     のアクセスから N 日後に削除する。初期値は `t'。
+`mew-pop-size'
+     POP サーバから取得するメッセージの大きさの上限。初期値は 55296 バ
+     イト。0 に設定すると、上限なしの意味になり、すべてのメッセージを取
+     得する。上限に引っ掛かったメッセージの全体を取得する方法については、
+     *Note retrieving:: を参照のこと。
+`mew-pop-body-lines'
+     大きさの上限にひっかかったメッセージの本文を何行取得するかという値。
+     デフォルトは40。
+`mew-pop-header-only'
+     POP でメッセージを取得する際に、ヘッダのみにするか、本文も取得する
+     か。`nil' でなければ、ヘッダのみを取得。デフォルトは `nil'。
+
+
+
+File: mew.jis.info, Node: imap, Next: nntp, Prev: pop, Up: Customize
+
+IMAP
+====
+
+Mew では、メッセージを受信する際に IMAP を利用できます。ここでは、IMAP
+を制御するための以下の変数についてまとめます。
+
+`mew-imap-server'
+     IMAP サーバの名前。
+`mew-imap-ssh-server'
+     IMAP を SSH 経由で取得する場合の SSH サーバの名前。
+`mew-imap-ssl'
+     IMAP over SSL を使うか否か。
+`mew-imap-ssl-port'
+     IMAP over SSL のポート番号。
+`mew-imap-user'
+     IMAP のアカウント名。初期値はログイン名。
+`mew-imap-auth'
+     IMAP の認証方式。`nil' は LOGIN (生パスワード)、`t' は
+     `mew-imap-auth-list' に基づいた SASL 意味する。初期値は `t'。
+`mew-imap-auth-list'
+     SASL で利用する認証方式のリスト。優先順位の高い順に並べる。現在、
+     CRAM-MD5" と "LOGIN" が利用可能。
+`mew-imap-delete'
+     IMAP サーバからメッセージを取得後、IMAP サーバにあるメッセージを削
+     除するか否か。`t' なら削除。`nil' なら削除しない。数値 N なら、最
+     初のアクセスから N 日後に削除する。初期値は `t'。
+`mew-imap-size'
+     IMAP サーバから取得するメッセージの大きさの上限。初期値は 55296 バ
+     イト。0 に設定すると、上限なしの意味になり、すべてのメッセージを取
+     得する。上限に引っ掛かったメッセージの全体を取得する方法については、
+     *Note retrieving:: を参照のこと。
+`mew-imap-header-only'
+     IMAP でメッセージを取得する際に、ヘッダのみにするか、本文も取得す
+     るか。`nil' でなければ、ヘッダのみを取得。デフォルトは `nil'。
+
+
+
+File: mew.jis.info, Node: nntp, Next: smtp, Prev: imap, Up: Customize
+
+NNTP
+====
+
+Mew では、ニュースを読み書きする際に NNTP を利用します。ここでは、NNTP
+を制御するための以下の変数についてまとめます。
+
+`mew-nntp-server'
+     NNTP サーバの名前。
+`mew-nntp-ssh-server'
+     NNTP を SSH 経由で取得する場合の SSH サーバの名前。
+`mew-nntp-ssl'
+     NNTP over SSL を使うか否か。
+`mew-nntp-ssl-port'
+     NNTP over SSL のポート番号。
+`mew-nntp-user'
+     NNTP のアカウント名。もし `nil' でなければ、認証の手続きが実行され
+     る。(mew-nntp-auth という変数はないことに注意。)
+`mew-nntp-newsgroup'
+     デフォルトのニュースグループ名。
+`mew-nntp-size'
+     NNTP サーバから取得するメッセージの大きさの上限。初期値は 55296 バ
+     イト。0 に設定すると、上限なしの意味になり、すべてのメッセージを取
+     得する。上限に引っ掛かったメッセージの全体を取得する方法については、
+     *Note retrieving:: を参照のこと。
+`mew-nntp-header-only'
+     NNTP でメッセージを取得する際に、ヘッダのみにするか、本文も取得す
+     るか。`nil' でなければ、ヘッダのみを取得。デフォルトは `nil'。
+`mew-nntp-msgid-user'
+     Message-Id: を作成するためのユーザ名。`nil' であれば `mew-user' の
+     値が利用される。初期値は `nil'。Message-Id: の書式は以下を参照。
+`mew-nntp-msgid-domain'
+     Message-Id: を作成するためのドメイン名。`nil' であれば
+     `mew-mail-domain' の値が利用される。初期値は `nil'。Message-Id: の
+     書式は以下を参照。
+
+なお、NNTP 用の Message-Id: の値は以下のように作成されます。
+
+     message-id = *random*.nntp-msgid-user@nntp-msgid-domain
+
+
+
+File: mew.jis.info, Node: smtp, Next: config, Prev: nntp, Up: Customize
+
+SMTP
+====
+
+Mew では、メッセージを送信する際に SMTP を利用します。ここでは、SMTP を
+制御するための以下の変数についてまとめます。
+
+`mew-smtp-server'
+     SMTP サーバの名前。
+`mew-smtp-port'
+     SMTP ポート番号。
+`mew-smtp-ssh-server'
+     SSH 経由でメッセージを送る際の SSH サーバの名前。
+`mew-smtp-ssl'
+     SMTP over SSL を使うか否か。
+`mew-smtp-ssl-port'
+     SMTP over SSL のポート番号。
+`mew-smtp-user'
+     SMTP AUTH で利用されるアカウント名。もし `nil' でなければ、認証の
+     手続きが実行される。(mew-smtp-auth という変数はないことに注意。)
+`mew-smtp-auth-list'
+     SMTP AUTH で利用する認証方式のリスト。優先順位の高い順に並べる。デ
+     フォルトは、'("CRAM-MD5" "PLAIN" "LOGIN")。
+`mew-smtp-helo-domain'
+     SMTP HELO コマンドで使われるサーバ名。初期値は "localhost"。
+`mew-smtp-mail-from'
+     SMTP MAIL FROM コマンドで指定されるアドレス。`nil' の場合は、
+     From: フィールドのアドレスが指定される。初期値は `nil'。
+`mew-smtp-msgid-user'
+     Message-Id: を作成するためのユーザ名。`nil' であれば `mew-user' の
+     値が利用される。初期値は `nil'。Message-Id: の書式は以下を参照。
+`mew-smtp-msgid-domain'
+     Message-Id: を作成するためのドメイン名。`nil' であれば
+     `mew-mail-domain' の値が利用される。初期値は `nil'。Message-Id: の
+     書式は以下を参照。
+`mew-use-8bit'
+     8 ビットテキストを符号化せずにそのまま送るか否か。`nil'の場合は、
+     適切な MIME 符号化が施される。初期値は `nil'。
+
+なお、SMTP 用の Message-Id: の値は以下のように作成されます。
+
+     message-id = *random*.smtp-msgid-user@smtp-msgid-domain
+
+Message Submission (ポート番号が 587 である送信用の SMTP)を使いたい場合
+は、以下のように設定して下さい。
+
+     (setq mew-smtp-port "587")
+
+
+
+
+File: mew.jis.info, Node: config, Next: custom-misc, Prev: smtp, Up: Customize
+
+送受信の動作変化
+================
+
+`mew-config-alist' を使うと、メッセージの送受信に関する動作に変化をつけ
+られます。以下の設定例を使って説明します。
+
+     (setq mew-config-alist
+           '(("home"
+              ("inbox-folder"   . "+inbox-home")
+              ("pop-server"     . "pop.iij4u.or.jp"))
+             ("ext"
+              ("pop-ssh-server" . "ssh.mew.org"))
+             ("default"
+              ("proto"          . "%")
+              ("imap-server"    . "imap.mew.org")
+              ("pop-server"     . "pop.mew.org"))))
+
+この例では、"home"、"ext"、"default" という 3 つのケースを定めています。
+それぞれのケースに対して、いくつかのキーと値の対が設定されています。
+
+この例を使って、`mew-config-alist'の意味を説明します。ケースを "home"
+にして "pop-server" を索くと、"pop.iij4u.or.jp" が得られます。ケースを
+ext" にして "pop-server" を索くと、"ext" には該当するキーがないので、
+default" を見て、"pop.mew.org" が得られます。ケースを "default" にして
+pop-server" を索くと、"pop.mew.org" が得られます。
+
+ケースを "home" にして "inbox-folder" を索くと、"+inbox-home" が得られ
+ます。ケースを "ext" にして "inbox-folder" を索くと、"ext" には該当する
+キーがなく、さらに "default" にもないので、`mew-inbox-folder' という変
+数の値が得られます。ケースを "default" にして "inbox-folder" を索いた場
+合も、`mew-inbox-folder' の値が得られます。
+
+"proto" (`mew-proto')は、`M-x mew' と入力された際に、どのフォルダに移動
+するか指定するために使います。(Mew を起動するために `M-x mew' と入力す
+る場合、"default" ケースの "proto" が利用されます。Mew が起動している際
+に、`M-x mew' と入力すると入力ケースに従って、"proto" が選ばれます。)
+
+値の候補は、"+"、"$"、"%"、"-" です。これらは標準では、"+inbox"、
+$inbox"、"%inbox"、"-fj.mail.reader.mew" を意味します。
+
+`mew-config-alist' で設定できるキーのほとんどは、`mew-"キー"' という変
+数に対応しています。以下に設定できる項目を列挙します。
+
+     "name", "user", "mail-domain",
+     "cc", "fcc", "dcc", "reply-to", "organization", "header-alist",
+     "proto",
+     "smtp-server", "smtp-port", "smtp-ssh-server", "smtp-ssl", "smtp-ssl-port",
+     "smtp-user", "smtp-auth-list",
+     "smtp-msgid-user", "smtp-msgid-domain", "smtp-helo-domain", "smtp-mail-from",
+     "pop-server", "pop-port", "pop-ssh-server", "pop-ssl", "pop-ssl-port",
+     "pop-user", "pop-auth", "pop-auth-list",
+     "pop-size", "pop-header-only", "pop-delete", "pop-body-lines",
+     "imap-server", "imap-port", "imap-ssh-server", "imap-ssl", "imap-ssl-port",
+     "imap-user", "imap-auth", "imap-auth-list",
+     "imap-size", "imap-header-only", "imap-delete",
+     "imap-trash-folder", "imap-queue-folder", "imap-spam-field", "imap-spam-word",
+     "nntp-server", "nntp-port", "nntp-ssh-server", "nntp-ssl", "nntp-ssl-port",
+     "nntp-user", "nntp-size", "nntp-header-only",
+     "nntp-msgid-user", "nntp-msgid-domain",
+     "ssl-cert-directory", "ssl-verify-level',
+     "inbox-folder", "queue-folder", "postq-folder",
+     "mailbox-type", "mbox-command", "mbox-command-arg",
+     "use-retrieve", "signature-file", "content-type", "refile-guess-alist",
+     "spam-prog", "spam-prog-args", "ham-prog", "ham-prog-args",
+     "use-old-pgp"
+
+"name"、"user"、"mail-domain" は以下の規則にしたがって、From: の値にな
+ります。
+
+     from = name <user@mail-domain>
+
+自分で `mew-from-list' を設定していない場合は、上記のルールに従い各ケー
+スの from を集めて、`mew-from-list' が自動的に設定されます。*Note
+cheader::を参照のこと。
+
+`mew-config-alist' に設定したケースを、受信ケースと送信ケースに指定でき
+ます。Mew の起動時は、受信ケースと送信ケース、ともに "default" になって
+います。
+
+Summary モードにおいて、受信ケースと送信ケースを変更するには `C' を利用
+します。ケースには、`TAB' で補完、`C-cTAB' で循環的な補完が効きます。
+
+`mew-case-synchronize' という変数を `nil' に設定すると、受信ケースと送
+信ケースを独立に設定できるようになります。この場合、`C' が受信ケース用
+で、`C-uC' が送信ケース用です。
+
+いずれか一方、あるいは両方のケースが "default" 以外の値をとった場合は、
+Summary モードのモードラインに表示されます。以下は受信ケース、送信ケー
+スがそれぞれ、"home"、"ext" となっている場合の例です。
+
+     (Summary home:ext)
+
+
+Draft モードでは、送信ケース "default" でない場合、モードラインにその値
+が表示されます。以下は、送信ケースが "home" である場合の例です。
+
+     (Draft home)
+
+Draft モードにおいて、その草稿の送信ケースを変更するには、`C-cC-o' を用
+います。"mail-domain" キーや "header-alist" キーに対応する値に応じて、
+ヘッダが動的に変更されます。なお、この送信ケースは、その Draft モードに
+固有になります。
+
+Draft モードでは、送信ケースを自動的に設定することもできます。
+
+`mew-case-guess-when-prepared'
+     この変数が `t' の場合、草稿が用意されたときに、
+     `mew-case-guess-alist' に従って送信ケースが設定される。初期値は
+     `t'。
+`mew-case-guess-when-composed'
+     この変数が `t' の場合、メッセージが作成されたときに、
+     `mew-case-guess-alist' に従って送信ケースが設定される。初期値は
+     `nil'
+`mew-case-guess-when-replied'
+     この変数が `t' の場合、返答によって草稿が用意されたときに、
+     `mew-case-guess-when-replied-alist' に従って送信ケースが設定される。
+     初期値は `t'。
+
+`mew-case-guess-alist' と `mew-case-guess-when-replied-alist' の書式は、
+`mew-refile-guess-alist' と同じです。詳しくは、*Note by-alist:: を参照
+して下さい。
+
+Draft モードで草稿を送信するために `C-cC-c' を使うと、Draft モードの送
+信ケースが SMTP/NNTP サーバなどを決定するために利用されます。Summary モー
+ドで +queue/+postq のメッセージを送り出すために `C-cC-c' を利用すると、
+Summary モードの送信ケースが利用されます。たとえ、その送信ケースが
+Draft モードで指定されていた送信ケースと違ってもです。Summary モードで
+`C-uC-cC-c' を使うと、+queue/+postq のメッセージを送り出すためのケース
+が指定できます。
+
+
+以下にケースに関するコマンドをまとめます。
+
+`C'
+     Summary モードにおいて、ケースを設定する。`mew-case-synchronize'
+     の値が `t' (初期値)なら、送信ケースと受信ケースを設定する。`nil'
+     なら、受信ケースのみを設定する。
+`C-uC'
+     Summary モードにおいて、ケースを設定する。`mew-case-synchronize'
+     の値が `t' なら、送信ケースと受信ケースを設定する。`nil'なら、送信
+     ケースのみを設定する。
+`C-cC-o'
+     Draft モードにおいて、その草稿の送信ケースを設定する。
+
+
+
+File: mew.jis.info, Node: custom-misc, Next: Tips, Prev: config, Up: Customize
+
+その他
+======
+
+環境によっては、添付ファイルをセーブする際に、ファイル名を SAMBA 形式に
+すると便利なことがあります。この場合、`mew-use-samba-encoding' を `t'
+にして下さい。ファイル名として、どの文字コードを利用するかは、
+`mew-cs-samba' で指定できます。初期値は `shift_jis' です。
+
+
+
+
+File: mew.jis.info, Node: Tips, Next: region, Prev: custom-misc, Up: Top
+
+さらなる一歩
+************
+
+* Menu:
+
+* region::                      リージョン
+* visiting::                    移動
+* SSH::                         Secure SHell
+* SSL::                         Secure Socket Layer
+* TLS::                         Transport Layer Security
+* spam::                        スパム
+* spam2::                       スパム(2)
+* biff::			Biff
+
+
+
+File: mew.jis.info, Node: region, Next: visiting, Prev: Tips, Up: Tips
+
+リージョン
+==========
+
+Summary モードには、`C-u'付きで呼び出すと、リージョンに作用するコマンド
+があります。これらのコマンドは、ビジブルなリージョンが指定されている場
+合は、`C-u'なしでもそのリージョンに作用します。
+
+Emacs では、以下の設定を "~/.emacs" に入れると、ビジブルなリージョンが
+利用できるようになります。
+
+     (transient-mark-mode 1)
+
+XEmacs では、デフォルトでビジブルなリージョンが利用できます。
+
+以下に、該当するコマンドを列挙しておきます。
+
+     `?', `tt', `'', `"', `x', `lx', `ma', `Md', `S', `mlc', `*', `$', `d', `u'
+
+`*', `$', `d', `u' は、直前に数字を入力することで、繰り返しの回数を指定
+することもできます。たとえば、`3*' は 3 つのメールに `*' マークを付けま
+す。数字の前に `C-u' は不要です。
+
+
+
+File: mew.jis.info, Node: visiting, Next: SSH, Prev: region, Up: Tips
+
+移動
+====
+
+Draft モードにおいて、`C-cC-m' でメッセージを作成し送信キューに入れた後、
++queue に移動したい場合は、`mew-visit-queue-after-sending' を `t' に設
+定して下さい。
+
+Summary モードにおいて、`C' でケースを設定した後に、各 inbox に移動した
+い場合は、`mew-visit-inbox-after-setting-case' を `t' に設定しましょう。
+
+Summary モードから、一番数字の小さい草稿(Draft モード)に移動するには、
+`C-cC-o' が利用できます。
+
+
+
+File: mew.jis.info, Node: SSH, Next: SSL, Prev: visiting, Up: Tips
+
+Secure SHell
+============
+
+Mew は SSH として、SSH バージョン 1、2 および OpenSSH をサポートしてい
+ます。Mew から SSH を利用する前に、必ずコマンド・ラインで "ssh" を実行
+し、SSH サーバの公開鍵を取得して下さい。すなわち、ユーザのパスワードか、
+ローカルのマシンの秘密鍵を復号化するためのパスワードを入力すれば、サー
+バにログインできる状態にして下さい。なお、"ssh-agent" を利用すれば、秘
+密鍵を復号化するためのパスワードの入力を省略できます。
+
+後は、各プロトコルの SSH に関する変数を設定して下さい。たとえば、POP
+over SSH を利用する場合は、`mew-pop-ssh-server' に SSH サーバの名前を設
+定しましょう。
+
+SSH で通信が保護されている場合、テキスト Emacs では、モードラインに
+[Sec]" と表示されます。グラフィカル Emacs では、モードラインに錠前の絵
+が表示されます。
+
+
+
+File: mew.jis.info, Node: SSL, Next: TLS, Prev: SSH, Up: Tips
+
+Secure Socket Layer
+===================
+
+SSL を使うには、認証局方式の信用モデルを理解している必要があります。現
+在、Mew は SSL のために "stunnel" バージョン 3 とバージョン 4 をサポー
+トしています。
+
+Mew で利用する前に、SSL サーバに対して "stunnel" で SSL のコネクション
+が張れるかを確かめて下さい。"stunnel" は、"openssl" のライブラリをリン
+クしているので、"openssl" の知識が必要です。
+
+信用する証明書を保存しておくディレクトリを "~/.certs" だとしましょう。
+ここに "openssl" の "certs" ディレクトリに付いてくる PEM 形式の証明書を
+<ハッシュ>.0" という名前でコピーします。
+
+ここでは、PEM 形式の証明書のファイル名を "ca.pem" だとしましょう。「<ハッ
+シュ>」は以下のように計算できます。
+
+     % openssl x509 -hash -noout -in ca.pem
+
+"~/.certs/" へコピーするには、以下のようにします。
+
+     % cp ca.pem ~/.certs/`openssl x509 -hash -noout -in ca.pem`.0
+
+"openssl" に付いてくる証明書は、世の中で使われている CA すべてを網羅で
+きていません。あなたが利用するサーバの証明書が、他の CA から発行された
+場合、その CA の証明書を同様にコピーしておく必要があります。以下のペー
+ジに CA の証明書がたくさん置いてあります。
+
+     http://www.columbia.edu/~ariel/good-certs/ns45/
+
+Mew で "stunnel" を制御する重要な変数は 2 つです。
+`mew-ssl-cert-directory' は、信用する CA の証明書を置いておくディレクト
+リであり、デフォルトは "~/.certs" です。また、`mew-ssl-verify-level' で、
+証明書を検証するレベルを指定できます。デフォルトのレベルは 1 です。
+
+後は各プロトコルの SSL に関する変数を設定して下しさい。たとえば、POP
+over SSL を利用するには、`mew-pop-ssl' を `t' にします。また、ポート番
+号が標準と異なる場合には、`mew-pop-ssl-port' を設定して下さい。
+
+     (setq mew-pop-ssl t)
+
+SSL で通信が保護されている場合、テキスト Emacs では、モードラインに
+[Sec]" と表示されます。グラフィカル Emacs では、モードラインに錠前の絵
+が表示されます。
+
+
+
+File: mew.jis.info, Node: TLS, Next: spam, Prev: SSL, Up: Tips
+
+Transport Layer Security
+========================
+
+Mew では SSL の代りに TLS を利用することもできます。TLS の実現は、SSL
+と同様 "stunnel" に頼っています。ですので、TLS を利用する際には、*Note
+SSL:: の説明に従って設定して下さい。
+
+次に、SSL のポート番号を守りたいプロトコルと同じポート番号に設定します。
+たとえば、POP では以下のようにします。
+
+     (setq mew-pop-ssl t)
+     (setq mew-pop-ssl-port "pop3") ;; The default is "pop3s" (995)
+
+すなわち、SSL のポート番号と保護したいプロトコルのポート番号が同じであ
+れば TLS、異なれば SSL が利用されます。
+
+以下は、Message Submission を TLS で守るための設定例です。
+
+     (setq mew-smtp-port "587") ;; The default is "smtp" (25)
+     (setq mew-smtp-ssl t)
+     (setq mew-smtp-ssl-port "587") ;; The default is "smtps" (465)
+
+
+
+
+File: mew.jis.info, Node: spam, Next: spam2, Prev: TLS, Up: Tips
+
+スパム
+======
+
+(1) スパムのフィルタが POPサーバやIMAPサーバ側で動いている場合：
+
+POP で +inbox にメッセージを取得したり、$inbox や %inbox でメッセージの
+一覧を取ったりする場合に、スパムに自動的に `D' マークを付けることができ
+ます。
+
+Bogofilter を利用している場合は、以下の設定を "~/.mew.el" に入れて下さ
+い。
+
+     (defun mew-spam-bogofilter (val)
+       (let ((case-fold-search t))
+         (if (string-match "yes" val) ?D)))
+
+     (setq mew-inbox-action-alist
+           '(("X-Bogosity:" mew-spam-bogofilter)))
+
+Spamassassin の場合は、まず "~/.emacs" に次の設定をいれます。
+
+     (setq mew-spam: "X-Spam-Flag:")
+
+次に、以下の設定を "~/.mew.el" に入れて下さい。
+
+     (defun mew-spam-assassin (val)
+       (let ((case-fold-search t))
+         (if (string-match "yes" val) ?D)))
+
+     (setq mew-inbox-action-alist
+           '(("X-Spam-Flag:" mew-spam-assassin)))
+
+bsfilter を使う場合は、bsfilter に含まれているマニュアルを参照して下さ
+い。
+
+
+(2) スパムのフィルタが IMAP サーバ側で動いている場合：
+
+%inbox でメッセージの一覧を取る際に、IMAP サーバの中でスパムを消去、ま
+たは、他のフォルダへ移動させることができます。Bogofilter を利用している
+場合|は、以下のような設定を"~/.mew.el" に加えて下さい。
+
+     (setq mew-imap-spam-field "X-Bogosity")
+     (setq mew-imap-spam-word "Yes")
+
+`mew-imap-spam-folder' あるいは `mew-imap-trash-folder' が定義されてい
+れば、そのフォルダへスパムが移動します。そうでなければ、スパムは消去さ
+れます。
+
+(3) ローカルで bogofilter を動かして、一括して `*' マークを付ける方法も
+あります。まず、以下のスクリプトをインストールして下さい。
+
+     #!/bin/sh
+
+     bogofilter -v -T -B $* | grep S
+
+このスクリプト名を "bogo" だとしましょう。Summary モードで `"' を実行し、
+コマンド名に "bogo" を指定すれば、スパムに `*' マークが付きます。あとは、
+`md' + `x' などで処理するといいでしょう。
+
+(4) POPサーバを利用しており、サーバ側ではスパムのフィルタを動かせないが、
+メッセージの取得時にマークを付けたい場合：
+
+bsfilter は、POP の代理サーバとなる機能があるので、これを実現できます。
+詳しくは bsfilter に含まれているマニュアルを参照して下さい。
+
+
+
+File: mew.jis.info, Node: spam2, Next: biff, Prev: spam, Up: Tips
+
+スパム(2)
+=========
+
+Summary モードで読んでいる現在のメッセージを、フィルターにスパムとして
+学習させるには `ls' を使います。同様に、ハム(スパムでないメッセージ)と
+して学習させるには `lh' を利用して下さい。
+
+両者のコマンドを使用するためには、4つの変数を設定して置く必要があります。
+ここでは bogofilter を例題にとり、3つのケースについて説明します。
+
+(1) ローカルのフィルターに学習させる場合：
+
+     (setq mew-spam-prog "bogofilter")
+     (setq mew-spam-prog-args '("-s" "-N" "-v"))
+     (setq mew-ham-prog "bogofilter")
+     (setq mew-ham-prog-args '("-n" "-S" "-v")))
+
+(2) サーバ(<server>)側のフィルターに SSH 経由で学習させる場合：
+
+     (setq mew-spam-prog "ssh")
+     (setq mew-spam-prog-args '("<server>" "bogofilter" "-s" "-N" "-v"))
+     (setq mew-ham-prog "ssh")
+     (setq mew-ham-prog-args '("<server>" "bogofilter" "-n" "-S" "-v")))
+
+(3) ファイアウォール(<firewall>)の先のサーバ(<server>)のフィルターに多
+段の SSH 経由で学習させる場合：
+
+     (setq mew-spam-prog "ssh")
+     (setq mew-spam-prog-args '("-A" "<firewall>" "ssh" "<server>" "bogofilter" "-s" "-N" "-v"))
+     (setq mew-ham-prog "ssh")
+     (setq mew-ham-prog-args '("-A" "<firewall>" "ssh" "<server>" "bogofilter" "-n" "-S" "-v")))
+
+なお SSH を利用する場合、関連するホストには、パスワードなしでログインで
+きるように設定しておく必要があります。
+
+
+
+File: mew.jis.info, Node: biff, Next: Convention, Prev: spam2, Up: Tips
+
+Biff
+====
+
+メッセージが到着したか定期的に調べる機能を biff といいます。Mew では、
+以下の設定をすると、5 分ごとに新規メッセージが何個あるか調べるようにな
+ります。
+
+     (setq mew-biff t)
+
+新規メッセージがあれば、その数がモードラインに表示されます。
+
+Biff の対象となるサーバとプロトコルは、Mew の起動時に `mew-proto' と入
+力ケース(`mew-case-input')から決定されます。
+
+以下の設定をすると、新規メッセージがない状態からある状態に変った際に、
+ビープ音が鳴ります。
+
+     (setq mew-biff-bell t)
+
+メッセージの到着を調べる間隔を変えるには、`mew-biff-interval' を設定し
+て下さい。以下は、10分にする例です。
+
+     (setq mew-biff-interval 10)
+
+
+
+
+File: mew.jis.info, Node: Convention, Next: Implementation, Prev: biff, Up: Top
+
+メッセージの作法
+****************
+
+メッセージをやりとりする際には、最低限のマナーがあります。マナーを守っ
+ていないメッセージは読みにくいため、大変損します。簡潔かつ適切な文章を
+書き、なるべく相手に理解してもらえるよう努力しましょう。
+
+メッセージを書く際に気を付けるべき項目を以下に示します。
+
+To: と Cc: を正しく書く
+     To: が目的の人で、Cc: は参考までに送り付ける人です。自分のアドレス
+     が Cc: の場合は、読み飛ばす人がいますから注意して下さい。また、不
+     必要なアドレスを To: や Cc: に書いて、相手に迷惑をかけてしまうこと
+     がないようにしましょう。
+
+To: と Cc: に書くアドレスの数は少なくする
+     アドレスをたくさん To: や Cc: に書くのはよくないことです。面倒でも
+     メーリングリストを作りましょう。あるいは、必要に応じて宛先を匿名に
+     しましょう(*Note anonymous::)。
+
+Subject: には本文の内容を的確に短く書く
+     Subject: を見て読むか決める人がいますから、不適切な Subject: だと
+     読んでもらえないかもしれません。長い Subject: は読みにくいので止め
+     ましょう。
+
+改行は行末を、空行は改段落を表す。1行は半角70文字程度にとどめる
+     意味もなく1行おきに書いたり、なん行にも渡って改行しないのは読みづ
+     らいです。とくに行が長いと引用するのに困ります。また、行頭にいくつ
+     かの空白文字を入れて右によせて書く人がいますが、これも無意味です。
+     テキストの表示は、使っているコンピュータでまちまちですから、結局自
+     分のコンピュータでみためがよくても、他人のコンピュータでそうである
+     とは限らないのです。
+
+必要な部分だけを引用する
+     面倒でも不要な部分は削りましょう。Mew を使っていれば、引用は楽勝の
+     はずです。
+
+シグニチャは簡素にする
+     長いシグニチャは単なる自己満足です。
+
+いたずらメッセージを送らない
+     こんなことは注意したくありませんが、それでも不幸のメッセージなどを
+     送ってくる人がいます。人格を疑われることを理解すべきです。
+
+相手の読めるデータのみを添付する
+     なんの合意もなしに送ってよいデータはテキストのみです。それ以外のデー
+     タを送る場合は、あらかじめ相手に送ってよいか確認をとりましょう。メー
+     リングリストには、テキストのみを投稿するのが無難でしょう。
+
+また、インターネットのマナーは RFC1855 を読むといいでしょう。著者は、正
+確な文章の書き方について学生のためにまとめた入門書を WWW で公開していま
+す。興味があれば、以下の URL にアクセスして下さい。
+
+     http://www.Mew.org/~kazu/doc/japanese.html
+
+
+
+
+
+File: mew.jis.info, Node: Implementation, Next: Avail, Prev: Convention, Up: Top
+
+実装について
+************
+
+"mewl" と "mewencode" が必要なのはなぜ？
+     Mew では、Summary mode でメッセージを取得している間や、一覧を再表
+     示している間に、メッセージを読み進めることができます。これは、プロ
+     グラムの制御の流れが複数必要であることを意味しています。Emacs で制
+     御の流れを複数にするには、サブプロセスを作るか、TCP コネクションを
+     張るしか方法がありません(Emacs Lisp には light weight process があ
+     りません)。POP や SMTP には、TCP コネクションを使うので問題ありま
+     せん。しかし、Summary mode の一覧を再表示するためには、何かコマン
+     ドを起動しないといけません。これが、"mewl" が存在する理由です。
+     mewencode" が存在する理由は、単に速度のためです。MIME の符号化を
+     Emacs Lisp で実装したところ、使い物にならないぐらい遅かったので、
+     mewencode" を使い続けています。(ただし、Base64 が Emacs で実装され
+     ていれば、そちらを使います。)
+
+文字列検索(`C-s'、`C-r')すると、行末にカーソルが飛ぶのはなぜ？
+     Summary mode において、スレッド情報は表示されません。これは、
+     Summary mode で表示されている行に関しては、表示する瞬間にスレッド
+     情報に非表示の属性を付けるからです。非表示の属性がついている部分は
+     文字列検索の対象にはなりません。しかし、Summary mode に表示されて
+     いない行のスレッド情報は、非表示の属性がついていないため、検索の対
+     象となります。そして、合致した行が表示される際に非表示の属性がつい
+     て、あたかも行末に合致したかのような錯覚を受けます。Summary mode
+     全体の行のスレッド情報には、キーの入力がない時間に非表示の属性が付
+     きます。全体に非表示の属性が付くと、Summary mode のモードラインの
+     右端にある `*' マークが消えます。この状態では、文字列検索が直感通
+     りに働きます。
+
+
+
+
+
+File: mew.jis.info, Node: Avail, Next: ftp, Prev: Implementation, Up: Top
+
+入手方法とメーリングリスト
+**************************
+
+ここでは、Mew の入手方法とメーリングリストについて触れます。
+
+* Menu:
+
+* ftp::                         Mew の入手方法
+* ml::                          メーリングリスト
+
+
+
+File: mew.jis.info, Node: ftp, Next: ml, Prev: Avail, Up: Avail
+
+Mew の入手方法
+==============
+
+Mewの最新バージョンは以下から入手できます。
+
+     ftp://ftp.Mew.org/pub/Mew/mew-current.tar.gz
+
+ときどきサンプルメッセージが以下のように提供されます。
+
+     ftp://ftp.Mew.org/pub/Mew/samples.tar.gz
+
+
+
+File: mew.jis.info, Node: ml, Next: Copyright, Prev: ftp, Up: Avail
+
+メーリングリスト
+================
+
+新しいバージョンは、
+
+     mew-release@Mew.org
+
+で英語でアナウンスしています。入りたい人は
+
+     mew-release-subscribe@Mew.org
+
+宛にメッセージを送って下さい。mew-release には著者以外が投稿できないよ
+うに制限が加えられています。
+
+Mew の質問や議論などは、
+
+     mew-dist@Mew.org
+
+に日本語で投稿できます。mew-dist へ入りたい人は
+
+     mew-dist-subscribe@Mew.org
+
+へメッセージを送って下さい。
+
+Mew の質問は、著者個人宛ではなく、できるだけ mew-dist へお願いします。
+著者には受け取ったすべての質問に答えている時間はありません。mew-dist へ
+質問すると、他の人が答えてくれることを期待できます。
+
+メーリングリストへ入る方法の詳細は、以下を参照して下さい。
+
+     http://www.Mew.org/ML/
+
+
+
+
+File: mew.jis.info, Node: Copyright, Next: Variable Index, Prev: ml, Up: Top
+
+著作権について
+**************
+
+Mew は以下の著作権に従います。
+
+Copyright (C) 1994-2005 Mew developing team.
+All rights reserved.
+
+変更の有無にかかわらず、ソースおよびバイナリ形式の再配布および利用は、
+以下の条件を満たしていれば、これを許可する。
+
+  1. ソース・コードの再配布は、上記の著作権表示、この条件項目、および、
+     以下の免責事項を保存しなければならない。
+  2. バイナリ形式の再配布は、上記の著作権表示、この条件項目、および、以
+     下の免責事項を、その配布に付随する説明書、あるいはその他の資料のい
+     ずれかに明記しなければならない。
+  3. 前もって特別に許諾を得ない限り、このソフトウェアから派生した製品の
+     推奨や販売促進のために、このチーム名と貢献者達の名前を利用してはな
+     らない。
+
+このソフトウェアは「このままの形で」提供され、明示的あるいは言外の保証
+は、商用利用および特定目的への適合に対する言外の保証も含み、またこれら
+だけに限らず、存在しない。たとえ以下のような損害の可能性を示唆されてい
+たとしても、どのような形にしろこのソフトウェアの利用から発生した問題に
+おいて、このチームと貢献者達は、(代替製品やサービスの調達; 利用権、デー
+タ、あるいは利益の損失; あるいは営業の中断を含む、またこれらだけに限ら
+ず)直接的に、間接的に、偶然に、特別に、懲罰上、あるいは、必然的に生じて
+しまった損害に対し責任はなく、いかなる責任理論上でも契約の有無に係わら
+ず厳密な責任はなく、また(過失あるいはその他を含む)不法行為に対しても責
+任はない。
+
+CD ROM に入れて配布したいという方は、できるだけ教えて下さい。教えてくれ
+なくても怒りませんが、教えて頂けるとありがたいです。配布を断ったことは
+ありません。
+
+このマニュアルの著作権は、著者に属します。複製、改変、再配布は自由です
+が、無保証です。また、このマニュアルから発生した被害に対し、著者は一切
+責任を負いません。
+
+
+
+
+File: mew.jis.info, Node: Variable Index, Next: Key Index, Prev: Copyright, Up: Top
+
+変数索引
+********
+
+
+* Menu:
+
+* mail-user-agent:              Composing.              (line   5)
+* mail-user-agent:              configuration.          (line   5)
+* mail-user-agent:              start.                  (line   5)
+* mew-addrbook-for-cite-label:  draft-mode.             (line   5)
+* mew-addrbook-for-cite-prefix: draft-mode.             (line   5)
+* mew-addrbook-mode-hook:       hooks.
+* mew-addrbook-override-by-newone: auto-alias.          (line   5)
+* mew-ask-charset:              charset.                (line   5)
+* mew-ask-fcc:                  send.                   (line   5)
+* mew-ask-subject:              send.                   (line   5)
+* mew-auto-flush-queue:         retrieving.             (line   5)
+* mew-auto-get:                 start.                  (line   5)
+* mew-before-cite-hook:         hooks.
+* mew-biff:                     biff.                   (line   5)
+* mew-biff-bell:                biff.                   (line   5)
+* mew-biff-interval:            biff.                   (line   5)
+* mew-case-guess-alist:         config.                 (line   5)
+* mew-case-guess-when-composed: config.
+* mew-case-guess-when-prepared: config.
+* mew-case-guess-when-replied:  config.
+* mew-case-guess-when-replied-alist: config.            (line   5)
+* mew-case-synchronize:         config.                 (line   5)
+* mew-cc:                       draft-mode.             (line   5)
+* mew-charset-latin:            charset.                (line   5)
+* mew-charset-m17n:             charset.                (line   5)
+* mew-cite-fields:              draft-mode.             (line   5)
+* mew-cite-format:              draft-mode.             (line   5)
+* mew-cite-hook:                hooks.
+* mew-cite-prefix:              draft-mode.             (line   5)
+* mew-cite-prefix-function:     draft-mode.             (line   5)
+* mew-config-alist:             config.                 (line   5)
+* mew-cs-samba:                 custom-misc.            (line   5)
+* mew-cursor-mark:              highlight.              (line   5)
+* mew-dcc:                      draft-mode.             (line   5)
+* mew-debug:                    status-update.          (line   5)
+* mew-decode-broken:            analysis.
+* mew-decode-broken:            status-update.          (line   5)
+* mew-decode-quoted:            invalid.                (line   5)
+* mew-delete-unread-mark-by-mark: unread mark.          (line   5)
+* mew-draft-mode-edit-again-hook: hooks.
+* mew-draft-mode-hook:          hooks.
+* mew-draft-mode-newdraft-hook: hooks.
+* mew-draft-mode-reedit-draft-hook: hooks.
+* mew-draft-mode-reedit-hook:   hooks.
+* mew-draft-mode-reedit-queue-hook: hooks.
+* mew-end-of-message-string:    multipart.              (line   5)
+* mew-end-of-part-string:       multipart.              (line   5)
+* mew-env-hook:                 hooks.
+* mew-field-delete-for-forwarding: forward.             (line   5)
+* mew-fields:                   header.                 (line   5)
+* mew-file-max-size:            analysis.
+* mew-from:                     draft-mode.             (line   5)
+* mew-from-list:                cheader.                (line   5)
+* mew-ham-prog:                 spam2.                  (line   5)
+* mew-ham-prog-args:            spam2.                  (line   5)
+* mew-header-alist:             draft-mode.             (line   5)
+* mew-header-max-length:        analysis.
+* mew-header-mode-hook:         hooks.
+* mew-header-veil-count:        features.               (line   5)
+* mew-highlight-body-max-size:  highlight.              (line   5)
+* mew-imap-auth:                imap.
+* mew-imap-auth-list:           imap.
+* mew-imap-delete:              imap.
+* mew-imap-delete:              retrieving.             (line   5)
+* mew-imap-header-only:         imap.
+* mew-imap-header-only:         retrieving.             (line   5)
+* mew-imap-sentinel-hook:       hooks.
+* mew-imap-sentinel-non-biff-hook: hooks.
+* mew-imap-server:              configuration.          (line   5)
+* mew-imap-server:              imap.
+* mew-imap-size:                imap.
+* mew-imap-spam-field:          spam.                   (line   5)
+* mew-imap-spam-folder:         spam.                   (line   5)
+* mew-imap-spam-word:           spam.                   (line   5)
+* mew-imap-ssh-server:          imap.
+* mew-imap-ssl:                 imap.
+* mew-imap-ssl-port:            imap.
+* mew-imap-trash-folder:        delete mark.            (line   5)
+* mew-imap-trash-folder-list:   delete mark.            (line   5)
+* mew-imap-user:                imap.
+* mew-inbox-action-alist:       spam.                   (line   5)
+* mew-init-hook:                hooks.
+* mew-lisp-max-length:          auto-alias.             (line   5)
+* mew-lisp-max-length:          by-from.                (line   5)
+* mew-lisp-max-length:          by-thread.              (line   5)
+* mew-mail-address-list:        reply.                  (line   5)
+* mew-mailbox-type:             config.                 (line   5)
+* mew-mailbox-type:             configuration.          (line   5)
+* mew-mailbox-type:             retrieving.             (line   5)
+* mew-mailbox-type:             start.                  (line   5)
+* mew-mail-domain-list:         cheader.                (line   5)
+* mew-make-message-hook:        hooks.
+* mew-mbox-command:             configuration.          (line   5)
+* mew-mbox-command-arg:         configuration.          (line   5)
+* mew-message-hook:             hooks.
+* mew-message-mode-hook:        hooks.
+* mew-mime-multipart-alternative-list: message-mode.    (line   5)
+* mew-name:                     configuration.          (line   5)
+* mew-nntp2-flush-hook:         hooks.
+* mew-nntp2-sentinel-hook:      hooks.
+* mew-nntp-header-only:         nntp.
+* mew-nntp-header-only:         retrieving.             (line   5)
+* mew-nntp-msgid-domain:        nntp.
+* mew-nntp-msgid-user:          nntp.
+* mew-nntp-newsgroup:           nntp.
+* mew-nntp-sentinel-hook:       hooks.
+* mew-nntp-server:              configuration.          (line   5)
+* mew-nntp-server:              nntp.
+* mew-nntp-size:                nntp.
+* mew-nntp-ssh-server:          nntp.
+* mew-nntp-ssl:                 nntp.
+* mew-nntp-ssl-port:            nntp.
+* mew-nntp-user:                nntp.
+* mew-pack-hook:                hooks.
+* mew-pick-pattern-list:        condition.              (line   5)
+* mew-pop-auth:                 pop.
+* mew-pop-auth-list:            pop.
+* mew-pop-body-lines:           pop.
+* mew-pop-delete:               pop.
+* mew-pop-delete:               retrieving.             (line   5)
+* mew-pop-header-only:          pop.
+* mew-pop-header-only:          retrieving.             (line   5)
+* mew-pop-sentinel-hook:        hooks.
+* mew-pop-sentinel-non-biff-hook: hooks.
+* mew-pop-server:               pop.
+* mew-pop-size:                 pop.
+* mew-pop-ssh-server:           pop.
+* mew-pop-ssh-server:           SSH.                    (line   5)
+* mew-pop-ssl:                  pop.
+* mew-pop-ssl:                  SSL.                    (line   5)
+* mew-pop-ssl-port:             pop.
+* mew-pop-ssl-port:             SSL.                    (line   5)
+* mew-pop-user:                 configuration.          (line   5)
+* mew-pop-user:                 pop.
+* mew-post-hook:                hooks.
+* mew-print-function:           features.               (line   5)
+* mew-prog-gpg:                 pgp-viewing.            (line   5)
+* mew-prog-pgp:                 pgp-viewing.            (line   5)
+* mew-prog-pgp2:                pgp-viewing.            (line   5)
+* mew-prog-pgp5:                pgp-viewing.            (line   5)
+* mew-prog-text/html-ext:       message-mode.           (line   5)
+* mew-prog-text/html-ext-arg:   message-mode.           (line   5)
+* mew-protect-privacy-always:   pgp-shortcut.           (line   5)
+* mew-protect-privacy-always-type: pgp-shortcut.        (line   5)
+* mew-protect-privacy-encrypted: pgp-shortcut.          (line   5)
+* mew-protect-privacy-encrypted-type: pgp-shortcut.     (line   5)
+* mew-protect-privacy-with-old-pgp-signature: pgp-shortcut.  (line   5)
+* mew-proto:                    config.                 (line   5)
+* mew-proto:                    configuration.          (line   5)
+* mew-proto:                    start.                  (line   5)
+* mew-quit-hook:                hooks.
+* mew-real-post-hook:           hooks.
+* mew-real-send-hook:           hooks.
+* mew-refile-auto-refile-skip-any-mark: auto-refile.    (line   5)
+* mew-refile-ctrl-multi:        guess-rule.             (line   5)
+* mew-refile-guess-alist:       by-alist.               (line   5)
+* mew-refile-guess-control:     guess-rule.             (line   5)
+* mew-refile-guess-from-me-is-special: by-from.         (line   5)
+* mew-refile-guess-from-me-is-special: by-from-folder.  (line   5)
+* mew-refile-guess-strip-domainpart: by-default.        (line   5)
+* mew-reply-all-alist:          reply.                  (line   5)
+* mew-reply-fromme-alist:       reply.                  (line   5)
+* mew-reply-sender-alist:       reply.                  (line   5)
+* mew-scan-sentinel-hook:       hooks.
+* mew-send-hook:                hooks.
+* mew-signature-as-lastpart:    cite.                   (line   5)
+* mew-signature-file:           cite.                   (line   5)
+* mew-signature-insert-last:    cite.                   (line   5)
+* mew-smtp-auth-list:           smtp.
+* mew-smtp-flush-hook:          hooks.
+* mew-smtp-helo-domain:         smtp.
+* mew-smtp-mail-from:           smtp.
+* mew-smtp-msgid-domain:        smtp.
+* mew-smtp-msgid-user:          smtp.
+* mew-smtp-port:                smtp.
+* mew-smtp-sentinel-hook:       hooks.
+* mew-smtp-server:              configuration.          (line   5)
+* mew-smtp-server:              smtp.
+* mew-smtp-ssh-server:          smtp.
+* mew-smtp-ssl:                 smtp.
+* mew-smtp-ssl-port:            smtp.
+* mew-smtp-user:                smtp.
+* mew-sort-default-key:         sorting.                (line   5)
+* mew-sort-default-key-alist:   sorting.                (line   5)
+* mew-sort-hook:                hooks.
+* mew-sort-key-alist:           sorting.                (line   5)
+* mew-spam:                     spam.                   (line   5)
+* mew-spam-prog:                spam2.                  (line   5)
+* mew-spam-prog-args:           spam2.                  (line   5)
+* mew-ssl-cert-directory:       SSL.                    (line   5)
+* mew-ssl-verify-level:         SSL.                    (line   5)
+* mew-summary-exec-hook:        hooks.
+* mew-summary-form:             summary-mode.           (line   5)
+* mew-summary-form-extract-rule: summary-mode.          (line   5)
+* mew-summary-form-from-me-prefix: summary-mode.        (line   5)
+* mew-summary-form-mark-delete: summary-mode.           (line   5)
+* mew-summary-form-mark-review: summary-mode.           (line   5)
+* mew-summary-ls-no-scan-hook:  hooks.
+* mew-summary-mark-direction:   summary-mode.           (line   5)
+* mew-summary-mode-hook:        hooks.
+* mew-summary-show-direction:   summary-mode.           (line   5)
+* mew-summary-toggle-disp-msg-hook: hooks.
+* mew-suspend-hook:             hooks.
+* mew-syntax-format-hook:       hooks.
+* mew-thread-display-hook:      hooks.
+* mew-thread-separator:         thread.                 (line   5)
+* mew-trash-folder:             delete mark.            (line   5)
+* mew-trash-folder-list:        delete mark.            (line   5)
+* mew-use-8bit:                 smtp.
+* mew-use-8bit:                 status-update.          (line   5)
+* mew-use-alternative:          analysis.
+* mew-use-cached-passwd:        password.               (line   5)
+* mew-use-cursor-mark:          highlight.              (line   5)
+* mew-use-fast-refile:          by-folder.              (line   5)
+* mew-use-full-window:          summary-mode.           (line   5)
+* mew-use-header-veil:          features.               (line   5)
+* mew-use-header-veil:          status-update.          (line   5)
+* mew-use-highlight-body:       highlight.              (line   5)
+* mew-use-highlight-cursor-line: highlight.             (line   5)
+* mew-use-highlight-header:     highlight.              (line   5)
+* mew-use-highlight-mark:       highlight.              (line   5)
+* mew-use-highlight-mouse-line: highlight.              (line   5)
+* mew-use-highlight-url:        highlight.              (line   5)
+* mew-use-highlight-x-face:     highlight.              (line   5)
+* mew-use-node-folder:          by-folder.              (line   5)
+* mew-use-old-pgp:              pgp-shortcut.           (line   5)
+* mew-use-old-pgp:              status-update.          (line   5)
+* mew-user:                     configuration.          (line   5)
+* mew-use-samba-encoding:       custom-misc.            (line   5)
+* mew-use-text-body:            analysis.
+* mew-use-text/html:            analysis.
+* mew-use-thread-separator:     thread.                 (line   5)
+* mew-use-unread-mark:          unread mark.            (line   5)
+* mew-virtual-mode-hook:        hooks.
+* mew-visit-inbox-after-setting-case: visiting.         (line   5)
+* mew-visit-queue-after-sending: visiting.              (line   5)
+* mew-warning-field-level:      status-update.          (line   5)
+* mew-x-pgp-key-list:           pgp-viewing.            (line   5)
+* read-mail-command:            configuration.          (line   5)
+
+
+
+
+File: mew.jis.info, Node: Key Index, Prev: Variable Index, Up: Top
+
+キー索引
+********
+
+
+* Menu:
+
+* : (Summary):                  analysis.               (line   5)
+* , (Summary):                  analysis.               (line   5)
+* . (Summary):                  analysis.               (line   5)
+* ; (Summary):                  features.               (line   5)
+* = (Summary):                  features.               (line   5)
+* | (Summary):                  features.               (line   5)
+* # (Summary):                  features.               (line   5)
+* : (Summary):                  message-mode.           (line   5)
+* , (Summary):                  message-mode.           (line   5)
+* / (Summary):                  Pick.                   (line   5)
+* " (Summary):                  Pick.                   (line   5)
+* ' (Summary):                  Pick.                   (line   5)
+* ? (Summary):                  Pick.                   (line   5)
+* - (Summary):                  singlepart.             (line   5)
+* * (Summary):                  target mark.            (line   5)
+* / (Summary):                  virtual.                (line   5)
+* ) (Virtual):                  thread.                 (line   5)
+* ( (Virtual):                  thread.                 (line   5)
+* & (Virtual):                  thread.                 (line   5)
+* ^ (Virtual):                  thread.                 (line   5)
+* 1Z (Summary):                 status-update.          (line   5)
+* 2Z (Summary):                 status-update.          (line   5)
+* 3Z (Summary):                 status-update.          (line   5)
+* a (Attach):                   mime-comp.              (line   5)
+* A (Summary):                  Composing.              (line   5)
+* a (Summary):                  Composing.              (line   5)
+* A (Summary):                  reply.                  (line   5)
+* a (Summary):                  reply.                  (line   5)
+* A (Summary):                  sum-write.              (line   5)
+* a (Summary):                  sum-write.              (line   5)
+* B (Attach):                   mark-b-comp.            (line   5)
+* B (Summary):                  features.               (line   5)
+* C (Attach):                   charset-guess.          (line   5)
+* C (Attach):                   mime-comp.              (line   5)
+* c (Attach):                   mime-comp.              (line   5)
+* C (Summary):                  features.               (line   5)
+* C-b (Attach):                 mime-comp.              (line   5)
+* C-cC-a (Draft):               mime-comp.              (line   5)
+* C-cC-a (Summary):             addrbook.               (line   5)
+* C-cC-a (Summary):             features.               (line   5)
+* C-cC-b (Draft):               pgp-shortcut.           (line   5)
+* C-cC-c (Addrbook):            addrbook.               (line   5)
+* C-cC-c (Draft):               send.                   (line   5)
+* C-cC-c (Header):              resend.                 (line   5)
+* C-cC-c (Summary):             off-line.               (line   5)
+* C-cC-c (Summary):             send.                   (line   5)
+* C-cC-e (Draft):               pgp-shortcut.           (line   5)
+* C-cC-e (Summary):             message-mode.           (line   5)
+* C-cC-f (Summary):             pgp-viewing.            (line   5)
+* C-cC-l (Draft):               cite.                   (line   5)
+* C-cC-l (Summary):             invalid.                (line   5)
+* C-cC-m (Draft):               send.                   (line   5)
+* C-cC-m (Header):              resend.                 (line   5)
+* C-cC-o (Draft):               config.                 (line   5)
+* C-cC-o (Summary):             visiting.               (line   5)
+* C-cC-pC-a (Draft):            pgp-shortcut.           (line   5)
+* C-cC-pC-e (Draft):            pgp-shortcut.           (line   5)
+* C-cC-q (Addrbook):            addrbook.               (line   5)
+* C-cC-q (Addrbook):            Quit.                   (line   5)
+* C-cC-q (Draft):               Quit.                   (line   5)
+* C-cC-q (Header):              Quit.                   (line   5)
+* C-cC-q (Summary):             Quit.                   (line   5)
+* C-cC-r (Draft):               pgp-shortcut.           (line   5)
+* C-cC-r (Summary):             features.               (line   5)
+* C-cC-s (Draft):               pgp-shortcut.           (line   5)
+* C-cC-s (Summary):             features.               (line   5)
+* C-cC-t (Draft):               cite.                   (line   5)
+* C-cC-v (Summary):             features.               (line   5)
+* C-cC-v (Summary):             pgp-viewing.            (line   5)
+* C-cC-y (Draft):               cite.                   (line   5)
+* C-cC-y (Summary):             message-mode.           (line   5)
+* C-cC-z (Summary):             features.               (line   5)
+* C-cC-z (Summary):             pgp-viewing.            (line   5)
+* C-cTAB (Draft):               cheader.                (line   5)
+* C-cTAB (Draft):               cite.                   (line   5)
+* C-cTAB (Summary):             analysis.               (line   5)
+* C-cTAB (Summary):             message-mode.           (line   5)
+* C-f (Attach):                 mime-comp.              (line   5)
+* C-n (Attach):                 mime-comp.              (line   5)
+* C-n (Summary):                singlepart.             (line   5)
+* C-p (Attach):                 mime-comp.              (line   5)
+* C-p (Summary):                singlepart.             (line   5)
+* C-u: (Summary):               analysis.               (line   5)
+* C-u. (Summary):               analysis.               (line   5)
+* C-u. (Summary):               invalid.                (line   5)
+* C-u/ (Summary):               Pick.                   (line   5)
+* C-uA (Summary):               reply.                  (line   5)
+* C-ua (Summary):               reply.                  (line   5)
+* C-uC-cC-a (Summary):          addrbook.               (line   5)
+* C-uC-cC-e (Summary):          message-mode.           (line   5)
+* C-uC-cC-f (Summary):          pgp-viewing.            (line   5)
+* C-uC-cC-l (Summary):          invalid.                (line   5)
+* C-uD (Summary):               delete mark.            (line   5)
+* C-uD (Summary):               features.               (line   5)
+* C-um/ (Summary):              Pick.                   (line   5)
+* C-umI (Summary):              target mark.            (line   5)
+* C-uM-n (Summary):             target mark.            (line   5)
+* C-uM-o (Summary):             auto-refile.            (line   5)
+* C-uM-p (Summary):             target mark.            (line   5)
+* C-uM-x mew:                   start.                  (line   5)
+* C-un (Summary):               singlepart.             (line   5)
+* C-up (Summary):               singlepart.             (line   5)
+* C-us (Summary):               retrieving.             (line   5)
+* C-uSPC (Summary):             singlepart.             (line   5)
+* C-utt (Summary):              thread.                 (line   5)
+* C-uw (Summary):               sum-write.              (line   5)
+* C-uZ (Summary):               status-update.          (line   5)
+* C-x RET l:                    charset-guess.          (line   5)
+* C-xm:                         Composing.              (line   5)
+* C-xm:                         start.                  (line   5)
+* D (Attach):                   mime-comp.              (line   5)
+* d (Attach):                   mime-comp.              (line   5)
+* D (Summary):                  delete mark.            (line   5)
+* d (Summary):                  delete mark.            (line   5)
+* D (Summary):                  features.               (line   5)
+* DEL (Summary):                singlepart.             (line   5)
+* E (Attach):                   mark-b-comp.            (line   5)
+* e (Attach):                   mime-comp.              (line   5)
+* E (Summary):                  sum-write.              (line   5)
+* F (Attach):                   mime-comp.              (line   5)
+* f (Attach):                   mime-comp.              (line   5)
+* F (Summary):                  Composing.              (line   5)
+* f (Summary):                  Composing.              (line   5)
+* F (Summary):                  forward.                (line   5)
+* f (Summary):                  forward.                (line   5)
+* F (Summary):                  sum-write.              (line   5)
+* f (Summary):                  sum-write.              (line   5)
+* F (Summary):                  target mark.            (line   5)
+* G (Attach):                   mark-b-comp.            (line   5)
+* g (Summary):                  moving.                 (line   5)
+* I (Attach):                   charset-guess.          (line   5)
+* i (Attach):                   mime-comp.              (line   5)
+* I (Summary):                  retrieving.             (line   5)
+* i (Summary):                  retrieving.             (line   5)
+* i (Summary):                  send.                   (line   5)
+* j (Summary):                  singlepart.             (line   5)
+* J (Summary):                  target mark.            (line   5)
+* k/ (Summary):                 dbsearch.               (line   5)
+* k? (Summary):                 dbsearch.               (line   5)
+* km (Summary):                 dbsearch.               (line   5)
+* lc (Summary):                 retrieving.             (line   5)
+* lh (Summary):                 spam2.                  (line   5)
+* ls (Summary):                 spam2.                  (line   5)
+* lx:                           off-line.               (line   5)
+* m*:                           escape mark.            (line   5)
+* m$:                           escape mark.            (line   5)
+* m (Attach):                   mime-comp.              (line   5)
+* m* (Summary):                 mark change.            (line   5)
+* m$ (Summary):                 mark change.            (line   5)
+* m/ (Summary):                 Pick.                   (line   5)
+* M* (Summary):                 unmark.                 (line   5)
+* M-\ (Summary):                target mark.            (line   5)
+* ma (Summary):                 target mark.            (line   5)
+* M-b (Summary):                target mark.            (line   5)
+* mc (Summary):                 mark change.            (line   5)
+* Md (Summary):                 delete mark.            (line   5)
+* md (Summary):                 delete mark.            (line   5)
+* md (Summary):                 mark change.            (line   5)
+* M-d (Summary):                delete mark.            (line   5)
+* M-e (Summary):                sum-write.              (line   5)
+* mI (Summary):                 target mark.            (line   5)
+* M-l (Summary):                features.               (line   5)
+* mM-d (Summary):               delete mark.            (line   5)
+* mM-d (Summary):               mark change.            (line   5)
+* mM-u (Summary):               mark change.            (line   5)
+* M-n (Summary):                target mark.            (line   5)
+* mo (Summary):                 mark change.            (line   5)
+* M-o (Summary):                auto-refile.            (line   5)
+* M-p (Summary):                target mark.            (line   5)
+* mr (Summary):                 target mark.            (line   5)
+* M-RET (Summary):              singlepart.             (line   5)
+* ms (Summary):                 mark change.            (line   5)
+* M-s (Summary):                target mark.            (line   5)
+* mt (Summary):                 thread.                 (line   5)
+* M-t (Summary):                target mark.            (line   5)
+* M-u:                          unread mark.            (line   5)
+* M-x mew:                      start.                  (line   5)
+* M-x mew:                      Viewing.                (line   5)
+* M-x mew-send:                 Composing.              (line   5)
+* M-x mew-send:                 start.                  (line   5)
+* mxd (Summary):                delete mark.            (line   5)
+* mxM-d (Summary):              delete mark.            (line   5)
+* n (Summary):                  singlepart.             (line   5)
+* N (Summary):                  target mark.            (line   5)
+* O (Summary):                  features.               (line   5)
+* o (Summary):                  refile mark.            (line   5)
+* P (Attach):                   mime-comp.              (line   5)
+* p (Attach):                   mime-comp.              (line   5)
+* p (Attach):                   pgp-key.                (line   5)
+* p (Summary):                  singlepart.             (line   5)
+* P (Summary):                  target mark.            (line   5)
+* Q (Attach):                   mark-b-comp.            (line   5)
+* Q (Summary):                  Quit.                   (line   5)
+* q (Summary):                  Quit.                   (line   5)
+* r (Summary):                  resend.                 (line   5)
+* RET (Summary):                singlepart.             (line   5)
+* S (Attach):                   mark-b-comp.            (line   5)
+* s (Summary):                  off-line.               (line   5)
+* s (Summary):                  retrieving.             (line   5)
+* S (Summary):                  sorting.                (line   5)
+* SPC (Summary):                singlepart.             (line   5)
+* t (Attach):                   mime-comp.              (line   5)
+* T (Attach):                   mime-comp.              (line   5)
+* t (Virtual):                  thread.                 (line   5)
+* t* (Virtual):                 thread.                 (line   5)
+* TAB (Draft):                  header.                 (line   5)
+* td (Virtual):                 thread.                 (line   5)
+* tg (Virtual):                 thread.                 (line   5)
+* tM-d (Virtual):               thread.                 (line   5)
+* tn (Virtual):                 thread.                 (line   5)
+* to (Virtual):                 thread.                 (line   5)
+* tp (Virtual):                 thread.                 (line   5)
+* tr (Summary):                 thread.                 (line   5)
+* tSPC (Virtual):               thread.                 (line   5)
+* tt (Summary):                 thread.                 (line   5)
+* tu (Virtual):                 thread.                 (line   5)
+* U (Attach):                   mark-b-comp.            (line   5)
+* U (Summary):                  unmark.                 (line   5)
+* u (Summary):                  unmark.                 (line   5)
+* v (Summary):                  features.               (line   5)
+* w (Summary):                  Composing.              (line   5)
+* W (Summary):                  resend.                 (line   5)
+* W (Summary):                  sum-write.              (line   5)
+* w (Summary):                  sum-write.              (line   5)
+* x (Summary):                  delete mark.            (line   5)
+* x (Summary):                  unmark.                 (line   5)
+* y (Attach):                   mime-comp.              (line   5)
+* y (Summary):                  features.               (line   5)
+* Z (Summary):                  auto-alias.             (line   5)
+* Z (Summary):                  status-update.          (line   5)
+* z8 (Summary):                 status-update.          (line   5)
+* zc (Summary):                 status-update.          (line   5)
+* zd (Summary):                 status-update.          (line   5)
+* zo (Summary):                 status-update.          (line   5)
+* zp (Summary):                 status-update.          (line   5)
+* zSPC:                         unread mark.            (line   5)
+* zv (Summary):                 features.               (line   5)
+* zv (Summary):                 status-update.          (line   5)
+* zw (Summary):                 status-update.          (line   5)
+

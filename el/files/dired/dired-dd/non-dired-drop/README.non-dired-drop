@@ -1,0 +1,52 @@
+-*- emacs-lisp -*-
+
+This directory contains non-dired-drop handler programs listed below,
+in which handler functions to deal with drag-and-drop into non-dired
+buffers are defined.
+
+dired-dd-lm.el           : Inserts MIME multipart framework into  drafting buffer
+dired-dd-insert-file.el  : Inserts file content with S-drag-mouse-2
+dired-dd-insert-fname.el : Inserts file name with C-drag-mouse-2
+dired-dd-mew.el          : Inserts MIME attachment file to Mew's draft buffer
+dired-dd-timidity.el     : Plays MIDI file with drag-and-drop into timididy
+
+You can setup load hook for them together with dired-dd like this:
+
+(add-hook
+ 'dired-load-hook
+ (function
+  (lambda ()
+    (load "dired-x")
+    ;; Set dired-x variables here.
+    ;; To and flo...
+    (if window-system
+	(progn (require 'dired-dd)
+	       (require 'dired-dd-lm)
+	                ;; require any other preferred files above here.
+	       (require 'dired-dd-timidity))))))
+
+These handler programs contain setq code to setup variable
+dired-dd-non-dired-drop-handlers.  If the content of the variable is
+not what you want after loading all your prefered handler programs,
+you may change the loading (require) order of the handler programs.
+
+Handler functions contained in the handler programs:
+dired-dd-lm.el:           dired-dd-lm-framework-insert
+dired-dd-insert-file.el:  dired-dd-insert-file
+dired-dd-insert-fname.el: dired-dd-insert-fname
+dired-dd-mew.el:          dired-dd-mew-draft-hanlder
+dired-dd-timidity.el:     dired-dd-timidity-load-file-list
+
+An example of (my) working variable dired-dd-non-dired-drop-handlers:
+dired-dd-non-dired-drop-handlers
+  =>
+(dired-dd-timidity-load-file-list dired-dd-lm-framework-insert dired-dd-insert-fname dired-dd-insert-file)
+
+
+See also "Customizing behavior on dropping into non-dired buffer" section in 
+dired-dd.info (or html), or each source itself above, for detailed information
+on spec of the handler functions.
+
+s.n.
+Sat Jan 16 14:41:42 1999
+Sun Apr  9 23:57:20 2000

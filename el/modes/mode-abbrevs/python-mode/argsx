@@ -1,0 +1,2 @@
+if ((len(sys.argv)-1) != <cursor>):
+    usage()

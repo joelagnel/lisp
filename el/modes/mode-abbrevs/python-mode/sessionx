@@ -1,0 +1,2 @@
+cherrypy.session['fontsize'] = fontsize
+fontsize = cherrypy.session.get('fontsize', 9)

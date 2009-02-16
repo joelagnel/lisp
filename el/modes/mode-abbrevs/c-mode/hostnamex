@@ -1,0 +1,17 @@
+#include <unistd.h>
+
+std::string get_hostname(bool force_short_name=false)
+{
+    std::string out;
+    char localhost[1024];
+    gethostname(localhost, sizeof(localhost));
+    localhost[sizeof(localhost)-1] = 0;
+    out = localhost;
+    if (force_short_name) {
+       std::string::size_type dotpos = out.find(".");
+       if (dotpos != std::string::npos) {
+           out.erase(dotpos, out.size() - dotpos);
+       }
+    }
+    return out;
+}
